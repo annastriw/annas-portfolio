@@ -20,15 +20,13 @@
   --accent: #315efb;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --background: #0c0e11;
-    --foreground: #f1eee7;
-    --muted: #9b9a95;
-    --border: #282b30;
-    --accent: #7695ff;
-  }
+html.dark {
+  color-scheme: dark;
+  --background: #0c0e11;
+  --foreground: #f1eee7;
+  --muted: #9b9a95;
+  --border: #282b30;
+  --accent: #7695ff;
 }
 
 * {
@@ -122,6 +120,68 @@ a {
   font-family: var(--font-serif);
   font-size: clamp(1.5rem, 3vw, 2.25rem);
   line-height: 1.1;
+}
+
+.theme-control {
+  display: grid;
+  gap: 0.75rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.theme-control-label {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.theme-control-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.theme-control-option {
+  position: relative;
+  display: flex;
+  min-block-size: 2.75rem;
+  min-inline-size: 4.5rem;
+}
+
+.theme-control-option input {
+  position: absolute;
+  block-size: 1px;
+  inline-size: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.theme-control-option span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 100%;
+  padding-inline: 0.875rem;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+
+.theme-control-option input:checked + span {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--background);
+}
+
+.theme-control-option input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 .recovery-link {

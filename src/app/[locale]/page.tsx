@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { ThemeControl } from "@/components/theme/theme-control";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 
 const foundationCopy: Record<
@@ -31,6 +32,7 @@ export default async function LocalizedHomePage({
       <p className="foundation-label">{copy.localeLabel}</p>
       <h1>Annas Tri Widagdo</h1>
       <p className="foundation-status">{copy.status}</p>
+      <ThemeControl locale={locale} />
     </main>
   );
 }
