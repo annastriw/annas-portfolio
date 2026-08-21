@@ -1,0 +1,60 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Build output
+/.next/
+/out/
+/build/
+/dist/
+/coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Local files
+AGENTS.md
+AGENTS.md.backup
+.agents/
+skills-lock.json
+CLAUDE.md
+GEMINI.md
+.claude/
+.gemini/
+.codex/
+
+# Internal documentation
+SPEC.md
+SITE-ARCHITECTURE.md
+DESIGN-DIRECTION.md
+IMPLEMENTATION-PLAN.md
+
+# Temporary files
+.DS_Store
+*.bak
+*.backup
+*.tmp
+
+# Private credentials
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Platform files
+.vercel/

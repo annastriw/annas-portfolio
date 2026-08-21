@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-instrument-serif);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  color-scheme: light;
+  --background: #f4f1ea;
+  --foreground: #111214;
+  --muted: #6c6b67;
+  --border: #d7d3ca;
+  --accent: #315efb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #0c0e11;
+    --foreground: #f1eee7;
+    --muted: #9b9a95;
+    --border: #282b30;
+    --accent: #7695ff;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  color: var(--foreground);
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-block-size: 100dvh;
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--background);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.site-shell {
+  min-block-size: 100dvh;
+}
+
+.skip-link {
+  position: fixed;
+  inset-block-start: 1rem;
+  inset-inline-start: 1rem;
+  z-index: 1;
+  min-block-size: 2.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  transform: translateY(calc(-100% - 1.5rem));
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.foundation-page {
+  display: grid;
+  align-content: center;
+  min-block-size: 100dvh;
+  inline-size: min(calc(100% - 2rem), 90rem);
+  margin-inline: auto;
+  padding-block: 4rem;
+  padding-inline-start: clamp(1rem, 4vw, 4rem);
+  border-inline-start: 1px solid var(--border);
+}
+
+.foundation-label {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.foundation-page h1 {
+  max-inline-size: 10ch;
+  margin: 0;
+  font-size: clamp(2.75rem, 8vw, 5.5rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+}
+
+.foundation-status {
+  max-inline-size: 24ch;
+  margin: 1.5rem 0 0;
+  color: var(--muted);
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.1;
+}
+
+.recovery-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  inline-size: fit-content;
+  margin-block-start: 2rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+@media (max-width: 40rem) {
+  .foundation-page {
+    inline-size: min(calc(100% - 1.5rem), 90rem);
+    padding-block: 3rem;
+    padding-inline-start: 1rem;
+  }
+}
