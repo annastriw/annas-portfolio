@@ -178,3 +178,51 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     throw err;
   }
 }
+
+/**
+ * Returns available local static asset paths for a project deterministically.
+ */
+export async function getProjectAssets(slug: string): Promise<string[]> {
+  if (!slug || typeof slug !== "string" || slug.includes("..") || slug.includes("/")) {
+    return [];
+  }
+
+  const projectAssetDir = path.join(ASSETS_BASE_DIRECTORY, slug);
+  try {
+    const entries = await fs.readdir(projectAssetDir, { withFileTypes: true });
+    const imageFiles = entries
+      .filter((entry) => entry.isFile() && /\.(webp|png|jpg|jpeg|svg)$/i.test(entry.name))
+      .map((entry) => `/assets/projects/${slug}/${entry.name}`)
+      .sort();
+    return imageFiles;
+  } catch (err: unknown) {
+    if (
+      err &&
+      typeof err === "object" &&
+      "code" in err &&
+      (err as { code: string }).code === "ENOENT"
+    ) {
+      return [];
+    }
+    throw err;
+  }
+}
+
+/**
+ * Returns adjacent (previous and next) projects based on deterministic ordering.
+ */
+export async function getAdjacentProjects(slug: string): Promise<{
+  prev: ProjectMetadata | null;
+  next: ProjectMetadata | null;
+}> {
+  const allProjects = await getAllProjectMetadata();
+  const currentIndex = allProjects.findIndex((p) => p.slug === slug);
+  if (currentIndex === -1) {
+    return { prev: null, next: null };
+  }
+
+  const prev = currentIndex > 0 ? allProjects[currentIndex - 1] : null;
+  const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
+
+  return { prev, next };
+}
