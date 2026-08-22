@@ -4058,4 +4058,206 @@ html.dark .spec-box-header {
   }
 }
 
+/* ==========================================================================
+   404 & Error Recovery Experience
+   ========================================================================== */
+
+.not-found-page {
+  padding-block: 5rem 8rem;
+  display: flex;
+  align-items: center;
+  min-block-size: 70vh;
+}
+
+.not-found-container {
+  inline-size: min(calc(100% - 2rem), 64rem);
+  margin-inline: auto;
+}
+
+.not-found-header {
+  border-block-end: 1px solid var(--border);
+  padding-block-end: 2.5rem;
+  margin-block-end: 3rem;
+}
+
+.not-found-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block-end: 1rem;
+}
+
+.not-found-pill {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--muted);
+  border-radius: 2px;
+}
+
+.not-found-pill-accent {
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.not-found-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--foreground);
+  margin: 0 0 1.25rem 0;
+}
+
+.not-found-lead {
+  max-inline-size: 65ch;
+  font-size: clamp(1rem, 1.4vw, 1.1875rem);
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+
+.error-digest {
+  margin-block-start: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.error-digest code {
+  padding: 0.25rem 0.5rem;
+  background: color-mix(in srgb, var(--border) 40%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+
+.not-found-recovery {
+  margin-block-end: 3.5rem;
+}
+
+.recovery-heading {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-block-end: 1.25rem;
+}
+
+.recovery-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .recovery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.recovery-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  background: var(--background);
+  text-decoration: none;
+  color: inherit;
+  border-radius: 2px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.recovery-card:hover {
+  border-color: var(--accent);
+  background-color: color-mix(in srgb, var(--foreground) 2%, var(--background));
+}
+
+.recovery-index {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.recovery-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.recovery-title {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.recovery-desc {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.recovery-arrow {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  color: var(--accent);
+  transform: translateX(0);
+  transition: transform 0.15s ease;
+}
+
+.recovery-card:hover .recovery-arrow {
+  transform: translateX(4px);
+}
+
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ==========================================================================
+   Reduced Motion & Print Directives
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .site-header,
+  .site-footer,
+  .mobile-nav-toggle,
+  .skip-link,
+  .theme-toggle-btn,
+  .locale-switcher {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 12pt !important;
+  }
+
+  a {
+    text-decoration: underline !important;
+    color: #000 !important;
+  }
+}
+
+
 
