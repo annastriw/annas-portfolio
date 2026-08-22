@@ -81,6 +81,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                     alt="Sertifikat Wisudawan Terbaik — Departemen Teknik Komputer Undip"
                     width={600}
                     height={420}
+                    sizes="(max-width: 768px) 100vw, 500px"
                     className="education-cert-img"
                     loading="lazy"
                   />

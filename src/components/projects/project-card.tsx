@@ -41,6 +41,7 @@ export function ProjectCard({
               alt={`Screenshot for ${project.title}`}
               width={600}
               height={340}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 380px"
               className="project-card-img"
               loading="lazy"
             />

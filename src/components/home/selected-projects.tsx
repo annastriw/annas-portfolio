@@ -81,6 +81,7 @@ export function SelectedProjects({
                         alt={`Screenshot of ${project.title}`}
                         width={700}
                         height={390}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 600px"
                         className="featured-card-img"
                         loading="lazy"
                       />

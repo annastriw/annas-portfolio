@@ -131,6 +131,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                     alt={cert.title[locale]}
                     width={600}
                     height={420}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
                     className="cert-card-img"
                     loading="lazy"
                   />
@@ -209,6 +210,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                 alt={activeCertificate.title[locale]}
                 width={1600}
                 height={1100}
+                sizes="(max-width: 1200px) 100vw, 1200px"
                 className="cert-modal-img"
                 priority
               />

@@ -7,6 +7,7 @@ const geistSans = Geist({
   subsets: ["latin"],
   weight: ["400", "600"],
   style: "normal",
+  display: "swap",
   variable: "--font-geist-sans",
 });
 
@@ -14,6 +15,7 @@ const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   style: "normal",
+  display: "swap",
   variable: "--font-instrument-serif",
 });
 
@@ -21,6 +23,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   weight: "400",
   style: "normal",
+  display: "swap",
   variable: "--font-geist-mono",
 });
 

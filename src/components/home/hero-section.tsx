@@ -87,6 +87,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
                   width={380}
                   height={480}
                   priority
+                  sizes="(max-width: 768px) 100vw, 380px"
                   className="hero-portrait-img"
                 />
               </div>

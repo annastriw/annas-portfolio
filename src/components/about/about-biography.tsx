@@ -21,8 +21,9 @@ export function AboutBiography({ locale }: AboutBiographyProps) {
                 alt="Annas Tri Widagdo — Software Engineer & AI Practitioner"
                 width={400}
                 height={500}
-                className="about-portrait-img"
                 priority
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="about-portrait-img"
               />
             </div>
             <figcaption className="about-portrait-caption">

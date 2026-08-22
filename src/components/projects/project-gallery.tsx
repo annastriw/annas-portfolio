@@ -65,6 +65,7 @@ export function ProjectGallery({
                     alt={`${title} - Figure ${figureNum}`}
                     width={800}
                     height={480}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
                     className="gallery-img"
                     loading="lazy"
                   />
@@ -111,6 +112,7 @@ export function ProjectGallery({
                 alt={`${title} - Enlarged Preview`}
                 width={1600}
                 height={1000}
+                sizes="(max-width: 1200px) 100vw, 1200px"
                 className="gallery-modal-img"
                 priority
               />

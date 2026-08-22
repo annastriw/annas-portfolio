@@ -15,10 +15,25 @@ import { normalizeBlogFrontmatter } from "./blog-normalizer";
 
 const BLOG_DIRECTORY = path.join(process.cwd(), "content", "blog");
 
+const cachedBlogValidation = new Map<string, BlogValidationResult>();
+const blogPostDetailCache = new Map<string, BlogPost | null>();
+
+/**
+ * Clears blog in-memory caches for testing or content re-validation.
+ */
+export function clearBlogContentCache(): void {
+  cachedBlogValidation.clear();
+  blogPostDetailCache.clear();
+}
+
 /**
  * Validates all markdown blog post files across all or a specific locale.
  */
 export async function validateAllBlogPosts(targetLocale?: Locale): Promise<BlogValidationResult> {
+  const cacheKey = targetLocale || "ALL";
+  if (cachedBlogValidation.has(cacheKey)) {
+    return cachedBlogValidation.get(cacheKey)!;
+  }
   const localesToScan: Locale[] = targetLocale ? [targetLocale] : [...supportedLocales];
   const allIssues: BlogValidationIssue[] = [];
   const posts: BlogMetadata[] = [];
@@ -88,12 +103,15 @@ export async function validateAllBlogPosts(targetLocale?: Locale): Promise<BlogV
     return a.slug.localeCompare(b.slug);
   });
 
-  return {
+  const result = {
     valid: allIssues.length === 0,
     total: posts.length,
     posts,
     issues: allIssues,
   };
+
+  cachedBlogValidation.set(cacheKey, result);
+  return result;
 }
 
 /**
@@ -126,16 +144,10 @@ export async function getAllBlogPosts(locale: Locale): Promise<BlogPost[]> {
   const posts: BlogPost[] = [];
 
   for (const metadata of metadataList) {
-    const filePath = path.join(BLOG_DIRECTORY, locale, `${metadata.slug}.md`);
-    const rawContent = await fs.readFile(filePath, "utf8");
-    const parsed = matter(rawContent);
-
-    posts.push({
-      slug: metadata.slug,
-      locale,
-      metadata,
-      content: parsed.content,
-    });
+    const post = await getBlogPostBySlug(metadata.slug, locale);
+    if (post) {
+      posts.push(post);
+    }
   }
 
   return posts;
@@ -150,6 +162,11 @@ export async function getBlogPostBySlug(
 ): Promise<BlogPost | null> {
   if (!slug || typeof slug !== "string" || slug.includes("..") || slug.includes("/")) {
     return null;
+  }
+
+  const cacheKey = `${locale}/${slug}`;
+  if (blogPostDetailCache.has(cacheKey)) {
+    return blogPostDetailCache.get(cacheKey)!;
   }
 
   const filePath = path.join(BLOG_DIRECTORY, locale, `${slug}.md`);
@@ -174,12 +191,14 @@ export async function getBlogPostBySlug(
     }
 
     const metadata = normalizeBlogFrontmatter(rawFm, parsed.content, locale);
-    return {
+    const post: BlogPost = {
       slug,
       locale,
       metadata,
       content: parsed.content,
     };
+    blogPostDetailCache.set(cacheKey, post);
+    return post;
   } catch (err: unknown) {
     if (
       err &&
@@ -187,6 +206,7 @@ export async function getBlogPostBySlug(
       "code" in err &&
       (err as { code: string }).code === "ENOENT"
     ) {
+      blogPostDetailCache.set(cacheKey, null);
       return null;
     }
     throw err;

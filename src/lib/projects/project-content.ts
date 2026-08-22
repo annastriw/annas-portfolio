@@ -13,6 +13,25 @@ import { normalizeProjectFrontmatter } from "./project-normalizer";
 const PROJECTS_DIRECTORY = path.join(process.cwd(), "content", "projects");
 const ASSETS_BASE_DIRECTORY = path.join(process.cwd(), "public", "assets", "projects");
 
+let cachedValidationResult: {
+  valid: boolean;
+  total: number;
+  projects: ProjectMetadata[];
+  issues: ContentValidationIssue[];
+} | null = null;
+
+const projectDetailCache = new Map<string, Project | null>();
+const projectAssetsCache = new Map<string, string[]>();
+
+/**
+ * Clears in-memory caches for testing or content re-validation.
+ */
+export function clearProjectContentCache(): void {
+  cachedValidationResult = null;
+  projectDetailCache.clear();
+  projectAssetsCache.clear();
+}
+
 /**
  * Validates all markdown project files in the content/projects directory.
  * Returns validation status, list of issues (if any), and parsed project metadata.
@@ -23,6 +42,9 @@ export async function validateAllProjects(): Promise<{
   projects: ProjectMetadata[];
   issues: ContentValidationIssue[];
 }> {
+  if (cachedValidationResult) {
+    return cachedValidationResult;
+  }
   const fileEntries = await fs.readdir(PROJECTS_DIRECTORY, { withFileTypes: true });
   const mdFilenames = fileEntries
     .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
@@ -67,12 +89,15 @@ export async function validateAllProjects(): Promise<{
   // Sort projects deterministically by slug
   projects.sort((a, b) => a.slug.localeCompare(b.slug));
 
-  return {
+  const result = {
     valid: allIssues.length === 0,
     total: mdFilenames.length,
     projects,
     issues: allIssues,
   };
+
+  cachedValidationResult = result;
+  return result;
 }
 
 /**
@@ -117,15 +142,10 @@ export async function getAllProjects(): Promise<Project[]> {
 
   const projects: Project[] = [];
   for (const metadata of validation.projects) {
-    const filePath = path.join(PROJECTS_DIRECTORY, `${metadata.slug}.md`);
-    const rawContent = await fs.readFile(filePath, "utf8");
-    const parsed = matter(rawContent);
-
-    projects.push({
-      slug: metadata.slug,
-      metadata,
-      content: parsed.content,
-    });
+    const project = await getProjectBySlug(metadata.slug);
+    if (project) {
+      projects.push(project);
+    }
   }
 
   return projects;
@@ -137,6 +157,10 @@ export async function getAllProjects(): Promise<Project[]> {
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
   if (!slug || typeof slug !== "string" || slug.includes("..") || slug.includes("/")) {
     return null;
+  }
+
+  if (projectDetailCache.has(slug)) {
+    return projectDetailCache.get(slug)!;
   }
 
   const filePath = path.join(PROJECTS_DIRECTORY, `${slug}.md`);
@@ -161,11 +185,13 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     }
 
     const metadata = normalizeProjectFrontmatter(rawFm);
-    return {
+    const project: Project = {
       slug,
       metadata,
       content: parsed.content,
     };
+    projectDetailCache.set(slug, project);
+    return project;
   } catch (err: unknown) {
     if (
       err &&
@@ -173,6 +199,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       "code" in err &&
       (err as { code: string }).code === "ENOENT"
     ) {
+      projectDetailCache.set(slug, null);
       return null;
     }
     throw err;
@@ -187,6 +214,10 @@ export async function getProjectAssets(slug: string): Promise<string[]> {
     return [];
   }
 
+  if (projectAssetsCache.has(slug)) {
+    return projectAssetsCache.get(slug)!;
+  }
+
   const projectAssetDir = path.join(ASSETS_BASE_DIRECTORY, slug);
   try {
     const entries = await fs.readdir(projectAssetDir, { withFileTypes: true });
@@ -194,6 +225,7 @@ export async function getProjectAssets(slug: string): Promise<string[]> {
       .filter((entry) => entry.isFile() && /\.(webp|png|jpg|jpeg|svg)$/i.test(entry.name))
       .map((entry) => `/assets/projects/${slug}/${entry.name}`)
       .sort();
+    projectAssetsCache.set(slug, imageFiles);
     return imageFiles;
   } catch (err: unknown) {
     if (
@@ -202,6 +234,7 @@ export async function getProjectAssets(slug: string): Promise<string[]> {
       "code" in err &&
       (err as { code: string }).code === "ENOENT"
     ) {
+      projectAssetsCache.set(slug, []);
       return [];
     }
     throw err;
