@@ -11,6 +11,11 @@ import { ExperienceSection } from "@/components/home/experience-section";
 import { TechStackSection } from "@/components/home/tech-stack-section";
 import { GitHubSignal } from "@/components/home/github-signal";
 import { ContactSection } from "@/components/home/contact-section";
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  generatePersonJsonLd,
+  generateWebSiteJsonLd,
+} from "@/lib/seo/schema-generators";
 
 export const dynamicParams = false;
 
@@ -75,6 +80,8 @@ export default async function LocalizedHomePage({
 
   return (
     <div className="home-landing-page">
+      <JsonLd schema={[generatePersonJsonLd(), generateWebSiteJsonLd()]} />
+
       {/* 01. Hero & Profile Introduction */}
       <HeroSection locale={locale} />
 

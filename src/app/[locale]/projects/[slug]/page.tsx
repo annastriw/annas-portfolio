@@ -12,6 +12,8 @@ import { MarkdownRenderer } from "@/components/markdown/markdown-renderer";
 import { ProjectMetaRail } from "@/components/projects/project-meta-rail";
 import { ProjectGallery } from "@/components/projects/project-gallery";
 import { ProjectClaimNotice } from "@/components/projects/project-claim-notice";
+import { JsonLd } from "@/components/seo/json-ld";
+import { generateProjectJsonLd } from "@/lib/seo/schema-generators";
 
 export const dynamicParams = false;
 
@@ -85,6 +87,8 @@ export default async function ProjectDetailPage({
   return (
     <article className="project-detail-page">
       <div className="project-detail-container">
+        <JsonLd schema={generateProjectJsonLd(project, locale)} />
+
         {/* Navigation Breadcrumb Bar */}
         <nav
           className="project-detail-breadcrumb"

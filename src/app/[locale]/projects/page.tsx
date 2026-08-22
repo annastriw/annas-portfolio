@@ -6,6 +6,9 @@ import {
   getProjectAssets,
 } from "@/lib/projects/project-content";
 import { ProjectFilter } from "@/components/projects/project-filter";
+import { JsonLd } from "@/components/seo/json-ld";
+import { generateItemListJsonLd } from "@/lib/seo/schema-generators";
+import { SITE_URL } from "@/lib/seo/seo-types";
 
 export const dynamicParams = false;
 
@@ -70,9 +73,20 @@ export default async function ProjectsPage({
 
   const isId = locale === "id";
 
+  const projectListSchema = generateItemListJsonLd(
+    projects.map((p) => ({
+      title: p.title,
+      url: `${SITE_URL}/${locale}/projects/${p.slug}`,
+    })),
+    isId ? "Arsip Proyek & Sistem" : "Projects & Systems Archive",
+    `${SITE_URL}/${locale}/projects`
+  );
+
   return (
     <div className="projects-hub-page">
       <div className="projects-hub-container">
+        <JsonLd schema={projectListSchema} />
+
         {/* Page Header */}
         <header className="projects-hub-header">
           <div className="projects-hub-meta">

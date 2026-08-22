@@ -10,6 +10,8 @@ import {
 import { MarkdownRenderer } from "@/components/markdown/markdown-renderer";
 import { BlogArticleHeader } from "@/components/blog/blog-article-header";
 import { BlogAdjacentNav } from "@/components/blog/blog-adjacent-nav";
+import { JsonLd } from "@/components/seo/json-ld";
+import { generateBlogPostingJsonLd } from "@/lib/seo/schema-generators";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -90,6 +92,8 @@ export default async function BlogPostDetailPage({
   return (
     <article className="blog-article-page">
       <div className="blog-article-container">
+        <JsonLd schema={generateBlogPostingJsonLd(post, locale)} />
+
         {/* Navigation Breadcrumb Bar */}
         <nav
           className="blog-detail-breadcrumb"

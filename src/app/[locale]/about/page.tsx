@@ -8,6 +8,8 @@ import { AboutCertificates } from "@/components/about/about-certificates";
 import { AboutPrinciples } from "@/components/about/about-principles";
 import { AboutTechMatrix } from "@/components/about/about-tech-matrix";
 import { AboutConnect } from "@/components/about/about-connect";
+import { JsonLd } from "@/components/seo/json-ld";
+import { generateProfilePageJsonLd } from "@/lib/seo/schema-generators";
 
 interface AboutPageProps {
   params: Promise<{
@@ -68,6 +70,8 @@ export default async function AboutPage({
   return (
     <div className="about-page">
       <div className="about-page-container">
+        <JsonLd schema={generateProfilePageJsonLd(locale)} />
+
         {/* 00. Page Header */}
         <AboutHero locale={locale} />
 

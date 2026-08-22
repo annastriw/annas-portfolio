@@ -8,6 +8,9 @@ import {
 import { BlogHero } from "@/components/blog/blog-hero";
 import { BlogFilter } from "@/components/blog/blog-filter";
 import { BlogEmptyState } from "@/components/blog/blog-empty-state";
+import { JsonLd } from "@/components/seo/json-ld";
+import { generateItemListJsonLd } from "@/lib/seo/schema-generators";
+import { SITE_URL } from "@/lib/seo/seo-types";
 
 interface BlogPageProps {
   params: Promise<{
@@ -65,10 +68,22 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
   const posts = await getAllBlogMetadata(locale);
   const categories = await getAllBlogCategories(locale);
+  const isId = locale === "id";
+
+  const blogListSchema = generateItemListJsonLd(
+    posts.map((p) => ({
+      title: p.title,
+      url: `${SITE_URL}/${locale}/blog/${p.slug}`,
+    })),
+    isId ? "Catatan Rekayasa & Tulisan Teknis" : "Dispatches & Technical Notes",
+    `${SITE_URL}/${locale}/blog`
+  );
 
   return (
     <div className="blog-hub-page">
       <div className="blog-hub-container">
+        <JsonLd schema={blogListSchema} />
+
         {/* Page Header Hero */}
         <BlogHero locale={locale} />
 
