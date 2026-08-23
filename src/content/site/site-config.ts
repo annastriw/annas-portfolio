@@ -1,11 +1,12 @@
 import type { Locale } from "@/lib/i18n/config";
-
-export interface NavItem {
-  key: string;
-  label: string;
-  href: string;
-  index: string;
-}
+import {
+  mainNavigation,
+  navigationLabels,
+  type NavItem,
+  type NavigationLabels,
+} from "./navigation";
+import { siteIdentity } from "./identity";
+import { siteContact } from "./contact";
 
 export interface SocialLink {
   key: string;
@@ -52,126 +53,66 @@ export interface SiteConfig {
   mainNav: Record<Locale, NavItem[]>;
   socialLinks: SocialLink[];
   colophon: Record<Locale, ColophonConfig>;
-  labels: Record<
-    Locale,
-    {
-      menu: string;
-      closeMenu: string;
-      switchLanguage: string;
-      navigation: string;
-      connect: string;
-      system: string;
-      theme: string;
-      skipToContent: string;
-      backToTop: string;
-    }
-  >;
+  labels: Record<Locale, NavigationLabels>;
 }
 
 export const siteConfig: SiteConfig = {
-  brand: "annastriwidagdo.me",
-  name: "Annas Tri Widagdo",
-  positioning: {
-    en: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
-    id: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
-  },
-  documentTitle: {
-    en: "Annas Tri Widagdo — Software Engineer, Full-Stack Developer & Machine Learning Engineer",
-    id: "Annas Tri Widagdo — Software Engineer, Full-Stack Developer & Machine Learning Engineer",
-  },
-  documentDescription: {
-    en: "Technical editorial archive of Annas Tri Widagdo. Fullstack web applications, machine learning integration, and robust software architectures grounded in verified implementation evidence.",
-    id: "Arsip editorial teknis Annas Tri Widagdo. Aplikasi web fullstack, integrasi machine learning, dan arsitektur perangkat lunak andal berlandaskan bukti implementasi terverifikasi.",
-  },
+  brand: siteIdentity.brand,
+  name: siteIdentity.name,
+  positioning: siteIdentity.positioning,
+  documentTitle: siteIdentity.documentTitle,
+  documentDescription: siteIdentity.documentDescription,
   contact: {
-    email: "annastriw23@gmail.com",
-    linkedIn: "linkedin.com/in/annastriw",
-    linkedInUrl: "https://www.linkedin.com/in/annastriw",
-    gitHub: "github.com/annastriw",
-    gitHubUrl: "https://github.com/annastriw",
-    location: "Klaten, Central Java, Indonesia",
-    timezone: "Asia/Jakarta (UTC+7)",
-    status: "OPEN TO COLLABORATION",
+    email: siteContact.email,
+    linkedIn: siteContact.linkedIn,
+    linkedInUrl: siteContact.linkedInUrl,
+    gitHub: siteContact.gitHub,
+    gitHubUrl: siteContact.gitHubUrl,
+    location: siteContact.location,
+    timezone: siteContact.timezone,
+    status: siteContact.status.en,
   },
-  mainNav: {
-    en: [
-      { key: "home", label: "Home", href: "/", index: "01" },
-      { key: "about", label: "About", href: "/about", index: "02" },
-      { key: "projects", label: "Projects", href: "/projects", index: "03" },
-      { key: "blog", label: "Blog", href: "/blog", index: "04" },
-      { key: "contact", label: "Contact", href: "/#contact", index: "05" },
-    ],
-    id: [
-      { key: "home", label: "Beranda", href: "/", index: "01" },
-      { key: "about", label: "Tentang", href: "/about", index: "02" },
-      { key: "projects", label: "Proyek", href: "/projects", index: "03" },
-      { key: "blog", label: "Blog", href: "/blog", index: "04" },
-      { key: "contact", label: "Kontak", href: "/#contact", index: "05" },
-    ],
-  },
+  mainNav: mainNavigation,
   socialLinks: [
     {
       key: "github",
       label: "GitHub",
-      href: "https://github.com/annastriw",
-      username: "annastriw",
+      href: siteContact.gitHubUrl,
+      username: siteContact.gitHub,
       isExternal: true,
     },
     {
       key: "linkedin",
       label: "LinkedIn",
-      href: "https://www.linkedin.com/in/annastriw",
-      username: "annastriw",
+      href: siteContact.linkedInUrl,
+      username: siteContact.linkedIn,
       isExternal: true,
     },
     {
       key: "email",
       label: "Email",
-      href: "mailto:annastriw23@gmail.com",
-      username: "annastriw23@gmail.com",
+      href: siteContact.emailUrl,
+      username: siteContact.email,
       isExternal: false,
     },
   ],
   colophon: {
     en: {
-      title: "Annas Tri Widagdo",
-      positioning: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
-      location: "Klaten, Central Java, Indonesia",
+      title: siteIdentity.name,
+      positioning: siteIdentity.positioning.en,
+      location: siteContact.location,
       timezone: "UTC+7",
-      status: "OPEN TO COLLABORATION",
+      status: siteContact.status.en,
       copyright: "© 2026 Annas Tri Widagdo. All rights reserved.",
     },
     id: {
-      title: "Annas Tri Widagdo",
-      positioning: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
+      title: siteIdentity.name,
+      positioning: siteIdentity.positioning.id,
       location: "Klaten, Jawa Tengah, Indonesia",
       timezone: "WIB (UTC+7)",
-      status: "TERSEDIA UNTUK KOLABORASI",
+      status: siteContact.status.id,
       copyright: "© 2026 Annas Tri Widagdo. Hak cipta dilindungi.",
     },
   },
-  labels: {
-    en: {
-      menu: "Menu",
-      closeMenu: "Close menu",
-      switchLanguage: "Switch language",
-      navigation: "Navigation",
-      connect: "Connect",
-      system: "System",
-      theme: "Theme",
-      skipToContent: "Skip to content",
-      backToTop: "Back to top",
-    },
-    id: {
-      menu: "Menu",
-      closeMenu: "Tutup menu",
-      switchLanguage: "Ganti bahasa",
-      navigation: "Navigasi",
-      connect: "Terhubung",
-      system: "Sistem",
-      theme: "Tema",
-      skipToContent: "Lewati ke konten",
-      backToTop: "Kembali ke atas",
-    },
-  },
+  labels: navigationLabels,
 };

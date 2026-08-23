@@ -30,13 +30,14 @@ export function EditorialPlaceholder({
           {`[FIG.${figureNumber} // ${category.toUpperCase()}]`}
         </span>
         <div className="w-8 h-[1px] bg-(--color-border) my-1" aria-hidden="true" />
-        <p className="font-mono text-sm font-medium text-(--color-text-primary) tracking-wide">
+        <p className="font-mono text-sm font-semibold text-(--color-text-primary) tracking-wider">
           {isId ? "BUKTI VISUAL SEDANG DISIAPKAN" : "FIGURE PENDING"}
         </p>
-        <p className="font-mono text-[11px] text-(--color-text-muted) max-w-[240px] uppercase">
-          {isId
-            ? "Aset dokumentasi resmi akan diunggah pada pembaruan berikutnya."
-            : "Project documentation asset not yet provided."}
+        <p className="font-mono text-[11px] text-(--color-text-secondary) tracking-wide uppercase">
+          {isId ? "ASET DOKUMENTASI SISTEM" : "DOCUMENTATION ASSET"}
+        </p>
+        <p className="font-mono text-[10px] text-(--color-text-muted) tracking-widest uppercase">
+          {isId ? "BELUM TERSEDIA" : "NOT YET PROVIDED"}
         </p>
       </div>
     </div>

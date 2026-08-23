@@ -55,8 +55,8 @@ export function ProjectFilter({ projects, locale }: ProjectFilterProps) {
           project.stakeholder?.[locale]?.toLowerCase().includes(query) ?? false;
         const techMatch = [
           ...project.techStack.core,
-          ...project.techStack.architecture,
-          ...project.techStack.qaOrDeployment,
+          ...(project.techStack.architecture ?? []),
+          ...(project.techStack.qaOrDeployment ?? []),
         ].some((t) => t.toLowerCase().includes(query));
 
         return (
