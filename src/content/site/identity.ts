@@ -16,8 +16,8 @@ export const siteIdentity: SiteIdentity = {
     id: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
   },
   documentTitle: {
-    en: "Annas Tri Widagdo — Software Engineer, Full-Stack Developer & Machine Learning Engineer",
-    id: "Annas Tri Widagdo — Software Engineer, Full-Stack Developer & Machine Learning Engineer",
+    en: "Annas Tri Widagdo - Software Engineer",
+    id: "Annas Tri Widagdo - Software Engineer",
   },
   documentDescription: {
     en: "Technical editorial archive of Annas Tri Widagdo. Fullstack web applications, machine learning integration, and robust software architectures grounded in verified implementation evidence.",

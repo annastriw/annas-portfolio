@@ -43,7 +43,7 @@ export async function generateMetadata({
   if (!post) return {};
 
   const isId = locale === "id";
-  const title = `${post.title[locale]} — Annas Tri Widagdo`;
+  const title = `${post.title[locale]} - Annas Tri Widagdo`;
   const description = post.description[locale];
 
   return {

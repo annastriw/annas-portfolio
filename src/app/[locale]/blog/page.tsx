@@ -32,8 +32,8 @@ export async function generateMetadata({
 
   const isId = locale === "id";
   const title = isId
-    ? "Catatan Rekayasa & Tulisan Teknis — Annas Tri Widagdo"
-    : "Dispatches & Technical Notes — Annas Tri Widagdo";
+    ? "Blog - Annas Tri Widagdo"
+    : "Blog - Annas Tri Widagdo";
   const description = isId
     ? "Kumpulan esai rekayasa sistem, catatan implementasi kecerdasan buatan, arsitektur web modern, dan pengalaman teknis Annas Tri Widagdo."
     : "Engineering essays, applied AI implementation notes, modern web architectures, and technical post-mortems by Annas Tri Widagdo.";

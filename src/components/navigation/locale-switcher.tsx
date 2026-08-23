@@ -27,44 +27,62 @@ export function LocaleSwitcher({
 
   return (
     <div
-      className={`locale-switcher ${className}`}
+      className={`editorial-lang-control ${className}`}
       role="group"
       aria-label={config.labels.switchLanguage}
     >
-      <span className="locale-switcher-prefix" aria-hidden="true">
-        LOC:
+      <span className="lang-control-tag" aria-hidden="true">
+        <svg
+          className="lang-control-icon"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.3"
+          aria-hidden="true"
+        >
+          <circle cx="8" cy="8" r="6.25" />
+          <path d="M1.75 8h12.5M8 1.75c1.8 2 2.5 4.3 2.5 6.25s-.7 4.25-2.5 6.25c-1.8-2-2.5-4.3-2.5-6.25s.7-4.25 2.5-6.25z" />
+        </svg>
+        <span className="lang-tag-text">LANG</span>
       </span>
-      {supportedLocales.map((loc, index) => {
-        const isCurrent = loc === locale;
-        const targetHref = getLocalizedPath(pathname, loc);
 
-        return (
-          <span key={loc} className="locale-switcher-item">
-            {index > 0 && <span className="locale-divider" aria-hidden="true">/</span>}
-            {isCurrent ? (
-              <span
-                className="locale-badge locale-badge-active"
-                aria-current="true"
-                lang={loc}
-                title={localeNames[loc].full}
-              >
-                {localeNames[loc].short}
-              </span>
-            ) : (
-              <Link
-                href={targetHref}
-                className="locale-badge locale-badge-link"
-                lang={loc}
-                title={`Switch to ${localeNames[loc].full}`}
-                onClick={onSelect}
-                aria-label={`Switch to ${localeNames[loc].full}`}
-              >
-                {localeNames[loc].short}
-              </Link>
-            )}
-          </span>
-        );
-      })}
+      <span className="lang-options-group">
+        {supportedLocales.map((loc, index) => {
+          const isCurrent = loc === locale;
+          const targetHref = getLocalizedPath(pathname, loc);
+
+          return (
+            <span key={loc} className="lang-option-item">
+              {index > 0 && (
+                <span className="lang-separator" aria-hidden="true">
+                  /
+                </span>
+              )}
+              {isCurrent ? (
+                <span
+                  className="lang-btn lang-btn-active"
+                  aria-current="true"
+                  lang={loc}
+                  title={localeNames[loc].full}
+                >
+                  {localeNames[loc].short}
+                </span>
+              ) : (
+                <Link
+                  href={targetHref}
+                  className="lang-btn lang-btn-link"
+                  lang={loc}
+                  title={`Switch to ${localeNames[loc].full}`}
+                  onClick={onSelect}
+                  aria-label={`Switch language to ${localeNames[loc].full}`}
+                >
+                  {localeNames[loc].short}
+                </Link>
+              )}
+            </span>
+          );
+        })}
+      </span>
     </div>
   );
 }

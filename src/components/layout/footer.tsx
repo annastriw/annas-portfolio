@@ -2,110 +2,110 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { navigationConfig } from "@/data/navigation";
 import { getLocalizedHref } from "@/lib/i18n/paths";
-import { ThemeControl } from "@/components/theme/theme-control";
 
 interface FooterProps {
   locale: Locale;
 }
 
+const positioningRoles = [
+  "Software Engineer",
+  "Full-Stack Developer",
+  "Machine Learning Engineer",
+];
+
 export function Footer({ locale }: FooterProps) {
   const config = navigationConfig[locale];
+  const isId = locale === "id";
 
   return (
-    <footer className="site-footer" role="contentinfo">
-      <div className="site-footer-inner">
-        {/* Top Grid */}
-        <div className="footer-grid">
-          {/* Column 1: Identity & Colophon */}
-          <div className="footer-col footer-col-brand">
-            <div className="footer-brand-header">
-              <span className="footer-brand-marker" aria-hidden="true">
+    <footer className="editorial-footer" role="contentinfo">
+      <div className="editorial-footer-inner">
+        {/* Main Editorial Bar: Identity + Roles + Contacts */}
+        <div className="footer-main-row">
+          {/* Identity & Status */}
+          <div className="footer-brand-col">
+            <div className="footer-brand-heading">
+              <span className="footer-brand-dot" aria-hidden="true">
                 ■
               </span>
-              <span className="footer-brand-title">{config.colophon.title}</span>
+              <span className="footer-brand-title">annastriwidagdo.me</span>
             </div>
-            <p className="footer-colophon-desc">
-              {config.colophon.description}
+            <p className="footer-positioning-line">
+              {positioningRoles.join(" · ")}
             </p>
             <div className="footer-status-pill">
-              <span className="status-indicator" aria-hidden="true"></span>
-              <span className="status-text">
-                SIGNAL / ARCHIVE — PORTFOLIO
+              <span className="status-indicator-dot" aria-hidden="true" />
+              <span className="status-indicator-text">
+                {isId ? "TERSEDIA UNTUK KOLABORASI" : "OPEN TO COLLABORATION"}
               </span>
             </div>
           </div>
 
-          {/* Column 2: Sitemap Navigation */}
-          <div className="footer-col">
-            <h2 className="footer-section-title">
-              [01 // {config.labels.navigation.toUpperCase()}]
-            </h2>
-            <ul className="footer-link-list">
-              {config.mainNav.map((item) => {
-                const localizedHref = getLocalizedHref(item.href, locale);
-                return (
-                  <li key={item.key}>
-                    <Link href={localizedHref} className="footer-nav-link">
-                      <span className="footer-link-index" aria-hidden="true">
-                        {item.index}
-                      </span>
-                      <span>{item.label}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-
-          {/* Column 3: Connect / Social */}
-          <div className="footer-col">
-            <h2 className="footer-section-title">
-              [02 // {config.labels.connect.toUpperCase()}]
-            </h2>
-            <ul className="footer-link-list">
+          {/* Connect & Location Rail */}
+          <div className="footer-connect-col">
+            <div className="footer-connect-links">
               {config.socialLinks.map((item) => (
-                <li key={item.key}>
-                  <a
-                    href={item.href}
-                    target={item.isExternal ? "_blank" : undefined}
-                    rel={item.isExternal ? "noopener noreferrer" : undefined}
-                    className="footer-nav-link"
-                  >
-                    <span>{item.label}</span>
-                    {item.isExternal && (
-                      <span className="footer-external-arrow" aria-hidden="true">
-                        ↗
-                      </span>
-                    )}
-                  </a>
-                </li>
+                <a
+                  key={item.key}
+                  href={item.href}
+                  target={item.isExternal ? "_blank" : undefined}
+                  rel={item.isExternal ? "noopener noreferrer" : undefined}
+                  className="footer-connect-link"
+                >
+                  <span>{item.label}</span>
+                  {item.isExternal && (
+                    <span className="external-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  )}
+                </a>
               ))}
-            </ul>
-          </div>
-
-          {/* Column 4: System & Location */}
-          <div className="footer-col">
-            <h2 className="footer-section-title">
-              [03 // {config.labels.system.toUpperCase()}]
-            </h2>
-            <div className="footer-system-theme">
-              <ThemeControl locale={locale} />
             </div>
-            <div className="footer-location-block">
-              <span className="footer-location-label">LOC / TIME:</span>
-              <p className="footer-location-value">
-                {config.colophon.location} [{config.colophon.timezone}]
-              </p>
+            <div className="footer-meta-coordinates">
+              <span>{isId ? "Klaten, Jawa Tengah" : "Klaten, Indonesia"}</span>
+              <span className="coord-divider" aria-hidden="true">
+                /
+              </span>
+              <span className="coord-tz">UTC+7</span>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="footer-bottom-bar">
-          <p className="footer-copyright">{config.colophon.copyright}</p>
-          <a href="#main-content" className="footer-back-to-top">
-            ↑ {locale === "id" ? "Kembali ke atas" : "Back to top"}
-          </a>
+        {/* Bottom Technical Rail: Secondary Nav + Colophon + Back to Top */}
+        <div className="footer-sub-row">
+          <nav className="footer-secondary-nav" aria-label="Footer Navigation">
+            {config.mainNav.map((item) => {
+              const localizedHref = getLocalizedHref(item.href, locale);
+              return (
+                <Link
+                  key={item.key}
+                  href={localizedHref}
+                  className="footer-sub-link"
+                >
+                  <span className="footer-sub-index" aria-hidden="true">
+                    {item.index}
+                  </span>
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="footer-colophon-actions">
+            <span className="footer-copyright-note">
+              {config.colophon.copyright}
+            </span>
+            <a
+              href="#main-content"
+              className="footer-top-btn"
+              aria-label={isId ? "Kembali ke atas" : "Back to top"}
+            >
+              <span>TOP</span>
+              <span className="arrow-top" aria-hidden="true">
+                ↑
+              </span>
+            </a>
+          </div>
         </div>
       </div>
     </footer>

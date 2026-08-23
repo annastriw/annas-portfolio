@@ -13,12 +13,13 @@ export function Header({ locale }: HeaderProps) {
   return (
     <header className="site-header" role="banner">
       <div className="site-header-inner">
-        {/* Brand / Wordmark */}
+        {/* Brand / Typographic Masthead */}
         <div className="site-brand">
           <Link
             href={`/${locale}`}
+            id="site-header-brand"
             className="brand-link"
-            aria-label="Annas Tri Widagdo — Home"
+            aria-label="annastriwidagdo.me — Home"
           >
             <span className="brand-marker" aria-hidden="true">
               ■
@@ -36,7 +37,7 @@ export function Header({ locale }: HeaderProps) {
           <NavLinks locale={locale} />
         </nav>
 
-        {/* Utility Controls: Locale & Theme */}
+        {/* Utility Controls: Editorial Language & Theme */}
         <div className="desktop-utilities">
           <LocaleSwitcher locale={locale} />
           <ThemeToggle locale={locale} />
@@ -50,3 +51,4 @@ export function Header({ locale }: HeaderProps) {
     </header>
   );
 }
+

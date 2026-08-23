@@ -31,8 +31,8 @@ export async function generateMetadata({
 
   const isId = locale === "id";
   const title = isId
-    ? "Tentang & Profil Rekayasa — Annas Tri Widagdo"
-    : "About & Engineering Profile — Annas Tri Widagdo";
+    ? "Tentang - Annas Tri Widagdo"
+    : "About - Annas Tri Widagdo";
   const description = isId
     ? "Profil rekayasa perangkat lunak, latar belakang teknik komputer Universitas Diponegoro, sertifikasi Cisco & Oracle, prinsip rekayasa, dan taksonomi teknologi Annas Tri Widagdo."
     : "Software engineering profile, Diponegoro University computer engineering foundation, Cisco & Oracle credentials, core engineering manifesto, and technical taxonomy of Annas Tri Widagdo.";

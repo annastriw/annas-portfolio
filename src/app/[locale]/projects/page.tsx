@@ -27,8 +27,8 @@ export async function generateMetadata({
 
   const isId = locale === "id";
   const title = isId
-    ? "Arsip Proyek & Rekayasa Sistem — Annas Tri Widagdo"
-    : "Projects & Systems Archive — Annas Tri Widagdo";
+    ? "Proyek - Annas Tri Widagdo"
+    : "Projects - Annas Tri Widagdo";
   const description = isId
     ? "Arsip komprehensif 10 proyek rekayasa perangkat lunak, aplikasi fullstack, purwarupa AI/ML, dan sistem digital karya Annas Tri Widagdo."
     : "Comprehensive archive of 10 curated software engineering projects, fullstack web applications, AI/ML prototypes, and digital systems by Annas Tri Widagdo.";

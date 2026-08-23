@@ -58,7 +58,7 @@ export const navigationConfig: LocaleNavigation = {
       },
     ],
     colophon: {
-      title: "Annas Tri Widagdo",
+      title: "annastriwidagdo.me",
       description:
         "Software Engineer · Full-Stack Developer · Machine Learning Engineer building robust web systems, intelligent products, and technical editorial solutions.",
       location: "Klaten, Central Java, Indonesia",
@@ -133,7 +133,7 @@ export const navigationConfig: LocaleNavigation = {
       },
     ],
     colophon: {
-      title: "Annas Tri Widagdo",
+      title: "annastriwidagdo.me",
       description:
         "Software Engineer · Full-Stack Developer · Machine Learning Engineer yang membangun sistem web yang tangguh, produk cerdas, dan solusi technical editorial.",
       location: "Klaten, Jawa Tengah, Indonesia",

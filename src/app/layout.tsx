@@ -5,7 +5,7 @@ import "./globals.css";
 
 const geistSans = Geist({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "500", "600"],
   style: "normal",
   display: "swap",
   variable: "--font-geist-sans",
@@ -21,7 +21,7 @@ const instrumentSerif = Instrument_Serif({
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "600"],
   style: "normal",
   display: "swap",
   variable: "--font-geist-mono",
@@ -30,14 +30,23 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://annastriwidagdo.me"),
   title: {
-    default: "Annas Tri Widagdo — Software Engineer & AI Practitioner",
+    default: "Annas Tri Widagdo - Software Engineer",
     template: "%s",
   },
   description:
-    "Technical editorial portfolio of Annas Tri Widagdo, software engineer and AI practitioner building robust web systems, intelligent products, and deterministic architectures.",
+    "Technical editorial archive of Annas Tri Widagdo. Fullstack web applications, machine learning integration, and robust software architectures grounded in verified implementation evidence.",
   authors: [{ name: "Annas Tri Widagdo", url: "https://annastriwidagdo.me" }],
   creator: "Annas Tri Widagdo",
   publisher: "Annas Tri Widagdo",
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "192x192", type: "image/png" },
+      { url: "/favicon.png", sizes: "64x64", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
@@ -55,15 +64,15 @@ export const metadata: Metadata = {
     alternateLocale: ["id_ID"],
     url: "https://annastriwidagdo.me",
     siteName: "Annas Tri Widagdo Portfolio",
-    title: "Annas Tri Widagdo — Software Engineer & AI Practitioner",
+    title: "Annas Tri Widagdo - Software Engineer",
     description:
-      "Technical editorial portfolio of Annas Tri Widagdo, software engineer and AI practitioner.",
+      "Technical editorial archive of Annas Tri Widagdo. Fullstack web applications, machine learning integration, and robust software architectures grounded in verified implementation evidence.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Annas Tri Widagdo — Software Engineer & AI Practitioner",
+    title: "Annas Tri Widagdo - Software Engineer",
     description:
-      "Technical editorial portfolio of Annas Tri Widagdo, software engineer and AI practitioner.",
+      "Technical editorial archive of Annas Tri Widagdo. Fullstack web applications, machine learning integration, and robust software architectures grounded in verified implementation evidence.",
   },
 };
 
@@ -74,6 +83,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=sessionStorage.getItem('annas_splash_shown');if(s){document.documentElement.classList.add('splash-dismissed');}else{document.documentElement.classList.add('splash-active');}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
