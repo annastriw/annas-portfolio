@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale, supportedLocales } from "@/lib/i18n/config";
+import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
 import {
-  getAllBlogMetadata,
-  getAllBlogCategories,
-} from "@/lib/blog/blog-content";
+  getAllBlogPostsData,
+  getAllBlogCategoriesData,
+} from "@/content/blog/blog-data";
 import { BlogHero } from "@/components/blog/blog-hero";
 import { BlogFilter } from "@/components/blog/blog-filter";
 import { BlogEmptyState } from "@/components/blog/blog-empty-state";
@@ -66,13 +66,13 @@ export default async function BlogPage({ params }: BlogPageProps) {
     notFound();
   }
 
-  const posts = await getAllBlogMetadata(locale);
-  const categories = await getAllBlogCategories(locale);
+  const posts = getAllBlogPostsData();
+  const categories = getAllBlogCategoriesData(locale as Locale);
   const isId = locale === "id";
 
   const blogListSchema = generateItemListJsonLd(
     posts.map((p) => ({
-      title: p.title,
+      title: p.title[locale as Locale],
       url: `${SITE_URL}/${locale}/blog/${p.slug}`,
     })),
     isId ? "Catatan Rekayasa & Tulisan Teknis" : "Dispatches & Technical Notes",
@@ -85,17 +85,17 @@ export default async function BlogPage({ params }: BlogPageProps) {
         <JsonLd schema={blogListSchema} />
 
         {/* Page Header Hero */}
-        <BlogHero locale={locale} />
+        <BlogHero locale={locale as Locale} />
 
         {/* Content Stream or Empty State */}
         {posts.length > 0 ? (
           <BlogFilter
             posts={posts}
             categories={categories}
-            locale={locale}
+            locale={locale as Locale}
           />
         ) : (
-          <BlogEmptyState locale={locale} mode="empty-archive" />
+          <BlogEmptyState locale={locale as Locale} mode="empty-archive" />
         )}
       </div>
     </div>

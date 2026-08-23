@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale, supportedLocales } from "@/lib/i18n/config";
-import {
-  getAllProjectMetadata,
-  getProjectAssets,
-} from "@/lib/projects/project-content";
+import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
+import { getAllProjectsData } from "@/content/projects/projects-data";
+import { siteConfig } from "@/content/site/site-config";
 import { HeroSection } from "@/components/home/hero-section";
 import { SelectedProjects } from "@/components/home/selected-projects";
 import { ExperienceSection } from "@/components/home/experience-section";
@@ -17,6 +15,12 @@ import {
   generateWebSiteJsonLd,
 } from "@/lib/seo/schema-generators";
 
+interface PageProps {
+  params: Promise<{
+    locale: string;
+  }>;
+}
+
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -25,17 +29,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]">): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
   const isId = locale === "id";
-  const title = isId
-    ? "Annas Tri Widagdo — Software Engineer & Praktisi AI"
-    : "Annas Tri Widagdo — Software Engineer & AI Practitioner";
-  const description = isId
-    ? "Portofolio profesional Annas Tri Widagdo. Rekayasa perangkat lunak, aplikasi fullstack, model klasifikasi machine learning, dan sistem digital berbasis bukti implementasi nyata."
-    : "Professional portfolio of Annas Tri Widagdo. Software engineering, fullstack web applications, machine learning classification prototypes, and evidence-driven digital products.";
+  const title = siteConfig.documentTitle[locale as Locale];
+  const description = siteConfig.documentDescription[locale as Locale];
 
   return {
     title,
@@ -58,51 +58,39 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocalizedHomePage({
-  params,
-}: PageProps<"/[locale]">) {
+export default async function LocalizedHomePage({ params }: PageProps) {
   const { locale } = await params;
 
   if (!isLocale(locale)) {
     notFound();
   }
 
-  const projects = await getAllProjectMetadata();
-
-  // Load first thumbnail for featured projects
-  const thumbnails: Record<string, string | null> = {};
-  await Promise.all(
-    projects.map(async (p) => {
-      const assets = await getProjectAssets(p.slug);
-      thumbnails[p.slug] = assets.length > 0 ? assets[0] : null;
-    })
-  );
+  const projects = getAllProjectsData();
 
   return (
     <div className="home-landing-page">
       <JsonLd schema={[generatePersonJsonLd(), generateWebSiteJsonLd()]} />
 
       {/* 01. Hero & Profile Introduction */}
-      <HeroSection locale={locale} />
+      <HeroSection locale={locale as Locale} />
 
       {/* 02. Selected Work / Featured Projects Preview */}
       <SelectedProjects
         projects={projects}
-        thumbnails={thumbnails}
-        locale={locale}
+        locale={locale as Locale}
       />
 
       {/* 03. Professional History & Internship Timeline */}
-      <ExperienceSection locale={locale} />
+      <ExperienceSection locale={locale as Locale} />
 
       {/* 04. Technical Capabilities & Taxonomy */}
-      <TechStackSection locale={locale} />
+      <TechStackSection locale={locale as Locale} />
 
       {/* 05. Open Source & GitHub Contribution Signal */}
-      <GitHubSignal locale={locale} />
+      <GitHubSignal locale={locale as Locale} />
 
-      {/* 06. Contact Paths & Transmission Initiation */}
-      <ContactSection locale={locale} />
+      {/* 06. Contact Channels */}
+      <ContactSection locale={locale as Locale} />
     </div>
   );
 }

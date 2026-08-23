@@ -18,45 +18,25 @@ export const educationData: EducationItem = {
     en: "Computer Engineering (Teknik Komputer)",
     id: "Teknik Komputer",
   },
-  distinction: {
-    en: "Best Graduate (Wisudawan Terbaik) — Department of Computer Engineering",
-    id: "Wisudawan Terbaik — Departemen Teknik Komputer",
-  },
   period: "2020 — 2024",
   location: "Semarang, Central Java, Indonesia",
   highlights: {
     en: [
-      "Awarded Best Graduate (Wisudawan Terbaik) distinction for academic excellence, thesis research, and technical rigor.",
-      "Specialized in Software Engineering, Applied Machine Learning, Distributed Web Systems, and Computer Networks.",
-      "Conducted research and prototype implementations across predictive healthcare models and interactive fullstack systems.",
+      "Graduated with Bachelor of Engineering in Computer Engineering.",
+      "Specialized in Software Systems Engineering, Applied Machine Learning, and Computer Networks.",
+      "Conducted thesis research in applied machine learning risk prediction systems.",
       "Active contributor in institutional developer initiatives at Faculty of Engineering.",
     ],
     id: [
-      "Meraih predikat Wisudawan Terbaik atas prestasi akademik unggul, riset tugas akhir, dan dedikasi rekayasa teknis.",
-      "Peminatan pada Rekayasa Perangkat Lunak, Terapan Machine Learning, Sistem Web Terdistribusi, dan Jaringan Komputer.",
-      "Melakukan riset dan purwarupa sistem inferensi prediktif bidang kesehatan dan aplikasi fullstack interaktif.",
+      "Lulus Sarjana Teknik pada Departemen Teknik Komputer Universitas Diponegoro.",
+      "Peminatan pada Rekayasa Perangkat Lunak, Terapan Machine Learning, dan Jaringan Komputer.",
+      "Melakukan riset tugas akhir dalam sistem klasifikasi inferensi machine learning.",
       "Berkontribusi aktif pada inisiatif pengembangan sistem Tim Developer IT Fakultas Teknik.",
     ],
   },
-  certificateAsset: "/assets/certificate/wisudawan_terbaik_tekkom.webp",
 };
 
 export const certificatesData: CertificateItem[] = [
-  {
-    id: "wisudawan-terbaik",
-    title: {
-      en: "Best Graduate (Wisudawan Terbaik) Department of Computer Engineering",
-      id: "Wisudawan Terbaik Departemen Teknik Komputer",
-    },
-    issuer: "Diponegoro University (Universitas Diponegoro)",
-    category: "academic-experience",
-    assetPath: "/assets/certificate/wisudawan_terbaik_tekkom.webp",
-    badge: "ACADEMIC DISTINCTION",
-    credentialNote: {
-      en: "Conferred for top academic achievement and engineering excellence upon degree completion.",
-      id: "Dianugerahkan atas prestasi akademik tertinggi dan keunggulan rekayasa teknik.",
-    },
-  },
   {
     id: "sertif-magang-undip",
     title: {
@@ -65,7 +45,7 @@ export const certificatesData: CertificateItem[] = [
     },
     issuer: "Faculty of Engineering, Diponegoro University",
     category: "academic-experience",
-    assetPath: "/assets/certificate/sertif_magang.webp",
+    assetPath: "/assets/certificates/sertif_magang.webp",
     badge: "INTERNSHIP CREDENTIAL",
     credentialNote: {
       en: "Formal completion certificate for UI/UX design, interactive prototyping, and internal systems development.",
@@ -81,7 +61,7 @@ export const certificatesData: CertificateItem[] = [
     issuer: "Cisco Networking Academy",
     category: "networking",
     assetPath:
-      "/assets/certificate/ccna_enterprise_networking_security_and_automation.webp",
+      "/assets/certificates/ccna_enterprise_networking_security_and_automation.webp",
     badge: "CISCO VERIFIED",
     credentialNote: {
       en: "Advanced routing, network security architectures, virtualization, and network automation APIs.",
@@ -97,7 +77,7 @@ export const certificatesData: CertificateItem[] = [
     issuer: "Cisco Networking Academy",
     category: "networking",
     assetPath:
-      "/assets/certificate/ccnav7_switching_routing_and_wireless_essentials.webp",
+      "/assets/certificates/ccnav7_switching_routing_and_wireless_essentials.webp",
     badge: "CISCO VERIFIED",
     credentialNote: {
       en: "VLANs, inter-VLAN routing, STP, EtherChannel, DHCPv4/v6, and WLAN configuration.",
@@ -112,7 +92,7 @@ export const certificatesData: CertificateItem[] = [
     },
     issuer: "Cisco Networking Academy",
     category: "networking",
-    assetPath: "/assets/certificate/ccnav7_introduction_to_networks.webp",
+    assetPath: "/assets/certificates/ccnav7_introduction_to_networks.webp",
     badge: "CISCO VERIFIED",
     credentialNote: {
       en: "Network architecture, IP addressing schemes, subnetting, Ethernet protocols, and OSI model fundamentals.",
@@ -127,7 +107,7 @@ export const certificatesData: CertificateItem[] = [
     },
     issuer: "Huawei Technologies Co., Ltd.",
     category: "ai-data",
-    assetPath: "/assets/certificate/hcia_ai_v3_5.webp",
+    assetPath: "/assets/certificates/hcia_ai_v3_5.webp",
     badge: "HUAWEI CERTIFIED",
     credentialNote: {
       en: "Deep learning fundamentals, computer vision, natural language processing, and AI development workflows.",
@@ -142,7 +122,7 @@ export const certificatesData: CertificateItem[] = [
     },
     issuer: "Oracle Academy",
     category: "ai-data",
-    assetPath: "/assets/certificate/database_design.webp",
+    assetPath: "/assets/certificates/database_design.webp",
     badge: "ORACLE ACADEMY",
     credentialNote: {
       en: "Relational modeling, entity-relationship diagrams (ERD), normalization, and schema design.",
@@ -157,7 +137,7 @@ export const certificatesData: CertificateItem[] = [
     },
     issuer: "Oracle Academy",
     category: "ai-data",
-    assetPath: "/assets/certificate/database_foundations.webp",
+    assetPath: "/assets/certificates/database_foundations.webp",
     badge: "ORACLE ACADEMY",
     credentialNote: {
       en: "SQL queries, relational database management principles, and data manipulation.",
@@ -173,7 +153,7 @@ export const certificatesData: CertificateItem[] = [
     issuer: "Cisco Networking Academy",
     category: "networking",
     assetPath:
-      "/assets/certificate/it_essentials_pc_hardware_and_software.webp",
+      "/assets/certificates/it_essentials_pc_hardware_and_software.webp",
     badge: "CISCO VERIFIED",
     credentialNote: {
       en: "Computer hardware architectures, operating system fundamentals, and operational security.",
@@ -189,7 +169,7 @@ export const certificatesData: CertificateItem[] = [
     issuer: "Cisco Networking Academy",
     category: "networking",
     assetPath:
-      "/assets/certificate/introduction_to_iot_and_digital_transformation.webp",
+      "/assets/certificates/introduction_to_iot_and_digital_transformation.webp",
     badge: "CISCO VERIFIED",
     credentialNote: {
       en: "Internet of Things ecosystem, sensor networks, cloud connectivity, and digital transformation.",
@@ -284,6 +264,7 @@ export const technicalTaxonomyData: TechnicalTaxonomyGroup[] = [
       id: "Backend, API & Sistem",
     },
     items: [
+      { name: "NestJS", context: "Enterprise TypeScript architecture, modular microservices" },
       { name: "Laravel", context: "Enterprise REST APIs, Eloquent ORM, Auth & Queues" },
       { name: "Node.js", context: "Lightweight services, tooling, build automation" },
       { name: "Flask", context: "Lightweight Python REST inference microservices" },
@@ -299,7 +280,7 @@ export const technicalTaxonomyData: TechnicalTaxonomyGroup[] = [
     items: [
       { name: "Scikit-Learn", context: "Binary classification models, evaluation pipelines" },
       { name: "NumPy & Pandas", context: "Data cleaning, feature scaling, matrix operations" },
-      { name: "Audio Feature Extraction", context: "Spectrogram analysis, Speech-to-Text pipelines" },
+      { name: "Hugging Face (Wav2Vec2)", context: "Speech-to-Text inference pipelines" },
       { name: "Model Serialization", context: "Joblib / Pickle deployment into production APIs" },
     ],
   },

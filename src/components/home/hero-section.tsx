@@ -9,27 +9,27 @@ interface HeroSectionProps {
 const heroCopy = {
   en: {
     systemTag: "SYS.2026 // SIGNAL ARCHIVE",
-    location: "LOC: SEMARANG, ID [UTC+7]",
-    availability: "STATUS: OPEN FOR OPPORTUNITIES",
+    location: "LOC: KLATEN, ID [UTC+7]",
+    availability: "STATUS: OPEN TO COLLABORATION",
     name: "ANNAS TRI WIDAGDO",
-    lead: "Software Engineer & AI Practitioner building robust web systems, intelligent classification models, and technical editorial digital products.",
+    lead: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
     description:
-      "Specialized in fullstack web development (Next.js, Laravel), machine learning prototypes (Python, Scikit-learn), and reliable software architectures grounded in real-world evidence.",
-    exploreCta: "Explore Projects Index",
+      "Specialized in fullstack web architecture (Next.js, React, NestJS, Laravel), machine learning integration (Python, Scikit-learn, Hugging Face), and resilient software architectures grounded in verified implementation evidence.",
+    exploreCta: "Explore Projects Archive (10)",
     contactCta: "Initiate Contact",
-    portraitCaption: "PROFILE // EVIDENCE FIG.01",
+    portraitCaption: "PROFILE // VERIFIED FIG.01",
   },
   id: {
     systemTag: "SYS.2026 // ARSIP SINYAL",
-    location: "LOKASI: SEMARANG, ID [UTC+7]",
+    location: "LOKASI: KLATEN, ID [UTC+7]",
     availability: "STATUS: TERSEDIA UNTUK KOLABORASI",
     name: "ANNAS TRI WIDAGDO",
-    lead: "Software Engineer & Praktisi AI yang membangun sistem web yang tangguh, model klasifikasi cerdas, dan produk digital bertaraf technical editorial.",
+    lead: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
     description:
-      "Berfokus pada pengembangan web fullstack (Next.js, Laravel), purwarupa machine learning (Python, Scikit-learn), dan arsitektur perangkat lunak andal berbasis implementasi nyata.",
-    exploreCta: "Lihat Arsip Proyek",
+      "Berfokus pada arsitektur web fullstack (Next.js, React, NestJS, Laravel), integrasi machine learning (Python, Scikit-learn, Hugging Face), dan rekayasa perangkat lunak andal berbasis bukti implementasi nyata.",
+    exploreCta: "Jelajahi Arsip Proyek (10)",
     contactCta: "Hubungi Langsung",
-    portraitCaption: "PROFIL // BUKTI FIG.01",
+    portraitCaption: "PROFIL // BUKTI TERVERIFIKASI FIG.01",
   },
 };
 
@@ -55,7 +55,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
         <div className="home-hero-grid">
           <div className="home-hero-content">
             <h1 className="home-hero-name">{copy.name}</h1>
-            <p className="home-hero-lead">{copy.lead}</p>
+            <p className="home-hero-lead font-mono text-sm tracking-wide text-(--color-accent)">
+              {copy.lead}
+            </p>
             <p className="home-hero-description">{copy.description}</p>
 
             <div className="home-hero-actions">
@@ -82,13 +84,13 @@ export function HeroSection({ locale }: HeroSectionProps) {
             <figure className="hero-portrait-figure">
               <div className="hero-portrait-frame">
                 <Image
-                  src="/assets/me/pas-foto.webp"
+                  src="/assets/profile/pas-foto.webp"
                   alt="Annas Tri Widagdo — Software Engineer"
                   width={380}
                   height={480}
                   priority
                   sizes="(max-width: 768px) 100vw, 380px"
-                  className="hero-portrait-img"
+                  className="hero-portrait-img object-cover w-full h-full"
                 />
               </div>
               <figcaption className="hero-portrait-caption">

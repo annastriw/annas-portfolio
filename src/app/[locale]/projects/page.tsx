@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale, supportedLocales } from "@/lib/i18n/config";
-import {
-  getAllProjectMetadata,
-  getProjectAssets,
-} from "@/lib/projects/project-content";
+import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
+import { getAllProjectsData } from "@/content/projects/projects-data";
 import { ProjectFilter } from "@/components/projects/project-filter";
 import { JsonLd } from "@/components/seo/json-ld";
 import { generateItemListJsonLd } from "@/lib/seo/schema-generators";
 import { SITE_URL } from "@/lib/seo/seo-types";
+
+interface PageProps {
+  params: Promise<{
+    locale: string;
+  }>;
+}
 
 export const dynamicParams = false;
 
@@ -18,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/projects">): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
@@ -27,8 +30,8 @@ export async function generateMetadata({
     ? "Arsip Proyek & Rekayasa Sistem — Annas Tri Widagdo"
     : "Projects & Systems Archive — Annas Tri Widagdo";
   const description = isId
-    ? "Arsip komprehensif proyek rekayasa perangkat lunak, purwarupa AI/ML, aplikasi fullstack, dan sistem digital nyata karya Annas Tri Widagdo."
-    : "Comprehensive archive of software engineering projects, AI/ML prototypes, fullstack web applications, and real-world systems by Annas Tri Widagdo.";
+    ? "Arsip komprehensif 10 proyek rekayasa perangkat lunak, aplikasi fullstack, purwarupa AI/ML, dan sistem digital karya Annas Tri Widagdo."
+    : "Comprehensive archive of 10 curated software engineering projects, fullstack web applications, AI/ML prototypes, and digital systems by Annas Tri Widagdo.";
 
   return {
     title,
@@ -51,34 +54,22 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProjectsPage({
-  params,
-}: PageProps<"/[locale]/projects">) {
+export default async function ProjectsPage({ params }: PageProps) {
   const { locale } = await params;
 
   if (!isLocale(locale)) {
     notFound();
   }
 
-  const projects = await getAllProjectMetadata();
-
-  // Load first thumbnail for each project
-  const thumbnails: Record<string, string | null> = {};
-  await Promise.all(
-    projects.map(async (p) => {
-      const assets = await getProjectAssets(p.slug);
-      thumbnails[p.slug] = assets.length > 0 ? assets[0] : null;
-    })
-  );
-
+  const projects = getAllProjectsData();
   const isId = locale === "id";
 
   const projectListSchema = generateItemListJsonLd(
     projects.map((p) => ({
-      title: p.title,
+      title: p.title[locale as Locale],
       url: `${SITE_URL}/${locale}/projects/${p.slug}`,
     })),
-    isId ? "Arsip Proyek & Sistem" : "Projects & Systems Archive",
+    isId ? "Arsip Proyek & Rekayasa Sistem" : "Projects & Systems Archive",
     `${SITE_URL}/${locale}/projects`
   );
 
@@ -92,27 +83,23 @@ export default async function ProjectsPage({
           <div className="projects-hub-meta">
             <span className="hub-meta-tag">[ARCHIVE // 01]</span>
             <span className="hub-meta-tag">
-              {isId ? "INDEKS KARYA & PROYEK" : "COMPLETE INDEX OF WORK"}
+              {isId ? "INDEKS KARYA & PROYEK TERKURASI" : "CURATED INDEX OF 10 PROJECTS"}
             </span>
           </div>
 
           <h1 className="projects-hub-title">
-            {isId ? "Arsip Proyek & Sistem" : "Projects & Systems Archive"}
+            {isId ? "Arsip Proyek & Rekayasa Sistem" : "Projects & Systems Archive"}
           </h1>
 
           <p className="projects-hub-lead">
             {isId
-              ? "Dokumentasi rekayasa perangkat lunak, aplikasi fullstack, purwarupa kecerdasan buatan, dan sistem interaktif berdasarkan implementasi nyata."
-              : "Comprehensive documentation of software engineering, fullstack web applications, artificial intelligence prototypes, and interactive systems grounded in real implementations."}
+              ? "Dokumentasi terstruktur dari 10 proyek rekayasa perangkat lunak, aplikasi web fullstack, purwarupa machine learning, dan utilitas perangkat keras berlandaskan bukti nyata."
+              : "Structured documentation of 10 curated software engineering projects, fullstack web applications, machine learning prototypes, and hardware utilities grounded in authentic evidence."}
           </p>
         </header>
 
         {/* Interactive Filter & Project Grid */}
-        <ProjectFilter
-          projects={projects}
-          thumbnails={thumbnails}
-          locale={locale}
-        />
+        <ProjectFilter projects={projects} locale={locale as Locale} />
       </div>
     </div>
   );

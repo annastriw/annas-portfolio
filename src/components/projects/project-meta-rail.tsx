@@ -1,73 +1,47 @@
-import type { ProjectMetadata } from "@/lib/projects/project-types";
+import type { ProjectItem } from "@/content/projects/projects-types";
 import type { Locale } from "@/lib/i18n/config";
 
 interface ProjectMetaRailProps {
-  metadata: ProjectMetadata;
+  project: ProjectItem;
   locale: Locale;
 }
 
-export function ProjectMetaRail({ metadata, locale }: ProjectMetaRailProps) {
-  const raw = metadata.raw;
+export function ProjectMetaRail({ project, locale }: ProjectMetaRailProps) {
   const isId = locale === "id";
 
   const metaItems = [
     {
       label: isId ? "PERAN" : "ROLE",
-      value: metadata.role,
+      value: project.role[locale],
     },
     {
-      label: isId ? "KLIEN / STAKEHOLDER" : "STAKEHOLDER",
-      value: metadata.stakeholder,
+      label: isId ? "KLIEN / MITRA" : "STAKEHOLDER",
+      value: project.stakeholder?.[locale] ?? null,
     },
     {
       label: isId ? "STATUS" : "STATUS",
-      value: metadata.status,
+      value: project.status[locale],
     },
     {
       label: isId ? "PERIODE" : "PERIOD",
-      value: metadata.period,
+      value: project.period[locale],
     },
     {
-      label: isId ? "DURASI" : "DURATION",
-      value: metadata.duration,
-    },
-    {
-      label: isId ? "LOKASI" : "LOCATION",
-      value: metadata.location,
-    },
-    {
-      label: isId ? "TIM / STRUKTUR" : "TEAM",
-      value: typeof raw.tim === "string" ? raw.tim : null,
-    },
-    {
-      label: isId ? "DIVISI" : "DIVISION",
-      value: typeof raw.divisi === "string" ? raw.divisi : null,
-    },
-    {
-      label: isId ? "PLATFORM" : "PLATFORM",
-      value: typeof raw.platform === "string" ? raw.platform : null,
-    },
-    {
-      label: isId ? "BAHASA UTAMA" : "CORE LANGUAGE",
-      value: typeof raw.bahasa_utama === "string" ? raw.bahasa_utama : null,
-    },
-    {
-      label: isId ? "MODEL UTAMA" : "CORE MODEL",
-      value: typeof raw.model_utama === "string" ? raw.model_utama : null,
-    },
-    {
-      label: isId ? "PRIMARY TOOLS" : "PRIMARY TOOLS",
-      value: typeof raw.primary_tool === "string" ? raw.primary_tool : null,
+      label: isId ? "KATEGORI" : "CATEGORY",
+      value:
+        project.category === "web-app"
+          ? isId ? "Aplikasi Web" : "Web Application"
+          : project.category === "ml"
+          ? "Machine Learning"
+          : project.category === "mobile"
+          ? isId ? "Aplikasi Mobile" : "Mobile Application"
+          : isId ? "Lainnya" : "Other",
     },
   ].filter((item) => Boolean(item.value));
 
-  const liveDomain =
-    typeof raw.live_domain === "string" && raw.live_domain.trim()
-      ? raw.live_domain.trim()
-      : null;
-
   return (
     <aside className="project-meta-rail" aria-label="Project Technical Specifications">
+      {/* 01. Specifications Header */}
       <div className="meta-rail-header">
         <span className="meta-rail-tag">[SPECS // 01]</span>
         <h2 className="meta-rail-title">
@@ -75,6 +49,7 @@ export function ProjectMetaRail({ metadata, locale }: ProjectMetaRailProps) {
         </h2>
       </div>
 
+      {/* Meta Item Key-Values */}
       <dl className="meta-rail-list">
         {metaItems.map((item) => (
           <div key={item.label} className="meta-rail-row">
@@ -83,21 +58,38 @@ export function ProjectMetaRail({ metadata, locale }: ProjectMetaRailProps) {
           </div>
         ))}
 
-        {liveDomain && (
+        {/* Live Domain URL */}
+        {project.liveUrl && (
           <div className="meta-rail-row meta-rail-live">
-            <dt className="meta-rail-dt">{isId ? "DOMAIN LIVE" : "LIVE DOMAIN"}</dt>
+            <dt className="meta-rail-dt">{isId ? "URL PRODUKSI" : "PRODUCTION URL"}</dt>
             <dd className="meta-rail-dd">
               <a
-                href={
-                  liveDomain.startsWith("http")
-                    ? liveDomain
-                    : `https://${liveDomain}`
-                }
+                href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="live-domain-link"
               >
-                <span>{liveDomain}</span>
+                <span>{project.liveUrl.replace(/^https?:\/\//, "")}</span>
+                <span className="live-domain-arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            </dd>
+          </div>
+        )}
+
+        {/* GitHub Repository URL */}
+        {project.githubUrl && (
+          <div className="meta-rail-row meta-rail-live">
+            <dt className="meta-rail-dt">{isId ? "KODE REPOSITORI" : "SOURCE CODE"}</dt>
+            <dd className="meta-rail-dd">
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="live-domain-link"
+              >
+                <span>{project.githubUrl.replace(/^https?:\/\//, "")}</span>
                 <span className="live-domain-arrow" aria-hidden="true">
                   ↗
                 </span>
@@ -106,6 +98,73 @@ export function ProjectMetaRail({ metadata, locale }: ProjectMetaRailProps) {
           </div>
         )}
       </dl>
+
+      {/* 02. Verified Metrics Box */}
+      {project.metrics && project.metrics.length > 0 && (
+        <div className="meta-rail-metrics-section">
+          <div className="meta-rail-header">
+            <span className="meta-rail-tag">[METRICS // 02]</span>
+            <h3 className="meta-rail-title">
+              {isId ? "TOLOK UKUR TERVERIFIKASI" : "VERIFIED BENCHMARKS"}
+            </h3>
+          </div>
+          <div className="metrics-grid">
+            {project.metrics.map((m, i) => (
+              <div key={i} className="metric-box">
+                <span className="metric-label">{m.label[locale]}</span>
+                <span className="metric-val">{m.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 03. Technology Matrix Rail */}
+      <div className="meta-rail-tech-section">
+        <div className="meta-rail-header">
+          <span className="meta-rail-tag">[STACK // 03]</span>
+          <h3 className="meta-rail-title">
+            {isId ? "TEKNOLOGI & INFRASTRUKTUR" : "STACK & INFRASTRUCTURE"}
+          </h3>
+        </div>
+
+        <div className="tech-group-block">
+          <span className="tech-group-label">{isId ? "Core Stack" : "Core Stack"}:</span>
+          <div className="tech-tag-cloud">
+            {project.techStack.core.map((t) => (
+              <span key={t} className="tech-pill">
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {project.techStack.architecture && project.techStack.architecture.length > 0 && (
+          <div className="tech-group-block">
+            <span className="tech-group-label">{isId ? "Arsitektur Sistem" : "System Architecture"}:</span>
+            <div className="tech-tag-cloud">
+              {project.techStack.architecture.map((t) => (
+                <span key={t} className="tech-pill tech-pill-secondary">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {project.techStack.qaOrDeployment && project.techStack.qaOrDeployment.length > 0 && (
+          <div className="tech-group-block">
+            <span className="tech-group-label">{isId ? "QA & Deployment" : "QA & Deployment"}:</span>
+            <div className="tech-tag-cloud">
+              {project.techStack.qaOrDeployment.map((t) => (
+                <span key={t} className="tech-pill tech-pill-subtle">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </aside>
   );
 }

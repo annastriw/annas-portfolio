@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { siteConfig } from "@/content/site/site-config";
 
 interface ContactSectionProps {
   locale: Locale;
@@ -14,21 +15,23 @@ export function ContactSection({ locale }: ContactSectionProps) {
       ? "Mari Bangun Perangkat Lunak & Sistem Cerdas Bersama"
       : "Let's Build Robust Software & Intelligent Systems Together",
     lead: isId
-      ? "Terbuka untuk peluang karir rekayasa perangkat lunak (Fullstack / Frontend / Backend), kolaborasi riset machine learning, maupun konsultasi teknis arsitektur web."
-      : "Open for full-time software engineering roles (Fullstack / Frontend / Backend), applied machine learning collaborations, and technical system architecture consulting.",
+      ? "Terbuka untuk peluang karir rekayasa perangkat lunak (Fullstack / Frontend / Backend), integrasi machine learning, maupun konsultasi arsitektur web."
+      : "Open for full-time software engineering roles (Fullstack / Frontend / Backend), applied machine learning integration, and technical system architecture consulting.",
     emailLabel: isId ? "Surel Resmi" : "Direct Email",
-    emailVal: "annastriwidagdo@gmail.com",
+    emailVal: siteConfig.contact.email,
     emailAction: isId ? "Kirim Email Langsung →" : "Send Direct Email →",
     linkedinLabel: "LinkedIn Network",
-    linkedinVal: "linkedin.com/in/annastriw",
+    linkedinVal: siteConfig.contact.linkedIn,
     linkedinAction: isId ? "Buka Profil LinkedIn ↗" : "View LinkedIn Profile ↗",
     githubLabel: "GitHub Repository",
-    githubVal: "github.com/annastriw",
+    githubVal: siteConfig.contact.gitHub,
     githubAction: isId ? "Buka Profil GitHub ↗" : "View GitHub Profile ↗",
     locationLabel: isId ? "LOKASI UTAMA" : "BASE LOCATION",
-    locationVal: "Semarang, Jawa Tengah, Indonesia [UTC+7 / WIB]",
+    locationVal: `${siteConfig.contact.location} [${siteConfig.contact.timezone}]`,
+    statusLabel: isId ? "STATUS KETERSEDIAAN" : "AVAILABILITY STATUS",
+    statusVal: isId ? "TERSEDIA UNTUK KOLABORASI" : "OPEN TO COLLABORATION",
     responseTime: isId
-      ? "Kanal kontak direct tanpa perantara form backend pihak ketiga."
+      ? "Kanal kontak langsung tanpa perantara form backend pihak ketiga."
       : "Direct contact channels without third-party form intermediaries.",
   };
 
@@ -55,7 +58,7 @@ export function ContactSection({ locale }: ContactSectionProps) {
             </div>
             <p className="contact-card-value">{copy.emailVal}</p>
             <a
-              href="mailto:annastriwidagdo@gmail.com"
+              href={`mailto:${siteConfig.contact.email}`}
               className="contact-card-action"
             >
               <span>{copy.emailAction}</span>
@@ -70,7 +73,7 @@ export function ContactSection({ locale }: ContactSectionProps) {
             </div>
             <p className="contact-card-value">{copy.linkedinVal}</p>
             <a
-              href="https://www.linkedin.com/in/annastriw"
+              href={siteConfig.contact.linkedInUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="contact-card-action"
@@ -87,7 +90,7 @@ export function ContactSection({ locale }: ContactSectionProps) {
             </div>
             <p className="contact-card-value">{copy.githubVal}</p>
             <a
-              href="https://github.com/annastriw"
+              href={siteConfig.contact.gitHubUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="contact-card-action"
@@ -104,7 +107,8 @@ export function ContactSection({ locale }: ContactSectionProps) {
             <span className="rail-value">{copy.locationVal}</span>
           </div>
           <div className="contact-rail-item">
-            <span className="rail-note">{copy.responseTime}</span>
+            <span className="rail-label">{copy.statusLabel}:</span>
+            <span className="rail-value font-mono text-(--color-accent)">{copy.statusVal}</span>
           </div>
         </div>
       </div>

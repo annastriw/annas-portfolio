@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
-import { engineeringPrinciples } from "@/data/about";
+import { engineeringPrinciples } from "@/content/about/about-data";
 
 interface AboutPrinciplesProps {
   locale: Locale;

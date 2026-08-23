@@ -1,6 +1,5 @@
-import Image from "next/image";
 import type { Locale } from "@/lib/i18n/config";
-import { educationData } from "@/data/about";
+import { educationData } from "@/content/about/about-data";
 
 interface AboutEducationProps {
   locale: Locale;
@@ -12,31 +11,31 @@ export function AboutEducation({ locale }: AboutEducationProps) {
   return (
     <section
       className="about-education-section"
-      aria-label="Education & Academic Merit"
+      aria-label="Education & Academic Foundation"
     >
       <div className="about-section-header">
         <div className="section-header-meta">
           <span className="section-meta-tag">[01 // ACADEMIC FOUNDATION]</span>
           <span className="section-meta-tag">
-            {isId ? "PENDIDIKAN & PRESTASI AKADEMIK" : "EDUCATION & DISTINCTION"}
+            {isId ? "PENDIDIKAN & LATAR BELAKANG" : "EDUCATION & FOUNDATION"}
           </span>
         </div>
         <h2 className="section-title">
-          {isId ? "Pendidikan & Rekam Akademik" : "Education & Academic Distinction"}
+          {isId ? "Pendidikan & Rekam Akademik" : "Education & Academic Foundation"}
         </h2>
         <p className="section-subtitle">
           {isId
-            ? "Pendidikan formal sarjana teknik komputer dan pencapaian akademik berlandaskan penghargaan resmi institusi."
-            : "Formal computer engineering degree education and verified institutional merit distinction."}
+            ? "Latar belakang pendidikan formal sarjana teknik komputer dengan peminatan rekayasa perangkat lunak, sistem terdistribusi, dan kecerdasan buatan terapan."
+            : "Formal computer engineering degree education specializing in software systems engineering, distributed architectures, and applied machine learning."}
         </p>
       </div>
 
       <div className="education-card-container">
         <article className="education-card">
-          <div className="education-card-main">
+          <div className="education-card-main w-full">
             <div className="education-badge-row">
               <span className="education-distinction-badge">
-                ★ {isId ? "PREDIKAT WISUDAWAN TERBAIK" : "BEST GRADUATE DISTINCTION"}
+                {isId ? "SARJANA TEKNIK (S.T.)" : "BACHELOR OF ENGINEERING"}
               </span>
               <span className="education-period-tag">{educationData.period}</span>
             </div>
@@ -58,7 +57,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
 
             <div className="education-highlights-wrapper">
               <h4 className="highlights-heading">
-                {isId ? "[SOROTAN AKADEMIK & RISET]" : "[ACADEMIC HIGHLIGHTS & RESEARCH]"}
+                {isId ? "[FOKUS STUDI & RISET REKAYASA]" : "[ENGINEERING SPECIALIZATION & RESEARCH]"}
               </h4>
               <ul className="education-highlights-list">
                 {educationData.highlights[locale].map((highlight, idx) => (
@@ -70,31 +69,6 @@ export function AboutEducation({ locale }: AboutEducationProps) {
               </ul>
             </div>
           </div>
-
-          {/* Certificate Evidence Preview */}
-          {educationData.certificateAsset && (
-            <div className="education-certificate-col">
-              <div className="education-cert-frame">
-                <div className="cert-img-wrapper">
-                  <Image
-                    src={educationData.certificateAsset}
-                    alt="Sertifikat Wisudawan Terbaik — Departemen Teknik Komputer Undip"
-                    width={600}
-                    height={420}
-                    sizes="(max-width: 768px) 100vw, 500px"
-                    className="education-cert-img"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="education-cert-caption">
-                  <span className="cert-caption-tag">[VERIFIED // MERIT]</span>
-                  <span className="cert-caption-title">
-                    {isId ? "Penghargaan Wisudawan Terbaik" : "Best Graduate Certificate"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
         </article>
       </div>
     </section>

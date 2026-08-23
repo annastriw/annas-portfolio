@@ -26,29 +26,29 @@ const capabilities: CapabilityCategory[] = [
       { name: "Next.js (App Router)", tag: "Framework" },
       { name: "React 19", tag: "UI Library" },
       { name: "TypeScript", tag: "Language" },
-      { name: "Tailwind CSS", tag: "Styling" },
-      { name: "Flutter & Dart", tag: "Mobile" },
-      { name: "Android SDK", tag: "Mobile" },
-      { name: "Three.js / WebGL", tag: "3D & Interactive" },
+      { name: "Tailwind CSS v4", tag: "Styling" },
+      { name: "Kotlin (Android SDK)", tag: "Mobile / Native" },
+      { name: "Flutter & Dart", tag: "Mobile / Cross-Platform" },
+      { name: "Three.js / Panolens", tag: "3D / Interactive" },
     ],
   },
   {
     number: "02",
     category: {
-      en: "Backend & API Architecture",
-      id: "Backend & Arsitektur API",
+      en: "Backend & Systems Architecture",
+      id: "Backend & Arsitektur Sistem",
     },
     description: {
-      en: "Engineering robust web backends, secure authentication workflows, role-based authorization, and high-throughput REST APIs.",
-      id: "Mengembangkan backend web yang andal, alur autentikasi aman, otorisasi berbasis peran, dan REST API berperforma tinggi.",
+      en: "Engineering modular web backends, secure authentication workflows, role-based authorization, and high-throughput REST APIs.",
+      id: "Mengembangkan backend web modular, alur autentikasi aman, otorisasi berbasis peran, dan REST API berperforma tinggi.",
     },
     skills: [
-      { name: "Laravel (PHP)", tag: "Backend Framework" },
-      { name: "Python & Flask", tag: "Microservices / API" },
-      { name: "RESTful API Design", tag: "Architecture" },
-      { name: "Role-Based Access (RBAC)", tag: "Security" },
-      { name: "Node.js / Express", tag: "Runtime" },
-      { name: "Microservices Architecture", tag: "Architecture" },
+      { name: "NestJS", tag: "Backend Framework" },
+      { name: "Laravel (PHP 8.x)", tag: "Enterprise Backend" },
+      { name: "Flask (Python)", tag: "ML Microservices / API" },
+      { name: "Node.js", tag: "Runtime & Tooling" },
+      { name: "RESTful Architecture", tag: "API Design" },
+      { name: "ESC/POS Protocol", tag: "Hardware Printing" },
     ],
   },
   {
@@ -64,16 +64,16 @@ const capabilities: CapabilityCategory[] = [
     skills: [
       { name: "Scikit-learn", tag: "ML Toolkit" },
       { name: "Random Forest & SVM", tag: "Classification" },
-      { name: "PyTorch & Audio AI", tag: "Deep Learning" },
-      { name: "SMOTE Imbalance Handling", tag: "Data Engineering" },
-      { name: "Pandas & NumPy", tag: "Data Analysis" },
-      { name: "Flask Inference Serving", tag: "MLOps / Serving" },
+      { name: "Hugging Face (Wav2Vec2)", tag: "ASR / Speech" },
+      { name: "SMOTE Balancing", tag: "Data Engineering" },
+      { name: "Pandas & NumPy", tag: "Data Wrangling" },
+      { name: "Flask ML Serving", tag: "Inference API" },
     ],
   },
   {
     number: "04",
     category: {
-      en: "Database, QA & DevOps",
+      en: "Database, QA & Infrastructure",
       id: "Basis Data, QA & Infrastruktur",
     },
     description: {
@@ -81,11 +81,11 @@ const capabilities: CapabilityCategory[] = [
       id: "Pemodelan basis data relasional, deployment kontainer pada Linux Ubuntu, pengujian otomatis, dan manajemen repositori Git.",
     },
     skills: [
-      { name: "MySQL", tag: "Relational DB" },
-      { name: "PostgreSQL", tag: "Relational DB" },
+      { name: "MySQL / MariaDB", tag: "Relational DB" },
       { name: "Docker Containerization", tag: "DevOps" },
-      { name: "Linux (Ubuntu Server)", tag: "Infrastructure" },
+      { name: "Linux (Ubuntu Server / VPS)", tag: "Infrastructure" },
       { name: "Katalon Studio", tag: "QA Automation" },
+      { name: "Cisco CCNA Networking", tag: "Network Security" },
       { name: "Git & Version Control", tag: "Tooling" },
     ],
   },
@@ -110,7 +110,7 @@ export function TechStackSection({ locale }: TechStackSectionProps) {
           </h2>
           <p className="section-subtitle">
             {isId
-              ? "Kumpulan bahasa pemrograman, kerangka kerja, platform data, dan metodologi pengujian yang telah tervalidasi pada proyek nyata."
+              ? "Taksonomi bahasa pemrograman, kerangka kerja, platform data, dan metodologi pengujian yang telah tervalidasi pada proyek nyata."
               : "Taxonomy of programming languages, frameworks, data platforms, and testing workflows validated through authentic project implementations."}
           </p>
         </div>

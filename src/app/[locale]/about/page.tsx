@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale, supportedLocales } from "@/lib/i18n/config";
+import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
 import { AboutHero } from "@/components/about/about-hero";
 import { AboutBiography } from "@/components/about/about-biography";
 import { AboutEducation } from "@/components/about/about-education";
@@ -11,7 +11,7 @@ import { AboutConnect } from "@/components/about/about-connect";
 import { JsonLd } from "@/components/seo/json-ld";
 import { generateProfilePageJsonLd } from "@/lib/seo/schema-generators";
 
-interface AboutPageProps {
+interface PageProps {
   params: Promise<{
     locale: string;
   }>;
@@ -25,7 +25,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: AboutPageProps): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
@@ -34,8 +34,8 @@ export async function generateMetadata({
     ? "Tentang & Profil Rekayasa — Annas Tri Widagdo"
     : "About & Engineering Profile — Annas Tri Widagdo";
   const description = isId
-    ? "Profil rekayasa perangkat lunak, latar belakang pendidikan Teknik Komputer Universitas Diponegoro (Wisudawan Terbaik), sertifikasi terverifikasi, dan filosofi kerja Annas Tri Widagdo."
-    : "Engineering profile, Diponegoro University Computer Engineering background (Best Graduate), verified credentials, and software principles of Annas Tri Widagdo.";
+    ? "Profil rekayasa perangkat lunak, latar belakang teknik komputer Universitas Diponegoro, sertifikasi Cisco & Oracle, prinsip rekayasa, dan taksonomi teknologi Annas Tri Widagdo."
+    : "Software engineering profile, Diponegoro University computer engineering foundation, Cisco & Oracle credentials, core engineering manifesto, and technical taxonomy of Annas Tri Widagdo.";
 
   return {
     title,
@@ -58,9 +58,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function AboutPage({
-  params,
-}: AboutPageProps) {
+export default async function AboutPage({ params }: PageProps) {
   const { locale } = await params;
 
   if (!isLocale(locale)) {
@@ -70,28 +68,28 @@ export default async function AboutPage({
   return (
     <div className="about-page">
       <div className="about-page-container">
-        <JsonLd schema={generateProfilePageJsonLd(locale)} />
+        <JsonLd schema={generateProfilePageJsonLd(locale as Locale)} />
 
-        {/* 00. Page Header */}
-        <AboutHero locale={locale} />
+        {/* 01. About Hero Header */}
+        <AboutHero locale={locale as Locale} />
 
-        {/* 01. Biographical Narrative & Spec Box */}
-        <AboutBiography locale={locale} />
+        {/* 02. Narrative Biography & Quick Specs */}
+        <AboutBiography locale={locale as Locale} />
 
-        {/* 02. Education & Academic Distinction */}
-        <AboutEducation locale={locale} />
+        {/* 03. Academic Foundation */}
+        <AboutEducation locale={locale as Locale} />
 
-        {/* 03. Verified Credentials & Certifications Showcase */}
-        <AboutCertificates locale={locale} />
+        {/* 04. Verified Credentials & Certifications */}
+        <AboutCertificates locale={locale as Locale} />
 
-        {/* 04. Core Engineering Principles Manifesto */}
-        <AboutPrinciples locale={locale} />
+        {/* 05. Core Engineering Principles */}
+        <AboutPrinciples locale={locale as Locale} />
 
-        {/* 05. Technical Taxonomy & Stack Depth */}
-        <AboutTechMatrix locale={locale} />
+        {/* 06. Technical Capabilities & Taxonomy */}
+        <AboutTechMatrix locale={locale as Locale} />
 
-        {/* 06. Transmission / Contact Channels */}
-        <AboutConnect locale={locale} />
+        {/* 07. Collaboration & Connect */}
+        <AboutConnect locale={locale as Locale} />
       </div>
     </div>
   );

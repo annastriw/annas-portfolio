@@ -1,134 +1,80 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { ProjectMetadata } from "@/lib/projects/project-types";
+import type { ProjectItem, ProjectCategory } from "@/content/projects/projects-types";
 import type { Locale } from "@/lib/i18n/config";
 import { ProjectCard } from "./project-card";
 
 interface ProjectFilterProps {
-  projects: ProjectMetadata[];
-  thumbnails: Record<string, string | null>;
+  projects: ProjectItem[];
   locale: Locale;
 }
 
-type CategoryKey = "all" | "web" | "ai" | "mobile" | "internship";
+type FilterCategory = "all" | ProjectCategory;
 
-const categories: Record<
+const filterCategories: Record<
   Locale,
-  { key: CategoryKey; label: string; countPredicate: (p: ProjectMetadata) => boolean }[]
+  { key: FilterCategory; label: string }[]
 > = {
   en: [
-    { key: "all", label: "All Projects", countPredicate: () => true },
-    {
-      key: "web",
-      label: "Web & Fullstack",
-      countPredicate: (p) =>
-        /web|fullstack|laravel|next|frontend|backend/i.test(p.projectType) ||
-        /fullstack|frontend/i.test(p.role),
-    },
-    {
-      key: "ai",
-      label: "AI & Machine Learning",
-      countPredicate: (p) =>
-        /machine learning|ai|classification|speech/i.test(p.projectType) ||
-        /machine learning|ai/i.test(p.role),
-    },
-    {
-      key: "mobile",
-      label: "Mobile & Systems",
-      countPredicate: (p) =>
-        /mobile|flutter|android|printer|game/i.test(p.projectType) ||
-        /flutter|android|game/i.test(p.role),
-    },
-    {
-      key: "internship",
-      label: "Internships",
-      countPredicate: (p) => p.kind === "Internship" || /intern/i.test(p.role),
-    },
+    { key: "all", label: "All Projects" },
+    { key: "web-app", label: "Web Application" },
+    { key: "ml", label: "Machine Learning" },
+    { key: "mobile", label: "Mobile" },
+    { key: "other", label: "Other" },
   ],
   id: [
-    { key: "all", label: "Semua Proyek", countPredicate: () => true },
-    {
-      key: "web",
-      label: "Web & Fullstack",
-      countPredicate: (p) =>
-        /web|fullstack|laravel|next|frontend|backend/i.test(p.projectType) ||
-        /fullstack|frontend/i.test(p.role),
-    },
-    {
-      key: "ai",
-      label: "AI & Machine Learning",
-      countPredicate: (p) =>
-        /machine learning|ai|classification|speech/i.test(p.projectType) ||
-        /machine learning|ai/i.test(p.role),
-    },
-    {
-      key: "mobile",
-      label: "Mobile & Sistem",
-      countPredicate: (p) =>
-        /mobile|flutter|android|printer|game/i.test(p.projectType) ||
-        /flutter|android|game/i.test(p.role),
-    },
-    {
-      key: "internship",
-      label: "Magang",
-      countPredicate: (p) => p.kind === "Internship" || /intern/i.test(p.role),
-    },
+    { key: "all", label: "Semua Proyek" },
+    { key: "web-app", label: "Aplikasi Web" },
+    { key: "ml", label: "Machine Learning" },
+    { key: "mobile", label: "Aplikasi Mobile" },
+    { key: "other", label: "Lainnya" },
   ],
 };
 
-export function ProjectFilter({
-  projects,
-  thumbnails,
-  locale,
-}: ProjectFilterProps) {
-  const [selectedCategory, setSelectedCategory] = useState<CategoryKey>("all");
+export function ProjectFilter({ projects, locale }: ProjectFilterProps) {
+  const [selectedCategory, setSelectedCategory] = useState<FilterCategory>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const currentCategories = categories[locale];
+  const currentCategories = filterCategories[locale];
 
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => {
-      // 1. Category check
-      const currentCategoryObj = currentCategories.find(
-        (c) => c.key === selectedCategory
-      );
-      if (currentCategoryObj && !currentCategoryObj.countPredicate(project)) {
+      // 1. Category filter
+      if (selectedCategory !== "all" && project.category !== selectedCategory) {
         return false;
       }
 
-      // 2. Search query check
+      // 2. Search query filter
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
-        const titleMatch = project.title.toLowerCase().includes(query);
-        const typeMatch = project.projectType.toLowerCase().includes(query);
-        const roleMatch = project.role.toLowerCase().includes(query);
+        const titleMatch = project.title[locale].toLowerCase().includes(query);
+        const subtitleMatch = project.subtitle[locale].toLowerCase().includes(query);
+        const roleMatch = project.role[locale].toLowerCase().includes(query);
         const stakeholderMatch =
-          project.stakeholder?.toLowerCase().includes(query) ?? false;
-        const toolMatch =
-          typeof project.raw.primary_tool === "string" &&
-          project.raw.primary_tool.toLowerCase().includes(query);
-        const langMatch =
-          typeof project.raw.bahasa_utama === "string" &&
-          project.raw.bahasa_utama.toLowerCase().includes(query);
+          project.stakeholder?.[locale]?.toLowerCase().includes(query) ?? false;
+        const techMatch = [
+          ...project.techStack.core,
+          ...project.techStack.architecture,
+          ...project.techStack.qaOrDeployment,
+        ].some((t) => t.toLowerCase().includes(query));
 
         return (
           titleMatch ||
-          typeMatch ||
+          subtitleMatch ||
           roleMatch ||
           stakeholderMatch ||
-          toolMatch ||
-          langMatch
+          techMatch
         );
       }
 
       return true;
     });
-  }, [projects, selectedCategory, searchQuery, currentCategories]);
+  }, [projects, selectedCategory, searchQuery, locale]);
 
   return (
     <div className="project-filter-container">
-      {/* Controls: Search & Category pills */}
+      {/* Controls: Category pills & Search */}
       <div className="project-filter-toolbar">
         {/* Category Pills */}
         <div
@@ -137,7 +83,10 @@ export function ProjectFilter({
           aria-label={locale === "id" ? "Filter Kategori" : "Filter Category"}
         >
           {currentCategories.map((cat) => {
-            const count = projects.filter(cat.countPredicate).length;
+            const count =
+              cat.key === "all"
+                ? projects.length
+                : projects.filter((p) => p.category === cat.key).length;
             const isSelected = selectedCategory === cat.key;
             return (
               <button
@@ -188,8 +137,8 @@ export function ProjectFilter({
       <div className="project-results-status">
         <span className="results-count-label">
           {locale === "id"
-            ? `Menampilkan ${filteredProjects.length} dari ${projects.length} entri proyek`
-            : `Showing ${filteredProjects.length} of ${projects.length} archived projects`}
+            ? `Menampilkan ${filteredProjects.length} dari ${projects.length} entri proyek terkurasi`
+            : `Showing ${filteredProjects.length} of ${projects.length} curated archive projects`}
         </span>
         {(selectedCategory !== "all" || searchQuery) && (
           <button
@@ -214,7 +163,6 @@ export function ProjectFilter({
               project={project}
               locale={locale}
               index={idx}
-              thumbnail={thumbnails[project.slug]}
             />
           ))}
         </div>
@@ -222,7 +170,7 @@ export function ProjectFilter({
         <div className="project-empty-state">
           <p className="empty-title">
             {locale === "id"
-              ? "Tidak ada proyek yang cocok dengan filter."
+              ? "Tidak ada proyek yang cocok dengan kriteria pencarian."
               : "No projects match your filter criteria."}
           </p>
           <p className="empty-subtitle">

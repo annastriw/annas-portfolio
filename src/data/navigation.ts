@@ -4,9 +4,9 @@ export const navigationConfig: LocaleNavigation = {
   en: {
     mainNav: [
       {
-        key: "projects",
-        label: "Projects",
-        href: "/projects",
+        key: "home",
+        label: "Home",
+        href: "/",
         index: "01",
       },
       {
@@ -16,16 +16,22 @@ export const navigationConfig: LocaleNavigation = {
         index: "02",
       },
       {
+        key: "projects",
+        label: "Projects",
+        href: "/projects",
+        index: "03",
+      },
+      {
         key: "blog",
         label: "Blog",
         href: "/blog",
-        index: "03",
+        index: "04",
       },
       {
         key: "contact",
         label: "Contact",
         href: "/#contact",
-        index: "04",
+        index: "05",
       },
     ],
     socialLinks: [
@@ -46,16 +52,16 @@ export const navigationConfig: LocaleNavigation = {
       {
         key: "email",
         label: "Email",
-        href: "mailto:annastriwidagdo@gmail.com",
-        username: "annastriwidagdo@gmail.com",
+        href: "mailto:annastriw23@gmail.com",
+        username: "annastriw23@gmail.com",
         isExternal: false,
       },
     ],
     colophon: {
       title: "Annas Tri Widagdo",
       description:
-        "Software engineer & AI practitioner building robust web systems, intelligent products, and technical editorial solutions.",
-      location: "Semarang, Indonesia",
+        "Software Engineer · Full-Stack Developer · Machine Learning Engineer building robust web systems, intelligent products, and technical editorial solutions.",
+      location: "Klaten, Central Java, Indonesia",
       timezone: "UTC+7",
       copyright: "© 2026 Annas Tri Widagdo. All rights reserved.",
     },
@@ -73,9 +79,9 @@ export const navigationConfig: LocaleNavigation = {
   id: {
     mainNav: [
       {
-        key: "projects",
-        label: "Proyek",
-        href: "/projects",
+        key: "home",
+        label: "Beranda",
+        href: "/",
         index: "01",
       },
       {
@@ -85,16 +91,22 @@ export const navigationConfig: LocaleNavigation = {
         index: "02",
       },
       {
+        key: "projects",
+        label: "Proyek",
+        href: "/projects",
+        index: "03",
+      },
+      {
         key: "blog",
         label: "Blog",
         href: "/blog",
-        index: "03",
+        index: "04",
       },
       {
         key: "contact",
         label: "Kontak",
         href: "/#contact",
-        index: "04",
+        index: "05",
       },
     ],
     socialLinks: [
@@ -115,16 +127,16 @@ export const navigationConfig: LocaleNavigation = {
       {
         key: "email",
         label: "Email",
-        href: "mailto:annastriwidagdo@gmail.com",
-        username: "annastriwidagdo@gmail.com",
+        href: "mailto:annastriw23@gmail.com",
+        username: "annastriw23@gmail.com",
         isExternal: false,
       },
     ],
     colophon: {
       title: "Annas Tri Widagdo",
       description:
-        "Software engineer & praktisi AI yang membangun sistem web yang tangguh, produk cerdas, dan solusi technical editorial.",
-      location: "Semarang, Indonesia",
+        "Software Engineer · Full-Stack Developer · Machine Learning Engineer yang membangun sistem web yang tangguh, produk cerdas, dan solusi technical editorial.",
+      location: "Klaten, Jawa Tengah, Indonesia",
       timezone: "WIB (UTC+7)",
       copyright: "© 2026 Annas Tri Widagdo. Hak cipta dilindungi.",
     },

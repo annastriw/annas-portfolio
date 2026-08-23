@@ -1,10 +1,10 @@
 import Link from "next/link";
-import type { BlogMetadata } from "@/lib/blog/blog-types";
+import type { BlogPostItem } from "@/content/blog/blog-types";
 import type { Locale } from "@/lib/i18n/config";
 
 interface BlogAdjacentNavProps {
-  prev: BlogMetadata | null;
-  next: BlogMetadata | null;
+  prev: BlogPostItem | null;
+  next: BlogPostItem | null;
   locale: Locale;
 }
 
@@ -26,7 +26,7 @@ export function BlogAdjacentNav({ prev, next, locale }: BlogAdjacentNavProps) {
             <span className="adjacent-nav-direction">
               ← {isId ? "TULISAN LEBIH BARU" : "NEWER DISPATCH"}
             </span>
-            <span className="adjacent-nav-title">{prev.title}</span>
+            <span className="adjacent-nav-title">{prev.title[locale]}</span>
           </Link>
         ) : (
           <span className="adjacent-nav-disabled">
@@ -55,7 +55,7 @@ export function BlogAdjacentNav({ prev, next, locale }: BlogAdjacentNavProps) {
             <span className="adjacent-nav-direction">
               {isId ? "TULISAN SEBELUMNYA" : "OLDER DISPATCH"} →
             </span>
-            <span className="adjacent-nav-title">{next.title}</span>
+            <span className="adjacent-nav-title">{next.title[locale]}</span>
           </Link>
         ) : (
           <span className="adjacent-nav-disabled">

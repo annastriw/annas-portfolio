@@ -1,28 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { ProjectMetadata } from "@/lib/projects/project-types";
+import type { ProjectItem } from "@/content/projects/projects-types";
 import type { Locale } from "@/lib/i18n/config";
+import { EditorialPlaceholder } from "@/components/ui/editorial-placeholder";
 
 interface SelectedProjectsProps {
-  projects: ProjectMetadata[];
-  thumbnails: Record<string, string | null>;
+  projects: ProjectItem[];
   locale: Locale;
 }
 
-const FEATURED_SLUGS = [
-  "dialisis-connect-edu",
-  "ml-for-heart-attack-risk-prediction",
-  "simastok",
-  "speech-to-text-system",
-];
-
-export function SelectedProjects({
-  projects,
-  thumbnails,
-  locale,
-}: SelectedProjectsProps) {
+export function SelectedProjects({ projects, locale }: SelectedProjectsProps) {
   const isId = locale === "id";
-  const featured = projects.filter((p) => FEATURED_SLUGS.includes(p.slug));
+  const featured = projects.filter((p) => p.featured);
 
   return (
     <section className="home-selected-section" aria-label="Selected Projects">
@@ -43,22 +32,21 @@ export function SelectedProjects({
               href={`/${locale}/projects`}
               className="section-header-link"
             >
-              <span>{isId ? "Lihat Semua 11 Proyek" : "View All 11 Projects"}</span>
+              <span>{isId ? "Lihat Semua 10 Proyek" : "View All 10 Projects"}</span>
               <span aria-hidden="true">→</span>
             </Link>
           </div>
           <p className="section-subtitle">
             {isId
-              ? "Sorotan proyek dengan kompleksitas arsitektur tinggi, mulai dari aplikasi web skala produksi hingga purwarupa machine learning tervalidasi."
-              : "Highlights of high-complexity engineering implementations, spanning production-deployed web applications to validated machine learning inference services."}
+              ? "Sorotan proyek dengan kompleksitas arsitektur tinggi, mulai dari aplikasi web enterprise skala produksi hingga purwarupa machine learning terverifikasi."
+              : "Highlights of high-impact engineering implementations, spanning production-deployed ERP web applications to verified machine learning inference services."}
           </p>
         </div>
 
-        {/* 2x2 Editorial Grid */}
+        {/* Editorial Grid */}
         <div className="home-featured-grid">
           {featured.map((project, idx) => {
             const indexFormatted = String(idx + 1).padStart(2, "0");
-            const thumbnail = thumbnails[project.slug];
             const href = `/${locale}/projects/${project.slug}`;
 
             return (
@@ -67,36 +55,50 @@ export function SelectedProjects({
                   {/* Card Top Meta */}
                   <div className="featured-card-meta-top">
                     <span className="featured-index">[{indexFormatted}]</span>
-                    <span className="featured-kind">{project.kind.toUpperCase()}</span>
+                    <span className="featured-kind">
+                      {project.category === "web-app"
+                        ? "WEB APP"
+                        : project.category === "ml"
+                        ? "MACHINE LEARNING"
+                        : project.category === "mobile"
+                        ? "MOBILE"
+                        : "OTHER"}
+                    </span>
                     {project.status && (
-                      <span className="featured-status">{project.status}</span>
+                      <span className="featured-status">{project.status[locale]}</span>
                     )}
                   </div>
 
-                  {/* Thumbnail Visual */}
-                  {thumbnail && (
-                    <div className="featured-card-media">
+                  {/* Cover Media (3:2 Aspect Ratio) */}
+                  <div className="featured-card-media aspect-[3/2] overflow-hidden bg-(--color-surface-subtle) relative">
+                    {project.coverImage ? (
                       <Image
-                        src={thumbnail}
-                        alt={`Screenshot of ${project.title}`}
+                        src={project.coverImage}
+                        alt={`Preview of ${project.title[locale]}`}
                         width={700}
-                        height={390}
+                        height={466}
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 600px"
-                        className="featured-card-img"
+                        className="featured-card-img object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
                       />
-                    </div>
-                  )}
+                    ) : (
+                      <EditorialPlaceholder
+                        figureNumber={indexFormatted}
+                        category={project.category}
+                        locale={locale}
+                      />
+                    )}
+                  </div>
 
                   {/* Title & Description */}
                   <div className="featured-card-body">
                     <h3 className="featured-card-title">
-                      <span>{project.title}</span>
+                      <span>{project.title[locale]}</span>
                       <span className="featured-arrow" aria-hidden="true">
                         ↗
                       </span>
                     </h3>
-                    <p className="featured-card-type">{project.projectType}</p>
+                    <p className="featured-card-type">{project.subtitle[locale]}</p>
                   </div>
 
                   {/* Key Tech Rail */}
@@ -105,14 +107,14 @@ export function SelectedProjects({
                       <span className="footer-label">
                         {isId ? "PERAN" : "ROLE"}:
                       </span>
-                      <span className="footer-val">{project.role}</span>
+                      <span className="footer-val">{project.role[locale]}</span>
                     </div>
                     {project.stakeholder && (
                       <div className="featured-footer-item">
                         <span className="footer-label">
-                          {isId ? "MITRA" : "CLIENT"}:
+                          {isId ? "MITRA / KLIEN" : "CLIENT"}:
                         </span>
-                        <span className="footer-val">{project.stakeholder}</span>
+                        <span className="footer-val">{project.stakeholder[locale]}</span>
                       </div>
                     )}
                   </div>
@@ -126,8 +128,8 @@ export function SelectedProjects({
         <div className="home-selected-bottom-bar">
           <span className="bottom-bar-label">
             {isId
-              ? `Tersedia 11 studi kasus teknis lengkap dalam arsip portofolio.`
-              : `11 verified technical case studies available in the complete archive.`}
+              ? `Tersedia 10 studi kasus teknis lengkap dalam arsip portofolio.`
+              : `10 verified technical case studies available in the complete archive.`}
           </span>
           <Link
             href={`/${locale}/projects`}

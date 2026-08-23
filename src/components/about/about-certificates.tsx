@@ -3,22 +3,24 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import type { Locale } from "@/lib/i18n/config";
-import type { CertificateCategory, CertificateItem } from "@/types/about";
-import { certificatesData } from "@/data/about";
+import type { CertificateData } from "@/content/about/about-data";
+import { certificatesData } from "@/content/about/about-data";
 
 interface AboutCertificatesProps {
   locale: Locale;
 }
 
+type CertFilterCategory = "all" | "networking" | "ai-data" | "academic-experience";
+
 export function AboutCertificates({ locale }: AboutCertificatesProps) {
   const [selectedCategory, setSelectedCategory] =
-    useState<CertificateCategory>("all");
+    useState<CertFilterCategory>("all");
   const [activeCertificate, setActiveCertificate] =
-    useState<CertificateItem | null>(null);
+    useState<CertificateData | null>(null);
 
   const isId = locale === "id";
 
-  const categories: { key: CertificateCategory; label: { en: string; id: string } }[] =
+  const categories: { key: CertFilterCategory; label: { en: string; id: string } }[] =
     [
       {
         key: "all",
@@ -34,7 +36,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
       },
       {
         key: "academic-experience",
-        label: { en: "Academic & Internship", id: "Akademik & Magang" },
+        label: { en: "Institutional Internship", id: "Magang Institusi" },
       },
     ];
 
@@ -79,8 +81,8 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
         </div>
         <p className="section-subtitle">
           {isId
-            ? "Kredensial profesional dan akademik yang telah diverifikasi dari Cisco Networking Academy, Huawei, Oracle Academy, dan Universitas Diponegoro."
-            : "Verified professional and academic credentials from Cisco Networking Academy, Huawei, Oracle Academy, and Diponegoro University."}
+            ? "Kredensial profesional terverifikasi dari Cisco Networking Academy, Huawei, Oracle Academy, dan Fakultas Teknik Universitas Diponegoro."
+            : "Verified technical and professional credentials from Cisco Networking Academy, Huawei, Oracle Academy, and Diponegoro University Faculty of Engineering."}
         </p>
       </div>
 
@@ -125,14 +127,14 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                 onClick={() => setActiveCertificate(cert)}
                 aria-label={`View certificate ${cert.title[locale]}`}
               >
-                <div className="cert-card-preview-wrapper">
+                <div className="cert-card-preview-wrapper aspect-[16/11] bg-(--color-surface-subtle) relative overflow-hidden">
                   <Image
                     src={cert.assetPath}
                     alt={cert.title[locale]}
                     width={600}
                     height={420}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
-                    className="cert-card-img"
+                    className="cert-card-img object-contain w-full h-full p-2"
                     loading="lazy"
                   />
                   <div className="cert-card-overlay">
@@ -211,7 +213,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                 width={1600}
                 height={1100}
                 sizes="(max-width: 1200px) 100vw, 1200px"
-                className="cert-modal-img"
+                className="cert-modal-img object-contain"
                 priority
               />
             </div>

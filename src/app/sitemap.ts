@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
-import { getProjectSlugs } from "@/lib/projects/project-content";
-import { getBlogSlugs } from "@/lib/blog/blog-content";
+import { projectsData } from "@/content/projects/projects-data";
+import { blogPostsData } from "@/content/blog/blog-data";
 import { SITE_URL } from "@/lib/seo/seo-types";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date();
 
   const entries: MetadataRoute.Sitemap = [];
@@ -89,31 +89,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   });
 
-  // 4. Individual Project Detail Pages
-  const projectSlugs = await getProjectSlugs();
-  for (const slug of projectSlugs) {
+  // 4. Individual Project Detail Pages (10 curated projects)
+  for (const project of projectsData) {
     entries.push({
-      url: `${SITE_URL}/en/projects/${slug}`,
+      url: `${SITE_URL}/en/projects/${project.slug}`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
         languages: {
-          en: `${SITE_URL}/en/projects/${slug}`,
-          id: `${SITE_URL}/id/projects/${slug}`,
+          en: `${SITE_URL}/en/projects/${project.slug}`,
+          id: `${SITE_URL}/id/projects/${project.slug}`,
         },
       },
     });
 
     entries.push({
-      url: `${SITE_URL}/id/projects/${slug}`,
+      url: `${SITE_URL}/id/projects/${project.slug}`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
         languages: {
-          en: `${SITE_URL}/en/projects/${slug}`,
-          id: `${SITE_URL}/id/projects/${slug}`,
+          en: `${SITE_URL}/en/projects/${project.slug}`,
+          id: `${SITE_URL}/id/projects/${project.slug}`,
         },
       },
     });
@@ -147,43 +146,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   // 6. Individual Blog Article Pages
-  const enBlogSlugs = await getBlogSlugs("en");
-  const idBlogSlugs = await getBlogSlugs("id");
-  const allBlogSlugs = Array.from(new Set([...enBlogSlugs, ...idBlogSlugs])).sort();
-
-  for (const slug of allBlogSlugs) {
-    const hasEn = enBlogSlugs.includes(slug);
-    const hasId = idBlogSlugs.includes(slug);
-
-    if (hasEn) {
-      entries.push({
-        url: `${SITE_URL}/en/blog/${slug}`,
-        lastModified: currentDate,
-        changeFrequency: "monthly",
-        priority: 0.7,
-        alternates: {
-          languages: {
-            en: `${SITE_URL}/en/blog/${slug}`,
-            ...(hasId ? { id: `${SITE_URL}/id/blog/${slug}` } : {}),
-          },
+  for (const post of blogPostsData) {
+    entries.push({
+      url: `${SITE_URL}/en/blog/${post.slug}`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+      alternates: {
+        languages: {
+          en: `${SITE_URL}/en/blog/${post.slug}`,
+          id: `${SITE_URL}/id/blog/${post.slug}`,
         },
-      });
-    }
+      },
+    });
 
-    if (hasId) {
-      entries.push({
-        url: `${SITE_URL}/id/blog/${slug}`,
-        lastModified: currentDate,
-        changeFrequency: "monthly",
-        priority: 0.7,
-        alternates: {
-          languages: {
-            ...(hasEn ? { en: `${SITE_URL}/en/blog/${slug}` } : {}),
-            id: `${SITE_URL}/id/blog/${slug}`,
-          },
+    entries.push({
+      url: `${SITE_URL}/id/blog/${post.slug}`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+      alternates: {
+        languages: {
+          en: `${SITE_URL}/en/blog/${post.slug}`,
+          id: `${SITE_URL}/id/blog/${post.slug}`,
         },
-      });
-    }
+      },
+    });
   }
 
   return entries;

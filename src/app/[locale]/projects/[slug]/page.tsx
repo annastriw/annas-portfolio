@@ -3,27 +3,31 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
 import {
-  getProjectBySlug,
-  getProjectSlugs,
-  getProjectAssets,
-  getAdjacentProjects,
-} from "@/lib/projects/project-content";
-import { MarkdownRenderer } from "@/components/markdown/markdown-renderer";
-import { ProjectMetaRail } from "@/components/projects/project-meta-rail";
+  projectsData,
+  getProjectDataBySlug,
+  getAdjacentProjectsData,
+} from "@/content/projects/projects-data";
 import { ProjectGallery } from "@/components/projects/project-gallery";
+import { ProjectMetaRail } from "@/components/projects/project-meta-rail";
 import { ProjectClaimNotice } from "@/components/projects/project-claim-notice";
 import { JsonLd } from "@/components/seo/json-ld";
 import { generateProjectJsonLd } from "@/lib/seo/schema-generators";
 
+interface PageProps {
+  params: Promise<{
+    locale: string;
+    slug: string;
+  }>;
+}
+
 export const dynamicParams = false;
 
-export async function generateStaticParams() {
-  const slugs = await getProjectSlugs();
+export function generateStaticParams() {
   const params: { locale: Locale; slug: string }[] = [];
 
   for (const locale of supportedLocales) {
-    for (const slug of slugs) {
-      params.push({ locale, slug });
+    for (const project of projectsData) {
+      params.push({ locale, slug: project.slug });
     }
   }
 
@@ -32,18 +36,16 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/projects/[slug]">): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
 
-  const project = await getProjectBySlug(slug);
+  const project = getProjectDataBySlug(slug);
   if (!project) return {};
 
   const isId = locale === "id";
-  const title = `${project.metadata.title} — Annas Tri Widagdo`;
-  const description = `${project.metadata.projectType} by Annas Tri Widagdo. ${
-    project.metadata.stakeholder ? `Developed for ${project.metadata.stakeholder}.` : ""
-  }`;
+  const title = `${project.title[locale]} — Annas Tri Widagdo`;
+  const description = project.summary[locale];
 
   return {
     title,
@@ -66,23 +68,26 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProjectDetailPage({
-  params,
-}: PageProps<"/[locale]/projects/[slug]">) {
+export default async function ProjectDetailPage({ params }: PageProps) {
   const { locale, slug } = await params;
 
   if (!isLocale(locale)) {
     notFound();
   }
 
-  const project = await getProjectBySlug(slug);
+  const project = getProjectDataBySlug(slug);
   if (!project) {
     notFound();
   }
 
-  const assets = await getProjectAssets(slug);
-  const { prev, next } = await getAdjacentProjects(slug);
+  const { prev, next } = getAdjacentProjectsData(slug);
   const isId = locale === "id";
+
+  // Combine cover image (if distinct) and documentation images for gallery
+  const allGalleryAssets = [
+    ...(project.coverImage ? [project.coverImage] : []),
+    ...project.documentationImages.filter((img) => img !== project.coverImage),
+  ];
 
   return (
     <article className="project-detail-page">
@@ -110,42 +115,124 @@ export default async function ProjectDetailPage({
         <header className="project-detail-header">
           <div className="project-detail-meta-tags">
             <span className="detail-meta-pill">
-              [{project.metadata.kind.toUpperCase()}]
+              [
+              {project.category === "web-app"
+                ? "WEB APPLICATION"
+                : project.category === "ml"
+                ? "MACHINE LEARNING"
+                : project.category === "mobile"
+                ? "MOBILE APPLICATION"
+                : "INTERACTIVE / OTHER"}
+              ]
             </span>
-            {project.metadata.status && (
+            {project.status && (
               <span className="detail-meta-pill detail-meta-status">
-                STATUS: {project.metadata.status}
+                STATUS: {project.status[locale]}
               </span>
             )}
           </div>
 
-          <h1 className="project-detail-title">{project.metadata.title}</h1>
-          <p className="project-detail-subtitle">{project.metadata.projectType}</p>
+          <h1 className="project-detail-title">{project.title[locale]}</h1>
+          <p className="project-detail-subtitle">{project.subtitle[locale]}</p>
         </header>
 
-        {/* Claim Limitations Callout (if applicable) */}
-        <ProjectClaimNotice slug={project.slug} locale={locale} />
+        {/* Claim Limitations Notice (if applicable) */}
+        {project.claimLimitation && (
+          <ProjectClaimNotice notice={project.claimLimitation} locale={locale} />
+        )}
 
         {/* Main Content Layout: Case Study + Technical Meta Rail */}
         <div className="project-detail-layout">
-          {/* Main Case Study & Markdown Body */}
-          <section className="project-detail-main" aria-label="Case Study and Documentation">
+          {/* Main Case Study Body */}
+          <section
+            className="project-detail-main"
+            aria-label="Case Study and Documentation"
+          >
             {/* Visual Media Gallery */}
             <ProjectGallery
-              assets={assets}
-              title={project.metadata.title}
+              assets={allGalleryAssets}
+              title={project.title[locale]}
               locale={locale}
             />
 
-            {/* Markdown Case Study Body */}
-            <div className="project-case-study-body">
-              <MarkdownRenderer content={project.content} />
+            {/* Structured Editorial Case Study */}
+            <div className="project-case-study-body editorial-prose">
+              {/* 01. Summary & Problem */}
+              <div className="case-study-section">
+                <h2 className="case-study-heading">
+                  {isId ? "01. Konteks & Masalah Rekayasa" : "01. Context & Engineering Problem"}
+                </h2>
+                <p className="case-study-lead">{project.summary[locale]}</p>
+                <p className="case-study-text">{project.problemStatement[locale]}</p>
+              </div>
+
+              {/* 02. System Solution & Architecture */}
+              <div className="case-study-section">
+                <h2 className="case-study-heading">
+                  {isId ? "02. Arsitektur & Solusi Sistem" : "02. Architecture & System Solution"}
+                </h2>
+                <p className="case-study-text">{project.systemSolution[locale]}</p>
+              </div>
+
+              {/* 03. Key Modules & Functional Capabilities */}
+              {project.keyModules && project.keyModules.length > 0 && (
+                <div className="case-study-section">
+                  <h2 className="case-study-heading">
+                    {isId ? "03. Modul & Kapabilitas Utama" : "03. Core Modules & Capabilities"}
+                  </h2>
+                  <div className="case-study-modules-grid">
+                    {project.keyModules.map((module, i) => (
+                      <div key={i} className="module-item-card">
+                        <div className="module-item-header">
+                          <span className="module-item-tag">MOD.0{i + 1}</span>
+                          <h3 className="module-item-title">{module.title[locale]}</h3>
+                        </div>
+                        <p className="module-item-desc">{module.description[locale]}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 04. Personal Contributions */}
+              <div className="case-study-section">
+                <h2 className="case-study-heading">
+                  {isId ? "04. Tanggung Jawab & Kontribusi Pribadi" : "04. Personal Responsibilities & Contributions"}
+                </h2>
+                <ul className="case-study-bullets">
+                  {project.personalContributions[locale].map((contrib, i) => (
+                    <li key={i} className="case-study-bullet-item">
+                      <span className="bullet-marker" aria-hidden="true">
+                        ▸
+                      </span>
+                      <span>{contrib}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 05. Verified Results & Evidence */}
+              <div className="case-study-section">
+                <h2 className="case-study-heading">
+                  {isId ? "05. Hasil Terverifikasi & Bukti Otentik" : "05. Verified Results & Authentic Evidence"}
+                </h2>
+                <ul className="case-study-bullets">
+                  {project.verifiedEvidence[locale].map((evidence, i) => (
+                    <li key={i} className="case-study-bullet-item">
+                      <span className="bullet-marker text-(--color-accent)" aria-hidden="true">
+                        ✓
+                      </span>
+                      <span>{evidence}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </section>
 
           {/* Technical Specifications Rail */}
           <ProjectMetaRail
-            metadata={project.metadata}
+            project={project}
             locale={locale}
           />
         </div>
@@ -164,7 +251,7 @@ export default async function ProjectDetailPage({
                 <span className="adjacent-nav-direction">
                   ← {isId ? "PROYEK SEBELUMNYA" : "PREVIOUS PROJECT"}
                 </span>
-                <span className="adjacent-nav-title">{prev.title}</span>
+                <span className="adjacent-nav-title">{prev.title[locale]}</span>
               </Link>
             ) : (
               <span className="adjacent-nav-disabled">
@@ -178,7 +265,7 @@ export default async function ProjectDetailPage({
               href={`/${locale}/projects`}
               className="adjacent-all-link"
             >
-              {isId ? "Lihat Semua Proyek" : "View All Projects"}
+              {isId ? "Lihat Semua Proyek (10)" : "View All Projects (10)"}
             </Link>
           </div>
 
@@ -191,7 +278,7 @@ export default async function ProjectDetailPage({
                 <span className="adjacent-nav-direction">
                   {isId ? "PROYEK BERIKUTNYA" : "NEXT PROJECT"} →
                 </span>
-                <span className="adjacent-nav-title">{next.title}</span>
+                <span className="adjacent-nav-title">{next.title[locale]}</span>
               </Link>
             ) : (
               <span className="adjacent-nav-disabled">

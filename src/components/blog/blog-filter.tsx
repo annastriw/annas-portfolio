@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { BlogMetadata } from "@/lib/blog/blog-types";
+import type { BlogPostItem } from "@/content/blog/blog-types";
 import type { Locale } from "@/lib/i18n/config";
 import { BlogCard } from "./blog-card";
 import { BlogEmptyState } from "./blog-empty-state";
 
 interface BlogFilterProps {
-  posts: BlogMetadata[];
+  posts: BlogPostItem[];
   categories: string[];
   locale: Locale;
 }
@@ -28,16 +28,16 @@ export function BlogFilter({ posts, categories, locale }: BlogFilterProps) {
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
       // 1. Category check
-      if (selectedCategory !== "all" && post.category !== selectedCategory) {
+      if (selectedCategory !== "all" && post.category[locale] !== selectedCategory) {
         return false;
       }
 
       // 2. Search query check
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
-        const titleMatch = post.title.toLowerCase().includes(query);
-        const descMatch = post.description.toLowerCase().includes(query);
-        const catMatch = post.category.toLowerCase().includes(query);
+        const titleMatch = post.title[locale].toLowerCase().includes(query);
+        const descMatch = post.description[locale].toLowerCase().includes(query);
+        const catMatch = post.category[locale].toLowerCase().includes(query);
         const tagMatch = post.tags.some((tag) => tag.toLowerCase().includes(query));
 
         return titleMatch || descMatch || catMatch || tagMatch;
@@ -45,7 +45,7 @@ export function BlogFilter({ posts, categories, locale }: BlogFilterProps) {
 
       return true;
     });
-  }, [posts, selectedCategory, searchQuery]);
+  }, [posts, selectedCategory, searchQuery, locale]);
 
   return (
     <div className="blog-filter-container">
@@ -61,7 +61,7 @@ export function BlogFilter({ posts, categories, locale }: BlogFilterProps) {
             const count =
               cat.key === "all"
                 ? posts.length
-                : posts.filter((p) => p.category === cat.key).length;
+                : posts.filter((p) => p.category[locale] === cat.key).length;
             const isSelected = selectedCategory === cat.key;
 
             return (
@@ -113,7 +113,7 @@ export function BlogFilter({ posts, categories, locale }: BlogFilterProps) {
       <div className="blog-results-status">
         <span className="results-count-label">
           {isId
-            ? `Menampilkan ${filteredPosts.length} dari ${posts.length} catatan teknis`
+            ? `Menampilkan ${filteredPosts.length} dari ${posts.length} catatan teknis terkurasi`
             : `Showing ${filteredPosts.length} of ${posts.length} technical dispatches`}
         </span>
         {(selectedCategory !== "all" || searchQuery) && (

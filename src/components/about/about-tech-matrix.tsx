@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
-import { technicalTaxonomyData } from "@/data/about";
+import { technicalTaxonomyData } from "@/content/about/about-data";
 
 interface AboutTechMatrixProps {
   locale: Locale;
@@ -27,7 +27,7 @@ export function AboutTechMatrix({ locale }: AboutTechMatrixProps) {
         </h2>
         <p className="section-subtitle">
           {isId
-            ? "Pemetaan bahasa pemrograman, kerangka kerja, pustaka kecerdasan buatan, dan alat infrastruktur yang digunakan dalam implementasi produksi dan riset."
+            ? "Pemetaan bahasa pemrograman, kerangka kerja web, model kecerdasan buatan, dan alat infrastruktur yang digunakan dalam implementasi produksi dan riset."
             : "Comprehensive taxonomy of programming languages, web frameworks, applied AI tools, and infrastructure technologies utilized across production systems and research."}
         </p>
       </div>

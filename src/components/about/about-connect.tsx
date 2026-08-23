@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
-import { navigationConfig } from "@/data/navigation";
+import { siteConfig } from "@/content/site/site-config";
 
 interface AboutConnectProps {
   locale: Locale;
@@ -7,7 +7,7 @@ interface AboutConnectProps {
 
 export function AboutConnect({ locale }: AboutConnectProps) {
   const isId = locale === "id";
-  const { socialLinks } = navigationConfig[locale];
+  const { socialLinks } = siteConfig;
 
   return (
     <section
@@ -31,8 +31,8 @@ export function AboutConnect({ locale }: AboutConnectProps) {
 
           <p className="section-subtitle">
             {isId
-              ? "Terbuka untuk peluang rekayasa perangkat lunak, perancangan sistem cerdas, dan kolaborasi teknis yang mengutamakan kualitas eksekusi."
-              : "Open to software engineering opportunities, intelligent system architecture, and technical collaborations prioritizing high execution standards."}
+              ? "Terbuka untuk peluang rekayasa perangkat lunak (Fullstack / Frontend / Backend), perancangan sistem cerdas, dan kolaborasi teknis yang mengutamakan kualitas eksekusi."
+              : "Open to software engineering opportunities (Fullstack / Frontend / Backend), intelligent system architecture, and technical collaborations prioritizing high execution standards."}
           </p>
         </div>
 
@@ -59,12 +59,12 @@ export function AboutConnect({ locale }: AboutConnectProps) {
         <div className="about-connect-footer-bar">
           <div className="connect-footer-meta">
             <span className="connect-dot" aria-hidden="true" />
-            <span className="connect-status">
-              {isId ? "STATUS: AKTIF & TERSEDIA" : "STATUS: ACTIVE & REACHABLE"}
+            <span className="connect-status font-mono text-(--color-accent)">
+              {isId ? "STATUS: TERSEDIA UNTUK KOLABORASI" : "STATUS: OPEN TO COLLABORATION"}
             </span>
           </div>
           <div className="connect-footer-loc">
-            <span>SEMARANG, INDONESIA // WIB (UTC+7)</span>
+            <span>KLATEN, CENTRAL JAVA, INDONESIA // UTC+7 (WIB)</span>
           </div>
         </div>
       </div>

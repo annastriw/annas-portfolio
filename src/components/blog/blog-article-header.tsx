@@ -1,12 +1,12 @@
-import type { BlogMetadata } from "@/lib/blog/blog-types";
+import type { BlogPostItem } from "@/content/blog/blog-types";
 import type { Locale } from "@/lib/i18n/config";
 
 interface BlogArticleHeaderProps {
-  metadata: BlogMetadata;
+  post: BlogPostItem;
   locale: Locale;
 }
 
-export function BlogArticleHeader({ metadata, locale }: BlogArticleHeaderProps) {
+export function BlogArticleHeader({ post, locale }: BlogArticleHeaderProps) {
   const isId = locale === "id";
 
   return (
@@ -14,16 +14,16 @@ export function BlogArticleHeader({ metadata, locale }: BlogArticleHeaderProps) 
       {/* Top Metadata Rail */}
       <div className="blog-article-meta-tags">
         <span className="blog-article-meta-pill blog-article-category">
-          [{metadata.category.toUpperCase()}]
+          [{post.category[locale].toUpperCase()}]
         </span>
         <span className="blog-article-meta-pill blog-article-reading-time">
-          {metadata.readingTime.toUpperCase()}
+          {post.readingTime[locale].toUpperCase()}
         </span>
       </div>
 
       {/* Main Title & Excerpt */}
-      <h1 className="blog-article-title">{metadata.title}</h1>
-      <p className="blog-article-lead">{metadata.description}</p>
+      <h1 className="blog-article-title">{post.title[locale]}</h1>
+      <p className="blog-article-lead">{post.description[locale]}</p>
 
       {/* Author & Timestamp Bar */}
       <div className="blog-article-byline-bar">
@@ -31,19 +31,19 @@ export function BlogArticleHeader({ metadata, locale }: BlogArticleHeaderProps) 
           <span className="byline-author-label">
             {isId ? "PENULIS" : "AUTHOR"}:
           </span>
-          <span className="byline-author-name">{metadata.author}</span>
+          <span className="byline-author-name">Annas Tri Widagdo</span>
           <span className="byline-divider" aria-hidden="true">
             /
           </span>
-          <time dateTime={metadata.date} className="byline-date">
-            {metadata.formattedDate}
+          <time dateTime={post.date} className="byline-date">
+            {post.date}
           </time>
         </div>
 
         {/* Tags List */}
-        {metadata.tags.length > 0 && (
+        {post.tags.length > 0 && (
           <div className="byline-tags" aria-label="Article tags">
-            {metadata.tags.map((tag) => (
+            {post.tags.map((tag) => (
               <span key={tag} className="byline-tag-item">
                 #{tag}
               </span>
