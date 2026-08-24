@@ -10,20 +10,18 @@ export function BlogHero({ locale }: BlogHeroProps) {
   return (
     <header className="blog-hero-header">
       <div className="blog-hero-meta">
-        <span className="blog-meta-tag">[ARCHIVE // 03]</span>
-        <span className="blog-meta-tag">
-          {isId ? "TULISAN & CATATAN TEKNIS" : "DISPATCHES & TECHNICAL ESSAYS"}
-        </span>
+        <span>{isId ? "ARSIP EDITORIAL" : "EDITORIAL ARCHIVE"}</span>
+        <span>{isId ? "4 ARTIKEL" : "4 ARTICLES"}</span>
       </div>
 
       <h1 className="blog-hero-title">
-        {isId ? "Catatan Rekayasa & Tulisan Teknis" : "Dispatches & Technical Notes"}
+        {isId ? "Catatan teknis dari pekerjaan nyata" : "Technical notes from real work"}
       </h1>
 
       <p className="blog-hero-lead">
         {isId
-          ? "Esai, catatan teknis, dan bedah arsitektur seputar rekayasa perangkat lunak, sistem cerdas, dan desain web deterministik berbasis pengalaman nyata."
-          : "Essays, technical notes, and architecture post-mortems on software engineering, intelligent systems, and deterministic web design grounded in real experience."}
+          ? "Empat artikel ringkas tentang ERP multi-cabang, integrasi machine learning, printing Android, dan pipeline speech-to-text."
+          : "Four concise articles on multi-branch ERP, machine-learning integration, Android printing, and a speech-to-text pipeline."}
       </p>
     </header>
   );

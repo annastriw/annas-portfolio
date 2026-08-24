@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
-import {
-  blogPostsData,
-  getBlogPostDataBySlug,
-  getAdjacentBlogPostsData,
-} from "@/content/blog/blog-data";
-import { BlogArticleHeader } from "@/components/blog/blog-article-header";
 import { BlogAdjacentNav } from "@/components/blog/blog-adjacent-nav";
+import { BlogArticleBody } from "@/components/blog/blog-article-body";
+import { BlogArticleHeader } from "@/components/blog/blog-article-header";
 import { JsonLd } from "@/components/seo/json-ld";
+import {
+  blogArticles,
+  getAdjacentBlogArticles,
+  getBlogArticle,
+} from "@/content/blog";
+import { getProjectCaseStudy } from "@/content/projects/project-case-studies";
+import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
 import { generateBlogPostingJsonLd } from "@/lib/seo/schema-generators";
 
 interface BlogPostPageProps {
@@ -22,15 +24,9 @@ interface BlogPostPageProps {
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const params: { locale: Locale; slug: string }[] = [];
-
-  for (const locale of supportedLocales) {
-    for (const post of blogPostsData) {
-      params.push({ locale, slug: post.slug });
-    }
-  }
-
-  return params;
+  return supportedLocales.flatMap((locale) =>
+    blogArticles.map((article) => ({ locale, slug: article.slug })),
+  );
 }
 
 export async function generateMetadata({
@@ -39,12 +35,12 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
 
-  const post = getBlogPostDataBySlug(slug);
-  if (!post) return {};
+  const article = getBlogArticle(slug);
+  if (!article) return {};
 
   const isId = locale === "id";
-  const title = `${post.title[locale]} - Annas Tri Widagdo`;
-  const description = post.description[locale];
+  const title = `${article.title[locale]} - Annas Tri Widagdo`;
+  const description = article.abstract[locale];
 
   return {
     title,
@@ -63,9 +59,8 @@ export async function generateMetadata({
       siteName: "Annas Tri Widagdo Portfolio",
       locale: isId ? "id_ID" : "en_US",
       type: "article",
-      publishedTime: post.date,
       authors: ["Annas Tri Widagdo"],
-      tags: post.tags,
+      tags: article.tags,
     },
   };
 }
@@ -79,106 +74,67 @@ export default async function BlogPostDetailPage({
     notFound();
   }
 
-  const post = getBlogPostDataBySlug(slug);
-  if (!post) {
+  const article = getBlogArticle(slug);
+  if (!article) {
     notFound();
   }
 
-  const { prev, next } = getAdjacentBlogPostsData(slug);
+  const { previous, next } = getAdjacentBlogArticles(slug);
   const isId = locale === "id";
 
   return (
     <article className="blog-article-page">
       <div className="blog-article-container">
-        <JsonLd schema={generateBlogPostingJsonLd(post, locale)} />
+        <JsonLd schema={generateBlogPostingJsonLd(article, locale)} />
 
-        {/* Navigation Breadcrumb Bar */}
         <nav
           className="blog-detail-breadcrumb"
-          aria-label={isId ? "Navigasi artikel blog" : "Article breadcrumb navigation"}
+          aria-label={isId ? "Navigasi artikel" : "Article navigation"}
         >
-          <Link
-            href={`/${locale}/blog`}
-            className="back-to-blog-link"
-          >
+          <Link href={`/${locale}/blog`} className="back-to-blog-link">
             <span aria-hidden="true">←</span>
-            <span>{isId ? "Kembali ke Indeks Tulisan" : "Back to Dispatches Index"}</span>
+            <span>{isId ? "Kembali ke indeks" : "Back to index"}</span>
           </Link>
           <span className="breadcrumb-path" aria-hidden="true">
-            / {locale.toUpperCase()} / BLOG / {post.slug}
+            BLOG / {article.index}
           </span>
         </nav>
 
-        {/* Article Header */}
-        <BlogArticleHeader
-          post={post}
-          locale={locale}
-        />
+        <BlogArticleHeader article={article} locale={locale} />
 
-        {/* Structured Article Body */}
-        <section className="blog-article-content" aria-label="Article Body">
-          <div className="blog-prose-wrapper editorial-prose">
-            {post.sections.map((section, idx) => (
-              <div key={idx} className="blog-section-block mb-10">
-                <h2 className="text-xl font-mono font-semibold tracking-tight text-(--color-text-primary) mb-4 mt-8 pb-2 border-b border-(--color-border)">
-                  {section.heading[locale]}
-                </h2>
-
-                {section.paragraphs && (
-                  <div className="space-y-4 mb-4">
-                    {section.paragraphs[locale].map((p, pIdx) => (
-                      <p key={pIdx} className="text-(--color-text-secondary) leading-relaxed">
-                        {p}
-                      </p>
-                    ))}
-                  </div>
-                )}
-
-                {section.list && (
-                  <div className="my-4 pl-2">
-                    {section.list.ordered ? (
-                      <ol className="list-decimal list-inside space-y-2 text-(--color-text-secondary)">
-                        {section.list.items[locale].map((item, lIdx) => (
-                          <li key={lIdx} className="leading-relaxed">
-                            {item}
-                          </li>
-                        ))}
-                      </ol>
-                    ) : (
-                      <ul className="list-disc list-inside space-y-2 text-(--color-text-secondary)">
-                        {section.list.items[locale].map((item, lIdx) => (
-                          <li key={lIdx} className="leading-relaxed">
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
-
-                {section.codeBlock && (
-                  <div className="code-block-container my-6 rounded-none border border-(--color-border) bg-(--color-surface-subtle) overflow-hidden">
-                    {section.codeBlock.caption && (
-                      <div className="code-block-header px-4 py-2 bg-(--color-surface) border-b border-(--color-border) font-mono text-xs text-(--color-text-muted) flex justify-between items-center">
-                        <span>{section.codeBlock.caption}</span>
-                        <span className="uppercase">{section.codeBlock.language}</span>
-                      </div>
-                    )}
-                    <pre className="p-4 overflow-x-auto font-mono text-xs text-(--color-text-primary) leading-relaxed">
-                      <code>{section.codeBlock.code}</code>
-                    </pre>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+        <section
+          className="blog-article-content"
+          aria-label={isId ? "Isi artikel" : "Article body"}
+        >
+          <BlogArticleBody article={article} locale={locale} />
         </section>
 
-        {/* Adjacent Exploration Nav */}
+        <aside className="blog-source-records" aria-labelledby="blog-source-heading">
+          <h2 id="blog-source-heading">
+            {isId ? "Pengalaman proyek terkait" : "Related project experience"}
+          </h2>
+          <div>
+            {article.sourceProjectSlugs.map((projectSlug) => {
+              const project = getProjectCaseStudy(projectSlug);
+              if (!project) return null;
+
+              return (
+                <Link
+                  href={`/${locale}/projects/${project.slug}`}
+                  key={project.slug}
+                >
+                  <span>{project.title[locale]}</span>
+                  <span aria-hidden="true">↗</span>
+                </Link>
+              );
+            })}
+          </div>
+        </aside>
+
         <BlogAdjacentNav
-          prev={prev}
+          previous={previous}
           next={next}
-          locale={locale}
+          locale={locale as Locale}
         />
       </div>
     </article>

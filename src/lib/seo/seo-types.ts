@@ -76,7 +76,7 @@ export interface JsonLdBlogPosting {
   headline: string;
   description: string;
   url: string;
-  datePublished: string;
+  datePublished?: string;
   inLanguage: string;
   author: {
     "@type": "Person";

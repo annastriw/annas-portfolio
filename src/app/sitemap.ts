@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { projectCaseStudies } from "@/content/projects/project-case-studies";
-import { blogPostsData } from "@/content/blog/blog-data";
+import { blogArticles } from "@/content/blog";
 import { SITE_URL } from "@/lib/seo/seo-types";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -146,29 +146,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   // 6. Individual Blog Article Pages
-  for (const post of blogPostsData) {
+  for (const article of blogArticles) {
     entries.push({
-      url: `${SITE_URL}/en/blog/${post.slug}`,
-      lastModified: currentDate,
+      url: `${SITE_URL}/en/blog/${article.slug}`,
       changeFrequency: "monthly",
       priority: 0.7,
       alternates: {
         languages: {
-          en: `${SITE_URL}/en/blog/${post.slug}`,
-          id: `${SITE_URL}/id/blog/${post.slug}`,
+          en: `${SITE_URL}/en/blog/${article.slug}`,
+          id: `${SITE_URL}/id/blog/${article.slug}`,
         },
       },
     });
 
     entries.push({
-      url: `${SITE_URL}/id/blog/${post.slug}`,
-      lastModified: currentDate,
+      url: `${SITE_URL}/id/blog/${article.slug}`,
       changeFrequency: "monthly",
       priority: 0.7,
       alternates: {
         languages: {
-          en: `${SITE_URL}/en/blog/${post.slug}`,
-          id: `${SITE_URL}/id/blog/${post.slug}`,
+          en: `${SITE_URL}/en/blog/${article.slug}`,
+          id: `${SITE_URL}/id/blog/${article.slug}`,
         },
       },
     });

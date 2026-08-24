@@ -126,7 +126,12 @@ export function Footer({ locale }: FooterProps) {
             <div className="flex items-center justify-between sm:justify-end gap-6">
               <span className="inline-flex items-center gap-1.5">
                 <span>© {currentYear} Annas Tri Widagdo · Built with</span>
-                <span className="text-(--color-accent) text-xs select-none" aria-label="love">♥︎</span>
+                <span
+                  className="text-(--color-accent) text-xs select-none"
+                  aria-hidden="true"
+                >
+                  ♥︎
+                </span>
               </span>
               <a
                 href="#site-header-brand"

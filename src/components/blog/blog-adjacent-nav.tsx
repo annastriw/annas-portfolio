@@ -1,51 +1,49 @@
 import Link from "next/link";
-import type { BlogPostItem } from "@/content/blog/blog-types";
+import type { BlogArticle } from "@/content/blog";
 import type { Locale } from "@/lib/i18n/config";
 
 interface BlogAdjacentNavProps {
-  prev: BlogPostItem | null;
-  next: BlogPostItem | null;
+  previous: BlogArticle | null;
+  next: BlogArticle | null;
   locale: Locale;
 }
 
-export function BlogAdjacentNav({ prev, next, locale }: BlogAdjacentNavProps) {
+export function BlogAdjacentNav({
+  previous,
+  next,
+  locale,
+}: BlogAdjacentNavProps) {
   const isId = locale === "id";
 
   return (
     <nav
       className="blog-adjacent-nav"
-      aria-label={isId ? "Tulisan sebelumnya dan selanjutnya" : "Previous and next dispatches"}
+      aria-label={isId ? "Artikel sebelum dan berikutnya" : "Previous and next articles"}
     >
-      {/* Newer / Previous Post */}
       <div className="adjacent-nav-item adjacent-nav-prev">
-        {prev ? (
+        {previous ? (
           <Link
-            href={`/${locale}/blog/${prev.slug}`}
+            href={`/${locale}/blog/${previous.slug}`}
             className="adjacent-nav-link"
           >
             <span className="adjacent-nav-direction">
-              ← {isId ? "TULISAN LEBIH BARU" : "NEWER DISPATCH"}
+              ← {isId ? "ARTIKEL SEBELUMNYA" : "PREVIOUS ARTICLE"}
             </span>
-            <span className="adjacent-nav-title">{prev.title[locale]}</span>
+            <span className="adjacent-nav-title">{previous.title[locale]}</span>
           </Link>
         ) : (
           <span className="adjacent-nav-disabled">
-            {isId ? "Tulisan Terbaru" : "Latest Dispatch"}
+            {isId ? "Awal indeks" : "Start of index"}
           </span>
         )}
       </div>
 
-      {/* Center Link to All Posts */}
       <div className="adjacent-nav-center">
-        <Link
-          href={`/${locale}/blog`}
-          className="adjacent-all-link"
-        >
-          {isId ? "Lihat Semua Tulisan" : "View All Dispatches"}
+        <Link href={`/${locale}/blog`} className="adjacent-all-link">
+          {isId ? "Semua Artikel" : "All Articles"}
         </Link>
       </div>
 
-      {/* Older / Next Post */}
       <div className="adjacent-nav-item adjacent-nav-next">
         {next ? (
           <Link
@@ -53,13 +51,13 @@ export function BlogAdjacentNav({ prev, next, locale }: BlogAdjacentNavProps) {
             className="adjacent-nav-link"
           >
             <span className="adjacent-nav-direction">
-              {isId ? "TULISAN SEBELUMNYA" : "OLDER DISPATCH"} →
+              {isId ? "ARTIKEL BERIKUTNYA" : "NEXT ARTICLE"} →
             </span>
             <span className="adjacent-nav-title">{next.title[locale]}</span>
           </Link>
         ) : (
           <span className="adjacent-nav-disabled">
-            {isId ? "Akhir Arsip Tulisan" : "End of Archive"}
+            {isId ? "Akhir indeks" : "End of index"}
           </span>
         )}
       </div>

@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
-import {
-  getAllBlogPostsData,
-  getAllBlogCategoriesData,
-} from "@/content/blog/blog-data";
+import { isLocale, supportedLocales } from "@/lib/i18n/config";
+import { blogArticles } from "@/content/blog";
 import { BlogHero } from "@/components/blog/blog-hero";
-import { BlogFilter } from "@/components/blog/blog-filter";
-import { BlogEmptyState } from "@/components/blog/blog-empty-state";
+import { BlogArchive } from "@/components/blog/blog-archive";
 import { JsonLd } from "@/components/seo/json-ld";
 import { generateItemListJsonLd } from "@/lib/seo/schema-generators";
 import { SITE_URL } from "@/lib/seo/seo-types";
@@ -31,12 +27,10 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
 
   const isId = locale === "id";
-  const title = isId
-    ? "Blog - Annas Tri Widagdo"
-    : "Blog - Annas Tri Widagdo";
+  const title = "Blog - Annas Tri Widagdo";
   const description = isId
-    ? "Kumpulan esai rekayasa sistem, catatan implementasi kecerdasan buatan, arsitektur web modern, dan pengalaman teknis Annas Tri Widagdo."
-    : "Engineering essays, applied AI implementation notes, modern web architectures, and technical post-mortems by Annas Tri Widagdo.";
+    ? "Artikel teknis ringkas tentang ERP multi-cabang, integrasi machine learning, printing Android, dan speech-to-text berdasarkan pengalaman proyek Annas Tri Widagdo."
+    : "Concise technical articles on multi-branch ERP, machine-learning integration, Android printing, and speech-to-text based on Annas Tri Widagdo's project work.";
 
   return {
     title,
@@ -66,16 +60,14 @@ export default async function BlogPage({ params }: BlogPageProps) {
     notFound();
   }
 
-  const posts = getAllBlogPostsData();
-  const categories = getAllBlogCategoriesData(locale as Locale);
   const isId = locale === "id";
 
   const blogListSchema = generateItemListJsonLd(
-    posts.map((p) => ({
-      title: p.title[locale as Locale],
-      url: `${SITE_URL}/${locale}/blog/${p.slug}`,
+    blogArticles.map((article) => ({
+      title: article.title[locale],
+      url: `${SITE_URL}/${locale}/blog/${article.slug}`,
     })),
-    isId ? "Catatan Rekayasa & Tulisan Teknis" : "Dispatches & Technical Notes",
+    isId ? "Artikel Teknis" : "Technical Articles",
     `${SITE_URL}/${locale}/blog`
   );
 
@@ -84,19 +76,8 @@ export default async function BlogPage({ params }: BlogPageProps) {
       <div className="blog-hub-container">
         <JsonLd schema={blogListSchema} />
 
-        {/* Page Header Hero */}
-        <BlogHero locale={locale as Locale} />
-
-        {/* Content Stream or Empty State */}
-        {posts.length > 0 ? (
-          <BlogFilter
-            posts={posts}
-            categories={categories}
-            locale={locale as Locale}
-          />
-        ) : (
-          <BlogEmptyState locale={locale as Locale} mode="empty-archive" />
-        )}
+        <BlogHero locale={locale} />
+        <BlogArchive articles={blogArticles} locale={locale} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 import type { ProjectCaseStudy } from "@/content/projects/project-case-studies";
-import type { BlogPostItem } from "@/content/blog/blog-types";
+import type { BlogArticle } from "@/content/blog";
 import { siteConfig } from "@/content/site/site-config";
 import {
   SITE_URL,
@@ -143,22 +143,21 @@ export function generateProjectJsonLd(
  * Generates Schema.org BlogPosting JSON-LD for a Blog Article Detail page.
  */
 export function generateBlogPostingJsonLd(
-  post: BlogPostItem,
+  article: BlogArticle,
   locale: Locale,
 ): JsonLdBlogPosting {
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: post.title[locale],
-    description: post.description[locale],
-    url: `${SITE_URL}/${locale}/blog/${post.slug}`,
-    datePublished: post.date,
+    headline: article.title[locale],
+    description: article.abstract[locale],
+    url: `${SITE_URL}/${locale}/blog/${article.slug}`,
     inLanguage: locale === "id" ? "id" : "en",
     author: {
       "@type": "Person",
       name: DEFAULT_AUTHOR,
       url: SITE_URL,
     },
-    ...(post.tags.length > 0 ? { keywords: post.tags.join(", ") } : {}),
+    ...(article.tags.length > 0 ? { keywords: article.tags.join(", ") } : {}),
   };
 }

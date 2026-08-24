@@ -1,55 +1,42 @@
-import type { BlogPostItem } from "@/content/blog/blog-types";
+import {
+  calculateArticleReadingTime,
+  type BlogArticle,
+} from "@/content/blog";
 import type { Locale } from "@/lib/i18n/config";
 
 interface BlogArticleHeaderProps {
-  post: BlogPostItem;
+  article: BlogArticle;
   locale: Locale;
 }
 
-export function BlogArticleHeader({ post, locale }: BlogArticleHeaderProps) {
+export function BlogArticleHeader({ article, locale }: BlogArticleHeaderProps) {
   const isId = locale === "id";
 
   return (
     <header className="blog-article-header">
-      {/* Top Metadata Rail */}
-      <div className="blog-article-meta-tags">
-        <span className="blog-article-meta-pill blog-article-category">
-          [{post.category[locale].toUpperCase()}]
-        </span>
-        <span className="blog-article-meta-pill blog-article-reading-time">
-          {post.readingTime[locale].toUpperCase()}
-        </span>
+      <div className="blog-article-meta">
+        <span>{article.category[locale]}</span>
+        <span>{calculateArticleReadingTime(article, locale)}</span>
+        {article.projectPeriod && <span>{article.projectPeriod[locale]}</span>}
       </div>
 
-      {/* Main Title & Excerpt */}
-      <h1 className="blog-article-title">{post.title[locale]}</h1>
-      <p className="blog-article-lead">{post.description[locale]}</p>
+      <h1 className="blog-article-title">{article.title[locale]}</h1>
+      <p className="blog-article-lead">{article.abstract[locale]}</p>
 
-      {/* Author & Timestamp Bar */}
       <div className="blog-article-byline-bar">
-        <div className="byline-author-info">
-          <span className="byline-author-label">
-            {isId ? "PENULIS" : "AUTHOR"}:
-          </span>
-          <span className="byline-author-name">Annas Tri Widagdo</span>
-          <span className="byline-divider" aria-hidden="true">
-            /
-          </span>
-          <time dateTime={post.date} className="byline-date">
-            {post.date}
-          </time>
+        <div className="blog-article-author">
+          <span>{isId ? "Ditulis oleh" : "Written by"}</span>
+          <strong>Annas Tri Widagdo</strong>
         </div>
 
-        {/* Tags List */}
-        {post.tags.length > 0 && (
-          <div className="byline-tags" aria-label="Article tags">
-            {post.tags.map((tag) => (
-              <span key={tag} className="byline-tag-item">
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
+        <ul
+          className="blog-article-tags"
+          aria-label={isId ? "Tag artikel" : "Article tags"}
+        >
+          {article.tags.map((tag) => (
+            <li key={tag}>#{tag}</li>
+          ))}
+        </ul>
       </div>
     </header>
   );
