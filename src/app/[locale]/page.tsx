@@ -4,11 +4,10 @@ import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
 import { getAllProjectsData } from "@/content/projects/projects-data";
 import { siteConfig } from "@/content/site/site-config";
 import { HeroSection } from "@/components/home/hero-section";
-import { SelectedProjects } from "@/components/home/selected-projects";
 import { ExperienceSection } from "@/components/home/experience-section";
-import { TechStackSection } from "@/components/home/tech-stack-section";
 import { GitHubSignal } from "@/components/home/github-signal";
-import { ContactSection } from "@/components/home/contact-section";
+import { SelectedProjects } from "@/components/home/selected-projects";
+import { TechStackSection } from "@/components/home/tech-stack-section";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
   generatePersonJsonLd,
@@ -74,23 +73,20 @@ export default async function LocalizedHomePage({ params }: PageProps) {
       {/* 01. Hero & Profile Introduction */}
       <HeroSection locale={locale as Locale} />
 
-      {/* 02. Selected Work / Featured Projects Preview */}
+      {/* 02. Professional History & Engineering Experience Timeline */}
+      <ExperienceSection locale={locale as Locale} />
+
+      {/* 03. Open Source & GitHub Contribution Telemetry */}
+      <GitHubSignal locale={locale as Locale} />
+
+      {/* 04. Selected Work / 4 Featured Case Studies Preview */}
       <SelectedProjects
         projects={projects}
         locale={locale as Locale}
       />
 
-      {/* 03. Professional History & Internship Timeline */}
-      <ExperienceSection locale={locale as Locale} />
-
-      {/* 04. Technical Capabilities & Taxonomy */}
+      {/* 05. Cartesian Technical Capabilities Matrix */}
       <TechStackSection locale={locale as Locale} />
-
-      {/* 05. Open Source & GitHub Contribution Signal */}
-      <GitHubSignal locale={locale as Locale} />
-
-      {/* 06. Contact Channels */}
-      <ContactSection locale={locale as Locale} />
     </div>
   );
 }

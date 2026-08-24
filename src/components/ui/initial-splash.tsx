@@ -214,7 +214,7 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
           <div className="splash-folio-meta-left">
             <span className="splash-folio-author">ANNAS TRI WIDAGDO</span>
             <span className="splash-folio-sep">/</span>
-            <span className="splash-folio-edition">PORTFOLIO · 2026</span>
+            <span className="splash-folio-edition">PORTFOLIO · {new Date().getFullYear()}</span>
           </div>
           <div className="splash-folio-meta-right">
             <span className="splash-folio-index">VOL. 01 // TECHNICAL ARCHIVE</span>
@@ -246,11 +246,11 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
             className={`splash-editorial-subtitle ${isTransit ? "splash-element-fade" : ""}`}
             aria-hidden="true"
           >
-            <span>SOFTWARE ENGINEERING</span>
+            <span>SOFTWARE ENGINEER</span>
             <span className="splash-sub-sep">·</span>
-            <span>FULL-STACK</span>
+            <span>FULL-STACK DEVELOPER</span>
             <span className="splash-sub-sep">·</span>
-            <span>MACHINE LEARNING</span>
+            <span>ML ENGINEER</span>
           </div>
         </div>
 

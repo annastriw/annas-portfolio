@@ -11,6 +11,7 @@ import { footyStandingsProject } from "./footy-standings";
 import { panoramicVirtualTourProject } from "./panoramic-virtual-tour";
 
 export * from "./types";
+export * from "./featured-config";
 export * from "./ukg-system";
 export * from "./ihealth-edu";
 export * from "./dialisis-connect-edu";

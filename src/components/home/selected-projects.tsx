@@ -1,8 +1,9 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { ProjectItem } from "@/content/projects/projects-types";
 import type { Locale } from "@/lib/i18n/config";
-import { EditorialPlaceholder } from "@/components/ui/editorial-placeholder";
+import { homeFeaturedConfig } from "@/content/projects/featured-config";
+import { FeaturedProjectItem } from "./projects/featured-project-item";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface SelectedProjectsProps {
   projects: ProjectItem[];
@@ -11,134 +12,101 @@ interface SelectedProjectsProps {
 
 export function SelectedProjects({ projects, locale }: SelectedProjectsProps) {
   const isId = locale === "id";
-  const featured = projects.filter((p) => p.featured);
+
+  const copy = {
+    tag: isId ? "[04 // KARYA PILIHAN]" : "[04 // SELECTED WORK]",
+    subtag: isId ? "PROYEK UNGGULAN" : "FEATURED PROJECTS",
+    title: isId ? "Proyek Pilihan" : "Selected Projects",
+    subtitle: isId
+      ? "Empat proyek yang menunjukkan pengalaman saya dalam full-stack development, machine learning, dan pengembangan pengalaman digital interaktif."
+      : "Four projects that show how I work across full-stack development, machine learning, and interactive digital experiences.",
+    viewAllCta: isId ? "Lihat Semua 10 Proyek" : "View All 10 Projects",
+    bottomNote: isId
+      ? "Tersedia 10 studi kasus teknis lengkap dalam arsip portofolio."
+      : "10 verified technical case studies available in the complete archive.",
+    bottomCta: isId ? "Lihat Semua Proyek" : "View All Projects",
+  };
+
+  // Resolve the 4 confirmed featured projects in strict required order
+  const slot1 = projects.find((p) => p.slug === homeFeaturedConfig.slot1Slug) || null;
+  const slot2 = projects.find((p) => p.slug === homeFeaturedConfig.slot2Slug) || null;
+  const slot3 = projects.find((p) => p.slug === homeFeaturedConfig.slot3Slug) || null;
+  const slot4 = projects.find((p) => p.slug === homeFeaturedConfig.slot4Slug) || null;
+
+  const slots: { index: string; project: ProjectItem | null }[] = [
+    { index: "01", project: slot1 },
+    { index: "02", project: slot2 },
+    { index: "03", project: slot3 },
+    { index: "04", project: slot4 },
+  ];
 
   return (
-    <section className="home-selected-section" aria-label="Selected Projects">
-      <div className="home-selected-container">
-        {/* Section Header */}
-        <div className="home-section-header">
-          <div className="section-header-meta">
-            <span className="section-meta-tag">[01 // SELECTED WORK]</span>
-            <span className="section-meta-tag">
-              {isId ? "PROYEK UNGGULAN" : "FEATURED CASE STUDIES"}
-            </span>
-          </div>
-          <div className="section-title-row">
-            <h2 className="section-title">
-              {isId ? "Karya & Purwarupa Pilihan" : "Selected Engineering Work"}
+    <section
+      className="home-selected-section py-8 sm:py-12 md:py-14 border-b border-(--color-border)"
+      aria-label={copy.title}
+    >
+      <div className="home-selected-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
+        {/* Section Header with Scroll Reveal */}
+        <ScrollReveal animationClass="animate-editorial-fade" className="home-section-header flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="flex flex-col gap-2 max-w-2xl">
+            <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
+              <span className="font-semibold text-(--color-accent)">{copy.tag}</span>
+              <span className="text-(--color-border)" aria-hidden="true">
+                /
+              </span>
+              <span>{copy.subtag}</span>
+            </div>
+            <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
+              {copy.title}
             </h2>
-            <Link
-              href={`/${locale}/projects`}
-              className="section-header-link"
-            >
-              <span>{isId ? "Lihat Semua 10 Proyek" : "View All 10 Projects"}</span>
-              <span aria-hidden="true">→</span>
-            </Link>
+            <p className="section-subtitle text-sm sm:text-base text-(--color-muted) leading-relaxed m-0">
+              {copy.subtitle}
+            </p>
           </div>
-          <p className="section-subtitle">
-            {isId
-              ? "Sorotan proyek dengan kompleksitas arsitektur tinggi, mulai dari aplikasi web enterprise skala produksi hingga purwarupa machine learning terverifikasi."
-              : "Highlights of high-impact engineering implementations, spanning production-deployed ERP web applications to verified machine learning inference services."}
-          </p>
-        </div>
 
-        {/* Editorial Grid */}
-        <div className="home-featured-grid">
-          {featured.map((project, idx) => {
-            const indexFormatted = String(idx + 1).padStart(2, "0");
-            const href = `/${locale}/projects/${project.slug}`;
+          <Link
+            href={`/${locale}/projects`}
+            className="section-header-link group inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-(--color-accent) hover:underline self-start md:self-end transition-colors"
+          >
+            <span>{copy.viewAllCta}</span>
+            <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+              →
+            </span>
+          </Link>
+        </ScrollReveal>
 
+        {/* 4-Slot Editorial Grid (2x2) */}
+        <div className="home-featured-grid grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-7">
+          {slots.map(({ index, project }) => {
+            if (!project) return null;
             return (
-              <article key={project.slug} className="featured-card group">
-                <Link href={href} className="featured-card-link">
-                  {/* Card Top Meta */}
-                  <div className="featured-card-meta-top">
-                    <span className="featured-index">[{indexFormatted}]</span>
-                    <span className="featured-kind">
-                      {project.category === "web-app"
-                        ? "WEB APP"
-                        : project.category === "ml"
-                        ? "MACHINE LEARNING"
-                        : project.category === "mobile"
-                        ? "MOBILE"
-                        : "OTHER"}
-                    </span>
-                    {project.status && (
-                      <span className="featured-status">{project.status[locale]}</span>
-                    )}
-                  </div>
-
-                  {/* Cover Media (3:2 Aspect Ratio) */}
-                  <div className="featured-card-media aspect-[3/2] overflow-hidden bg-(--color-surface-subtle) relative">
-                    {project.coverImage ? (
-                      <Image
-                        src={project.coverImage}
-                        alt={`Preview of ${project.title[locale]}`}
-                        width={700}
-                        height={466}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 600px"
-                        className="featured-card-img object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <EditorialPlaceholder
-                        figureNumber={indexFormatted}
-                        category={project.category}
-                        locale={locale}
-                      />
-                    )}
-                  </div>
-
-                  {/* Title & Description */}
-                  <div className="featured-card-body">
-                    <h3 className="featured-card-title">
-                      <span>{project.title[locale]}</span>
-                      <span className="featured-arrow" aria-hidden="true">
-                        ↗
-                      </span>
-                    </h3>
-                    <p className="featured-card-type">{project.subtitle[locale]}</p>
-                  </div>
-
-                  {/* Key Tech Rail */}
-                  <div className="featured-card-footer">
-                    <div className="featured-footer-item">
-                      <span className="footer-label">
-                        {isId ? "PERAN" : "ROLE"}:
-                      </span>
-                      <span className="footer-val">{project.role[locale]}</span>
-                    </div>
-                    {project.stakeholder && (
-                      <div className="featured-footer-item">
-                        <span className="footer-label">
-                          {isId ? "MITRA / KLIEN" : "CLIENT"}:
-                        </span>
-                        <span className="footer-val">{project.stakeholder[locale]}</span>
-                      </div>
-                    )}
-                  </div>
-                </Link>
-              </article>
+              <FeaturedProjectItem
+                key={project.slug}
+                project={project}
+                index={index}
+                locale={locale}
+              />
             );
           })}
         </div>
 
-        {/* Section Bottom CTA */}
-        <div className="home-selected-bottom-bar">
-          <span className="bottom-bar-label">
-            {isId
-              ? `Tersedia 10 studi kasus teknis lengkap dalam arsip portofolio.`
-              : `10 verified technical case studies available in the complete archive.`}
-          </span>
-          <Link
-            href={`/${locale}/projects`}
-            className="bottom-bar-cta"
-          >
-            <span>{isId ? "Buka Seluruh Indeks Proyek" : "Browse Full Projects Archive"}</span>
-            <span aria-hidden="true">→</span>
-          </Link>
-        </div>
+        {/* Section Bottom Bar with View All Projects CTA */}
+        <ScrollReveal delayMs={200} animationClass="animate-editorial-fade">
+          <div className="home-selected-bottom-bar flex flex-wrap items-center justify-between gap-3 border border-(--color-border) bg-(--color-background) p-3.5 sm:p-4 rounded-[2px] hover:border-(--color-accent) transition-colors duration-300">
+            <span className="bottom-bar-label font-mono text-xs text-(--color-muted)">
+              {copy.bottomNote}
+            </span>
+            <Link
+              href={`/${locale}/projects`}
+              className="bottom-bar-cta group inline-flex items-center gap-2 font-mono text-xs font-semibold text-(--color-accent) hover:underline"
+            >
+              <span>{copy.bottomCta}</span>
+              <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+                →
+              </span>
+            </Link>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

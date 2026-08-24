@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
+import { getLocalizedHref } from "@/lib/i18n/paths";
 import { navigationConfig } from "@/data/navigation";
-import { NavLinks } from "./nav-links";
 import { LocaleSwitcher } from "./locale-switcher";
-import { ThemeControl } from "@/components/theme/theme-control";
+import { ThemeToggle } from "./theme-toggle";
 
 interface MobileNavProps {
   locale: Locale;
@@ -16,17 +17,17 @@ export function MobileNav({ locale }: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [prevPathname, setPrevPathname] = useState(pathname);
-  const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const config = navigationConfig[locale];
+  const isId = locale === "id";
 
-  // Adjust state during render when pathname changes
+  // Close menu on route change
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
     setIsOpen(false);
   }
 
-  // Lock body scroll and handle Escape key
+  // Lock body scroll, handle Escape key and window resize
   useEffect(() => {
     if (!isOpen) return;
 
@@ -41,7 +42,7 @@ export function MobileNav({ locale }: MobileNavProps) {
     };
 
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 1024) {
         setIsOpen(false);
       }
     };
@@ -58,96 +59,101 @@ export function MobileNav({ locale }: MobileNavProps) {
 
   return (
     <div className="mobile-nav-container">
+      {/* Mobile Menu Toggle Button */}
       <button
         ref={triggerRef}
         type="button"
-        className="mobile-nav-toggle"
+        className="mobile-nav-toggle inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-(--header-border) bg-(--header-bg) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) transition-colors"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
-        aria-controls="mobile-nav-dialog"
+        aria-controls="mobile-nav-sheet"
         aria-label={isOpen ? config.labels.closeMenu : config.labels.menu}
       >
-        <span className="mobile-nav-toggle-icon" aria-hidden="true">
-          {isOpen ? "✕" : "☰"}
+        <span className="text-(--color-accent) text-xs" aria-hidden="true">
+          {isOpen ? "✕" : "■"}
         </span>
-        <span className="mobile-nav-toggle-label">
-          {isOpen ? config.labels.closeMenu : config.labels.menu}
+        <span className="uppercase tracking-tight">
+          {isOpen ? "CLOSE" : "MENU"}
         </span>
       </button>
 
+      {/* Editorial Table of Contents Full-Screen / Full-Width Sheet */}
       {isOpen && (
         <div
-          id="mobile-nav-dialog"
-          ref={menuRef}
-          className="mobile-nav-dialog"
+          id="mobile-nav-sheet"
+          className="fixed inset-0 top-[49px] z-50 bg-(--color-background) border-t border-(--header-border) overflow-y-auto p-5 sm:p-8 flex flex-col justify-between gap-8 animate-in fade-in slide-in-from-top-2 duration-200"
           role="dialog"
           aria-modal="true"
-          aria-label={config.labels.navigation}
+          aria-label={isId ? "Daftar Isi Navigasi" : "Table of Contents Navigation"}
         >
-          <div className="mobile-nav-content">
-            <div className="mobile-nav-section">
-              <span className="mobile-nav-section-label" aria-hidden="true">
-                [01 // {config.labels.navigation.toUpperCase()}]
+          {/* Top Section: Table of Contents */}
+          <div className="flex flex-col gap-6 max-w-md mx-auto w-full">
+            <div className="flex items-center justify-between border-b border-(--color-border) pb-2 font-mono text-xs text-(--color-muted)">
+              <span className="font-semibold text-(--color-accent) uppercase tracking-wider">
+                [INDEX // 01]
               </span>
-              <NavLinks
-                locale={locale}
-                className="mobile-nav-links"
-                itemClassName="mobile-nav-link"
-                onNavigate={() => setIsOpen(false)}
-              />
+              <span className="uppercase tracking-wider">
+                {isId ? "DAFTAR ISI" : "TABLE OF CONTENTS"}
+              </span>
             </div>
 
-            <div className="mobile-nav-section">
-              <span className="mobile-nav-section-label" aria-hidden="true">
-                [02 // {config.labels.connect.toUpperCase()}]
-              </span>
-              <ul className="mobile-social-links">
-                {config.socialLinks.map((item) => (
-                  <li key={item.key}>
-                    <a
-                      href={item.href}
-                      target={item.isExternal ? "_blank" : undefined}
-                      rel={item.isExternal ? "noopener noreferrer" : undefined}
-                      className="mobile-social-link"
-                    >
-                      <span>{item.label}</span>
-                      <span className="mobile-social-arrow" aria-hidden="true">
-                        ↗
+            {/* Navigation List */}
+            <nav className="flex flex-col gap-2" role="navigation">
+              {config.mainNav.map((item) => {
+                const localizedHref = getLocalizedHref(item.href, locale);
+                const isActive =
+                  pathname === localizedHref ||
+                  (item.href !== "/" && pathname?.startsWith(`${localizedHref}/`));
+
+                return (
+                  <Link
+                    key={item.key}
+                    href={localizedHref}
+                    onClick={() => setIsOpen(false)}
+                    className={`group flex items-center justify-between p-2.5 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) hover:border-(--color-accent) transition-all ${
+                      isActive ? "border-(--color-accent) bg-(--color-background)" : ""
+                    }`}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <div className="flex items-baseline gap-3">
+                      <span className="font-mono text-xs font-bold text-(--color-accent)">
+                        [{item.index}]
                       </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                      <span className="font-serif text-lg sm:text-xl font-normal text-(--color-foreground) group-hover:text-(--color-accent) transition-colors">
+                        {item.label}
+                      </span>
+                    </div>
 
-            <div className="mobile-nav-section">
-              <span className="mobile-nav-section-label" aria-hidden="true">
-                [03 // {config.labels.system.toUpperCase()}]
+                    {isActive ? (
+                      <span className="text-(--color-accent) text-xs font-mono font-semibold">
+                        ● ACTIVE
+                      </span>
+                    ) : (
+                      <span className="text-(--color-muted) font-mono text-xs group-hover:text-(--color-accent) group-hover:translate-x-0.5 transition-all">
+                        →
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Bottom Controls: Language & Theme Switcher */}
+          <div className="flex flex-col gap-4 max-w-md mx-auto w-full pt-4 border-t border-(--color-border)">
+            <div className="flex items-center justify-between font-mono text-xs">
+              <span className="text-(--color-muted) uppercase tracking-wider">
+                {isId ? "SISTEM //" : "SYSTEM //"}
               </span>
-              <div className="mobile-nav-system-controls">
-                <div className="mobile-locale-wrapper">
-                  <span className="mobile-control-title">
-                    {config.labels.switchLanguage}
-                  </span>
-                  <LocaleSwitcher
-                    locale={locale}
-                    className="mobile-locale-switcher"
-                    onSelect={() => setIsOpen(false)}
-                  />
-                </div>
-                <div className="mobile-theme-wrapper">
-                  <ThemeControl locale={locale} />
-                </div>
+              <div className="flex items-center gap-3">
+                <LocaleSwitcher locale={locale} />
+                <ThemeToggle locale={locale} />
               </div>
             </div>
 
-            <div className="mobile-nav-footer">
-              <p className="mobile-nav-location">
-                {config.colophon.location} [{config.colophon.timezone}]
-              </p>
-              <p className="mobile-nav-copyright">
-                {config.colophon.copyright}
-              </p>
+            <div className="flex items-center justify-between font-mono text-[11px] text-(--color-muted) pt-2">
+              <span>KLATEN, ID · UTC+7</span>
+              <span>annastriwidagdo.me</span>
             </div>
           </div>
         </div>

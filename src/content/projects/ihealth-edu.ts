@@ -30,8 +30,8 @@ export const ihealthEduProject: ProjectItem = {
     id: "2024",
   },
   status: {
-    en: "Completed",
-    id: "Selesai",
+    en: "Live / Deployed",
+    id: "Live / Deployed",
   },
   summary: {
     en: "An interactive health education platform combining responsive health literacy modules with machine learning risk inference prototypes for preventative lifestyle assessment.",

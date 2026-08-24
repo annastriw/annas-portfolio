@@ -7,6 +7,8 @@ export interface ExperienceItem {
   organization: Record<Locale, string>;
   location: string;
   type: string;
+  logoFolder: string;
+  logoPlaceholder: string;
   description: Record<Locale, string>;
   highlights: Record<Locale, string[]>;
   technologies: string[];
@@ -14,65 +16,126 @@ export interface ExperienceItem {
 
 export const experiencesData: ExperienceItem[] = [
   {
+    id: "cv-universal-kharisma-globalindo",
+    period: "01/2026 — 04/2026",
+    role: {
+      en: "Full-Stack Developer — Freelance Project",
+      id: "Full-Stack Developer — Proyek Freelance",
+    },
+    organization: {
+      en: "CV Universal Kharisma Globalindo",
+      id: "CV Universal Kharisma Globalindo",
+    },
+    location: "Klaten, Central Java, Indonesia",
+    type: "FREELANCE // PRODUCTION ERP",
+    logoFolder: "universal-kharisma-globalindo",
+    logoPlaceholder: "UKG",
+    description: {
+      en: "Engineered and deployed UKG System, a multi-branch Enterprise Resource Planning (ERP) web application used in daily business operations.",
+      id: "Merancang dan melakukan deployment UKG System, aplikasi ERP multi-cabang berbasis web untuk operasional bisnis harian.",
+    },
+    highlights: {
+      en: [
+        "Developed UKG System, a multi-branch ERP web application using Next.js frontend, NestJS modular REST API backend, and MySQL database.",
+        "Architected end-to-end Figma UI/UX, role-based access control, operational workflows (inventory, sales, approvals, reporting), and automated cashier stock deductions.",
+        "Executed QA automation and regression testing using Chrome DevTools automation and Playwright, and deployed to production on a Linux Ubuntu VPS.",
+      ],
+      id: [
+        "Mengembangkan UKG System, aplikasi ERP multi-cabang menggunakan frontend Next.js, backend REST API modular NestJS, dan basis data MySQL.",
+        "Merancang alur end-to-end dari UI/UX Figma, kontrol akses berbasis peran, alur operasional (inventaris, kasir, approval, laporan), dan rekonsiliasi stok otomatis.",
+        "Menjalankan otomatisasi QA dan regression testing dengan Chrome DevTools automation dan Playwright serta melakukan deployment production pada VPS Linux Ubuntu.",
+      ],
+    },
+    technologies: [
+      "Next.js",
+      "NestJS",
+      "TypeScript",
+      "REST API",
+      "MySQL",
+      "Playwright",
+      "Chrome DevTools Automation",
+      "Linux Ubuntu VPS",
+      "Figma",
+    ],
+  },
+  {
     id: "intern-ft-undip",
     period: "08/2025 — 09/2025",
     role: {
-      en: "Developer IT Intern",
-      id: "Developer IT Intern",
+      en: "UI/UX Designer Intern",
+      id: "UI/UX Designer Intern",
     },
     organization: {
-      en: "IT Developer Team, Faculty of Engineering, Diponegoro University",
-      id: "Tim Developer IT Fakultas Teknik Universitas Diponegoro",
+      en: "Faculty of Engineering, Diponegoro University",
+      id: "Fakultas Teknik, Universitas Diponegoro",
     },
-    location: "Semarang, Indonesia",
-    type: "INTERNSHIP // ONSITE",
+    location: "Semarang, Central Java, Indonesia",
+    type: "INTERNSHIP // UI/UX DESIGN",
+    logoFolder: "ft-undip",
+    logoPlaceholder: "FT",
     description: {
-      en: "Engineered user experience designs, interactive Figma prototypes, and formal system documentation for institutional faculty platforms (SITEDI research platform and SIPERPUS library system).",
-      id: "Merancang pengalaman pengguna, purwarupa interaktif Figma, dan dokumentasi sistem operasional untuk platform institusi Fakultas Teknik (sistem riset SITEDI dan perpustakaan SIPERPUS).",
+      en: "Designed user experiences, interface wireframes, interactive prototypes, and technical system documentation for institutional engineering faculty platforms.",
+      id: "Merancang pengalaman pengguna, wireframe antarmuka, purwarupa interaktif, dan dokumentasi sistem teknis untuk platform digital Fakultas Teknik.",
     },
     highlights: {
       en: [
-        "Designed UI/UX and interactive prototypes in Figma for SITEDI (Research & Community Service System) and SIPERPUS FT UNDIP.",
-        "Formulated information architecture, user flows, navigation hierarchies, and design consistency across multi-role workflows.",
-        "Authored the official SITEDI User Manual Guide (Buku Panduan Penggunaan) to standardize operational adoption across faculty departments.",
+        "Designed wireframes and user interaction flows for SITEDI (Faculty Research and Community Service Information System).",
+        "Authored the official SITEDI User Guide documenting core system workflows, key features, and user instructions.",
+        "Designed wireframes and user experience flows for the SIPERPUS FT UNDIP faculty library system.",
       ],
       id: [
-        "Merancang UI/UX dan purwarupa interaktif Figma untuk SITEDI (Sistem Informasi Penelitian & Pengabdian) dan SIPERPUS FT UNDIP.",
-        "Menyusun arsitektur informasi, alur pengguna, hierarki navigasi, dan konsistensi antarmuka lintas peran pengguna.",
-        "Menulis Buku Panduan Penggunaan resmi SITEDI sebagai dokumentasi operasional standar bagi sivitas akademika fakultas.",
+        "Merancang wireframe dan alur interaksi pengguna untuk SITEDI (Sistem Informasi Penelitian dan Pengabdian Fakultas Teknik).",
+        "Menyusun Buku Panduan Penggunaan resmi SITEDI yang mendokumentasikan alur sistem, fitur utama, dan instruksi pengguna.",
+        "Merancang wireframe dan alur pengalaman pengguna untuk sistem perpustakaan fakultas SIPERPUS FT UNDIP.",
       ],
     },
-    technologies: ["Figma", "UI/UX Design", "Interactive Prototyping", "Information Architecture", "Technical Documentation"],
+    technologies: [
+      "Figma",
+      "UI/UX Design",
+      "Wireframing",
+      "User Flow",
+      "Interactive Prototyping",
+      "Technical Documentation",
+    ],
   },
   {
-    id: "independent-engineering",
-    period: "2022 — PRESENT",
+    id: "intern-duta-basis-dataprima",
+    period: "07/2024 — 08/2024",
     role: {
-      en: "Software Engineer · Full-Stack & Machine Learning",
-      id: "Software Engineer · Full-Stack & Machine Learning",
+      en: "Junior Game Developer Intern",
+      id: "Junior Game Developer Intern",
     },
     organization: {
-      en: "Independent Engineering & Client Stakeholder Engagements",
-      id: "Pengembangan Mandiri & Kemitraan Klien",
+      en: "PT Duta Basis Dataprima",
+      id: "PT Duta Basis Dataprima",
     },
-    location: "Klaten / Remote, Indonesia",
-    type: "SYSTEMS & APPLIED AI",
+    location: "Bandung, West Java, Indonesia",
+    type: "INTERNSHIP // 3D & MULTIMEDIA",
+    logoFolder: "duta-basis-dataprima",
+    logoPlaceholder: "DBD",
     description: {
-      en: "Architected and delivered end-to-end fullstack web platforms, machine learning predictive inference services, and hardware-integrated mobile utilities across commercial and community domains.",
-      id: "Merancang dan mengimplementasikan platform web fullstack end-to-end, layanan inferensi prediktif machine learning, dan aplikasi mobile integrasi perangkat keras.",
+      en: "Engineered an interactive 360° Panoramic Virtual Tour prototype for architectural building visualization.",
+      id: "Mengembangkan purwarupa Panoramic Virtual Tour 360° interaktif untuk visualisasi proyek bangunan arsitektur.",
     },
     highlights: {
       en: [
-        "UKG System: Built production multi-branch ERP with NestJS REST API, Next.js frontend, automated stock workflows, and Katalon Studio QA for CV Universal Kharisma Globalindo.",
-        "iHealth Edu & Dialisis Connect Edu: Delivered digital health platforms featuring multi-role access, standardized screening, and Flask-served risk prediction prototypes.",
-        "Applied ML & Systems: Engineered heart attack risk classification prototype (Scikit-learn, Random Forest), automated speech recognition pipeline (Wav2Vec2), and Android ESC/POS thermal printing service.",
+        "Developed Panoramic Virtual Tour prototype in Unity (C#) using Lumion Pro 3D architectural renders.",
+        "Processed 78 rendered 360° panoramas and structured scene management across 79 distinct Unity scenes.",
+        "Implemented Physics Raycasts, Box Colliders, reusable navigation hotspot prefabs, and mouse/touch camera controls with persistent PlayerRig.",
       ],
       id: [
-        "UKG System: Membangun sistem ERP multi-cabang dengan REST API NestJS, Next.js, sinkronisasi stok otomatis, dan QA Katalon Studio untuk CV Universal Kharisma Globalindo.",
-        "iHealth Edu & Dialisis Connect Edu: Mengembangkan platform kesehatan digital dengan modul asesmen terstandar, jalur edukasi terstruktur, dan purwarupa prediksi risiko.",
-        "Terapan ML & Sistem: Merekayasa purwarupa klasifikasi risiko penyakit jantung (Scikit-learn), pipeline speech recognition (Wav2Vec2), dan utilitas Android printer termal ESC/POS.",
+        "Membangun purwarupa Panoramic Virtual Tour di Unity (C#) memanfaatkan hasil render 3D Lumion Pro.",
+        "Mengolah 78 hasil render panorama 360° dan menyusun hierarki scene management pada 79 scene Unity.",
+        "Mengimplementasikan Physics Raycast, Box Collider, prefab hotspot navigasi reusable, dan kontrol kamera mouse/touch dengan PlayerRig persisten.",
       ],
     },
-    technologies: ["Next.js", "React", "TypeScript", "NestJS", "Laravel", "Python", "Scikit-learn", "Kotlin", "Docker", "Linux"],
+    technologies: [
+      "Unity",
+      "C#",
+      "Lumion Pro",
+      "360° Panorama",
+      "Physics Raycast",
+      "Scene Management",
+    ],
   },
 ];

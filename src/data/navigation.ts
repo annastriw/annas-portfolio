@@ -1,5 +1,7 @@
 import type { LocaleNavigation } from "@/types/navigation";
 
+const currentYear = new Date().getFullYear();
+
 export const navigationConfig: LocaleNavigation = {
   en: {
     mainNav: [
@@ -30,7 +32,7 @@ export const navigationConfig: LocaleNavigation = {
       {
         key: "contact",
         label: "Contact",
-        href: "/#contact",
+        href: "/contact",
         index: "05",
       },
     ],
@@ -60,10 +62,10 @@ export const navigationConfig: LocaleNavigation = {
     colophon: {
       title: "annastriwidagdo.me",
       description:
-        "Software Engineer · Full-Stack Developer · Machine Learning Engineer building robust web systems, intelligent products, and technical editorial solutions.",
+        "Software Engineer · Full-Stack Developer · ML Engineer building robust web systems, intelligent products, and technical editorial solutions.",
       location: "Klaten, Central Java, Indonesia",
       timezone: "UTC+7",
-      copyright: "© 2026 Annas Tri Widagdo. All rights reserved.",
+      copyright: `© ${currentYear} Annas Tri Widagdo. All rights reserved.`,
     },
     labels: {
       menu: "Menu",
@@ -105,7 +107,7 @@ export const navigationConfig: LocaleNavigation = {
       {
         key: "contact",
         label: "Kontak",
-        href: "/#contact",
+        href: "/contact",
         index: "05",
       },
     ],
@@ -135,10 +137,10 @@ export const navigationConfig: LocaleNavigation = {
     colophon: {
       title: "annastriwidagdo.me",
       description:
-        "Software Engineer · Full-Stack Developer · Machine Learning Engineer yang membangun sistem web yang tangguh, produk cerdas, dan solusi technical editorial.",
+        "Software Engineer · Full-Stack Developer · ML Engineer yang membangun sistem web yang tangguh, produk cerdas, dan solusi technical editorial.",
       location: "Klaten, Jawa Tengah, Indonesia",
-      timezone: "WIB (UTC+7)",
-      copyright: "© 2026 Annas Tri Widagdo. Hak cipta dilindungi.",
+      timezone: "UTC+7",
+      copyright: `© ${currentYear} Annas Tri Widagdo. Hak cipta dilindungi.`,
     },
     labels: {
       menu: "Menu",

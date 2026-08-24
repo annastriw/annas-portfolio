@@ -1,141 +1,48 @@
 import type { Locale } from "@/lib/i18n/config";
+import { TechDirectory } from "./tech-directory/tech-directory";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface TechStackSectionProps {
   locale: Locale;
 }
 
-interface CapabilityCategory {
-  number: string;
-  category: { en: string; id: string };
-  description: { en: string; id: string };
-  skills: { name: string; tag: string }[];
-}
-
-const capabilities: CapabilityCategory[] = [
-  {
-    number: "01",
-    category: {
-      en: "Frontend & Client Engineering",
-      id: "Frontend & Rekayasa Antarmuka",
-    },
-    description: {
-      en: "Architecting responsive, high-performance web and mobile interfaces with strict type safety and accessible semantic layouts.",
-      id: "Membangun antarmuka web dan mobile berkinerja tinggi, responsif, dengan type safety ketat dan tata letak semantik yang aksesibel.",
-    },
-    skills: [
-      { name: "Next.js (App Router)", tag: "Framework" },
-      { name: "React 19", tag: "UI Library" },
-      { name: "TypeScript", tag: "Language" },
-      { name: "Tailwind CSS v4", tag: "Styling" },
-      { name: "Kotlin (Android SDK)", tag: "Mobile / Native" },
-      { name: "Flutter & Dart", tag: "Mobile / Cross-Platform" },
-      { name: "Three.js / Panolens", tag: "3D / Interactive" },
-    ],
-  },
-  {
-    number: "02",
-    category: {
-      en: "Backend & Systems Architecture",
-      id: "Backend & Arsitektur Sistem",
-    },
-    description: {
-      en: "Engineering modular web backends, secure authentication workflows, role-based authorization, and high-throughput REST APIs.",
-      id: "Mengembangkan backend web modular, alur autentikasi aman, otorisasi berbasis peran, dan REST API berperforma tinggi.",
-    },
-    skills: [
-      { name: "NestJS", tag: "Backend Framework" },
-      { name: "Laravel (PHP 8.x)", tag: "Enterprise Backend" },
-      { name: "Flask (Python)", tag: "ML Microservices / API" },
-      { name: "Node.js", tag: "Runtime & Tooling" },
-      { name: "RESTful Architecture", tag: "API Design" },
-      { name: "ESC/POS Protocol", tag: "Hardware Printing" },
-    ],
-  },
-  {
-    number: "03",
-    category: {
-      en: "Applied AI & Machine Learning",
-      id: "AI & Machine Learning Terapan",
-    },
-    description: {
-      en: "Developing predictive classification models, audio feature extraction pipelines, data balancing routines, and containerized inference services.",
-      id: "Mengembangkan model klasifikasi prediktif, pemrosesan ekstraksi fitur audio, penanganan data imbalance, dan layanan inferensi terkontainerisasi.",
-    },
-    skills: [
-      { name: "Scikit-learn", tag: "ML Toolkit" },
-      { name: "Random Forest & SVM", tag: "Classification" },
-      { name: "Hugging Face (Wav2Vec2)", tag: "ASR / Speech" },
-      { name: "SMOTE Balancing", tag: "Data Engineering" },
-      { name: "Pandas & NumPy", tag: "Data Wrangling" },
-      { name: "Flask ML Serving", tag: "Inference API" },
-    ],
-  },
-  {
-    number: "04",
-    category: {
-      en: "Database, QA & Infrastructure",
-      id: "Basis Data, QA & Infrastruktur",
-    },
-    description: {
-      en: "Relational database modeling, container deployment on Linux environments, automated testing workflows, and version control hygiene.",
-      id: "Pemodelan basis data relasional, deployment kontainer pada Linux Ubuntu, pengujian otomatis, dan manajemen repositori Git.",
-    },
-    skills: [
-      { name: "MySQL / MariaDB", tag: "Relational DB" },
-      { name: "Docker Containerization", tag: "DevOps" },
-      { name: "Linux (Ubuntu Server / VPS)", tag: "Infrastructure" },
-      { name: "Katalon Studio", tag: "QA Automation" },
-      { name: "Cisco CCNA Networking", tag: "Network Security" },
-      { name: "Git & Version Control", tag: "Tooling" },
-    ],
-  },
-];
-
 export function TechStackSection({ locale }: TechStackSectionProps) {
   const isId = locale === "id";
 
+  const copy = {
+    tag: "[05 // TECH STACK]",
+    subtag: isId ? "INDEKS TEKNOLOGI" : "TECHNICAL INDEX",
+    title: isId ? "Tools & Teknologi" : "Tools & Technologies",
+    subtitle: isId
+      ? "Teknologi yang biasa saya gunakan untuk merancang, membangun, menguji, dan menerapkan software."
+      : "Technologies I regularly use to design, build, test, and deploy software.",
+  };
+
   return (
-    <section className="home-tech-section" aria-label="Technical Capabilities">
-      <div className="home-tech-container">
-        {/* Section Header */}
-        <div className="home-section-header">
-          <div className="section-header-meta">
-            <span className="section-meta-tag">[03 // CAPABILITY MATRIX]</span>
-            <span className="section-meta-tag">
-              {isId ? "ARSENAL TEKNOLOGI" : "TECHNICAL ARSENAL"}
+    <section
+      className="home-tech-section py-8 sm:py-12 md:py-14"
+      aria-label={copy.title}
+    >
+      <div className="home-tech-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
+        {/* Section Header with Scroll Reveal */}
+        <ScrollReveal animationClass="animate-editorial-fade" className="home-section-header flex flex-col gap-2 max-w-3xl">
+          <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
+            <span className="font-semibold text-(--color-accent)">{copy.tag}</span>
+            <span className="text-(--color-border)" aria-hidden="true">
+              /
             </span>
+            <span>{copy.subtag}</span>
           </div>
-          <h2 className="section-title">
-            {isId ? "Kapabilitas & Teknologi Rekayasa" : "Technical Stack & Capabilities"}
+          <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
+            {copy.title}
           </h2>
-          <p className="section-subtitle">
-            {isId
-              ? "Taksonomi bahasa pemrograman, kerangka kerja, platform data, dan metodologi pengujian yang telah tervalidasi pada proyek nyata."
-              : "Taxonomy of programming languages, frameworks, data platforms, and testing workflows validated through authentic project implementations."}
+          <p className="section-subtitle text-sm sm:text-base text-(--color-muted) leading-relaxed m-0">
+            {copy.subtitle}
           </p>
-        </div>
+        </ScrollReveal>
 
-        {/* 2-Column Capability Grid */}
-        <div className="capability-grid">
-          {capabilities.map((cat) => (
-            <div key={cat.number} className="capability-card">
-              <div className="capability-card-header">
-                <span className="capability-number">[{cat.number}]</span>
-                <h3 className="capability-category">{cat.category[locale]}</h3>
-              </div>
-              <p className="capability-desc">{cat.description[locale]}</p>
-
-              <div className="capability-skills-list">
-                {cat.skills.map((skill) => (
-                  <div key={skill.name} className="capability-skill-chip">
-                    <span className="skill-name">{skill.name}</span>
-                    <span className="skill-tag">{skill.tag}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Editorial Technical Directory */}
+        <TechDirectory locale={locale} />
       </div>
     </section>
   );
