@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
-import type { ProjectItem } from "@/content/projects/projects-types";
+import type { ProjectCaseStudy } from "@/content/projects/project-case-studies";
 import type { BlogPostItem } from "@/content/blog/blog-types";
 import { siteConfig } from "@/content/site/site-config";
 import {
@@ -113,23 +113,21 @@ export function generateItemListJsonLd(
  * Generates Schema.org SoftwareSourceCode / CreativeWork JSON-LD for a Project Detail page.
  */
 export function generateProjectJsonLd(
-  project: ProjectItem,
+  project: ProjectCaseStudy,
   locale: Locale,
 ): JsonLdSoftwareSourceCode {
-  const language = project.techStack.core[0] || undefined;
+  const language = project.techStack[0] || undefined;
   const keywords = [
     project.category,
-    project.projectType[locale],
     project.role[locale],
-    project.stakeholder?.[locale],
-    ...project.techStack.core,
+    ...project.techStack,
   ].filter((k): k is string => Boolean(k) && k !== "-");
 
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
     name: project.title[locale],
-    description: project.summary[locale],
+    description: project.overview[locale].join(" "),
     url: `${SITE_URL}/${locale}/projects/${project.slug}`,
     author: {
       "@type": "Person",

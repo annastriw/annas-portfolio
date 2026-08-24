@@ -1,12 +1,12 @@
 import Link from "next/link";
-import type { ProjectItem } from "@/content/projects/projects-types";
+import type { ProjectArchiveItem } from "@/content/projects/project-archive";
 import type { Locale } from "@/lib/i18n/config";
 import { homeFeaturedConfig } from "@/content/projects/featured-config";
 import { FeaturedProjectItem } from "./projects/featured-project-item";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface SelectedProjectsProps {
-  projects: ProjectItem[];
+  projects: readonly ProjectArchiveItem[];
   locale: Locale;
 }
 
@@ -33,7 +33,7 @@ export function SelectedProjects({ projects, locale }: SelectedProjectsProps) {
   const slot3 = projects.find((p) => p.slug === homeFeaturedConfig.slot3Slug) || null;
   const slot4 = projects.find((p) => p.slug === homeFeaturedConfig.slot4Slug) || null;
 
-  const slots: { index: string; project: ProjectItem | null }[] = [
+  const slots: { index: string; project: ProjectArchiveItem | null }[] = [
     { index: "01", project: slot1 },
     { index: "02", project: slot2 },
     { index: "03", project: slot3 },

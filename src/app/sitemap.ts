@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { projectsData } from "@/content/projects/projects-data";
+import { projectCaseStudies } from "@/content/projects/project-case-studies";
 import { blogPostsData } from "@/content/blog/blog-data";
 import { SITE_URL } from "@/lib/seo/seo-types";
 
@@ -90,7 +90,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   // 4. Individual Project Detail Pages (10 curated projects)
-  for (const project of projectsData) {
+  for (const project of projectCaseStudies) {
     entries.push({
       url: `${SITE_URL}/en/projects/${project.slug}`,
       lastModified: currentDate,

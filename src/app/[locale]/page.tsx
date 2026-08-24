@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
-import { getAllProjectsData } from "@/content/projects/projects-data";
+import { projectArchive } from "@/content/projects/project-archive";
 import { siteConfig } from "@/content/site/site-config";
 import { HeroSection } from "@/components/home/hero-section";
 import { ExperienceSection } from "@/components/home/experience-section";
@@ -64,8 +64,6 @@ export default async function LocalizedHomePage({ params }: PageProps) {
     notFound();
   }
 
-  const projects = getAllProjectsData();
-
   return (
     <div className="home-landing-page">
       <JsonLd schema={[generatePersonJsonLd(), generateWebSiteJsonLd()]} />
@@ -81,7 +79,7 @@ export default async function LocalizedHomePage({ params }: PageProps) {
 
       {/* 04. Selected Work / 4 Featured Case Studies Preview */}
       <SelectedProjects
-        projects={projects}
+        projects={projectArchive}
         locale={locale as Locale}
       />
 
