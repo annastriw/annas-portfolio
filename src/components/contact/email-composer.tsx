@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Locale } from "@/lib/i18n/config";
 import {
-  buildContactMailto,
+  buildContactEmailLinks,
   contactCopy,
   contactTemplates,
   type ContactTemplateId,
@@ -21,7 +21,7 @@ export function EmailComposer({ locale }: EmailComposerProps) {
     useState<ContactTemplateId | null>(null);
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-  const mailto = buildContactMailto(subject, message);
+  const emailLinks = buildContactEmailLinks({ subject, body: message });
 
   const applyTemplate = (templateId: ContactTemplateId) => {
     const template = templates.find((item) => item.id === templateId);
@@ -45,7 +45,9 @@ export function EmailComposer({ locale }: EmailComposerProps) {
       onSubmit={(event) => event.preventDefault()}
     >
       <fieldset className={styles.templateFieldset}>
-        <legend className={styles.templateLegend}>{copy.templateLegend}</legend>
+        <legend className={styles.templateLegend}>
+          <span>01 /</span> {copy.templateLegend}
+        </legend>
         <div className={styles.templateGrid}>
           {templates.map((template, index) => {
             const isSelected = selectedTemplate === template.id;
@@ -83,7 +85,7 @@ export function EmailComposer({ locale }: EmailComposerProps) {
 
       <div className={styles.fieldGroup}>
         <label className={styles.fieldLabel} htmlFor={`contact-subject-${locale}`}>
-          <span>01 /</span> {copy.subjectLabel}
+          <span>02 /</span> {copy.subjectLabel}
         </label>
         <input
           className={styles.textInput}
@@ -98,7 +100,7 @@ export function EmailComposer({ locale }: EmailComposerProps) {
 
       <div className={styles.fieldGroup}>
         <label className={styles.fieldLabel} htmlFor={`contact-message-${locale}`}>
-          <span>02 /</span> {copy.messageLabel}
+          <span>03 /</span> {copy.messageLabel}
         </label>
         <textarea
           className={styles.textarea}
@@ -112,18 +114,31 @@ export function EmailComposer({ locale }: EmailComposerProps) {
       </div>
 
       <div className={styles.formActions}>
-        <a className={styles.primaryAction} href={mailto}>
-          <span>{copy.openEmailClient}</span>
+        <a
+          className={styles.primaryAction}
+          href={emailLinks.gmail}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <span>{copy.openGmail}</span>
+          <span className={styles.actionArrow} aria-hidden="true">
+            {"\u2197"}
+          </span>
+          <span className="sr-only"> ({copy.gmailCue})</span>
+        </a>
+        <a className={styles.secondaryAction} href={emailLinks.mailto}>
+          <span>{copy.openEmailApp}</span>
           <span className={styles.actionArrow} aria-hidden="true">
             {"\u2192"}
           </span>
         </a>
-        <button className={styles.clearAction} onClick={clearDraft} type="button">
-          {copy.clearDraft}
-        </button>
       </div>
 
       <p className={styles.helperText}>{copy.helper}</p>
+
+      <button className={styles.clearAction} onClick={clearDraft} type="button">
+        {copy.clearDraft}
+      </button>
     </form>
   );
 }

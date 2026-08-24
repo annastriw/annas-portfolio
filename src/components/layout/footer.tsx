@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { siteContact } from "@/content/site/contact";
+import { BackToTop } from "./back-to-top";
+import styles from "./footer.module.css";
 
 interface FooterProps {
   locale: Locale;
@@ -10,141 +12,108 @@ interface FooterProps {
 export function Footer({ locale }: FooterProps) {
   const isId = locale === "id";
   const currentYear = new Date().getFullYear();
+  const signature = `\u00A9 ${currentYear} Annas Tri Widagdo. Drafted in grids, shipped in code.`;
 
   const copy = {
-    brandTagline: isId
-      ? "Mengubah kebutuhan nyata menjadi produk digital melalui full-stack development dan machine learning engineering."
-      : "Turning real needs into practical digital products through full-stack development and machine learning engineering.",
-    emailLabel: "EMAIL //",
-    linkedinLabel: "LINKEDIN //",
-    githubLabel: "GITHUB //",
-    contactLabel: "CONTACT //",
-    openContact: isId ? "Halaman Kontak" : "Open Contact",
-    location: isId ? "Klaten, Jawa Tengah, Indonesia" : "Klaten, Central Java, Indonesia",
+    footerNavigation: isId ? "Navigasi footer" : "Footer navigation",
+    rolesLabel: isId ? "Peran profesional" : "Professional roles",
+    linkedInValue: "/in/annastriw",
+    gitHubValue: "@annastriw",
+    openContact: isId ? "Buka Kontak" : "Open Contact",
     backToTop: isId ? "KEMBALI KE ATAS" : "BACK TO TOP",
+    newTabCue: isId ? "dibuka di tab baru" : "opens in a new tab",
   };
 
   return (
-    <footer
-      className="editorial-footer-slim bg-(--footer-bg) text-(--footer-foreground) border-t border-(--footer-border) py-8 sm:py-10 transition-colors duration-200"
-      role="contentinfo"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
-        <ScrollReveal animationClass="animate-editorial-fade">
-          {/* Main Colophon Line: Brand Info (Left) + Open Interactive Channels (Right) */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6 lg:gap-12 items-start">
-            {/* Left Column: Brand Wordmark & Aligned Description */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-(--color-accent) text-xs leading-none" aria-hidden="true">
-                  ■
-                </span>
-                <span className="font-mono text-sm sm:text-base font-semibold tracking-tight text-(--footer-foreground)">
-                  annastriwidagdo.me
-                </span>
-              </div>
-              <p className="text-xs text-(--footer-muted) leading-relaxed m-0 max-w-lg">
-                {copy.brandTagline}
-              </p>
-            </div>
-
-            {/* Right Column: Open Typographic Channel Links (No Enclosed Boxes) */}
-            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start gap-x-6 gap-y-2.5 font-mono text-xs">
-              {/* Email */}
-              <a
-                href={siteContact.emailUrl}
-                className="footer-text-link group inline-flex items-center gap-1.5 text-(--footer-foreground) hover:text-(--color-accent) transition-colors"
-                aria-label="Direct Email"
-              >
-                <span className="text-[10px] text-(--color-accent) font-semibold">
-                  {copy.emailLabel}
-                </span>
-                <span className="relative">
-                  {siteContact.email}
-                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-(--color-accent) transition-all duration-300 group-hover:w-full" aria-hidden="true" />
-                </span>
-              </a>
-
-              {/* LinkedIn */}
-              <a
-                href={siteContact.linkedInUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-text-link group inline-flex items-center gap-1 text-(--footer-foreground) hover:text-(--color-accent) transition-colors"
-                aria-label="LinkedIn Profile"
-              >
-                <span className="text-[10px] text-(--color-accent) font-semibold">
-                  {copy.linkedinLabel}
-                </span>
-                <span>{siteContact.linkedIn}</span>
-                <span className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true">
-                  ↗
-                </span>
-              </a>
-
-              {/* GitHub */}
-              <a
-                href={siteContact.gitHubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-text-link group inline-flex items-center gap-1 text-(--footer-foreground) hover:text-(--color-accent) transition-colors"
-                aria-label="GitHub Profile"
-              >
-                <span className="text-[10px] text-(--color-accent) font-semibold">
-                  {copy.githubLabel}
-                </span>
-                <span>{siteContact.gitHub}</span>
-                <span className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true">
-                  ↗
-                </span>
-              </a>
-
-              {/* Contact Route */}
-              <Link
-                href={`/${locale}/contact`}
-                className="footer-text-link group inline-flex items-center gap-1 text-(--footer-foreground) hover:text-(--color-accent) transition-colors"
-                aria-label={isId ? "Halaman Kontak" : "Contact Page"}
-              >
-                <span className="text-[10px] text-(--color-accent) font-semibold">
-                  {copy.contactLabel}
-                </span>
-                <span>{copy.openContact}</span>
-                <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
-                  →
-                </span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Bottom Colophon Sub-bar: Location, Dynamic Copyright + Built with love Signature, Back to top */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-(--footer-border) font-mono text-[11px] text-(--footer-muted) mt-4">
-            <div className="flex items-center gap-2">
-              <span>{copy.location}</span>
-              <span className="text-(--footer-border)">/</span>
-              <span>UTC+7</span>
-            </div>
-
-            <div className="flex items-center justify-between sm:justify-end gap-6">
-              <span className="inline-flex items-center gap-1.5">
-                <span>© {currentYear} Annas Tri Widagdo · Built with</span>
-                <span
-                  className="text-(--color-accent) text-xs select-none"
-                  aria-hidden="true"
-                >
-                  ♥︎
-                </span>
-              </span>
-              <a
-                href="#site-header-brand"
-                className="hover:text-(--footer-foreground) inline-flex items-center gap-1 text-(--color-accent) font-semibold transition-colors"
-                aria-label={isId ? "Kembali ke atas" : "Back to top"}
-              >
-                <span>{copy.backToTop}</span>
-                <span aria-hidden="true">↑</span>
-              </a>
-            </div>
-          </div>
+    <footer className={styles.footer} role="contentinfo">
+      <div className={styles.container}>
+        <ScrollReveal animationClass="animate-editorial-rule-x">
+          <div className={styles.entryRule} aria-hidden="true" />
         </ScrollReveal>
+
+        <div className={styles.mainGrid}>
+          <div className={styles.brandBlock}>
+            <Link className={styles.wordmark} href={`/${locale}`}>
+              <span className={styles.wordmarkMarker} aria-hidden="true">
+                {"\u25A0"}
+              </span>
+              <span className={styles.wordmarkText}>annastriwidagdo.me</span>
+            </Link>
+            <ul className={styles.roleList} aria-label={copy.rolesLabel}>
+              <li>Software Engineer</li>
+              <li>Full-Stack Developer</li>
+              <li>ML Engineer</li>
+            </ul>
+          </div>
+
+          <nav className={styles.linkGrid} aria-label={copy.footerNavigation}>
+            <a
+              className={styles.footerLink}
+              data-kind="email"
+              href={siteContact.gmailComposeUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span className={styles.linkLabel}>EMAIL</span>
+              <span className={styles.linkValue}>{siteContact.email}</span>
+              <span className={styles.linkArrow} aria-hidden="true">
+                {"\u2197"}
+              </span>
+              <span className="sr-only"> ({copy.newTabCue})</span>
+              <span className={styles.linkRule} aria-hidden="true" />
+            </a>
+
+            <a
+              className={styles.footerLink}
+              data-kind="external"
+              href={siteContact.linkedInUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span className={styles.linkLabel}>LINKEDIN</span>
+              <span className={styles.linkValue}>{copy.linkedInValue}</span>
+              <span className={styles.linkArrow} aria-hidden="true">
+                {"\u2197"}
+              </span>
+              <span className="sr-only"> ({copy.newTabCue})</span>
+              <span className={styles.linkRule} aria-hidden="true" />
+            </a>
+
+            <a
+              className={styles.footerLink}
+              data-kind="external"
+              href={siteContact.gitHubUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span className={styles.linkLabel}>GITHUB</span>
+              <span className={styles.linkValue}>{copy.gitHubValue}</span>
+              <span className={styles.linkArrow} aria-hidden="true">
+                {"\u2197"}
+              </span>
+              <span className="sr-only"> ({copy.newTabCue})</span>
+              <span className={styles.linkRule} aria-hidden="true" />
+            </a>
+
+            <Link
+              className={styles.footerLink}
+              data-kind="contact"
+              href={`/${locale}/contact`}
+            >
+              <span className={styles.linkLabel}>CONTACT</span>
+              <span className={styles.linkValue}>{copy.openContact}</span>
+              <span className={styles.linkArrow} aria-hidden="true">
+                {"\u2192"}
+              </span>
+              <span className={styles.linkRule} aria-hidden="true" />
+            </Link>
+          </nav>
+        </div>
+
+        <div className={styles.closingRow}>
+          <BackToTop label={copy.backToTop} />
+          <p className={styles.signature}>{signature}</p>
+        </div>
       </div>
     </footer>
   );

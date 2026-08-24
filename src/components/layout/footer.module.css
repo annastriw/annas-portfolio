@@ -1,0 +1,327 @@
+.footer {
+  margin-top: auto;
+  background: var(--footer-bg);
+  color: var(--footer-foreground);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.wordmark:focus-visible,
+.footerLink:focus-visible,
+.backToTop:focus-visible {
+  outline-color: var(--footer-accent);
+}
+
+.container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  padding-bottom: 1.25rem;
+}
+
+.entryRule {
+  width: 100%;
+  height: 1px;
+  background: var(--footer-border);
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  padding-block: 1.25rem;
+}
+
+.brandBlock {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wordmark {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--footer-foreground);
+  font-family: var(--font-mono);
+  font-size: clamp(0.9375rem, 2vw, 1.125rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.wordmark::after {
+  position: absolute;
+  right: 0;
+  bottom: 0.35rem;
+  left: 1.2rem;
+  height: 1px;
+  background: var(--footer-accent);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wordmark:hover::after,
+.wordmark:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.wordmarkMarker {
+  color: var(--footer-accent);
+  font-size: 0.625rem;
+  transition: transform 220ms ease;
+}
+
+.wordmark:hover .wordmarkMarker,
+.wordmark:focus-visible .wordmarkMarker {
+  transform: translateX(2px);
+}
+
+.roleList {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  gap: 0.2rem;
+  color: var(--footer-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  list-style: none;
+}
+
+.linkGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--footer-border);
+}
+
+.footerLink {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.25rem 0.75rem;
+  min-height: 3.5rem;
+  padding-block: 0.625rem;
+  align-content: center;
+  color: var(--footer-foreground);
+  transition: color 220ms ease;
+}
+
+.linkLabel {
+  grid-column: 1 / -1;
+  color: var(--footer-accent);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.055em;
+}
+
+.linkValue {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.linkArrow {
+  color: var(--footer-accent);
+  font-family: var(--font-mono);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linkRule {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--footer-border);
+}
+
+.linkRule::after {
+  position: absolute;
+  inset: 0;
+  background: var(--footer-accent);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.footerLink:hover,
+.footerLink:focus-visible {
+  color: var(--footer-accent);
+}
+
+.footerLink:hover .linkRule::after,
+.footerLink:focus-visible .linkRule::after {
+  transform: scaleX(1);
+}
+
+.footerLink[data-kind="external"]:hover .linkArrow,
+.footerLink[data-kind="external"]:focus-visible .linkArrow,
+.footerLink[data-kind="email"]:hover .linkArrow,
+.footerLink[data-kind="email"]:focus-visible .linkArrow {
+  transform: translate(3px, -3px);
+}
+
+.footerLink[data-kind="contact"]:hover .linkArrow,
+.footerLink[data-kind="contact"]:focus-visible .linkArrow {
+  transform: translateX(3px);
+}
+
+.closingRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--footer-border);
+}
+
+.signature {
+  margin: 0;
+  color: var(--footer-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.55;
+}
+
+.backToTop {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--footer-border);
+  border-radius: 0;
+  align-items: center;
+  gap: 0.75rem;
+  background: transparent;
+  color: var(--footer-foreground);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: color 220ms ease, border-color 220ms ease, transform 220ms ease;
+}
+
+.backToTop::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: var(--footer-accent);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.backToTop:hover,
+.backToTop:focus-visible {
+  color: var(--footer-accent);
+}
+
+.backToTop:hover::after,
+.backToTop:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.backToTopArrow {
+  color: var(--footer-accent);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.backToTop:hover .backToTopArrow,
+.backToTop:focus-visible .backToTopArrow {
+  transform: translateY(-3px);
+}
+
+.backToTop:active {
+  transform: translateY(1px);
+}
+
+@media (min-width: 40rem) {
+  .container {
+    padding-inline: 1.5rem;
+  }
+
+  .mainGrid {
+    grid-template-columns: minmax(12rem, 0.75fr) minmax(0, 1.25fr);
+    gap: 3rem;
+  }
+
+  .linkGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-left: 1px solid var(--footer-border);
+  }
+
+  .footerLink {
+    padding-inline: 1rem;
+  }
+
+  .footerLink:nth-child(odd) {
+    border-right: 1px solid var(--footer-border);
+  }
+
+  .closingRow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .signature {
+    order: -1;
+  }
+}
+
+@media (min-width: 64rem) {
+  .container {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 80rem) {
+  .mainGrid {
+    grid-template-columns: minmax(15rem, 0.9fr) minmax(0, 2.1fr);
+    gap: 4rem;
+    padding-block: 1.5rem;
+  }
+
+  .linkGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 0;
+  }
+
+  .footerLink,
+  .footerLink:nth-child(odd) {
+    border-right: 1px solid var(--footer-border);
+  }
+
+  .footerLink:last-child {
+    border-right: 0;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer,
+  .wordmark::after,
+  .wordmarkMarker,
+  .footerLink,
+  .linkArrow,
+  .linkRule::after,
+  .backToTop,
+  .backToTop::after,
+  .backToTopArrow {
+    transition-duration: 0.01ms;
+  }
+}

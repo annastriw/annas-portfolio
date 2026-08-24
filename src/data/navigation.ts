@@ -1,8 +1,6 @@
 import type { LocaleNavigation } from "@/types/navigation";
 import { siteContact } from "@/content/site/contact";
 
-const currentYear = new Date().getFullYear();
-
 export const navigationConfig: LocaleNavigation = {
   en: {
     mainNav: [
@@ -60,14 +58,6 @@ export const navigationConfig: LocaleNavigation = {
         isExternal: false,
       },
     ],
-    colophon: {
-      title: "annastriwidagdo.me",
-      description:
-        "Software Engineer · Full-Stack Developer · ML Engineer building robust web systems, intelligent products, and technical editorial solutions.",
-      location: "Klaten, Central Java, Indonesia",
-      timezone: "UTC+7",
-      copyright: `© ${currentYear} Annas Tri Widagdo. All rights reserved.`,
-    },
     labels: {
       menu: "Menu",
       closeMenu: "Close menu",
@@ -135,14 +125,6 @@ export const navigationConfig: LocaleNavigation = {
         isExternal: false,
       },
     ],
-    colophon: {
-      title: "annastriwidagdo.me",
-      description:
-        "Software Engineer · Full-Stack Developer · ML Engineer yang membangun sistem web yang tangguh, produk cerdas, dan solusi technical editorial.",
-      location: "Klaten, Jawa Tengah, Indonesia",
-      timezone: "UTC+7",
-      copyright: `© ${currentYear} Annas Tri Widagdo. Hak cipta dilindungi.`,
-    },
     labels: {
       menu: "Menu",
       closeMenu: "Tutup menu",

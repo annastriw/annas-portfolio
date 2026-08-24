@@ -12,12 +12,6 @@ export function ContactPage({ locale }: ContactPageProps) {
   const copy = contactCopy[locale];
   const channels = [
     {
-      label: "Email",
-      value: siteContact.email,
-      href: siteContact.emailUrl,
-      external: false,
-    },
-    {
       label: "LinkedIn",
       value: siteContact.linkedIn,
       href: siteContact.linkedInUrl,
@@ -33,52 +27,86 @@ export function ContactPage({ locale }: ContactPageProps) {
 
   return (
     <div className={styles.page}>
-      <header className={styles.intro}>
-        <div className={styles.container}>
-          <ScrollReveal animationClass="animate-editorial-fade">
-            <div className={styles.introInner}>
-              <p className={styles.pageLabel}>{copy.pageLabel}</p>
-              <h1 className={styles.title}>{copy.title}</h1>
-              <p className={styles.lead}>{copy.intro}</p>
-            </div>
+      <div className={`${styles.container} ${styles.contactLayout}`}>
+        <div className={styles.leftColumn}>
+          <header className={styles.intro}>
+            <ScrollReveal animationClass="animate-editorial-fade">
+              <div className={styles.introInner}>
+                <p className={styles.pageLabel}>{copy.pageLabel}</p>
+                <h1 className={styles.title}>{copy.title}</h1>
+                <p className={styles.lead}>{copy.intro}</p>
+              </div>
+            </ScrollReveal>
+          </header>
+
+          <ScrollReveal
+            animationClass="animate-editorial-fade"
+            className={styles.channelColumn}
+            delayMs={80}
+          >
+            <section aria-labelledby="contact-channels-title">
+              <h2 className={styles.sectionTitle} id="contact-channels-title">
+                {copy.channelsTitle}
+              </h2>
+              <ol className={styles.channelList}>
+                <li className={styles.channelRow}>
+                  <div className={styles.emailChannel}>
+                    <span className={styles.channelIndex}>01</span>
+                    <div className={styles.channelIdentity}>
+                      <span className={styles.channelLabel}>Email</span>
+                      <span className={styles.channelValue}>{siteContact.email}</span>
+                    </div>
+                    <div className={styles.channelActions}>
+                      <a
+                        className={styles.channelAction}
+                        href={siteContact.gmailComposeUrl}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span>{copy.openGmail}</span>
+                        <span className={styles.channelArrow} aria-hidden="true">
+                          {"\u2197"}
+                        </span>
+                        <span className="sr-only"> ({copy.gmailCue})</span>
+                      </a>
+                      <a
+                        className={styles.channelAction}
+                        href={siteContact.emailUrl}
+                      >
+                        <span>{copy.openEmailApp}</span>
+                        <span className={styles.channelArrow} aria-hidden="true">
+                          {"\u2192"}
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </li>
+                {channels.map((channel, index) => (
+                  <li className={styles.channelRow} key={channel.label}>
+                    <a
+                      className={styles.channelLink}
+                      href={channel.href}
+                      rel={channel.external ? "noopener noreferrer" : undefined}
+                      target={channel.external ? "_blank" : undefined}
+                    >
+                      <span className={styles.channelIndex}>
+                        {String(index + 2).padStart(2, "0")}
+                      </span>
+                      <span className={styles.channelIdentity}>
+                        <span className={styles.channelLabel}>{channel.label}</span>
+                        <span className={styles.channelValue}>{channel.value}</span>
+                      </span>
+                      <span className={styles.channelArrow} aria-hidden="true">
+                        {"\u2197"}
+                      </span>
+                      <span className="sr-only"> ({copy.externalCue})</span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </section>
           </ScrollReveal>
         </div>
-      </header>
-
-      <div className={`${styles.container} ${styles.contactLayout}`}>
-        <ScrollReveal
-          animationClass="animate-editorial-fade"
-          className={styles.channelColumn}
-        >
-          <section aria-labelledby="contact-channels-title">
-            <h2 className={styles.sectionTitle} id="contact-channels-title">
-              {copy.channelsTitle}
-            </h2>
-            <ol className={styles.channelList}>
-              {channels.map((channel, index) => (
-                <li className={styles.channelRow} key={channel.label}>
-                  <a
-                    className={styles.channelLink}
-                    href={channel.href}
-                    rel={channel.external ? "noopener noreferrer" : undefined}
-                    target={channel.external ? "_blank" : undefined}
-                  >
-                    <span className={styles.channelMeta}>
-                      {String(index + 1).padStart(2, "0")} / {channel.label}
-                    </span>
-                    <span className={styles.channelValue}>{channel.value}</span>
-                    <span className={styles.channelArrow} aria-hidden="true">
-                      {channel.external ? "\u2197" : "\u2192"}
-                    </span>
-                    {channel.external ? (
-                      <span className="sr-only"> ({copy.externalCue})</span>
-                    ) : null}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </section>
-        </ScrollReveal>
 
         <ScrollReveal
           animationClass="animate-editorial-fade"
@@ -87,7 +115,7 @@ export function ContactPage({ locale }: ContactPageProps) {
         >
           <section aria-labelledby="email-composer-title">
             <div className={styles.composerHeader}>
-              <p className={styles.composerLabel}>{copy.composerLabel}</p>
+              <p className={styles.composerLabel}>[{copy.composerLabel}]</p>
               <h2 className={styles.composerTitle} id="email-composer-title">
                 {copy.composerTitle}
               </h2>

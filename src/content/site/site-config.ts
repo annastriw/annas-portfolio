@@ -16,15 +16,6 @@ export interface SocialLink {
   isExternal: boolean;
 }
 
-export interface ColophonConfig {
-  title: string;
-  positioning: string;
-  location: string;
-  timezone: string;
-  status: string;
-  copyright: string;
-}
-
 export interface SiteConfig {
   brand: string;
   name: string;
@@ -52,7 +43,6 @@ export interface SiteConfig {
   };
   mainNav: Record<Locale, NavItem[]>;
   socialLinks: SocialLink[];
-  colophon: Record<Locale, ColophonConfig>;
   labels: Record<Locale, NavigationLabels>;
 }
 
@@ -96,23 +86,5 @@ export const siteConfig: SiteConfig = {
       isExternal: false,
     },
   ],
-  colophon: {
-    en: {
-      title: siteIdentity.name,
-      positioning: siteIdentity.positioning.en,
-      location: siteContact.location,
-      timezone: "UTC+7",
-      status: siteContact.status.en,
-      copyright: "© 2026 Annas Tri Widagdo. All rights reserved.",
-    },
-    id: {
-      title: siteIdentity.name,
-      positioning: siteIdentity.positioning.id,
-      location: "Klaten, Jawa Tengah, Indonesia",
-      timezone: "WIB (UTC+7)",
-      status: siteContact.status.id,
-      copyright: "© 2026 Annas Tri Widagdo. Hak cipta dilindungi.",
-    },
-  },
   labels: navigationLabels,
 };

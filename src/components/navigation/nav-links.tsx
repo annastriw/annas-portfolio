@@ -42,7 +42,7 @@ export function NavLinks({
               aria-current={isActive ? "page" : undefined}
               onClick={onNavigate}
             >
-              <span className="nav-link-index text-[11px] text-(--color-accent)">
+              <span className="nav-link-index text-[11px] text-(--header-accent)">
                 {item.index}
               </span>
               <span className="nav-link-label">{item.label}</span>

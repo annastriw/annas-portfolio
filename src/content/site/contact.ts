@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 export interface ContactInfo {
   email: string;
   emailUrl: string;
+  gmailComposeUrl: string;
   linkedIn: string;
   linkedInUrl: string;
   gitHub: string;
@@ -10,16 +11,11 @@ export interface ContactInfo {
   location: string;
   timezone: string;
   status: Record<Locale, string>;
-  colophon: Record<
-    Locale,
-    {
-      title: string;
-      positioning: string;
-      location: string;
-      timezone: string;
-      copyright: string;
-    }
-  >;
+}
+
+export interface ContactEmailDraft {
+  subject: string;
+  body: string;
 }
 
 export type ContactTemplateId =
@@ -35,9 +31,57 @@ export interface ContactTemplate {
   message: string;
 }
 
+const contactEmail = "annastriw6@gmail.com";
+const gmailComposeBaseUrl = "https://mail.google.com/mail/";
+
+function encodeEmailParams(entries: Record<string, string>): string {
+  return new URLSearchParams(entries).toString().replace(/\+/g, "%20");
+}
+
+function buildEmailUrl(baseUrl: string, params: Record<string, string>): string {
+  const url = new URL(baseUrl);
+  url.search = encodeEmailParams(params);
+  return url.href;
+}
+
+export function buildContactMailto(subject: string, message: string): string {
+  return buildEmailUrl(`mailto:${contactEmail}`, {
+    subject,
+    body: message,
+  });
+}
+
+export function buildContactGmailCompose(
+  subject: string,
+  message: string,
+): string {
+  return buildEmailUrl(gmailComposeBaseUrl, {
+    view: "cm",
+    fs: "1",
+    to: contactEmail,
+    su: subject,
+    body: message,
+  });
+}
+
+export function buildContactEmailLinks({
+  subject,
+  body,
+}: ContactEmailDraft): { gmail: string; mailto: string } {
+  return {
+    gmail: buildContactGmailCompose(subject, body),
+    mailto: buildContactMailto(subject, body),
+  };
+}
+
 export const siteContact: ContactInfo = {
-  email: "annastriw6@gmail.com",
-  emailUrl: "mailto:annastriw6@gmail.com",
+  email: contactEmail,
+  emailUrl: `mailto:${contactEmail}`,
+  gmailComposeUrl: buildEmailUrl(gmailComposeBaseUrl, {
+    view: "cm",
+    fs: "1",
+    to: contactEmail,
+  }),
   linkedIn: "linkedin.com/in/annastriw",
   linkedInUrl: "https://www.linkedin.com/in/annastriw",
   gitHub: "github.com/annastriw",
@@ -48,67 +92,53 @@ export const siteContact: ContactInfo = {
     en: "OPEN TO COLLABORATION",
     id: "TERBUKA UNTUK KOLABORASI",
   },
-  colophon: {
-    en: {
-      title: "Annas Tri Widagdo",
-      positioning: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
-      location: "Klaten, Central Java, Indonesia",
-      timezone: "UTC+7",
-      copyright: "© 2026 Annas Tri Widagdo. All rights reserved.",
-    },
-    id: {
-      title: "Annas Tri Widagdo",
-      positioning: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
-      location: "Klaten, Jawa Tengah, Indonesia",
-      timezone: "WIB (UTC+7)",
-      copyright: "© 2026 Annas Tri Widagdo. Hak cipta dilindungi.",
-    },
-  },
 };
 
 export const contactCopy = {
   en: {
-    pageLabel: "[CONTACT]",
+    pageLabel: "[CONTACT // 01]",
     title: "Open to Collaboration",
     intro:
       "Have a project, role, or technical opportunity in mind? Feel free to reach out.",
-    channelsTitle: "Contact channels",
-    composerLabel: "[EMAIL COMPOSER]",
-    composerTitle: "Prepare your email",
-    composerIntro: "Choose a starting point, then edit every field.",
-    templateLegend: "Choose a template",
+    channelsTitle: "Direct channels",
+    composerLabel: "CORRESPONDENCE / DRAFT",
+    composerTitle: "Prepare an email",
+    composerIntro: "Choose a template, then edit the subject and message.",
+    templateLegend: "Template",
     selectedTemplate: "Selected",
     subjectLabel: "Subject",
     subjectPlaceholder: "Add a concise subject",
     messageLabel: "Message",
     messagePlaceholder: "Write your message to Annas",
-    openEmailClient: "Open in Email Client",
+    openGmail: "Open in Gmail",
+    openEmailApp: "Open in Email App",
     clearDraft: "Clear draft",
-    helper:
-      "This opens your default email application. The website does not send the message directly.",
+    helper: "Choose Gmail or your default email application to continue with this draft.",
     externalCue: "opens in a new tab",
+    gmailCue: "opens Gmail in a new tab",
     formLabel: "Email draft composer",
   },
   id: {
-    pageLabel: "[KONTAK]",
+    pageLabel: "[KONTAK // 01]",
     title: "Terbuka untuk Kolaborasi",
     intro:
       "Punya proyek, peluang kerja, atau ingin berdiskusi tentang pengembangan software? Silakan hubungi saya.",
-    channelsTitle: "Kanal kontak",
-    composerLabel: "[PENYUSUN EMAIL]",
-    composerTitle: "Siapkan email Anda",
-    composerIntro: "Pilih draf awal, lalu sesuaikan seluruh isinya.",
-    templateLegend: "Pilih templat",
+    channelsTitle: "Kanal kontak langsung",
+    composerLabel: "KORESPONDENSI / DRAF",
+    composerTitle: "Siapkan email",
+    composerIntro: "Pilih templat, lalu sesuaikan subjek dan pesan.",
+    templateLegend: "Templat",
     selectedTemplate: "Dipilih",
     subjectLabel: "Subjek",
     subjectPlaceholder: "Tulis subjek singkat",
     messageLabel: "Pesan",
     messagePlaceholder: "Tulis pesan Anda untuk Annas",
-    openEmailClient: "Buka di Aplikasi Email",
+    openGmail: "Buka di Gmail",
+    openEmailApp: "Buka di Aplikasi Email",
     clearDraft: "Kosongkan draf",
-    helper:
-      "Tombol ini membuka aplikasi email Anda. Pesan tidak dikirim langsung melalui website.",
+    helper: "Lanjutkan draf melalui Gmail atau aplikasi email bawaan Anda.",
     externalCue: "dibuka di tab baru",
+    gmailCue: "membuka Gmail di tab baru",
     formLabel: "Penyusun draf email",
   },
 } satisfies Record<Locale, Record<string, string>>;
@@ -175,12 +205,3 @@ export const contactTemplates: Record<Locale, ContactTemplate[]> = {
     },
   ],
 };
-
-export function buildContactMailto(subject: string, message: string): string {
-  const params = new URLSearchParams({ subject, body: message });
-  const encodedQuery = params.toString().replace(/\+/g, "%20");
-  const mailto = new URL(siteContact.emailUrl);
-
-  mailto.search = encodedQuery;
-  return mailto.href;
-}

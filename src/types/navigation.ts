@@ -19,13 +19,6 @@ export interface SocialLink {
 export interface NavigationConfig {
   mainNav: NavItem[];
   socialLinks: SocialLink[];
-  colophon: {
-    title: string;
-    description: string;
-    location: string;
-    timezone: string;
-    copyright: string;
-  };
   labels: {
     menu: string;
     closeMenu: string;

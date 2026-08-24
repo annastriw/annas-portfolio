@@ -22,7 +22,7 @@ export function Header({ locale }: HeaderProps) {
             href={`/${locale}`}
             id="site-header-brand"
             className="brand-link group inline-flex items-baseline gap-2 text-(--color-foreground) hover:opacity-90 transition-opacity"
-            aria-label="annastriwidagdo.me — Home"
+            aria-label="annastriwidagdo.me - Home"
           >
             <span
               className="brand-marker text-(--color-accent) text-xs leading-none transition-transform duration-200 group-hover:scale-110"
