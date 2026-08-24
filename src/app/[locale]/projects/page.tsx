@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
-import { getAllProjectsData } from "@/content/projects/projects-data";
-import { ProjectFilter } from "@/components/projects/project-filter";
+import { isLocale, supportedLocales } from "@/lib/i18n/config";
+import { projectArchive } from "@/content/projects/project-archive";
+import { ProjectArchive } from "@/components/projects/project-archive";
 import { JsonLd } from "@/components/seo/json-ld";
 import { generateItemListJsonLd } from "@/lib/seo/schema-generators";
 import { SITE_URL } from "@/lib/seo/seo-types";
@@ -27,11 +27,11 @@ export async function generateMetadata({
 
   const isId = locale === "id";
   const title = isId
-    ? "Proyek - Annas Tri Widagdo"
-    : "Projects - Annas Tri Widagdo";
+    ? "Arsip Proyek - Annas Tri Widagdo"
+    : "Projects Archive - Annas Tri Widagdo";
   const description = isId
-    ? "Arsip komprehensif 10 proyek rekayasa perangkat lunak, aplikasi fullstack, purwarupa AI/ML, dan sistem digital karya Annas Tri Widagdo."
-    : "Comprehensive archive of 10 curated software engineering projects, fullstack web applications, AI/ML prototypes, and digital systems by Annas Tri Widagdo.";
+    ? "Arsip 10 proyek terverifikasi Annas Tri Widagdo di bidang aplikasi web, machine learning, mobile, dan media interaktif."
+    : "An archive of 10 verified projects by Annas Tri Widagdo across web applications, machine learning, mobile, and interactive media.";
 
   return {
     title,
@@ -61,45 +61,37 @@ export default async function ProjectsPage({ params }: PageProps) {
     notFound();
   }
 
-  const projects = getAllProjectsData();
   const isId = locale === "id";
 
   const projectListSchema = generateItemListJsonLd(
-    projects.map((p) => ({
-      title: p.title[locale as Locale],
-      url: `${SITE_URL}/${locale}/projects/${p.slug}`,
+    projectArchive.map((project) => ({
+      title: project.title[locale],
+      url: `${SITE_URL}/${locale}/projects/${project.slug}`,
     })),
-    isId ? "Arsip Proyek & Rekayasa Sistem" : "Projects & Systems Archive",
+    isId ? "Arsip Proyek" : "Projects Archive",
     `${SITE_URL}/${locale}/projects`
   );
 
   return (
-    <div className="projects-hub-page">
-      <div className="projects-hub-container">
+    <div className="py-10 sm:py-12 md:py-14">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <JsonLd schema={projectListSchema} />
 
-        {/* Page Header */}
-        <header className="projects-hub-header">
-          <div className="projects-hub-meta">
-            <span className="hub-meta-tag">[ARCHIVE // 01]</span>
-            <span className="hub-meta-tag">
-              {isId ? "INDEKS KARYA & PROYEK TERKURASI" : "CURATED INDEX OF 10 PROJECTS"}
-            </span>
-          </div>
-
-          <h1 className="projects-hub-title">
-            {isId ? "Arsip Proyek & Rekayasa Sistem" : "Projects & Systems Archive"}
+        <header className="mb-10 max-w-4xl animate-editorial-fade motion-reduce:animate-none sm:mb-12 md:mb-14">
+          <p className="mb-4 font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-(--color-muted)">
+            {isId ? "INDEKS PROYEK / 10 ENTRI" : "PROJECT INDEX / 10 ENTRIES"}
+          </p>
+          <h1 className="m-0 max-w-4xl font-serif text-[clamp(3rem,7vw,6.5rem)] font-normal leading-[0.92] tracking-[-0.055em] text-(--color-foreground)">
+            {isId ? "Arsip Proyek" : "Projects Archive"}
           </h1>
-
-          <p className="projects-hub-lead">
+          <p className="mb-0 mt-6 max-w-2xl text-base leading-relaxed text-(--color-muted) sm:text-lg">
             {isId
-              ? "Dokumentasi terstruktur dari 10 proyek rekayasa perangkat lunak, aplikasi web fullstack, purwarupa machine learning, dan utilitas perangkat keras berlandaskan bukti nyata."
-              : "Structured documentation of 10 curated software engineering projects, fullstack web applications, machine learning prototypes, and hardware utilities grounded in authentic evidence."}
+              ? "Sepuluh proyek terverifikasi yang mencakup sistem web, machine learning, utilitas mobile, dan media interaktif."
+              : "Ten verified builds across web systems, machine learning, mobile utilities, and interactive media."}
           </p>
         </header>
 
-        {/* Interactive Filter & Project Grid */}
-        <ProjectFilter projects={projects} locale={locale as Locale} />
+        <ProjectArchive projects={projectArchive} locale={locale} />
       </div>
     </div>
   );

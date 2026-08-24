@@ -24,6 +24,8 @@ export function LocaleSwitcher({
 }: LocaleSwitcherProps) {
   const pathname = usePathname() || `/${locale}`;
   const config = navigationConfig[locale];
+  const switchLanguageTo =
+    locale === "id" ? "Ganti bahasa ke" : "Switch language to";
 
   return (
     <div
@@ -74,7 +76,7 @@ export function LocaleSwitcher({
                   lang={loc}
                   title={`Switch to ${localeNames[loc].full}`}
                   onClick={onSelect}
-                  aria-label={`Switch language to ${localeNames[loc].full}`}
+                  aria-label={`${localeNames[loc].short}: ${switchLanguageTo} ${localeNames[loc].full}`}
                 >
                   {localeNames[loc].short}
                 </Link>
