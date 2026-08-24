@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { siteContact } from "@/content/site/contact";
 
 interface FooterProps {
   locale: Locale;
@@ -51,7 +52,7 @@ export function Footer({ locale }: FooterProps) {
             <div className="flex flex-col sm:flex-row sm:flex-wrap items-start gap-x-6 gap-y-2.5 font-mono text-xs">
               {/* Email */}
               <a
-                href="mailto:annastriw23@gmail.com"
+                href={siteContact.emailUrl}
                 className="footer-text-link group inline-flex items-center gap-1.5 text-(--footer-foreground) hover:text-(--color-accent) transition-colors"
                 aria-label="Direct Email"
               >
@@ -59,14 +60,14 @@ export function Footer({ locale }: FooterProps) {
                   {copy.emailLabel}
                 </span>
                 <span className="relative">
-                  annastriw23@gmail.com
+                  {siteContact.email}
                   <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-(--color-accent) transition-all duration-300 group-hover:w-full" aria-hidden="true" />
                 </span>
               </a>
 
               {/* LinkedIn */}
               <a
-                href="https://www.linkedin.com/in/annastriw"
+                href={siteContact.linkedInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-text-link group inline-flex items-center gap-1 text-(--footer-foreground) hover:text-(--color-accent) transition-colors"
@@ -75,7 +76,7 @@ export function Footer({ locale }: FooterProps) {
                 <span className="text-[10px] text-(--color-accent) font-semibold">
                   {copy.linkedinLabel}
                 </span>
-                <span>linkedin.com/in/annastriw</span>
+                <span>{siteContact.linkedIn}</span>
                 <span className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true">
                   ↗
                 </span>
@@ -83,7 +84,7 @@ export function Footer({ locale }: FooterProps) {
 
               {/* GitHub */}
               <a
-                href="https://github.com/annastriw"
+                href={siteContact.gitHubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-text-link group inline-flex items-center gap-1 text-(--footer-foreground) hover:text-(--color-accent) transition-colors"
@@ -92,7 +93,7 @@ export function Footer({ locale }: FooterProps) {
                 <span className="text-[10px] text-(--color-accent) font-semibold">
                   {copy.githubLabel}
                 </span>
-                <span>github.com/annastriw</span>
+                <span>{siteContact.gitHub}</span>
                 <span className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true">
                   ↗
                 </span>

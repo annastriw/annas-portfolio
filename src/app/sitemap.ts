@@ -62,7 +62,34 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   });
 
-  // 3. Projects Hub Pages
+  // 3. Contact Pages
+  entries.push({
+    url: `${SITE_URL}/en/contact`,
+    lastModified: currentDate,
+    changeFrequency: "monthly",
+    priority: 0.7,
+    alternates: {
+      languages: {
+        en: `${SITE_URL}/en/contact`,
+        id: `${SITE_URL}/id/contact`,
+      },
+    },
+  });
+
+  entries.push({
+    url: `${SITE_URL}/id/contact`,
+    lastModified: currentDate,
+    changeFrequency: "monthly",
+    priority: 0.7,
+    alternates: {
+      languages: {
+        en: `${SITE_URL}/en/contact`,
+        id: `${SITE_URL}/id/contact`,
+      },
+    },
+  });
+
+  // 4. Projects Hub Pages
   entries.push({
     url: `${SITE_URL}/en/projects`,
     lastModified: currentDate,
@@ -89,7 +116,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   });
 
-  // 4. Individual Project Detail Pages (10 curated projects)
+  // 5. Individual Project Detail Pages (10 curated projects)
   for (const project of projectCaseStudies) {
     entries.push({
       url: `${SITE_URL}/en/projects/${project.slug}`,
@@ -118,7 +145,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // 5. Blog Hub Pages
+  // 6. Blog Hub Pages
   entries.push({
     url: `${SITE_URL}/en/blog`,
     lastModified: currentDate,
@@ -145,7 +172,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   });
 
-  // 6. Individual Blog Article Pages
+  // 7. Individual Blog Article Pages
   for (const article of blogArticles) {
     entries.push({
       url: `${SITE_URL}/en/blog/${article.slug}`,

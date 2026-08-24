@@ -25,14 +25,14 @@ export const mainNavigation: Record<Locale, NavItem[]> = {
     { key: "about", label: "About", href: "/about", index: "02" },
     { key: "projects", label: "Projects", href: "/projects", index: "03" },
     { key: "blog", label: "Blog", href: "/blog", index: "04" },
-    { key: "contact", label: "Contact", href: "/#contact", index: "05" },
+    { key: "contact", label: "Contact", href: "/contact", index: "05" },
   ],
   id: [
     { key: "home", label: "Beranda", href: "/", index: "01" },
     { key: "about", label: "Tentang", href: "/about", index: "02" },
     { key: "projects", label: "Proyek", href: "/projects", index: "03" },
     { key: "blog", label: "Blog", href: "/blog", index: "04" },
-    { key: "contact", label: "Kontak", href: "/#contact", index: "05" },
+    { key: "contact", label: "Kontak", href: "/contact", index: "05" },
   ],
 };
 

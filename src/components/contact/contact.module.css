@@ -1,0 +1,438 @@
+.page {
+  flex: 1 0 auto;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.intro {
+  border-bottom: 1px solid var(--border);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+}
+
+.introInner {
+  display: flex;
+  max-width: 55rem;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pageLabel,
+.composerLabel {
+  margin: 0;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.title,
+.composerTitle,
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.title {
+  max-width: 15ch;
+  font-size: clamp(2.5rem, 7vw, 5.25rem);
+  line-height: 0.98;
+}
+
+.lead {
+  max-width: 42rem;
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.7vw, 1.2rem);
+  line-height: 1.6;
+}
+
+.contactLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3.5rem;
+  padding-block: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.channelColumn,
+.composerColumn {
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin-bottom: 1.25rem;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.channelList {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+  list-style: none;
+}
+
+.channelRow {
+  border-bottom: 1px solid var(--border);
+}
+
+.channelLink {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem 1rem;
+  min-height: 5.5rem;
+  padding-block: 1rem;
+  align-items: center;
+  transition: color 180ms ease, padding-inline 180ms ease;
+}
+
+.channelLink:hover {
+  padding-inline: 0.5rem;
+  color: var(--accent);
+}
+
+.channelMeta {
+  grid-column: 1 / -1;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.channelValue {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 500;
+}
+
+.channelArrow,
+.actionArrow {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  transition: transform 180ms ease;
+}
+
+.channelLink:hover .channelArrow {
+  transform: translate(0.15rem, -0.15rem);
+}
+
+.composerHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.composerTitle {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.05;
+}
+
+.composerIntro,
+.helperText {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.composerIntro {
+  max-width: 34rem;
+  font-size: 0.9375rem;
+}
+
+.composerForm {
+  display: flex;
+  max-width: 46rem;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.templateFieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.templateLegend,
+.fieldLabel {
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.templateLegend {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--border);
+}
+
+.templateOption {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.templateInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.templateLabel {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.75rem 0;
+  align-items: center;
+  cursor: pointer;
+  transition: color 180ms ease, padding-inline 180ms ease;
+}
+
+.templateLabel:hover {
+  padding-inline: 0.5rem;
+  color: var(--accent);
+}
+
+.templateLabel[data-selected="true"] {
+  padding-inline: 0.5rem;
+  border-left: 3px solid var(--accent);
+  color: var(--accent);
+}
+
+.templateInput:focus-visible + .templateLabel {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.templateIndex,
+.templateState {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.templateIndex {
+  color: var(--accent);
+}
+
+.templateName {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.templateState {
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.fieldLabel span {
+  color: var(--accent);
+}
+
+.textInput,
+.textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  line-height: 1.6;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.textInput {
+  min-height: 3.25rem;
+  padding: 0.75rem 0.875rem;
+}
+
+.textarea {
+  min-height: 14rem;
+  padding: 0.875rem;
+  resize: vertical;
+}
+
+.textInput::placeholder,
+.textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.82;
+}
+
+.textInput:hover,
+.textarea:hover {
+  border-color: var(--muted);
+}
+
+.textInput:focus-visible,
+.textarea:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  background: color-mix(in srgb, var(--accent) 3%, transparent);
+}
+
+.formActions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.primaryAction,
+.clearAction {
+  min-height: 3rem;
+  border: 1px solid var(--accent);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.primaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--accent);
+  color: var(--background);
+  white-space: nowrap;
+  transition: filter 180ms ease, transform 180ms ease;
+}
+
+.primaryAction .actionArrow {
+  color: currentcolor;
+}
+
+.primaryAction:hover {
+  filter: brightness(0.92);
+}
+
+.primaryAction:hover .actionArrow {
+  transform: translateX(0.25rem);
+}
+
+.primaryAction:active,
+.clearAction:active {
+  transform: translateY(1px);
+}
+
+.clearAction {
+  padding: 0.75rem 1rem;
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.clearAction:hover {
+  border-color: var(--foreground);
+  color: var(--accent);
+}
+
+.helperText {
+  max-width: 38rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+@media (min-width: 40rem) {
+  .container {
+    padding-inline: 1.5rem;
+  }
+
+  .templateGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+
+  .formActions {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .primaryAction {
+    min-width: 18rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .container {
+    padding-inline: 2rem;
+  }
+
+  .contactLayout {
+    gap: 4.5rem;
+  }
+}
+
+@media (min-width: 80rem) {
+  .contactLayout {
+    grid-template-columns: minmax(18rem, 0.78fr) minmax(0, 1.22fr);
+    gap: clamp(4rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .channelColumn {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+@media (max-width: 24rem) {
+  .primaryAction {
+    white-space: normal;
+  }
+
+  .templateLabel {
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+  }
+
+  .templateState {
+    grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .channelLink,
+  .channelArrow,
+  .templateLabel,
+  .textInput,
+  .textarea,
+  .primaryAction,
+  .clearAction,
+  .actionArrow {
+    transition-duration: 0.01ms;
+  }
+}

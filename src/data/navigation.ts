@@ -1,4 +1,5 @@
 import type { LocaleNavigation } from "@/types/navigation";
+import { siteContact } from "@/content/site/contact";
 
 const currentYear = new Date().getFullYear();
 
@@ -40,22 +41,22 @@ export const navigationConfig: LocaleNavigation = {
       {
         key: "github",
         label: "GitHub",
-        href: "https://github.com/annastriw",
-        username: "annastriw",
+        href: siteContact.gitHubUrl,
+        username: siteContact.gitHub,
         isExternal: true,
       },
       {
         key: "linkedin",
         label: "LinkedIn",
-        href: "https://www.linkedin.com/in/annastriw",
-        username: "annastriw",
+        href: siteContact.linkedInUrl,
+        username: siteContact.linkedIn,
         isExternal: true,
       },
       {
         key: "email",
         label: "Email",
-        href: "mailto:annastriw23@gmail.com",
-        username: "annastriw23@gmail.com",
+        href: siteContact.emailUrl,
+        username: siteContact.email,
         isExternal: false,
       },
     ],
@@ -115,22 +116,22 @@ export const navigationConfig: LocaleNavigation = {
       {
         key: "github",
         label: "GitHub",
-        href: "https://github.com/annastriw",
-        username: "annastriw",
+        href: siteContact.gitHubUrl,
+        username: siteContact.gitHub,
         isExternal: true,
       },
       {
         key: "linkedin",
         label: "LinkedIn",
-        href: "https://www.linkedin.com/in/annastriw",
-        username: "annastriw",
+        href: siteContact.linkedInUrl,
+        username: siteContact.linkedIn,
         isExternal: true,
       },
       {
         key: "email",
         label: "Email",
-        href: "mailto:annastriw23@gmail.com",
-        username: "annastriw23@gmail.com",
+        href: siteContact.emailUrl,
+        username: siteContact.email,
         isExternal: false,
       },
     ],
