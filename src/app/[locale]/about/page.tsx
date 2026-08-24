@@ -5,9 +5,6 @@ import { AboutHero } from "@/components/about/about-hero";
 import { AboutBiography } from "@/components/about/about-biography";
 import { AboutEducation } from "@/components/about/about-education";
 import { AboutCertificates } from "@/components/about/about-certificates";
-import { AboutPrinciples } from "@/components/about/about-principles";
-import { AboutTechMatrix } from "@/components/about/about-tech-matrix";
-import { AboutConnect } from "@/components/about/about-connect";
 import { JsonLd } from "@/components/seo/json-ld";
 import { generateProfilePageJsonLd } from "@/lib/seo/schema-generators";
 
@@ -31,11 +28,11 @@ export async function generateMetadata({
 
   const isId = locale === "id";
   const title = isId
-    ? "Tentang - Annas Tri Widagdo"
-    : "About - Annas Tri Widagdo";
+    ? "Tentang & Profil Rekayasa - Annas Tri Widagdo"
+    : "About & Engineering Profile - Annas Tri Widagdo";
   const description = isId
-    ? "Profil rekayasa perangkat lunak, latar belakang teknik komputer Universitas Diponegoro, sertifikasi Cisco & Oracle, prinsip rekayasa, dan taksonomi teknologi Annas Tri Widagdo."
-    : "Software engineering profile, Diponegoro University computer engineering foundation, Cisco & Oracle credentials, core engineering manifesto, and technical taxonomy of Annas Tri Widagdo.";
+    ? "Profil rekayasa perangkat lunak, latar belakang teknik komputer Universitas Diponegoro (IPK 3.79), dan sertifikasi Cisco, Huawei & Oracle karya Annas Tri Widagdo."
+    : "Software engineering profile, Diponegoro University computer engineering foundation (GPA 3.79), and Cisco, Huawei & Oracle credentials of Annas Tri Widagdo.";
 
   return {
     title,
@@ -67,30 +64,19 @@ export default async function AboutPage({ params }: PageProps) {
 
   return (
     <div className="about-page">
-      <div className="about-page-container">
-        <JsonLd schema={generateProfilePageJsonLd(locale as Locale)} />
+      <JsonLd schema={generateProfilePageJsonLd(locale as Locale)} />
 
-        {/* 01. About Hero Header */}
-        <AboutHero locale={locale as Locale} />
+      {/* 01. About Hero Header & Short Personal Branding */}
+      <AboutHero locale={locale as Locale} />
 
-        {/* 02. Narrative Biography & Quick Specs */}
-        <AboutBiography locale={locale as Locale} />
+      {/* 02. Concise Narrative Biography & Light Profile Record */}
+      <AboutBiography locale={locale as Locale} />
 
-        {/* 03. Academic Foundation */}
-        <AboutEducation locale={locale as Locale} />
+      {/* 03. Academic Foundation & Bachelor Certificate Evidence */}
+      <AboutEducation locale={locale as Locale} />
 
-        {/* 04. Verified Credentials & Certifications */}
-        <AboutCertificates locale={locale as Locale} />
-
-        {/* 05. Core Engineering Principles */}
-        <AboutPrinciples locale={locale as Locale} />
-
-        {/* 06. Technical Capabilities & Taxonomy */}
-        <AboutTechMatrix locale={locale as Locale} />
-
-        {/* 07. Collaboration & Connect */}
-        <AboutConnect locale={locale as Locale} />
-      </div>
+      {/* 04. Technical Certifications Archive (8 Verified Credentials) */}
+      <AboutCertificates locale={locale as Locale} />
     </div>
   );
 }

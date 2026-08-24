@@ -7,7 +7,7 @@ import type {
 
 export const educationData: EducationItem = {
   institution: {
-    en: "Diponegoro University (Universitas Diponegoro)",
+    en: "Diponegoro University",
     id: "Universitas Diponegoro",
   },
   degree: {
@@ -15,43 +15,26 @@ export const educationData: EducationItem = {
     id: "Sarjana Teknik (S.T.)",
   },
   fieldOfStudy: {
-    en: "Computer Engineering (Teknik Komputer)",
+    en: "Computer Engineering",
     id: "Teknik Komputer",
   },
-  period: "2020 — 2024",
+  period: "August 2022 – July 2026",
   location: "Semarang, Central Java, Indonesia",
   highlights: {
     en: [
-      "Graduated with Bachelor of Engineering in Computer Engineering.",
-      "Specialized in Software Systems Engineering, Applied Machine Learning, and Computer Networks.",
-      "Conducted thesis research in applied machine learning risk prediction systems.",
-      "Active contributor in institutional developer initiatives at Faculty of Engineering.",
+      "Graduated with GPA 3.79 / 4.00 from Diponegoro University.",
+      "Conducted research and implementation in applied machine learning models.",
+      "Delivered end-to-end projects across web architectures, backend APIs, and hardware integrations.",
     ],
     id: [
-      "Lulus Sarjana Teknik pada Departemen Teknik Komputer Universitas Diponegoro.",
-      "Peminatan pada Rekayasa Perangkat Lunak, Terapan Machine Learning, dan Jaringan Komputer.",
-      "Melakukan riset tugas akhir dalam sistem klasifikasi inferensi machine learning.",
-      "Berkontribusi aktif pada inisiatif pengembangan sistem Tim Developer IT Fakultas Teknik.",
+      "Lulus dengan IPK 3.79 / 4.00 dari Universitas Diponegoro.",
+      "Melakukan riset dan implementasi dalam model machine learning terapan.",
+      "Menyelesaikan proyek end-to-end meliputi arsitektur web, API backend, dan integrasi perangkat keras.",
     ],
   },
 };
 
 export const certificatesData: CertificateItem[] = [
-  {
-    id: "sertif-magang-undip",
-    title: {
-      en: "Developer IT Internship — Faculty of Engineering",
-      id: "Sertifikat Magang Developer IT — Fakultas Teknik",
-    },
-    issuer: "Faculty of Engineering, Diponegoro University",
-    category: "academic-experience",
-    assetPath: "/assets/certificates/sertif_magang.webp",
-    badge: "INTERNSHIP CREDENTIAL",
-    credentialNote: {
-      en: "Formal completion certificate for UI/UX design, interactive prototyping, and internal systems development.",
-      id: "Sertifikat penyelesaian magang untuk perancangan UI/UX, purwarupa interaktif, dan sistem internal.",
-    },
-  },
   {
     id: "ccna-enterprise",
     title: {
@@ -64,8 +47,8 @@ export const certificatesData: CertificateItem[] = [
       "/assets/certificates/ccna_enterprise_networking_security_and_automation.webp",
     badge: "CISCO VERIFIED",
     credentialNote: {
-      en: "Advanced routing, network security architectures, virtualization, and network automation APIs.",
-      id: "Routing tingkat lanjut, arsitektur keamanan jaringan, virtualisasi, dan otomatisasi jaringan.",
+      en: "Enterprise routing architectures, network security, virtualization, and network automation APIs.",
+      id: "Arsitektur routing tingkat lanjut, keamanan jaringan, virtualisasi, dan otomatisasi jaringan.",
     },
   },
   {
@@ -125,8 +108,8 @@ export const certificatesData: CertificateItem[] = [
     assetPath: "/assets/certificates/database_design.webp",
     badge: "ORACLE ACADEMY",
     credentialNote: {
-      en: "Relational modeling, entity-relationship diagrams (ERD), normalization, and schema design.",
-      id: "Pemodelan relasional, Entity-Relationship Diagram (ERD), normalisasi, dan perancangan skema.",
+      en: "Relational modeling, entity-relationship diagrams (ERD), normalization, and database schema design.",
+      id: "Pemodelan relasional, Entity-Relationship Diagram (ERD), normalisasi, dan perancangan skema basis data.",
     },
   },
   {
@@ -140,7 +123,7 @@ export const certificatesData: CertificateItem[] = [
     assetPath: "/assets/certificates/database_foundations.webp",
     badge: "ORACLE ACADEMY",
     credentialNote: {
-      en: "SQL queries, relational database management principles, and data manipulation.",
+      en: "SQL queries, relational database management principles, and structured data manipulation.",
       id: "Kueri SQL, prinsip manajemen basis data relasional, dan manipulasi data terstruktur.",
     },
   },
@@ -181,50 +164,50 @@ export const certificatesData: CertificateItem[] = [
 export const engineeringPrinciples: EngineeringPrinciple[] = [
   {
     index: "01",
-    code: "PRINCIPLE // EVIDENCE",
+    code: "PRINCIPLE // 01",
     title: {
-      en: "Evidence Over Speculation",
-      id: "Bukti Nyata Mengungguli Spekulasi",
+      en: "Build End-to-End",
+      id: "Bangun Secara End-to-End",
     },
     description: {
-      en: "Architecture decisions, benchmark claims, and engineering choices must be grounded in verified runtime measurements and authentic constraints rather than hype.",
-      id: "Keputusan arsitektur, tolok ukur performa, dan pemilihan teknologi harus berlandaskan pengukuran runtime terverifikasi dan batasan nyata.",
+      en: "Understand the need first, then connect interface, backend, data, testing, and deployment into one usable system.",
+      id: "Pahami kebutuhan terlebih dahulu, lalu hubungkan antarmuka, backend, data, pengujian, dan deployment menjadi satu sistem yang siap digunakan.",
     },
   },
   {
     index: "02",
-    code: "PRINCIPLE // TYPE-SAFETY",
+    code: "PRINCIPLE // 02",
     title: {
-      en: "Strict Determinism & Type Safety",
-      id: "Determinisme & Keamanan Tipe Ketat",
+      en: "Design for Real Users",
+      id: "Rancang untuk Pengguna Nyata",
     },
     description: {
-      en: "Static verification, compile-time contracts, and fail-fast validation eliminate runtime bugs before they manifest in user-facing systems.",
-      id: "Verifikasi statis, kontrak compile-time, dan validasi fail-fast mengeliminasi potensi galat sebelum berdampak pada pengguna akhir.",
+      en: "Build around how people actually use the system, with clear flows and understandable feedback.",
+      id: "Bangun sistem berdasarkan cara pengguna berinteraksi di dunia nyata, dengan alur yang jelas dan respons yang mudah dipahami.",
     },
   },
   {
     index: "03",
-    code: "PRINCIPLE // SIMPLICITY",
+    code: "PRINCIPLE // 03",
     title: {
-      en: "Pragmatic Simplicity & Low Surface Area",
-      id: "Kesederhanaan Pragmatis & Minim Dependensi",
+      en: "Use Technology with Purpose",
+      id: "Gunakan Teknologi Sesuai Kebutuhan",
     },
     description: {
-      en: "Prefer native web platform primitives and Server Components. Avoid unnecessary microservices, excessive client JavaScript, and fragile abstraction layers.",
-      id: "Prioritaskan kapabilitas native web dan Server Components. Hindari kompleksitas mikroservis berlebih, client JavaScript membengkak, dan abstraksi rapuh.",
+      en: "Choose tools and machine learning only when they genuinely help solve the problem.",
+      id: "Pilih alat bantu dan machine learning hanya ketika benar-benar memberikan solusi nyata bagi masalah yang dihadapi.",
     },
   },
   {
     index: "04",
-    code: "PRINCIPLE // ACCESSIBILITY",
+    code: "PRINCIPLE // 04",
     title: {
-      en: "Inclusive Semantics & Performance as Default",
-      id: "Semantik Inklusif & Performa Sebagai Standar",
+      en: "Test Before Delivery",
+      id: "Uji Sebelum Rilis",
     },
     description: {
-      en: "Fast load times, zero layout shift, logical keyboard navigation, and WCAG AA contrast are baseline engineering requirements, not afterthoughts.",
-      id: "Waktu muat cepat, nihil pergeseran tata letak (CLS), navigasi keyboard logis, dan kontras WCAG AA adalah syarat mutlak sistem yang andal.",
+      en: "Check important workflows and edge cases before considering the system ready.",
+      id: "Periksa alur penting dan skenario batas (edge case) secara teliti sebelum sistem dianggap siap digunakan.",
     },
   },
 ];
@@ -232,69 +215,50 @@ export const engineeringPrinciples: EngineeringPrinciple[] = [
 export const technicalTaxonomyData: TechnicalTaxonomyGroup[] = [
   {
     category: {
-      en: "Core Languages & Runtimes",
-      id: "Bahasa Pemrograman & Lingkungan Eksekusi",
+      en: "Software Development",
+      id: "Pengembangan Software",
     },
     items: [
-      { name: "TypeScript", context: "Strict typing, Node.js & Next.js systems" },
-      { name: "JavaScript (ESNext)", context: "Modern browser APIs, Async/Await" },
-      { name: "PHP 8.x", context: "Modern MVC, Laravel, Enterprise services" },
-      { name: "Python 3.x", context: "Machine Learning, Flask APIs, Data wrangling" },
-      { name: "Kotlin / Java", context: "Native Android application development" },
-      { name: "SQL", context: "Relational queries, indexing, schema optimization" },
+      { name: "Next.js & React", context: "App Router, Server Components, TypeScript" },
+      { name: "NestJS & Node.js", context: "Modular backend services, REST APIs" },
+      { name: "Laravel & PHP", context: "MVC architecture, REST APIs, Eloquent ORM" },
+      { name: "TypeScript & JavaScript", context: "Type safety, modern ES standards" },
     ],
   },
   {
     category: {
-      en: "Frontend & Interface Engineering",
-      id: "Rekayasa Frontend & Antarmuka",
+      en: "Machine Learning",
+      id: "Machine Learning",
     },
     items: [
-      { name: "Next.js (App Router)", context: "React Server Components, SSG, Metadata API" },
-      { name: "React 19", context: "Concurrent rendering, Server Actions, Hooks" },
-      { name: "Tailwind CSS v4", context: "Modern design tokens, responsive grid layouts" },
-      { name: "HTML5 & Semantic Web", context: "WCAG 2.2 AA accessibility, screen readers" },
-      { name: "Three.js / Panolens.js", context: "360° interactive panoramic rendering" },
-      { name: "Figma", context: "UI/UX wireframing, interactive prototyping, user flows" },
+      { name: "Supervised Learning", context: "Classification models, Scikit-learn pipelines" },
+      { name: "Model Evaluation", context: "Cross-validation, precision/recall metrics" },
+      { name: "Python & Data Stack", context: "Pandas, NumPy, model training workflows" },
+      { name: "Inference Endpoints", context: "REST API serving for trained ML models" },
     ],
   },
   {
     category: {
-      en: "Backend, API & Systems",
-      id: "Backend, API & Sistem",
+      en: "Testing & Delivery",
+      id: "Pengujian & Pengiriman",
     },
     items: [
-      { name: "NestJS", context: "Enterprise TypeScript architecture, modular microservices" },
-      { name: "Laravel", context: "Enterprise REST APIs, Eloquent ORM, Auth & Queues" },
-      { name: "Node.js", context: "Lightweight services, tooling, build automation" },
-      { name: "Flask", context: "Lightweight Python REST inference microservices" },
-      { name: "RESTful Architecture", context: "Stateless contracts, deterministic payloads" },
-      { name: "Thermal Printer ESC/POS", context: "Hardware Android Bluetooth/USB printing" },
+      { name: "QA & Verification", context: "Functional testing, edge case validation" },
+      { name: "Git & Version Control", context: "Branching workflows, collaborative development" },
+      { name: "Linux & VPS", context: "Server configuration, application deployment" },
+      { name: "Performance & Optimization", context: "Asset optimization, responsive validation" },
     ],
   },
   {
     category: {
-      en: "Applied Machine Learning & Data",
-      id: "Terapan Machine Learning & Data",
+      en: "Tools & Systems",
+      id: "Perangkat & Sistem",
     },
     items: [
-      { name: "Scikit-Learn", context: "Binary classification models, evaluation pipelines" },
-      { name: "NumPy & Pandas", context: "Data cleaning, feature scaling, matrix operations" },
-      { name: "Hugging Face (Wav2Vec2)", context: "Speech-to-Text inference pipelines" },
-      { name: "Model Serialization", context: "Joblib / Pickle deployment into production APIs" },
-    ],
-  },
-  {
-    category: {
-      en: "Databases, Networking & Infrastructure",
-      id: "Basis Data, Jaringan & Infrastruktur",
-    },
-    items: [
-      { name: "MySQL / MariaDB", context: "Relational schema design, transactions, indexing" },
-      { name: "SQLite", context: "Embedded client & edge storage solutions" },
-      { name: "Cisco Networking", context: "CCNA routing, VLANs, switching, network security" },
-      { name: "Git & Version Control", context: "Feature workflows, deterministic history" },
-      { name: "Vercel / Cloud Edge", context: "Static SSG deployment, edge performance" },
+      { name: "Relational Databases", context: "MySQL, PostgreSQL schema design" },
+      { name: "Tailwind CSS", context: "Design tokens, responsive layouts, utility classes" },
+      { name: "Hardware Integration", context: "Android thermal printing protocol integration" },
+      { name: "RESTful APIs", context: "Structured request/response contracts" },
     ],
   },
 ];

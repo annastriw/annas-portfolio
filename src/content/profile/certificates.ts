@@ -2,9 +2,8 @@ import type { Locale } from "@/lib/i18n/config";
 
 export type CertificateCategoryKey =
   | "all"
-  | "networking"
-  | "ai-data"
-  | "academic-experience";
+  | "cisco-systems"
+  | "ai-databases";
 
 export interface CertificateRecord {
   id: string;
@@ -18,34 +17,19 @@ export interface CertificateRecord {
 
 export const verifiedCertificates: CertificateRecord[] = [
   {
-    id: "sertif-magang-undip",
-    title: {
-      en: "Developer IT Internship — Faculty of Engineering",
-      id: "Sertifikat Magang Developer IT — Fakultas Teknik",
-    },
-    issuer: "Faculty of Engineering, Diponegoro University",
-    category: "academic-experience",
-    assetPath: "/assets/certificates/sertif_magang.webp",
-    badge: "INTERNSHIP CREDENTIAL",
-    credentialNote: {
-      en: "Formal completion certificate for UI/UX design, interactive prototyping, and internal systems development.",
-      id: "Sertifikat penyelesaian magang untuk perancangan UI/UX, purwarupa interaktif, dan sistem internal.",
-    },
-  },
-  {
     id: "ccna-enterprise",
     title: {
       en: "CCNA: Enterprise Networking, Security, and Automation",
       id: "CCNA: Enterprise Networking, Security, and Automation",
     },
     issuer: "Cisco Networking Academy",
-    category: "networking",
+    category: "cisco-systems",
     assetPath:
       "/assets/certificates/ccna_enterprise_networking_security_and_automation.webp",
     badge: "CISCO VERIFIED",
     credentialNote: {
-      en: "Advanced routing, network security architectures, virtualization, and network automation APIs.",
-      id: "Routing tingkat lanjut, arsitektur keamanan jaringan, virtualisasi, dan otomatisasi jaringan.",
+      en: "Enterprise routing architectures, network security, virtualization, and network automation APIs.",
+      id: "Arsitektur routing tingkat lanjut, keamanan jaringan, virtualisasi, dan otomatisasi jaringan.",
     },
   },
   {
@@ -55,7 +39,7 @@ export const verifiedCertificates: CertificateRecord[] = [
       id: "CCNAv7: Switching, Routing, and Wireless Essentials",
     },
     issuer: "Cisco Networking Academy",
-    category: "networking",
+    category: "cisco-systems",
     assetPath:
       "/assets/certificates/ccnav7_switching_routing_and_wireless_essentials.webp",
     badge: "CISCO VERIFIED",
@@ -71,7 +55,7 @@ export const verifiedCertificates: CertificateRecord[] = [
       id: "CCNAv7: Introduction to Networks",
     },
     issuer: "Cisco Networking Academy",
-    category: "networking",
+    category: "cisco-systems",
     assetPath: "/assets/certificates/ccnav7_introduction_to_networks.webp",
     badge: "CISCO VERIFIED",
     credentialNote: {
@@ -86,7 +70,7 @@ export const verifiedCertificates: CertificateRecord[] = [
       id: "HCIA-AI V3.5 (Huawei Certified ICT Associate - Artificial Intelligence)",
     },
     issuer: "Huawei Technologies Co., Ltd.",
-    category: "ai-data",
+    category: "ai-databases",
     assetPath: "/assets/certificates/hcia_ai_v3_5.webp",
     badge: "HUAWEI CERTIFIED",
     credentialNote: {
@@ -101,11 +85,11 @@ export const verifiedCertificates: CertificateRecord[] = [
       id: "Database Design",
     },
     issuer: "Oracle Academy",
-    category: "ai-data",
+    category: "ai-databases",
     assetPath: "/assets/certificates/database_design.webp",
     badge: "ORACLE ACADEMY",
     credentialNote: {
-      en: "Relational modeling, entity-relationship diagrams (ERD), normalization, and schema design.",
+      en: "Relational modeling, entity-relationship diagrams (ERD), normalization, and database schema design.",
       id: "Pemodelan relasional, Entity-Relationship Diagram (ERD), normalisasi, dan perancangan skema basis data.",
     },
   },
@@ -116,7 +100,7 @@ export const verifiedCertificates: CertificateRecord[] = [
       id: "Database Foundations",
     },
     issuer: "Oracle Academy",
-    category: "ai-data",
+    category: "ai-databases",
     assetPath: "/assets/certificates/database_foundations.webp",
     badge: "ORACLE ACADEMY",
     credentialNote: {
@@ -131,7 +115,7 @@ export const verifiedCertificates: CertificateRecord[] = [
       id: "IT Essentials: PC Hardware and Software",
     },
     issuer: "Cisco Networking Academy",
-    category: "networking",
+    category: "cisco-systems",
     assetPath:
       "/assets/certificates/it_essentials_pc_hardware_and_software.webp",
     badge: "CISCO VERIFIED",
@@ -147,7 +131,7 @@ export const verifiedCertificates: CertificateRecord[] = [
       id: "Introduction to IoT and Digital Transformation",
     },
     issuer: "Cisco Networking Academy",
-    category: "networking",
+    category: "cisco-systems",
     assetPath:
       "/assets/certificates/introduction_to_iot_and_digital_transformation.webp",
     badge: "CISCO VERIFIED",

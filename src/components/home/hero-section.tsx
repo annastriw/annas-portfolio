@@ -13,7 +13,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
   const copy = {
     sectionTag: "[01 // INTRO]",
-    introTitle: isId ? "KENALAN DULU" : "LEMME INTRODUCE MYSELF",
+    introTitle: isId ? "PROFIL ENGINEERING" : "ENGINEERING PROFILE",
     greeting: isId ? "Halo, saya" : "Hello, I'm",
     name: "Annas Tri Widagdo",
     roleLead: isId ? "Saya seorang" : "I'm a",

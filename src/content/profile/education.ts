@@ -4,14 +4,16 @@ export interface EducationRecord {
   institution: Record<Locale, string>;
   degree: Record<Locale, string>;
   fieldOfStudy: Record<Locale, string>;
-  period: string;
-  location: string;
-  highlights: Record<Locale, string[]>;
+  period: Record<Locale, string>;
+  gpa: string;
+  positioning: Record<Locale, string>;
+  location: Record<Locale, string>;
+  certificateAsset: string;
 }
 
 export const academicEducation: EducationRecord = {
   institution: {
-    en: "Diponegoro University (Universitas Diponegoro)",
+    en: "Diponegoro University",
     id: "Universitas Diponegoro",
   },
   degree: {
@@ -19,23 +21,21 @@ export const academicEducation: EducationRecord = {
     id: "Sarjana Teknik (S.T.)",
   },
   fieldOfStudy: {
-    en: "Computer Engineering (Teknik Komputer)",
+    en: "Computer Engineering",
     id: "Teknik Komputer",
   },
-  period: "2020 — 2024",
-  location: "Semarang, Central Java, Indonesia",
-  highlights: {
-    en: [
-      "Graduated with Bachelor of Engineering in Computer Engineering.",
-      "Specialized in Software Systems Engineering, Applied Machine Learning, and Computer Networks.",
-      "Conducted thesis research in applied machine learning risk prediction systems.",
-      "Active contributor in institutional developer initiatives at Faculty of Engineering.",
-    ],
-    id: [
-      "Lulus Sarjana Teknik pada Departemen Teknik Komputer Universitas Diponegoro.",
-      "Peminatan pada Rekayasa Perangkat Lunak, Terapan Machine Learning, dan Jaringan Komputer.",
-      "Melakukan riset tugas akhir dalam sistem klasifikasi inferensi machine learning.",
-      "Berkontribusi aktif pada inisiatif pengembangan sistem Tim Developer IT Fakultas Teknik.",
-    ],
+  period: {
+    en: "August 2022 – July 2026",
+    id: "Agustus 2022 – Juli 2026",
   },
+  gpa: "3.79 / 4.00",
+  positioning: {
+    en: "Fresh Graduate",
+    id: "Lulusan Baru",
+  },
+  location: {
+    en: "Semarang, Central Java, Indonesia",
+    id: "Semarang, Jawa Tengah, Indonesia",
+  },
+  certificateAsset: "/assets/certificates/bachelor_certificate.webp",
 };
