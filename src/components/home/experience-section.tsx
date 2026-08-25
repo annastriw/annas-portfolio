@@ -21,7 +21,7 @@ export function ExperienceSection({ locale }: ExperienceSectionProps) {
 
   return (
     <section
-      className="home-experience-section py-8 sm:py-12 md:py-14 border-b border-(--color-border)"
+      className="home-experience-section py-12 sm:py-16 md:py-20 border-b border-(--color-border)"
       aria-label={isId ? "Pengalaman Profesional" : "Professional Experience"}
     >
       <div className="home-experience-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">

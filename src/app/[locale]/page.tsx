@@ -8,6 +8,7 @@ import { ExperienceSection } from "@/components/home/experience-section";
 import { GitHubSignal } from "@/components/home/github-signal";
 import { SelectedProjects } from "@/components/home/selected-projects";
 import { TechStackSection } from "@/components/home/tech-stack-section";
+import { getGitHubTelemetry } from "@/lib/github/github-data";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
   generatePersonJsonLd,
@@ -64,6 +65,8 @@ export default async function LocalizedHomePage({ params }: PageProps) {
     notFound();
   }
 
+  const telemetry = await getGitHubTelemetry();
+
   return (
     <div className="home-landing-page">
       <JsonLd schema={[generatePersonJsonLd(), generateWebSiteJsonLd()]} />
@@ -75,7 +78,7 @@ export default async function LocalizedHomePage({ params }: PageProps) {
       <ExperienceSection locale={locale as Locale} />
 
       {/* 03. Open Source & GitHub Contribution Telemetry */}
-      <GitHubSignal locale={locale as Locale} />
+      <GitHubSignal locale={locale as Locale} telemetry={telemetry} />
 
       {/* 04. Selected Work / 4 Featured Case Studies Preview */}
       <SelectedProjects
