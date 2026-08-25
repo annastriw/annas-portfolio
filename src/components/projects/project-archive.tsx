@@ -52,18 +52,24 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
   const isId = locale === "id";
   const visibleProjectLabel =
     locale === "id"
-      ? `${visibleProjects.length} proyek ditampilkan`
-      : `${visibleProjects.length} ${visibleProjects.length === 1 ? "project" : "projects"} in view`;
+      ? `${visibleProjects.length} dari ${projects.length} proyek ditampilkan`
+      : `Showing ${visibleProjects.length} of ${projects.length} archived builds`;
 
   return (
     <section
       className={styles.archive}
-      aria-label={isId ? "Arsip proyek" : "Project archive"}
+      aria-label={isId ? "Arsip proyek terverifikasi" : "Verified project archive"}
     >
+      {/* Editorial Index Filter Bar */}
       <div className={styles.filterBlock}>
         <div className={styles.filterHeader}>
-          <span>{isId ? "Filter berdasarkan bidang" : "Filter by discipline"}</span>
-          <span aria-live="polite">{visibleProjectLabel}</span>
+          <div className={styles.filterHeaderTag}>
+            <span className={styles.filterHeaderDot}>●</span>
+            <span>{isId ? "Indeks Disiplin" : "Discipline Index"}</span>
+          </div>
+          <span className={styles.filterStatus} aria-live="polite">
+            {visibleProjectLabel}
+          </span>
         </div>
 
         <div
@@ -71,7 +77,7 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
           role="group"
           aria-label={isId ? "Filter kategori proyek" : "Project category filters"}
         >
-          {projectArchiveCategories.map((category) => {
+          {projectArchiveCategories.map((category, idx) => {
             const count =
               category.key === "all"
                 ? projects.length
@@ -79,6 +85,7 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
                     (project) => project.category === category.key,
                   ).length;
             const isActive = activeFilter === category.key;
+            const prefix = `0${idx + 1}`;
 
             return (
               <button
@@ -90,9 +97,10 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
                 onClick={() => setActiveFilter(category.key)}
                 aria-pressed={isActive}
               >
-                <span>{category.label[locale]}</span>
+                <span className={styles.filterButtonPrefix}>{prefix}</span>
+                <span className={styles.filterButtonLabel}>{category.label[locale]}</span>
                 <span className={styles.filterCount} aria-hidden="true">
-                  {String(count).padStart(2, "0")}
+                  [{String(count).padStart(2, "0")}]
                 </span>
               </button>
             );
@@ -100,6 +108,7 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
         </div>
       </div>
 
+      {/* Categorized Archive Entries */}
       <div className={styles.groups}>
         {visibleGroups.map((group) => (
           <section
@@ -108,21 +117,24 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
             aria-labelledby={`archive-group-${group.key}`}
           >
             <header className={styles.groupHeader}>
-              <span className={styles.groupCode} aria-hidden="true">
-                {group.key === "all" ? "" : groupCodes[group.key]}
-              </span>
-              <h2
-                id={`archive-group-${group.key}`}
-                className={styles.groupTitle}
-              >
-                {group.label[locale]}
-              </h2>
+              <div className={styles.groupTitleBlock}>
+                <span className={styles.groupCode} aria-hidden="true">
+                  [{group.key === "all" ? "ALL" : groupCodes[group.key]}]
+                </span>
+                <h2
+                  id={`archive-group-${group.key}`}
+                  className={styles.groupTitle}
+                >
+                  {group.label[locale]}
+                </h2>
+              </div>
               <span className={styles.groupCount}>
-                {String(group.projects.length).padStart(2, "0")} {isId
-                  ? "entri"
+                {String(group.projects.length).padStart(2, "0")}{" "}
+                {isId
+                  ? "karya"
                   : group.projects.length === 1
-                    ? "entry"
-                    : "entries"}
+                    ? "build"
+                    : "builds"}
               </span>
             </header>
 

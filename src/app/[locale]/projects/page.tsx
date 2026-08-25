@@ -73,22 +73,56 @@ export default async function ProjectsPage({ params }: PageProps) {
   );
 
   return (
-    <div className="py-10 sm:py-12 md:py-14">
+    <div className="py-8 sm:py-12 md:py-16">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <JsonLd schema={projectListSchema} />
 
+        {/* Technical Editorial Header */}
         <header className="mb-10 max-w-4xl animate-editorial-fade motion-reduce:animate-none sm:mb-12 md:mb-14">
-          <p className="mb-4 font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-(--color-muted)">
-            {isId ? "INDEKS PROYEK / 10 ENTRI" : "PROJECT INDEX / 10 ENTRIES"}
-          </p>
-          <h1 className="m-0 max-w-4xl font-serif text-[clamp(3rem,7vw,6.5rem)] font-normal leading-[0.92] tracking-[-0.055em] text-(--color-foreground)">
+          <div className="mb-3 flex items-center gap-3 font-mono text-xs text-(--color-muted)">
+            <span className="font-semibold text-(--color-accent)">
+              {isId ? "[03 // PROYEK]" : "[03 // PROJECTS]"}
+            </span>
+            <span className="text-(--color-border)" aria-hidden="true">
+              /
+            </span>
+            <span className="uppercase tracking-wider">
+              {isId ? "ARSIP TEKNIS & REKAYASA" : "TECHNICAL EDITORIAL ARCHIVE"}
+            </span>
+          </div>
+
+          <h1 className="m-0 font-serif text-[clamp(2.75rem,6vw,5.5rem)] font-normal leading-[0.96] tracking-[-0.04em] text-(--color-foreground)">
             {isId ? "Arsip Proyek" : "Projects Archive"}
           </h1>
-          <p className="mb-0 mt-6 max-w-2xl text-base leading-relaxed text-(--color-muted) sm:text-lg">
+
+          <p className="mb-0 mt-5 max-w-3xl text-base leading-relaxed text-(--color-muted) sm:text-lg">
             {isId
-              ? "Sepuluh proyek terverifikasi yang mencakup sistem web, machine learning, utilitas mobile, dan media interaktif."
-              : "Ten verified builds across web systems, machine learning, mobile utilities, and interactive media."}
+              ? "Sepuluh proyek rekayasa perangkat lunak terverifikasi yang mencakup aplikasi web multi-cabang, model prediksi risiko machine learning, pipeline ASR speech-to-text, plugin print utility Android, dan aplikasi mobile."
+              : "Ten verified engineering builds spanning multi-branch enterprise web systems, machine learning risk-prediction models, speech-to-text ASR pipelines, Android print utilities, and mobile applications."}
           </p>
+
+          {/* Quick Telemetry Index Bar */}
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-(--color-border) pt-4 font-mono text-[11px] text-(--color-muted) uppercase tracking-wider">
+            <div className="flex items-center gap-2">
+              <span className="text-(--color-accent)">●</span>
+              <span className="text-(--color-foreground) font-medium">10</span>
+              <span>{isId ? "Karya Terverifikasi" : "Verified Builds"}</span>
+            </div>
+            <div className="hidden sm:inline text-(--color-border)" aria-hidden="true">
+              |
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-(--color-foreground) font-medium">4</span>
+              <span>{isId ? "Bidang Disiplin" : "Disciplines"}</span>
+            </div>
+            <div className="hidden sm:inline text-(--color-border)" aria-hidden="true">
+              |
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-(--color-foreground) font-medium">100%</span>
+              <span>{isId ? "Bukti Visual Otentik" : "Authentic Visual Evidence"}</span>
+            </div>
+          </div>
         </header>
 
         <ProjectArchive projects={projectArchive} locale={locale} />

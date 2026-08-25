@@ -35,29 +35,52 @@ export function ProjectArchiveRow({
     <li className={styles.rowShell}>
       <ScrollReveal animationClass="animate-editorial-fade" threshold={0.04}>
         <article className={styles.row}>
-          <span className={styles.index} aria-hidden="true">
-            {project.index}
-          </span>
-
-          <div className={styles.narrative}>
-            <span className={styles.category}>
-              {categoryLabels[project.category][locale]}
+          {/* Large Master Index */}
+          <div className={styles.indexCol}>
+            <span className={styles.indexNumber}>{project.index}</span>
+            <span className={styles.indexDot} aria-hidden="true">
+              {"//"}
             </span>
+          </div>
+
+          {/* Narrative Column: Category, Title, Short Summary, Action Links */}
+          <div className={styles.narrativeCol}>
+            {/* Mobile-Only Header */}
+            <div className={styles.mobileHeader}>
+              <div className={styles.mobileIndexGroup}>
+                <span className={styles.mobileIndex}>{project.index}</span>
+                <span className={styles.mobileCategory}>
+                  {categoryLabels[project.category][locale]}
+                </span>
+              </div>
+              <span className={styles.mobileStatusBadge}>
+                {project.status[locale]}
+              </span>
+            </div>
+
+            {/* Desktop Category Subtag */}
+            <div className={styles.categoryBadge}>
+              <span>{categoryLabels[project.category][locale]}</span>
+            </div>
+
             <h3 className={styles.title}>
               <Link href={detailHref} className={styles.titleLink}>
                 {project.title[locale]}
               </Link>
             </h3>
+
             <p className={styles.summary}>{project.summary[locale]}</p>
 
             <div className={styles.actions}>
               <Link
                 href={detailHref}
-                className={styles.actionLink}
-                aria-label={`${isId ? "Lihat studi kasus" : "View case study"}: ${project.title[locale]}`}
+                className={styles.actionPrimary}
+                aria-label={`${isId ? "Lihat studi kasus lengkap" : "View complete case study"}: ${project.title[locale]}`}
               >
-                <span>{isId ? "Lihat studi kasus" : "View case study"}</span>
-                <span aria-hidden="true">→</span>
+                <span>{isId ? "Lihat Studi Kasus" : "View Case Study"}</span>
+                <span className={styles.actionArrow} aria-hidden="true">
+                  →
+                </span>
               </Link>
 
               {project.liveUrl ? (
@@ -65,58 +88,74 @@ export function ProjectArchiveRow({
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.actionLink}
-                  aria-label={`${isId ? "Buka sistem live" : "Visit live system"}: ${project.title[locale]}`}
+                  className={styles.actionSecondary}
+                  aria-label={`${isId ? "Buka sistem live di tab baru" : "Visit live system in new tab"}: ${project.title[locale]}`}
                 >
-                  <span>{isId ? "Buka sistem live" : "Visit live system"}</span>
-                  <span aria-hidden="true">↗</span>
+                  <span>{isId ? "Sistem Live" : "Live System"}</span>
+                  <span className={styles.actionArrow} aria-hidden="true">
+                    ↗
+                  </span>
                 </a>
               ) : null}
             </div>
           </div>
 
-          <Link
-            href={detailHref}
-            className={styles.mediaLink}
-            aria-label={`${isId ? "Lihat bukti visual" : "View visual evidence"}: ${project.title[locale]}`}
-          >
-            <div className={styles.media}>
-              <Image
-                src={project.coverImage}
-                alt={project.coverAlt[locale]}
-                fill
-                loading={project.index === "01" ? "eager" : "lazy"}
-                sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1100px) 38vw, 30vw"
-                className={`${styles.image} ${
-                  project.coverPosition === "top"
-                    ? styles.imageTop
-                    : styles.imageCenter
-                }`}
-              />
-            </div>
-          </Link>
+          {/* 3:2 Visual Evidence Column with Caption */}
+          <div className={styles.evidenceCol}>
+            <Link
+              href={detailHref}
+              className={styles.evidenceLink}
+              aria-label={`${isId ? "Buka studi kasus dan bukti visual" : "Open case study and visual evidence"}: ${project.title[locale]}`}
+            >
+              <div className={styles.evidenceMedia}>
+                <Image
+                  src={project.coverImage}
+                  alt={project.coverAlt[locale]}
+                  fill
+                  loading={project.index === "01" ? "eager" : "lazy"}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 45vw, 380px"
+                  className={`${styles.evidenceImage} ${
+                    project.coverPosition === "top"
+                      ? styles.imageTop
+                      : styles.imageCenter
+                  }`}
+                />
+              </div>
+              <div className={styles.evidenceCaption}>
+                <span className={styles.figureTag}>
+                  {`FIG.${project.index} // ${project.title[locale].toUpperCase()}`}
+                </span>
+                <span className={styles.statusDot}>
+                  {`● ${project.status[locale]}`}
+                </span>
+              </div>
+            </Link>
+          </div>
 
+          {/* Metadata Rail: Role, Status, Primary Technologies */}
           <dl className={styles.metaRail}>
             <div className={styles.metaItem}>
               <dt className={styles.metaLabel}>{isId ? "Peran" : "Role"}</dt>
               <dd className={styles.metaValue}>{project.role[locale]}</dd>
             </div>
+
             <div className={styles.metaItem}>
               <dt className={styles.metaLabel}>Status</dt>
               <dd className={styles.metaValue}>{project.status[locale]}</dd>
             </div>
+
             <div className={styles.metaItem}>
               <dt className={styles.metaLabel}>
-                {isId ? "Teknologi utama" : "Primary technologies"}
+                {isId ? "Teknologi Utama" : "Primary Stack"}
               </dt>
               <dd className={styles.metaValue}>
-                <ul className={styles.techList}>
+                <div className={styles.techStackList}>
                   {project.primaryTechnologies.map((technology) => (
-                    <li key={technology} className={styles.techItem}>
+                    <span key={technology} className={styles.techBadge}>
                       {technology}
-                    </li>
+                    </span>
                   ))}
-                </ul>
+                </div>
               </dd>
             </div>
           </dl>

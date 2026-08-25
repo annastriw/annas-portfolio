@@ -46,8 +46,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     title: { en: "UKG System", id: "UKG System" },
     role: { en: "Fullstack Developer", id: "Fullstack Developer" },
     summary: {
-      en: "A multi-branch ERP web application built end to end for CV Universal Kharisma Globalindo, covering operational workflows, quality assurance, and production deployment.",
-      id: "Aplikasi ERP web multi-cabang yang dikembangkan secara end to end untuk CV Universal Kharisma Globalindo, mencakup alur operasional, quality assurance, dan deployment ke production.",
+      en: "Multi-branch ERP web application developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and Linux VPS production deployment.",
+      id: "Aplikasi ERP web multi-cabang yang dikembangkan end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment production pada VPS Linux.",
     },
     primaryTechnologies: [
       "Next.js",
@@ -62,7 +62,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Dashboard administrasi ERP multi-cabang UKG System",
     },
     coverPosition: "top",
-    status: { en: "Live production", id: "Aktif di production" },
+    status: { en: "Live Production", id: "Aktif di Production" },
     liveUrl: "https://ukgsystem.com",
   },
   {
@@ -72,8 +72,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     title: { en: "iHealth Edu", id: "iHealth Edu" },
     role: { en: "Fullstack Developer", id: "Fullstack Developer" },
     summary: {
-      en: "An integrated digital health platform for screening, education, patient records, ML risk prediction, and ESP32 health data, developed with Puskesmas Padangsari. Its prediction workflow is a decision-support prototype, not a clinical diagnosis.",
-      id: "Platform kesehatan digital terintegrasi untuk screening, edukasi, rekam pasien, prediksi risiko berbasis ML, dan data kesehatan ESP32 yang dikembangkan bersama Puskesmas Padangsari. Alur prediksinya merupakan purwarupa pendukung keputusan, bukan diagnosis klinis.",
+      en: "Integrated digital health platform developed with Puskesmas Padangsari for health screening, education, ESP32 IoT telemetry, and ML risk-prediction decision support.",
+      id: "Platform kesehatan digital terintegrasi yang dikembangkan bersama Puskesmas Padangsari untuk screening, edukasi, telemetri IoT ESP32, dan pendukung keputusan prediksi risiko berbasis ML.",
     },
     primaryTechnologies: ["Next.js", "Laravel", "MySQL", "Flask", "ESP32"],
     coverImage: "/assets/projects/ihealth-edu/cover.webp",
@@ -82,7 +82,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Antarmuka edukasi dan screening kesehatan iHealth Edu",
     },
     coverPosition: "top",
-    status: { en: "Production deployment", id: "Deploy ke production" },
+    status: { en: "Production Deployment", id: "Deploy ke Production" },
   },
   {
     index: "03",
@@ -91,8 +91,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     title: { en: "Dialisis Connect Edu", id: "Dialisis Connect Edu" },
     role: { en: "Fullstack Developer", id: "Fullstack Developer" },
     summary: {
-      en: "A dialysis education and community platform for IPDI Central Java with role-based content, YouTube video, PDF booklets, and a discussion forum. It is positioned for information and education without claims of clinical outcomes.",
-      id: "Platform edukasi dan komunitas dialisis untuk IPDI Jawa Tengah dengan konten berbasis peran, video YouTube, booklet PDF, dan forum diskusi. Platform ini diposisikan untuk informasi dan edukasi tanpa klaim hasil klinis.",
+      en: "Kidney health education and community platform developed with IPDI Central Java, featuring role-based resources, video guides, PDF booklets, and interactive discussion forums.",
+      id: "Platform edukasi dan komunitas kesehatan ginjal yang dikembangkan bersama IPDI Jawa Tengah, menyajikan materi edukasi berbasis peran, panduan video, booklet PDF, dan forum diskusi interaktif.",
     },
     primaryTechnologies: [
       "Next.js",
@@ -107,7 +107,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Halaman awal platform edukasi Dialisis Connect Edu",
     },
     coverPosition: "top",
-    status: { en: "Production deployment", id: "Deploy ke production" },
+    status: { en: "Production Deployment", id: "Deploy ke Production" },
   },
   {
     index: "04",
@@ -116,8 +116,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     title: { en: "Nusa Dakwah", id: "Nusa Dakwah" },
     role: { en: "Fullstack Developer", id: "Fullstack Developer" },
     summary: {
-      en: "A full-stack digital dakwah platform with structured learning modules, content search, YouTube media, and a moderated discussion forum with nested replies.",
-      id: "Platform dakwah digital fullstack dengan modul pembelajaran terstruktur, pencarian konten, media YouTube, serta forum diskusi termoderasi dengan nested reply.",
+      en: "Digital learning and dakwah platform with structured modular topics, indexed search, multimedia integration, and a moderated discussion forum with nested replies.",
+      id: "Platform pembelajaran dan dakwah digital dengan modul terstruktur, pencarian terindeks, integrasi multimedia, serta forum diskusi termoderasi dengan nested reply.",
     },
     primaryTechnologies: [
       "Next.js",
@@ -132,7 +132,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Halaman awal platform konten digital Nusa Dakwah",
     },
     coverPosition: "top",
-    status: { en: "Production deployment", id: "Deploy ke production" },
+    status: { en: "Production Deployment", id: "Deploy ke Production" },
   },
   {
     index: "05",
@@ -144,8 +144,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     role: { en: "Fullstack Developer", id: "Fullstack Developer" },
     summary: {
-      en: "A centralized spare-parts inventory system with role-based access, automatic stock updates, transaction history, date-range reporting, and PDF export.",
-      id: "Sistem inventaris suku cadang terpusat dengan akses berbasis peran, pembaruan stok otomatis, riwayat transaksi, laporan berdasarkan periode, dan ekspor PDF.",
+      en: "Centralized spare-parts inventory management system featuring role-based access, automatic stock reconciliation, transaction logging, date-range analytics, and PDF exports.",
+      id: "Sistem manajemen inventaris suku cadang terpusat dengan akses berbasis peran, rekonsiliasi stok otomatis, pencatatan transaksi, analitik berbasis tanggal, dan ekspor PDF.",
     },
     primaryTechnologies: ["Laravel", "PHP", "MySQL", "Katalon Studio", "Docker"],
     coverImage: "/assets/projects/simastok/cover.webp",
@@ -154,7 +154,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Halaman masuk sistem inventaris SIMASTOK SHR Jaya Motor",
     },
     coverPosition: "center",
-    status: { en: "Production deployment", id: "Deploy ke production" },
+    status: { en: "Production Deployment", id: "Deploy ke Production" },
   },
   {
     index: "06",
@@ -169,8 +169,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Machine Learning Developer",
     },
     summary: {
-      en: "A binary classification prototype comparing four algorithms on 158,355 observations; the selected Random Forest reached 71.93% accuracy and 0.8015 ROC-AUC. It is served through Flask for risk prediction, not clinical diagnosis.",
-      id: "Purwarupa klasifikasi biner yang membandingkan empat algoritma pada 158.355 observasi; Random Forest terpilih mencapai akurasi 71,93% dan ROC-AUC 0,8015. Model disajikan melalui Flask untuk prediksi risiko, bukan diagnosis klinis.",
+      en: "Binary classification prototype evaluated across 158,355 clinical records; the selected Random Forest model achieved 71.93% accuracy and 0.8015 ROC-AUC, served via Flask REST API for decision-support risk prediction.",
+      id: "Purwarupa klasifikasi biner yang dievaluasi pada 158.355 data klinis; model Random Forest terpilih mencapai akurasi 71,93% dan ROC-AUC 0,8015, disajikan melalui REST API Flask sebagai pendukung keputusan prediksi risiko.",
     },
     primaryTechnologies: ["Python", "Scikit-learn", "SMOTE", "Flask", "Docker"],
     coverImage:
@@ -181,8 +181,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     coverPosition: "top",
     status: {
-      en: "Prototype with deployed inference service",
-      id: "Purwarupa dengan layanan inferensi yang telah di-deploy",
+      en: "Prototype / Deployed API",
+      id: "Purwarupa / Deployed API",
     },
   },
   {
@@ -195,8 +195,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Machine Learning / AI Developer",
     },
     summary: {
-      en: "An end-to-end ASR workflow that accepts audio or video, normalizes audio to mono 16 kHz, transcribes with pretrained Wav2Vec2, and generates TXT, CSV, JSON, SRT, and burned-in subtitles.",
-      id: "Workflow ASR end to end yang menerima audio atau video, menormalisasi audio ke mono 16 kHz, melakukan transkripsi dengan pretrained Wav2Vec2, serta menghasilkan TXT, CSV, JSON, SRT, dan burned-in subtitle.",
+      en: "End-to-end ASR pipeline that ingests audio/video, normalizes audio to 16 kHz mono chunks, performs Wav2Vec2 transcription, and exports structured TXT, CSV, JSON, and burned-in SRT video subtitles.",
+      id: "Pipeline ASR end-to-end yang memproses audio/video, menormalisasi audio ke chunk mono 16 kHz, melakukan transkripsi Wav2Vec2, serta mengekspor data terstruktur TXT, CSV, JSON, dan subtitle video SRT.",
     },
     primaryTechnologies: [
       "Python",
@@ -211,7 +211,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Perbandingan sebelum dan sesudah subtitle otomatis dari workflow speech-to-text",
     },
     coverPosition: "center",
-    status: { en: "Completed", id: "Selesai" },
+    status: { en: "Completed Workflow", id: "Workflow Selesai" },
   },
   {
     index: "08",
@@ -223,8 +223,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     role: { en: "Android Developer", id: "Android Developer" },
     summary: {
-      en: "A native Kotlin Android PrintService that converts Android print jobs into ESC/POS raster data for 58 mm and 80 mm Bluetooth thermal printers. It includes printer profiles, calibration, retry handling, and cancellable background jobs.",
-      id: "Android PrintService native berbasis Kotlin yang mengubah print job Android menjadi data raster ESC/POS untuk printer termal Bluetooth 58 mm dan 80 mm. Aplikasi mencakup profil printer, kalibrasi, penanganan retry, dan background job yang dapat dibatalkan.",
+      en: "Native Kotlin Android PrintService plugin that converts system print documents into ESC/POS monochrome raster streams for 58 mm and 80 mm Bluetooth thermal printers with calibration and retry handling.",
+      id: "Plugin Android PrintService native berbasis Kotlin yang mengonversi dokumen cetak sistem menjadi raster monochrome ESC/POS untuk printer termal Bluetooth 58 mm dan 80 mm dengan kalibrasi dan retry handling.",
     },
     primaryTechnologies: [
       "Kotlin",
@@ -239,7 +239,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Ikon aplikasi Android Thermal Printer Service",
     },
     coverPosition: "center",
-    status: { en: "Completed", id: "Selesai" },
+    status: { en: "Completed Application", id: "Aplikasi Selesai" },
   },
   {
     index: "09",
@@ -248,8 +248,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     title: { en: "Footy Standings", id: "Footy Standings" },
     role: { en: "Flutter Developer", id: "Flutter Developer" },
     summary: {
-      en: "A Flutter app that retrieves standings, upcoming fixtures, top scorers, and club details for six competitions through the Football Data REST API.",
-      id: "Aplikasi Flutter yang mengambil data klasemen, jadwal mendatang, pencetak gol terbanyak, dan detail klub untuk enam kompetisi melalui Football Data REST API.",
+      en: "Cross-platform Flutter mobile application providing real-time standings, match fixtures, top scorers, and club profiles across 6 major football leagues via the Football Data REST API.",
+      id: "Aplikasi mobile Flutter cross-platform yang menyajikan data klasemen langsung, jadwal pertandingan, top scorer, dan profil klub untuk 6 liga sepak bola utama melalui Football Data REST API.",
     },
     primaryTechnologies: [
       "Flutter",
@@ -265,8 +265,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     coverPosition: "top",
     status: {
-      en: "Implementation documented",
-      id: "Implementasi terdokumentasi",
+      en: "Documented Build",
+      id: "Implementasi Terdokumentasi",
     },
   },
   {
@@ -279,8 +279,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     role: { en: "Junior Game Developer", id: "Junior Game Developer" },
     summary: {
-      en: "A Unity prototype built during an internship at PT Duta Basis Dataprima, combining 78 rendered panoramas with 360 View and navigation hotspots across up to 79 scenes.",
-      id: "Purwarupa Unity yang dikembangkan saat kerja praktik di PT Duta Basis Dataprima, menggabungkan 78 panorama hasil render dengan 360 View dan navigation hotspot pada struktur hingga 79 scene.",
+      en: "Interactive Unity 360-degree architectural exploration prototype built during internship at PT Duta Basis Dataprima, integrating 78 Lumion rendered panoramas with physics raycast hotspot navigation.",
+      id: "Purwarupa eksplorasi arsitektur interaktif 360 derajat berbasis Unity saat kerja praktik di PT Duta Basis Dataprima, mengintegrasikan 78 panorama render Lumion dengan navigasi hotspot physics raycast.",
     },
     primaryTechnologies: ["Unity", "C#", "Lumion Pro", "Physics Raycast"],
     coverImage: "/assets/projects/panoramic-virtual-tour/cover.webp",
@@ -289,7 +289,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Scene pembuka purwarupa Unity Panoramic Virtual Tour",
     },
     coverPosition: "center",
-    status: { en: "Completed prototype", id: "Purwarupa selesai" },
+    status: { en: "Completed Prototype", id: "Purwarupa Selesai" },
   },
 ] as const;
 
