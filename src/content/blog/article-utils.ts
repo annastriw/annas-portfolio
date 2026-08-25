@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
-import type { BlogArticle, BlogBlock } from "./article-types.ts";
+import type { BlogArticle, BlogBlock } from "./article-types";
 
 function getBlockText(block: BlogBlock, locale: Locale): string[] {
   switch (block.type) {

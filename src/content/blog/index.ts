@@ -1,4 +1,4 @@
-import type { BlogArticle } from "./article-types.ts";
+import type { BlogArticle } from "./article-types";
 import { multiBranchErpArticle } from "./articles/building-a-multi-branch-erp.ts";
 import { speechToTextPipelineArticle } from "./articles/building-a-practical-speech-to-text-pipeline.ts";
 import { androidPrintFrameworkArticle } from "./articles/from-android-print-framework.ts";
@@ -10,7 +10,7 @@ export type {
   BlogFigureBlock,
   BlogSection,
   Localized,
-} from "./article-types.ts";
+} from "./article-types";
 export {
   calculateArticleReadingTime,
   getLocalizedArticleText,
@@ -31,14 +31,13 @@ export function getAdjacentBlogArticles(slug: string): {
   previous: BlogArticle | null;
   next: BlogArticle | null;
 } {
-  const index = blogArticles.findIndex((article) => article.slug === slug);
-
-  if (index < 0) {
+  const currentIndex = blogArticles.findIndex((article) => article.slug === slug);
+  if (currentIndex === -1) {
     return { previous: null, next: null };
   }
 
   return {
-    previous: index > 0 ? blogArticles[index - 1] : null,
-    next: index < blogArticles.length - 1 ? blogArticles[index + 1] : null,
+    previous: currentIndex > 0 ? blogArticles[currentIndex - 1] : null,
+    next: currentIndex < blogArticles.length - 1 ? blogArticles[currentIndex + 1] : null,
   };
 }

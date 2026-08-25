@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
 import { getLocalizedHref } from "@/lib/i18n/paths";
-import { navigationConfig } from "@/data/navigation";
+import { navigationConfig } from "@/content/site/navigation";
 
 interface NavLinksProps {
   locale: Locale;

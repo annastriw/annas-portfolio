@@ -38,12 +38,12 @@ export const experiencesData: ExperienceItem[] = [
       en: [
         "Developed UKG System, a multi-branch ERP web application using Next.js frontend, NestJS modular REST API backend, and MySQL database.",
         "Architected end-to-end Figma UI/UX, role-based access control, operational workflows (inventory, sales, approvals, reporting), and automated cashier stock deductions.",
-        "Executed QA automation and regression testing using Chrome DevTools automation and Playwright, and deployed to production on a Linux Ubuntu VPS.",
+        "Executed manual and automation testing using Katalon Studio, and deployed to production on a Linux Ubuntu VPS.",
       ],
       id: [
         "Mengembangkan UKG System, aplikasi ERP multi-cabang menggunakan frontend Next.js, backend REST API modular NestJS, dan basis data MySQL.",
         "Merancang alur end-to-end dari UI/UX Figma, kontrol akses berbasis peran, alur operasional (inventaris, kasir, approval, laporan), dan rekonsiliasi stok otomatis.",
-        "Menjalankan otomatisasi QA dan regression testing dengan Chrome DevTools automation dan Playwright serta melakukan deployment production pada VPS Linux Ubuntu.",
+        "Menjalankan manual testing dan automation testing dengan Katalon Studio serta melakukan deployment production pada VPS Linux Ubuntu.",
       ],
     },
     technologies: [
@@ -52,8 +52,7 @@ export const experiencesData: ExperienceItem[] = [
       "TypeScript",
       "REST API",
       "MySQL",
-      "Playwright",
-      "Chrome DevTools Automation",
+      "Katalon Studio",
       "Linux Ubuntu VPS",
       "Figma",
     ],

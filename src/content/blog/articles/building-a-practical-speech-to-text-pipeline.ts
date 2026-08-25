@@ -1,4 +1,4 @@
-import type { BlogArticle } from "../article-types.ts";
+import type { BlogArticle } from "../article-types";
 
 export const speechToTextPipelineArticle: BlogArticle = {
   index: "04",

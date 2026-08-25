@@ -78,7 +78,7 @@ test("Header and Navigation maintain 5 numbered routes, locale switcher, and the
     "utf8",
   );
   const navFile = readFileSync(
-    join(root, "src", "data", "navigation.ts"),
+    join(root, "src", "content", "site", "navigation.ts"),
     "utf8",
   );
 

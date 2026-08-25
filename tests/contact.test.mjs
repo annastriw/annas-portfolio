@@ -122,7 +122,7 @@ test("publishes localized Contact routes, metadata, sitemap entries, and current
     "utf8",
   );
   const navigation = readFileSync(
-    join(root, "src", "data", "navigation.ts"),
+    join(root, "src", "content", "site", "navigation.ts"),
     "utf8",
   );
 
