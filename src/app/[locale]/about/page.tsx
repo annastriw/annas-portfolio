@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
-import { AboutHero } from "@/components/about/about-hero";
-import { AboutBiography } from "@/components/about/about-biography";
+import { AboutProfile } from "@/components/about/about-profile";
 import { AboutEducation } from "@/components/about/about-education";
 import { AboutCertificates } from "@/components/about/about-certificates";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -66,17 +65,15 @@ export default async function AboutPage({ params }: PageProps) {
     <div className="about-page">
       <JsonLd schema={generateProfilePageJsonLd(locale as Locale)} />
 
-      {/* 01. About Hero Header & Short Personal Branding */}
-      <AboutHero locale={locale as Locale} />
+      {/* 01. [02 // ABOUT] Personal Profile & Narrative */}
+      <AboutProfile locale={locale as Locale} />
 
-      {/* 02. Concise Narrative Biography & Light Profile Record */}
-      <AboutBiography locale={locale as Locale} />
-
-      {/* 03. Academic Foundation & Bachelor Certificate Evidence */}
+      {/* 02. [01 // EDUCATION] Academic Foundation & Bachelor Certificate Evidence */}
       <AboutEducation locale={locale as Locale} />
 
-      {/* 04. Technical Certifications Archive (8 Verified Credentials) */}
+      {/* 03. [02 // CREDENTIALS] Technical Certifications Archive (8 Verified Credentials) */}
       <AboutCertificates locale={locale as Locale} />
     </div>
   );
 }
+

@@ -42,9 +42,12 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
     return certificatesData.filter((c) => c.category === selectedCategory);
   }, [selectedCategory]);
 
-  // Handle Escape key to close modal
+  // Handle Escape key & body scroll lock for modal
   useEffect(() => {
     if (!activeCertificate) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -53,7 +56,10 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [activeCertificate]);
 
   const copy = {
@@ -61,8 +67,8 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
     subtag: isId ? "SERTIFIKASI TEKNIS" : "TECHNICAL CERTIFICATIONS",
     title: isId ? "Sertifikasi Teknis" : "Technical Certifications",
     subtitle: isId
-      ? "Delapan sertifikasi teknis di bidang jaringan, artificial intelligence, database, hardware, dan IoT."
-      : "Eight technical certifications covering networking, artificial intelligence, databases, hardware, and IoT.",
+      ? "Delapan sertifikasi teknis terverifikasi di bidang jaringan komputer, kecerdasan buatan, basis data, hardware, dan IoT."
+      : "Eight verified technical certifications covering computer networking, artificial intelligence, databases, hardware, and IoT.",
     filterLabel: "[FILTER]:",
     inspectText: isId ? "Lihat Kredensial" : "Inspect Credential",
   };
@@ -83,7 +89,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
             <span className="text-(--color-border)" aria-hidden="true">
               /
             </span>
-            <span>{copy.subtag}</span>
+            <span className="uppercase tracking-wider">{copy.subtag}</span>
           </div>
 
           <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
@@ -139,7 +145,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
             return (
               <article
                 key={cert.id}
-                className="border border-(--color-border) bg-(--color-background) flex flex-col hover:border-(--color-accent) transition-colors duration-200"
+                className="border border-(--color-border) bg-(--color-background) flex flex-col hover:border-(--color-accent) transition-colors duration-200 rounded-[2px] overflow-hidden"
               >
                 <button
                   type="button"
@@ -248,3 +254,4 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
     </section>
   );
 }
+

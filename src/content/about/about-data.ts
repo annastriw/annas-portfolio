@@ -1,6 +1,33 @@
 import type { Locale } from "@/lib/i18n/config";
 
+export interface ProfileMetadata {
+  role: Record<Locale, string>;
+  education: Record<Locale, string>;
+  gpa: string;
+  status: Record<Locale, string>;
+  location: Record<Locale, string>;
+}
+
+export interface ProfileData {
+  tag: string;
+  subtag: Record<Locale, string>;
+  name: string;
+  headline: Record<Locale, string>;
+  lead: Record<Locale, string>;
+  paragraphs: Record<Locale, string[]>;
+  portrait: {
+    assetPath: string;
+    alt: Record<Locale, string>;
+    figureLabel: string;
+    caption: Record<Locale, string>;
+  };
+  metadata: ProfileMetadata;
+}
+
 export interface EducationData {
+  tag: string;
+  subtag: Record<Locale, string>;
+  title: Record<Locale, string>;
   institution: Record<Locale, string>;
   degree: Record<Locale, string>;
   fieldOfStudy: Record<Locale, string>;
@@ -8,7 +35,11 @@ export interface EducationData {
   gpa: string;
   positioning: Record<Locale, string>;
   location: Record<Locale, string>;
+  summary: Record<Locale, string>;
   certificateAsset: string;
+  figureLabel: Record<Locale, string>;
+  documentCaption: Record<Locale, string>;
+  inspectLabel: Record<Locale, string>;
 }
 
 export interface CertificateData {
@@ -20,26 +51,44 @@ export interface CertificateData {
   badge: string;
 }
 
-export const biographyData = {
-  intro: {
-    en: "Software Engineer, Full-Stack Developer, and ML Engineer with a Computer Engineering background from Diponegoro University, focused on building practical end-to-end digital products.",
-    id: "Software Engineer, Full-Stack Developer, dan ML Engineer dengan latar belakang Teknik Komputer Universitas Diponegoro yang berfokus pada pengembangan produk digital secara end-to-end.",
+export const profileData: ProfileData = {
+  tag: "[02 // ABOUT]",
+  subtag: {
+    en: "PERSONAL PROFILE",
+    id: "PROFIL PRIBADI",
   },
+  name: "Annas Tri Widagdo",
   headline: {
     en: "Software Engineer · Full-Stack Developer · ML Engineer",
     id: "Software Engineer · Full-Stack Developer · ML Engineer",
   },
+  lead: {
+    en: "Computer Engineering graduate from Diponegoro University building robust full-stack web applications and applied machine learning systems.",
+    id: "Lulusan Teknik Komputer Universitas Diponegoro yang mengembangkan aplikasi web full-stack yang andal dan sistem machine learning terapan.",
+  },
   paragraphs: {
     en: [
-      "I build digital products from interface and backend services to machine learning integration, with a focus on solving real user and operational needs.",
-      "My approach is simple: keep the experience clear, choose technology for a practical reason, and test the system before delivery.",
+      "I am a Computer Engineering graduate from Diponegoro University (GPA 3.79 / 4.00) specializing in full-stack software development and applied machine learning. My engineering background focuses on building scalable web architectures, production-grade backend services, and practical ML pipelines that solve operational problems.",
+      "My approach emphasizes clean code structure, predictable system workflows, and thorough testing. From responsive user interfaces to backend API design and hardware printing integrations, I deliver dependable digital solutions engineered for long-term maintainability.",
     ],
     id: [
-      "Saya membangun produk digital mulai dari antarmuka, backend, hingga integrasi machine learning dengan fokus pada kebutuhan pengguna dan proses kerja nyata.",
-      "Pendekatan saya sederhana: membuat alur yang jelas, memilih teknologi sesuai kebutuhan, dan memastikan sistem telah diuji sebelum digunakan.",
+      "Saya lulusan Teknik Komputer dari Universitas Diponegoro (IPK 3.79 / 4.00) yang berfokus pada software engineering, full-stack web development, dan machine learning terapan. Latar belakang rekayasa saya berfokus pada pembangunan arsitektur web yang scalable, layanan backend yang tangguh, serta pipeline ML praktis untuk kebutuhan operasional nyata.",
+      "Pendekatan rekayasa saya mengutamakan struktur kode yang bersih, alur workflow yang jelas, serta pengujian sistem yang menyeluruh. Mulai dari antarmuka pengguna responsif, perancangan API backend, hingga integrasi hardware thermal printer, saya menghasilkan solusi digital yang andal dan mudah dirawat.",
     ],
   },
-  specifications: {
+  portrait: {
+    assetPath: "/assets/profile/pas-foto.webp",
+    alt: {
+      en: "Annas Tri Widagdo — Software Engineer, Full-Stack Developer & ML Engineer",
+      id: "Annas Tri Widagdo — Software Engineer, Full-Stack Developer & ML Engineer",
+    },
+    figureLabel: "FIG.01 // PORTRAIT RECORD",
+    caption: {
+      en: "ANNAS TRI WIDAGDO, S.T. · KLATEN, ID",
+      id: "ANNAS TRI WIDAGDO, S.T. · KLATEN, ID",
+    },
+  },
+  metadata: {
     role: {
       en: "Software Engineer · Full-Stack Developer · ML Engineer",
       id: "Software Engineer · Full-Stack Developer · ML Engineer",
@@ -60,7 +109,24 @@ export const biographyData = {
   },
 };
 
+// Backward-compatible alias for existing consumers while migrating
+export const biographyData = {
+  intro: profileData.lead,
+  headline: profileData.headline,
+  paragraphs: profileData.paragraphs,
+  specifications: profileData.metadata,
+};
+
 export const educationData: EducationData = {
+  tag: "[01 // EDUCATION]",
+  subtag: {
+    en: "ACADEMIC FOUNDATION",
+    id: "LATAR BELAKANG AKADEMIK",
+  },
+  title: {
+    en: "Education",
+    id: "Pendidikan",
+  },
   institution: {
     en: "Diponegoro University",
     id: "Universitas Diponegoro",
@@ -86,7 +152,23 @@ export const educationData: EducationData = {
     en: "Semarang, Central Java, Indonesia",
     id: "Semarang, Jawa Tengah, Indonesia",
   },
+  summary: {
+    en: "Completed undergraduate degree in Computer Engineering with academic focus on software engineering, computer networks, distributed systems, and applied machine learning.",
+    id: "Menyelesaikan pendidikan Sarjana Teknik Komputer dengan fokus akademik pada rekayasa perangkat lunak, jaringan komputer, sistem terdistribusi, dan machine learning terapan.",
+  },
   certificateAsset: "/assets/certificates/bachelor_certificate.webp",
+  figureLabel: {
+    en: "FIG.01 // BACHELOR CERTIFICATE",
+    id: "FIG.01 // IJAZAH SARJANA TEKNIK",
+  },
+  documentCaption: {
+    en: "Diponegoro University · Faculty of Engineering · Computer Engineering · 2026",
+    id: "Universitas Diponegoro · Fakultas Teknik · Teknik Komputer · 2026",
+  },
+  inspectLabel: {
+    en: "Inspect Document",
+    id: "Lihat Dokumen",
+  },
 };
 
 export const certificatesData: CertificateData[] = [

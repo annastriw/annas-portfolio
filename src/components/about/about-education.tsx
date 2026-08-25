@@ -13,10 +13,14 @@ interface AboutEducationProps {
 export function AboutEducation({ locale }: AboutEducationProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isId = locale === "id";
+  const data = educationData;
 
-  // Handle Escape key to close modal
+  // Handle Escape key & body scroll lock for modal
   useEffect(() => {
     if (!isModalOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -25,27 +29,22 @@ export function AboutEducation({ locale }: AboutEducationProps) {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isModalOpen]);
 
   const copy = {
-    tag: isId ? "[01 // PENDIDIKAN]" : "[01 // EDUCATION]",
-    subtag: isId ? "LATAR BELAKANG AKADEMIK" : "ACADEMIC FOUNDATION",
-    title: isId ? "Pendidikan" : "Education",
-    figLabel: isId ? "FIG.01 // SERTIFIKAT KELULUSAN" : "FIG.01 // BACHELOR CERTIFICATE",
-    inspectLabel: isId ? "Lihat Dokumen" : "Inspect Document",
-    docCaption: isId
-      ? "Universitas Diponegoro · Teknik Komputer · 2026"
-      : "Diponegoro University · Computer Engineering · 2026",
     metaLine: isId
-      ? `IPK ${educationData.gpa} · ${educationData.positioning[locale]}`
-      : `GPA ${educationData.gpa} · ${educationData.positioning[locale]}`,
+      ? `IPK ${data.gpa} · ${data.positioning[locale]}`
+      : `GPA ${data.gpa} · ${data.positioning[locale]}`,
   };
 
   return (
     <section
       className="about-education-section py-8 sm:py-12 md:py-14 border-b border-(--color-border)"
-      aria-label={copy.title}
+      aria-label={data.title[locale]}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
         {/* Section Header */}
@@ -54,14 +53,14 @@ export function AboutEducation({ locale }: AboutEducationProps) {
           className="flex flex-col gap-2 max-w-3xl"
         >
           <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
-            <span className="font-semibold text-(--color-accent)">{copy.tag}</span>
+            <span className="font-semibold text-(--color-accent)">{data.tag}</span>
             <span className="text-(--color-border)" aria-hidden="true">
               /
             </span>
-            <span>{copy.subtag}</span>
+            <span className="uppercase tracking-wider">{data.subtag[locale]}</span>
           </div>
           <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
-            {copy.title}
+            {data.title[locale]}
           </h2>
         </ScrollReveal>
 
@@ -75,16 +74,16 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             {/* Degree & Field of Study */}
             <div className="flex flex-col gap-1">
               <h3 className="font-serif text-2xl sm:text-3xl text-(--color-foreground) font-normal m-0 tracking-tight">
-                {educationData.degree[locale]} — {educationData.fieldOfStudy[locale]}
+                {data.degree[locale]} — {data.fieldOfStudy[locale]}
               </h3>
               <p className="font-sans text-base sm:text-lg font-medium text-(--color-foreground) m-0">
-                {educationData.institution[locale]}
+                {data.institution[locale]}
               </p>
             </div>
 
             {/* Concise Meta Row */}
             <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-(--color-muted)">
-              <span>{educationData.period[locale]}</span>
+              <span>{data.period[locale]}</span>
               <span className="text-(--color-border)" aria-hidden="true">
                 /
               </span>
@@ -96,8 +95,13 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             {/* Location Meta */}
             <div className="flex items-center gap-2 font-mono text-xs text-(--color-muted)">
               <span className="text-(--color-accent)" aria-hidden="true">📍</span>
-              <span>{educationData.location[locale]}</span>
+              <span>{data.location[locale]}</span>
             </div>
+
+            {/* Summary Note */}
+            <p className="text-sm sm:text-base text-(--color-muted) leading-relaxed m-0 pt-1 max-w-xl">
+              {data.summary[locale]}
+            </p>
           </ScrollReveal>
 
           {/* Right Column: Bachelor Certificate Document Evidence */}
@@ -107,7 +111,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
           >
             <div className="flex justify-between items-center font-mono text-[11px] text-(--color-muted) px-0.5">
               <span className="font-semibold text-(--color-foreground)">
-                {copy.figLabel}
+                {data.figureLabel[locale]}
               </span>
               <span className="text-(--color-accent)">2026</span>
             </div>
@@ -116,12 +120,12 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="group relative border border-(--color-border) bg-(--color-background) aspect-[16/11] overflow-hidden cursor-pointer hover:border-(--color-accent) transition-all duration-300 text-left p-0 w-full"
-              aria-label={`${copy.inspectLabel}: ${educationData.degree[locale]}`}
+              className="group relative border border-(--color-border) bg-(--color-background) aspect-[16/11] overflow-hidden cursor-pointer hover:border-(--color-accent) transition-all duration-300 text-left p-0 w-full rounded-[2px]"
+              aria-label={`${data.inspectLabel[locale]}: ${data.degree[locale]}`}
             >
               <Image
-                src={educationData.certificateAsset}
-                alt={`Ijazah ${educationData.degree[locale]} — ${educationData.institution[locale]}`}
+                src={data.certificateAsset}
+                alt={`Ijazah ${data.degree[locale]} — ${data.institution[locale]}`}
                 width={700}
                 height={480}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px"
@@ -135,13 +139,13 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                   ⊕
                 </span>
                 <span className="font-mono text-xs font-semibold uppercase tracking-wider">
-                  {copy.inspectLabel}
+                  {data.inspectLabel[locale]}
                 </span>
               </div>
             </button>
 
             <figcaption className="font-mono text-[11px] text-(--color-muted) px-1">
-              {copy.docCaption}
+              {data.documentCaption[locale]}
             </figcaption>
           </ScrollReveal>
         </div>
@@ -153,7 +157,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
           className="cert-modal-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-label={copy.figLabel}
+          aria-label={data.figureLabel[locale]}
           onClick={() => setIsModalOpen(false)}
         >
           <div
@@ -166,10 +170,10 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                   {isId ? "BUKTI AKADEMIK TERVERIFIKASI" : "VERIFIED ACADEMIC EVIDENCE"}
                 </span>
                 <h3 className="cert-modal-heading">
-                  {educationData.degree[locale]} — {educationData.fieldOfStudy[locale]}
+                  {data.degree[locale]} — {data.fieldOfStudy[locale]}
                 </h3>
                 <p className="cert-modal-issuer">
-                  {educationData.institution[locale]} · {educationData.period[locale]}
+                  {data.institution[locale]} · {data.period[locale]}
                 </p>
               </div>
 
@@ -185,8 +189,8 @@ export function AboutEducation({ locale }: AboutEducationProps) {
 
             <div className="cert-modal-image-wrapper">
               <Image
-                src={educationData.certificateAsset}
-                alt={`Ijazah ${educationData.degree[locale]} — ${educationData.institution[locale]}`}
+                src={data.certificateAsset}
+                alt={`Ijazah ${data.degree[locale]} — ${data.institution[locale]}`}
                 width={1600}
                 height={1100}
                 sizes="(max-width: 1200px) 100vw, 1200px"
@@ -200,3 +204,4 @@ export function AboutEducation({ locale }: AboutEducationProps) {
     </section>
   );
 }
+

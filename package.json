@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node tests/home-telemetry.test.mjs && node tests/blog-articles.test.mjs && node tests/contact.test.mjs && node tests/project-archive.test.mjs && node tests/project-case-studies.test.mjs && node scripts/validate-content.mjs",
+    "test": "node tests/home-telemetry.test.mjs && node tests/about-editorial.test.mjs && node tests/blog-articles.test.mjs && node tests/contact.test.mjs && node tests/project-archive.test.mjs && node tests/project-case-studies.test.mjs && node scripts/validate-content.mjs",
     "validate:content": "node scripts/validate-content.mjs"
   },
   "dependencies": {
