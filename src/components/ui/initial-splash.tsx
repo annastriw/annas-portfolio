@@ -14,6 +14,11 @@ function subscribe() {
 function getSplashEligibility(): boolean {
   if (typeof window === "undefined") return true;
   try {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (prefersReducedMotion) return false;
+
     const alreadyShown = window.sessionStorage.getItem("annas_splash_shown");
     return !alreadyShown;
   } catch {
@@ -25,14 +30,14 @@ function getServerSplashEligibility(): boolean {
   return true;
 }
 
-const SPLASH_TOTAL_DURATION_MS = 6000;
-const TYPING_START_MS = 500;
-const TYPING_DURATION_MS = 1500; // 500ms to 2000ms (~88ms per char)
-const PROGRESS_START_MS = 1000;
-const PROGRESS_DURATION_MS = 3300; // 1000ms to 4300ms
-const HOLD_START_MS = 4300;
-const TRANSIT_START_MS = 5000;
-const REVEAL_PAGE_MS = 5500;
+const SPLASH_TOTAL_DURATION_MS = 2700;
+const TYPING_START_MS = 200;
+const TYPING_DURATION_MS = 900; // 200ms to 1100ms (~53ms per char)
+const PROGRESS_START_MS = 400;
+const PROGRESS_DURATION_MS = 1400; // 400ms to 1800ms
+const HOLD_START_MS = 1800;
+const TRANSIT_START_MS = 2100;
+const REVEAL_PAGE_MS = 2300;
 
 export function InitialSplash({ locale = "en" }: InitialSplashProps) {
   const isEligible = useSyncExternalStore(
@@ -52,7 +57,7 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
 
   useEffect(() => {
     if (!isEligible) {
-      document.documentElement.classList.remove("splash-active");
+      document.documentElement.classList.remove("splash-active", "splash-revealing");
       document.documentElement.classList.add("splash-dismissed");
       return;
     }
@@ -61,53 +66,15 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
     document.documentElement.classList.add("splash-active");
     document.documentElement.classList.remove("splash-dismissed");
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (prefersReducedMotion) {
-      const initTimer = setTimeout(() => {
-        setTypedChars(fullText.length);
-        setProgress(100);
-        setStage("hold");
-      }, 0);
-
-      const revealTimer = setTimeout(() => {
-        document.documentElement.classList.add("splash-revealing");
-      }, 350);
-
-      const transitTimer = setTimeout(() => {
-        setStage("transit");
-      }, 400);
-
-      const doneTimer = setTimeout(() => {
-        try {
-          window.sessionStorage.setItem("annas_splash_shown", "1");
-        } catch {
-          // Ignored
-        }
-        document.documentElement.classList.remove("splash-active", "splash-revealing");
-        document.documentElement.classList.add("splash-dismissed");
-        setStage("done");
-      }, 700);
-
-      return () => {
-        clearTimeout(initTimer);
-        clearTimeout(revealTimer);
-        clearTimeout(transitTimer);
-        clearTimeout(doneTimer);
-      };
-    }
-
-    // Standard 6-Second Editorial Folio Choreography (REV-02-E):
-    // 0–500ms: Editorial folio canvas & masthead metadata appear (stage "init")
-    // 500–2000ms: Controlled typesetting character reveal into stable baseline (~88ms/char, stage "typing")
-    // 1000–4300ms: Thin publication folio progress rule advances calmly across the track
-    // 2000–4300ms: Completed wordmark remains clearly visible while folio rule completes
-    // 4300–5000ms: Editorial composition reaches complete state hold (stage "hold")
-    // 5000–5900ms: Splash wordmark smoothly glides via FLIP to Header brand position (stage "transit")
-    // 5500–6000ms: Page content and Header fade in seamlessly under the landing wordmark
-    // 6000ms: Done and fully unmounted (stage "done")
+    // Standard 2.7-Second Editorial Folio Choreography (REV-03):
+    // 0–200ms: Editorial folio canvas & masthead metadata appear (stage "init")
+    // 200–1100ms: Controlled typesetting character reveal into stable baseline (~53ms/char, stage "typing")
+    // 400–1800ms: Thin publication folio progress rule advances smoothly across the track
+    // 1100–1800ms: Completed wordmark remains clearly visible while folio rule completes
+    // 1800–2100ms: Editorial composition reaches complete state hold (stage "hold")
+    // 2100–2550ms: Splash wordmark smoothly glides via FLIP to Header brand position (stage "transit")
+    // 2300–2700ms: Page content and Header fade in seamlessly under the landing wordmark
+    // 2700ms: Done and fully unmounted (stage "done")
 
     const typingStartTimeout = setTimeout(() => {
       setStage("typing");
@@ -135,7 +102,7 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
         if (rawProgress >= 100) {
           clearInterval(progressInterval);
         }
-      }, 30);
+      }, 25);
     }, PROGRESS_START_MS);
 
     const holdTimeout = setTimeout(() => {

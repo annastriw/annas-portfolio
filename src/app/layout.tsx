@@ -86,7 +86,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=sessionStorage.getItem('annas_splash_shown');if(s){document.documentElement.classList.add('splash-dismissed');}else{document.documentElement.classList.add('splash-active');}}catch(e){}})();`,
+            __html: `(function(){try{var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;var s=sessionStorage.getItem('annas_splash_shown');if(s||rm){document.documentElement.classList.add('splash-dismissed');}else{document.documentElement.classList.add('splash-active');}}catch(e){}})();`,
           }}
         />
       </head>

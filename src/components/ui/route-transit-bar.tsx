@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -30,37 +30,36 @@ const routeInfoMap: Record<
 
 export function RouteTransitBar({ locale = "en" }: RouteTransitBarProps) {
   const pathname = usePathname();
+  const [prevPathname, setPrevPathname] = useState(pathname);
   const [isNavigating, setIsNavigating] = useState(false);
-  const [currentRoute, setCurrentRoute] = useState<{
-    code: string;
-    label: string;
-  }>({ code: "01", label: "HOME" });
-  const firstRender = useRef(true);
+  const [navKey, setNavKey] = useState(0);
+
   const activeLocale = locale in routeInfoMap ? locale : "en";
   const routes = routeInfoMap[activeLocale];
 
-  useEffect(() => {
-    // Ignore initial mount
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
-
-    let routeKey = "home";
-    if (pathname.includes("/about")) routeKey = "about";
-    else if (pathname.includes("/projects")) routeKey = "projects";
-    else if (pathname.includes("/blog")) routeKey = "blog";
-    else if (pathname.includes("/contact")) routeKey = "contact";
-
-    setCurrentRoute(routes[routeKey] || routes.home);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setIsNavigating(true);
+    setNavKey((k) => k + 1);
+  }
+
+  let routeKey = "home";
+  if (pathname.includes("/about")) routeKey = "about";
+  else if (pathname.includes("/projects")) routeKey = "projects";
+  else if (pathname.includes("/blog")) routeKey = "blog";
+  else if (pathname.includes("/contact")) routeKey = "contact";
+
+  const currentRoute = routes[routeKey] || routes.home;
+
+  useEffect(() => {
+    if (!isNavigating) return;
 
     const timer = setTimeout(() => {
       setIsNavigating(false);
-    }, 1550);
+    }, 400);
 
     return () => clearTimeout(timer);
-  }, [pathname, routes]);
+  }, [isNavigating, navKey]);
 
   if (!isNavigating) return null;
 

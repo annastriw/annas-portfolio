@@ -18,6 +18,7 @@ export function MobileNav({ locale }: MobileNavProps) {
   const pathname = usePathname();
   const [prevPathname, setPrevPathname] = useState(pathname);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   const config = navigationConfig[locale];
   const isId = locale === "id";
 
@@ -27,17 +28,52 @@ export function MobileNav({ locale }: MobileNavProps) {
     setIsOpen(false);
   }
 
-  // Lock body scroll, handle Escape key and window resize
+  // Lock body scroll, manage focus trap, handle Escape key and window resize
   useEffect(() => {
     if (!isOpen) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Focus the first link or dialog on open
+    const sheetEl = sheetRef.current;
+    const focusableElements = sheetEl?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    );
+    if (focusableElements && focusableElements.length > 0) {
+      focusableElements[0].focus();
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.preventDefault();
         setIsOpen(false);
         triggerRef.current?.focus();
+        return;
+      }
+
+      if (e.key === "Tab" && sheetEl) {
+        const focusables = Array.from(
+          sheetEl.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        );
+        if (focusables.length === 0) return;
+
+        const firstEl = focusables[0];
+        const lastEl = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstEl) {
+            e.preventDefault();
+            lastEl.focus();
+          }
+        } else {
+          if (document.activeElement === lastEl) {
+            e.preventDefault();
+            firstEl.focus();
+          }
+        }
       }
     };
 
@@ -80,6 +116,7 @@ export function MobileNav({ locale }: MobileNavProps) {
       {/* Editorial Table of Contents Full-Screen / Full-Width Sheet */}
       {isOpen && (
         <div
+          ref={sheetRef}
           id="mobile-nav-sheet"
           className="fixed inset-0 top-[49px] z-50 bg-(--color-background) border-t border-(--header-border) overflow-y-auto p-5 sm:p-8 flex flex-col justify-between gap-8 animate-in fade-in slide-in-from-top-2 duration-200"
           role="dialog"

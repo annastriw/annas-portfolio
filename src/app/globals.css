@@ -195,7 +195,7 @@ html.splash-active.splash-revealing .site-main,
 html.splash-active.splash-revealing .site-footer {
   opacity: 1;
   pointer-events: auto;
-  transition: opacity 0.55s var(--ease-editorial), transform 0.55s var(--ease-editorial);
+  transition: opacity 0.4s var(--ease-editorial), transform 0.4s var(--ease-editorial);
 }
 
 html.splash-dismissed .initial-splash-overlay {
@@ -218,7 +218,7 @@ html.splash-dismissed .site-footer {
   background: var(--background);
   color: var(--foreground);
   overflow: hidden;
-  transition: background-color 0.9s var(--ease-editorial), opacity 0.9s var(--ease-editorial);
+  transition: background-color 0.45s var(--ease-editorial), opacity 0.45s var(--ease-editorial);
 }
 
 .stage-transit {
@@ -402,11 +402,11 @@ html.splash-dismissed .site-footer {
 
 .splash-element-fade {
   opacity: 0 !important;
-  transform: translateY(8px) !important;
+  transform: translateY(6px) !important;
 }
 
 .brand-in-transit {
-  transition: transform 0.55s var(--ease-editorial);
+  transition: transform 0.45s var(--ease-editorial);
 }
 
 @media (max-width: 640px) {
@@ -439,7 +439,7 @@ html.splash-dismissed .site-footer {
 }
 
 /* ==========================================================================
-   Top-Right Route Loading Indicator (1.55s Transit Pill)
+   Top-Right Route Loading Indicator (Snappy 400ms Transit Pill)
    ========================================================================== */
 
 .top-right-route-loader {
@@ -448,7 +448,7 @@ html.splash-dismissed .site-footer {
   inset-inline-end: 1.25rem;
   z-index: 999;
   pointer-events: none;
-  animation: pillEntrance 0.3s var(--ease-editorial) forwards;
+  animation: pillEntrance 0.16s var(--ease-editorial) forwards;
 }
 
 .route-loader-pill {
@@ -530,7 +530,7 @@ html.dark .route-loader-pill {
   inline-size: 100%;
   background: var(--accent);
   transform-origin: left center;
-  animation: routeBarSweep 1.55s var(--ease-editorial) forwards;
+  animation: routeBarSweep 0.38s var(--ease-editorial) forwards;
 }
 
 @keyframes routeBarSweep {
@@ -538,12 +538,8 @@ html.dark .route-loader-pill {
     transform: scaleX(0);
     opacity: 1;
   }
-  40% {
-    transform: scaleX(0.65);
-    opacity: 1;
-  }
-  80% {
-    transform: scaleX(0.92);
+  50% {
+    transform: scaleX(0.7);
     opacity: 1;
   }
   100% {
@@ -555,7 +551,7 @@ html.dark .route-loader-pill {
 @keyframes pillEntrance {
   0% {
     opacity: 0;
-    transform: translateY(-8px) scale(0.96);
+    transform: translateY(-6px) scale(0.97);
   }
   100% {
     opacity: 1;
@@ -1600,25 +1596,25 @@ html.dark .route-loader-pill {
 }
 
 .animate-editorial-mask {
-  animation: editorial-mask-reveal 0.6s var(--ease-editorial) forwards;
+  animation: editorial-mask-reveal var(--duration-enter) var(--ease-editorial) forwards;
 }
 
 .animate-editorial-fade {
-  animation: editorial-fade-up 0.5s var(--ease-editorial) forwards;
+  animation: editorial-fade-up var(--duration-normal) var(--ease-editorial) forwards;
 }
 
 .animate-editorial-rule-x {
   transform-origin: left center;
-  animation: editorial-rule-draw-x 0.7s var(--ease-editorial) forwards;
+  animation: editorial-rule-draw-x 0.55s var(--ease-editorial) forwards;
 }
 
 .animate-editorial-spine-y {
   transform-origin: top center;
-  animation: editorial-spine-draw-y 0.8s var(--ease-editorial) forwards;
+  animation: editorial-spine-draw-y 0.65s var(--ease-editorial) forwards;
 }
 
 .animate-subtle-beacon {
-  animation: subtle-beacon-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: subtle-beacon-pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* ==========================================================================

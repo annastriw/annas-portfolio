@@ -8,20 +8,28 @@ interface BackToTopProps {
 
 export function BackToTop({ label }: BackToTopProps) {
   const returnToTop = () => {
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     window.scrollTo({
       top: 0,
       behavior: reduceMotion ? "auto" : "smooth",
     });
 
-    document.getElementById("main-content")?.focus({ preventScroll: true });
+    const main = document.getElementById("main-content");
+    if (main) {
+      main.focus({ preventScroll: true });
+    }
   };
 
   return (
-    <button className={styles.backToTop} onClick={returnToTop} type="button">
+    <button
+      className={styles.backToTop}
+      onClick={returnToTop}
+      type="button"
+      aria-label={label}
+    >
       <span>{label}</span>
       <span className={styles.backToTopArrow} aria-hidden="true">
         {"\u2191"}
