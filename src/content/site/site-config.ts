@@ -1,20 +1,8 @@
 import type { Locale } from "@/lib/i18n/config";
-import {
-  mainNavigation,
-  navigationLabels,
-  type NavItem,
-  type NavigationLabels,
-} from "./navigation";
+import { navigationConfig } from "@/data/navigation";
+import type { NavItem, SocialLink, NavigationConfig } from "@/types/navigation";
 import { siteIdentity } from "./identity";
 import { siteContact } from "./contact";
-
-export interface SocialLink {
-  key: string;
-  label: string;
-  href: string;
-  username: string;
-  isExternal: boolean;
-}
 
 export interface SiteConfig {
   brand: string;
@@ -43,7 +31,7 @@ export interface SiteConfig {
   };
   mainNav: Record<Locale, NavItem[]>;
   socialLinks: SocialLink[];
-  labels: Record<Locale, NavigationLabels>;
+  labels: Record<Locale, NavigationConfig["labels"]>;
 }
 
 export const siteConfig: SiteConfig = {
@@ -62,29 +50,13 @@ export const siteConfig: SiteConfig = {
     timezone: siteContact.timezone,
     status: siteContact.status.en,
   },
-  mainNav: mainNavigation,
-  socialLinks: [
-    {
-      key: "github",
-      label: "GitHub",
-      href: siteContact.gitHubUrl,
-      username: siteContact.gitHub,
-      isExternal: true,
-    },
-    {
-      key: "linkedin",
-      label: "LinkedIn",
-      href: siteContact.linkedInUrl,
-      username: siteContact.linkedIn,
-      isExternal: true,
-    },
-    {
-      key: "email",
-      label: "Email",
-      href: siteContact.emailUrl,
-      username: siteContact.email,
-      isExternal: false,
-    },
-  ],
-  labels: navigationLabels,
+  mainNav: {
+    en: navigationConfig.en.mainNav,
+    id: navigationConfig.id.mainNav,
+  },
+  socialLinks: navigationConfig.en.socialLinks,
+  labels: {
+    en: navigationConfig.en.labels,
+    id: navigationConfig.id.labels,
+  },
 };
