@@ -12,12 +12,21 @@ export function ContactPage({ locale }: ContactPageProps) {
   const copy = contactCopy[locale];
   const channels = [
     {
+      index: "01",
+      label: "Email",
+      value: siteContact.email,
+      href: siteContact.emailUrl,
+      external: false,
+    },
+    {
+      index: "02",
       label: "LinkedIn",
       value: siteContact.linkedIn,
       href: siteContact.linkedInUrl,
       external: true,
     },
     {
+      index: "03",
       label: "GitHub",
       value: siteContact.gitHub,
       href: siteContact.gitHubUrl,
@@ -28,11 +37,18 @@ export function ContactPage({ locale }: ContactPageProps) {
   return (
     <div className={styles.page}>
       <div className={`${styles.container} ${styles.contactLayout}`}>
+        {/* Left Column: Editorial Masthead & Direct Channels */}
         <div className={styles.leftColumn}>
           <header className={styles.intro}>
             <ScrollReveal animationClass="animate-editorial-fade">
               <div className={styles.introInner}>
-                <p className={styles.pageLabel}>{copy.pageLabel}</p>
+                <div className={styles.tagGroup}>
+                  <span className={styles.pageLabel}>{copy.pageLabel}</span>
+                  <span className={styles.tagDivider} aria-hidden="true">
+                    /
+                  </span>
+                  <span className={styles.archiveTag}>{copy.archiveTag}</span>
+                </div>
                 <h1 className={styles.title}>{copy.title}</h1>
                 <p className={styles.lead}>{copy.intro}</p>
               </div>
@@ -49,39 +65,7 @@ export function ContactPage({ locale }: ContactPageProps) {
                 {copy.channelsTitle}
               </h2>
               <ol className={styles.channelList}>
-                <li className={styles.channelRow}>
-                  <div className={styles.emailChannel}>
-                    <span className={styles.channelIndex}>01</span>
-                    <div className={styles.channelIdentity}>
-                      <span className={styles.channelLabel}>Email</span>
-                      <span className={styles.channelValue}>{siteContact.email}</span>
-                    </div>
-                    <div className={styles.channelActions}>
-                      <a
-                        className={styles.channelAction}
-                        href={siteContact.gmailComposeUrl}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        <span>{copy.openGmail}</span>
-                        <span className={styles.channelArrow} aria-hidden="true">
-                          {"\u2197"}
-                        </span>
-                        <span className="sr-only"> ({copy.gmailCue})</span>
-                      </a>
-                      <a
-                        className={styles.channelAction}
-                        href={siteContact.emailUrl}
-                      >
-                        <span>{copy.openEmailApp}</span>
-                        <span className={styles.channelArrow} aria-hidden="true">
-                          {"\u2192"}
-                        </span>
-                      </a>
-                    </div>
-                  </div>
-                </li>
-                {channels.map((channel, index) => (
+                {channels.map((channel) => (
                   <li className={styles.channelRow} key={channel.label}>
                     <a
                       className={styles.channelLink}
@@ -90,16 +74,22 @@ export function ContactPage({ locale }: ContactPageProps) {
                       target={channel.external ? "_blank" : undefined}
                     >
                       <span className={styles.channelIndex}>
-                        {String(index + 2).padStart(2, "0")}
+                        {channel.index}
                       </span>
                       <span className={styles.channelIdentity}>
-                        <span className={styles.channelLabel}>{channel.label}</span>
-                        <span className={styles.channelValue}>{channel.value}</span>
+                        <span className={styles.channelLabel}>
+                          {channel.label}
+                        </span>
+                        <span className={styles.channelValue}>
+                          {channel.value}
+                        </span>
                       </span>
                       <span className={styles.channelArrow} aria-hidden="true">
                         {"\u2197"}
                       </span>
-                      <span className="sr-only"> ({copy.externalCue})</span>
+                      {channel.external && (
+                        <span className="sr-only"> ({copy.externalCue})</span>
+                      )}
                     </a>
                   </li>
                 ))}
@@ -108,14 +98,17 @@ export function ContactPage({ locale }: ContactPageProps) {
           </ScrollReveal>
         </div>
 
+        {/* Right Column: Email Draft Composer */}
         <ScrollReveal
           animationClass="animate-editorial-fade"
           className={styles.composerColumn}
-          delayMs={80}
+          delayMs={120}
         >
           <section aria-labelledby="email-composer-title">
             <div className={styles.composerHeader}>
-              <p className={styles.composerLabel}>[{copy.composerLabel}]</p>
+              <div className={styles.composerTagGroup}>
+                <span className={styles.composerLabel}>{copy.composerLabel}</span>
+              </div>
               <h2 className={styles.composerTitle} id="email-composer-title">
                 {copy.composerTitle}
               </h2>

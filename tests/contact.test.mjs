@@ -55,6 +55,7 @@ test("provides four concise editable draft templates in both locales", () => {
 
     assert.ok(contactCopy[locale].title.trim());
     assert.ok(contactCopy[locale].intro.trim());
+    assert.match(contactCopy[locale].pageLabel, /^\[05 \/\/ (CONTACT|KONTAK)\]$/);
     assert.doesNotMatch(
       JSON.stringify({ copy: contactCopy[locale], templates: contactTemplates[locale] }),
       /[â€”â€“]/,

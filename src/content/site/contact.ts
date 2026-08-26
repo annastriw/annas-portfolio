@@ -96,47 +96,53 @@ export const siteContact: ContactInfo = {
 
 export const contactCopy = {
   en: {
-    pageLabel: "[CONTACT // 01]",
+    pageLabel: "[05 // CONTACT]",
+    archiveTag: "TECHNICAL EDITORIAL ARCHIVE",
     title: "Open to Collaboration",
     intro:
-      "Have a project, role, or technical opportunity in mind? Feel free to reach out.",
-    channelsTitle: "Direct channels",
-    composerLabel: "CORRESPONDENCE / DRAFT",
-    composerTitle: "Prepare an email",
-    composerIntro: "Choose a template, then edit the subject and message.",
+      "Have a project, role, or technical inquiry in mind? Feel free to reach out directly through any channel or draft an email below.",
+    channelsTitle: "Direct Channels",
+    composerLabel: "[EMAIL DRAFT]",
+    composerTitle: "Prepare an Email",
+    composerIntro:
+      "Select a template to start, or compose your own subject and message directly.",
     templateLegend: "Template",
     selectedTemplate: "Selected",
     subjectLabel: "Subject",
     subjectPlaceholder: "Add a concise subject",
     messageLabel: "Message",
-    messagePlaceholder: "Write your message to Annas",
+    messagePlaceholder: "Write your message to Annas...",
     openGmail: "Open in Gmail",
     openEmailApp: "Open in Email App",
     clearDraft: "Clear draft",
-    helper: "Choose Gmail or your default email application to continue with this draft.",
+    helper:
+      "Drafts open directly in Gmail or your default email application. No messages are sent through this website.",
     externalCue: "opens in a new tab",
     gmailCue: "opens Gmail in a new tab",
     formLabel: "Email draft composer",
   },
   id: {
-    pageLabel: "[KONTAK // 01]",
+    pageLabel: "[05 // KONTAK]",
+    archiveTag: "ARSIP TEKNIS & REKAYASA",
     title: "Terbuka untuk Kolaborasi",
     intro:
-      "Punya proyek, peluang kerja, atau ingin berdiskusi tentang pengembangan software? Silakan hubungi saya.",
-    channelsTitle: "Kanal kontak langsung",
-    composerLabel: "KORESPONDENSI / DRAF",
-    composerTitle: "Siapkan email",
-    composerIntro: "Pilih templat, lalu sesuaikan subjek dan pesan.",
-    templateLegend: "Templat",
+      "Punya tawaran project, peluang role kerja, atau ingin berdiskusi seputar software? Silakan hubungi langsung atau susun draf email di bawah.",
+    channelsTitle: "Kanal Langsung",
+    composerLabel: "[DRAF EMAIL]",
+    composerTitle: "Siapkan Email",
+    composerIntro:
+      "Pilih template untuk mengisi draf, atau tulis subjek dan pesan Anda sendiri.",
+    templateLegend: "Template",
     selectedTemplate: "Dipilih",
     subjectLabel: "Subjek",
-    subjectPlaceholder: "Tulis subjek singkat",
+    subjectPlaceholder: "Tulis subjek ringkas",
     messageLabel: "Pesan",
-    messagePlaceholder: "Tulis pesan Anda untuk Annas",
+    messagePlaceholder: "Tulis pesan Anda untuk Annas...",
     openGmail: "Buka di Gmail",
     openEmailApp: "Buka di Aplikasi Email",
     clearDraft: "Kosongkan draf",
-    helper: "Lanjutkan draf melalui Gmail atau aplikasi email bawaan Anda.",
+    helper:
+      "Draf dibuka langsung di Gmail atau aplikasi email bawaan Anda. Website ini tidak mengirim email secara langsung.",
     externalCue: "dibuka di tab baru",
     gmailCue: "membuka Gmail di tab baru",
     formLabel: "Penyusun draf email",
@@ -150,58 +156,58 @@ export const contactTemplates: Record<Locale, ContactTemplate[]> = {
       label: "Project Collaboration",
       subject: "Project Collaboration - [Project / Company]",
       message:
-        "Hi Annas,\n\nI'd like to discuss a potential project involving ...\n\nBest,\n[Name]",
+        "Hi Annas,\n\nI'd like to discuss a potential project collaboration regarding ...\n\nBest regards,\n[Name]",
     },
     {
       id: "job-opportunity",
       label: "Job Opportunity",
       subject: "Job Opportunity - [Role / Company]",
       message:
-        "Hi Annas,\n\nI'm reaching out regarding a potential [Role] opportunity at ...\n\nBest,\n[Name]",
+        "Hi Annas,\n\nI'm reaching out regarding a [Role] opportunity at [Company] ...\n\nBest regards,\n[Name]",
     },
     {
       id: "freelance-inquiry",
       label: "Freelance Inquiry",
       subject: "Freelance Inquiry - [Project / Company]",
       message:
-        "Hi Annas,\n\nI'd like to ask about your availability for a freelance project involving ...\n\nBest,\n[Name]",
+        "Hi Annas,\n\nI'd like to ask about your availability for a freelance project regarding ...\n\nBest regards,\n[Name]",
     },
     {
       id: "general-conversation",
       label: "General Conversation",
-      subject: "Conversation - [Topic]",
+      subject: "Technical Discussion - [Topic]",
       message:
-        "Hi Annas,\n\nI'd like to start a conversation about ...\n\nBest,\n[Name]",
+        "Hi Annas,\n\nI came across your portfolio and would like to connect regarding ...\n\nBest regards,\n[Name]",
     },
   ],
   id: [
     {
       id: "project-collaboration",
-      label: "Kolaborasi Proyek",
-      subject: "Kolaborasi Proyek - [Proyek / Perusahaan]",
+      label: "Kolaborasi Project",
+      subject: "Kolaborasi Project - [Project / Perusahaan]",
       message:
-        "Halo Annas,\n\nSaya ingin membahas peluang kolaborasi untuk proyek ...\n\nSalam,\n[Nama]",
+        "Halo Annas,\n\nSaya ingin membahas peluang kolaborasi project untuk ...\n\nSalam,\n[Nama]",
     },
     {
       id: "job-opportunity",
-      label: "Peluang Kerja",
-      subject: "Peluang Kerja - [Peran / Perusahaan]",
+      label: "Peluang Role",
+      subject: "Peluang Role - [Role / Perusahaan]",
       message:
-        "Halo Annas,\n\nSaya menghubungi Anda terkait peluang [Peran] di ...\n\nSalam,\n[Nama]",
+        "Halo Annas,\n\nSaya menghubungi Anda terkait peluang role [Posisi] di [Perusahaan] ...\n\nSalam,\n[Nama]",
     },
     {
       id: "freelance-inquiry",
       label: "Tawaran Freelance",
-      subject: "Tawaran Freelance - [Proyek / Perusahaan]",
+      subject: "Inquiry Freelance - [Project / Perusahaan]",
       message:
-        "Halo Annas,\n\nSaya ingin menanyakan ketersediaan Anda untuk proyek freelance tentang ...\n\nSalam,\n[Nama]",
+        "Halo Annas,\n\nSaya ingin menanyakan ketersediaan Anda untuk freelance project terkait ...\n\nSalam,\n[Nama]",
     },
     {
       id: "general-conversation",
       label: "Diskusi Umum",
-      subject: "Diskusi - [Topik]",
+      subject: "Diskusi Teknis - [Topik]",
       message:
-        "Halo Annas,\n\nSaya ingin berdiskusi tentang ...\n\nSalam,\n[Nama]",
+        "Halo Annas,\n\nSaya tertarik dengan portofolio Anda dan ingin berdiskusi mengenai ...\n\nSalam,\n[Nama]",
     },
   ],
 };
