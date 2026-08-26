@@ -21,20 +21,20 @@ export const androidPrintFrameworkArticle: BlogArticle = {
     {
       id: "android-print-flow",
       title: {
-        en: "Integrating with the Native Android Print Framework",
-        id: "Integrasi dengan Android Print Framework Native",
+        en: "Connecting Android to Bluetooth Thermal Printers",
+        id: "Menghubungkan Android ke Printer Termal Bluetooth",
       },
       blocks: [
         {
           type: "prose",
           paragraphs: {
             en: [
-              "Thermal Printer Service is a native Android application built in Kotlin to bridge standard operating system printing with Bluetooth ESC/POS thermal receipt printers. Rather than forcing third-party mobile apps to implement proprietary Bluetooth drivers, the application creates a custom Android PrintService and registers a PrinterDiscoverySession.",
-              "This architectural choice integrates thermal printing directly into the native Android print dialog. Any document dispatched through the standard Android print workflow is intercepted as a temporary PDF, allowing the service to manage page scaling, raster encoding, and Bluetooth transmission without requiring modification to the originating application.",
+              "Mobile point-of-sale and logistics apps often need to print receipts on compact thermal printers. Instead of requiring third-party Android apps to write custom Bluetooth code for every printer brand, Thermal Printer Service was built in Kotlin as a native Android PrintService with a PrinterDiscoverySession.",
+              "This design hooks directly into the standard Android print dialog. Whenever a user taps Print in any Android application, the document is sent to the service as a temporary PDF file, allowing our background engine to handle scaling, formatting, and Bluetooth transmission automatically.",
             ],
             id: [
-              "Thermal Printer Service adalah aplikasi Android native yang dibangun dengan Kotlin untuk menjembatani alur pencetakan standar sistem operasi dengan printer struk termal Bluetooth berbasis ESC/POS. Alih-alih mewajibkan aplikasi pihak ketiga mengimplementasikan driver Bluetooth proprietary, aplikasi ini membangun custom PrintService Android dan mendaftarkan PrinterDiscoverySession.",
-              "Pilihan arsitektur ini mengintegrasikan pencetakan termal langsung ke dalam dialog print native Android. Dokumen apa pun yang dikirim melalui workflow print standar Android diterima sebagai file PDF sementara, memungkinkan layanan menangani penyesuaian skala, encoding raster, dan transmisi Bluetooth tanpa perlu mengubah aplikasi sumber.",
+              "Aplikasi kasir (point-of-sale) dan logistik sering kali perlu mencetak struk pada printer termal yang ringkas. Alih-alih mewajibkan setiap aplikasi Android menulis kode Bluetooth khusus untuk berbagai merek printer, Thermal Printer Service dibangun menggunakan Kotlin sebagai PrintService native Android dengan PrinterDiscoverySession.",
+              "Desain ini terhubung langsung ke dialog cetak standar Android. Kapan pun pengguna memilih Cetak pada aplikasi Android apa pun, dokumen diteruskan ke layanan sebagai file PDF sementara, sehingga proses penyesuaian skala, pemformatan, dan transmisi Bluetooth dapat ditangani secara otomatis di latar belakang.",
             ],
           },
         },
@@ -56,8 +56,8 @@ export const androidPrintFrameworkArticle: BlogArticle = {
     {
       id: "pdf-rasterization",
       title: {
-        en: "PDF Rendering and Geometric Bitmap Calibration",
-        id: "Rendering PDF dan Kalibrasi Geometris Bitmap",
+        en: "Converting PDF Pages into Thermal Dot Rasters",
+        id: "Mengubah Halaman PDF Menjadi Raster Titik Termal",
       },
       blocks: [
         {
@@ -85,12 +85,12 @@ export const androidPrintFrameworkArticle: BlogArticle = {
           type: "prose",
           paragraphs: {
             en: [
-              "When a print job is dispatched, Android passes a temporary PDF file to the PrintService. Using Android's native PdfRenderer, the application renders each PDF page into a high-density bitmap. Because standard document geometries rarely match thermal paper rolls, the rendering engine performs geometric transformations before raster encoding.",
-              "The pipeline analyzes the rendered bitmap to crop unnecessary margin whitespace, centers the content, applies horizontal offset compensation, appends vertical bottom padding, and scales the image to match the printer head resolution (432 dots for 58 mm rolls or 576 dots for 80 mm rolls at 203 DPI). The adjusted bitmap is then converted into a binary monochrome format.",
+              "When a print job arrives, Android's PdfRenderer converts each PDF page into a high-density bitmap. Because standard document sizes do not match narrow thermal receipt paper, the service automatically trims unused whitespace, centers the text, applies custom top/bottom padding, and resizes the bitmap to the printer head width (432 dots for 58 mm rolls or 576 dots for 80 mm rolls at standard 203 DPI).",
+              "The adjusted bitmap is then transformed into a clean binary monochrome image, where every black pixel represents a heated dot on the receipt paper.",
             ],
             id: [
-              "Saat print job dikirimkan, Android meneruskan file PDF sementara ke PrintService. Menggunakan PdfRenderer native Android, aplikasi merender setiap halaman PDF menjadi bitmap berdensitas tinggi. Karena geometri dokumen standar jarang sesuai dengan ukuran gulungan kertas termal, engine rendering menjalankan transformasi geometris sebelum encoding raster.",
-              "Pipeline menganalisis bitmap hasil render untuk memotong margin whitespace yang tidak perlu, memusatkan konten, menerapkan kompensasi horizontal offset, menambahkan bottom padding vertikal, dan menyesuaikan skala gambar dengan resolusi head printer (432 dots untuk 58 mm atau 576 dots untuk 80 mm pada 203 DPI). Bitmap yang telah disesuaikan kemudian dikonversi menjadi format biner monokrom.",
+              "Saat print job diterima, PdfRenderer bawaan Android mengubah setiap halaman PDF menjadi bitmap berkualitas tinggi. Karena ukuran dokumen standar tidak sesuai dengan kertas struk termal yang sempit, layanan ini otomatis memotong whitespace yang tidak terpakai, memusatkan teks, menerapkan padding atas dan bawah, serta menyesuaikan ukuran gambar dengan lebar head printer (432 dots untuk kertas 58 mm atau 576 dots untuk 80 mm pada 203 DPI).",
+              "Bitmap yang telah disesuaikan kemudian diubah menjadi gambar monokrom biner, di mana setiap piksel hitam mewakili titik panas pada kertas struk.",
             ],
           },
         },
@@ -99,8 +99,8 @@ export const androidPrintFrameworkArticle: BlogArticle = {
     {
       id: "esc-pos-encoding",
       title: {
-        en: "Translating Monochrome Bitmaps to ESC/POS Raster",
-        id: "Menerjemahkan Bitmap Monokrom ke Raster ESC/POS",
+        en: "Generating ESC/POS Commands and Managing Profiles",
+        id: "Membuat Perintah ESC/POS dan Mengelola Profil",
       },
       blocks: [
         {
@@ -108,16 +108,16 @@ export const androidPrintFrameworkArticle: BlogArticle = {
           items: {
             en: [
               "Android Document",
-              "Temporary PDF",
+              "Temporary PDF File",
               "PdfRenderer Bitmap",
-              "Whitespace Crop and Scale",
+              "Whitespace Trim and Scale",
               "Monochrome Conversion",
               "24-Dot ESC/POS Raster",
-              "Chunked Bluetooth Write",
+              "Bluetooth Chunked Write",
             ],
             id: [
               "Dokumen Android",
-              "PDF Sementara",
+              "File PDF Sementara",
               "Bitmap PdfRenderer",
               "Crop Whitespace dan Skala",
               "Konversi Monokrom",
@@ -130,12 +130,12 @@ export const androidPrintFrameworkArticle: BlogArticle = {
           type: "prose",
           paragraphs: {
             en: [
-              "Thermal receipt printers do not interpret high-level typography; they require raw bit sequences sent via ESC/POS command protocol. The service encodes the monochrome bitmap into 24-dot double-density ESC/POS raster command structures, calculating line widths and byte alignments in memory.",
-              "To accommodate multiple hardware units, the application persists printer configurations locally using SharedPreferences and JSON. Eight documented profile attributes (id, name, btAddress, paperMm, scale, autoCut, horizontalOffsetMm, and bottomPaddingMm) allow operators to switch configurations seamlessly using an editable RecyclerView list.",
+              "Thermal receipt printers do not understand complex font files; they only print black-and-white dots driven by low-level ESC/POS byte commands. The app converts the monochrome bitmap into 24-dot ESC/POS raster byte arrays in memory, organizing the lines into manageable chunks for transmission.",
+              "To support different printer models in the field, configurations are saved locally using SharedPreferences and JSON. A clean RecyclerView list allows operators to easily save and switch between printer profiles, setting Bluetooth address, paper width, density scale, auto-cut, and margin offsets.",
             ],
             id: [
-              "Printer struk termal tidak membaca tipografi tingkat tinggi; printer membutuhkan rangkaian bit mentah yang dikirim melalui protokol perintah ESC/POS. Layanan ini meng-encode bitmap monokrom menjadi struktur perintah raster ESC/POS double-density 24-dot, menghitung lebar baris dan perataan byte di memori.",
-              "Untuk mengakomodasi berbagai perangkat hardware, aplikasi menyimpan konfigurasi printer secara lokal menggunakan SharedPreferences dan JSON. Delapan atribut profil terdokumentasi (id, name, btAddress, paperMm, scale, autoCut, horizontalOffsetMm, dan bottomPaddingMm) memungkinkan operator berganti konfigurasi secara fleksibel melalui daftar RecyclerView.",
+              "Printer struk termal tidak membaca file font yang rumit; printer hanya mencetak titik hitam-putih berdasarkan instruksi byte ESC/POS tingkat rendah. Aplikasi ini mengubah bitmap monokrom menjadi array byte raster ESC/POS 24-dot di memori, menyusun baris-baris data menjadi potongan yang siap dikirim.",
+              "Untuk mendukung berbagai model printer di lapangan, konfigurasi disimpan secara lokal menggunakan SharedPreferences dan JSON. Tampilan daftar RecyclerView yang praktis memungkinkan operator menyimpan dan beralih antar profil printer dengan mudah (mengatur alamat Bluetooth, lebar kertas, skala densitas, pemotong otomatis, dan offset margin).",
             ],
           },
         },
@@ -144,8 +144,8 @@ export const androidPrintFrameworkArticle: BlogArticle = {
     {
       id: "bluetooth-edge-cases",
       title: {
-        en: "Managing Bluetooth RFCOMM and Background Execution",
-        id: "Mengelola Bluetooth RFCOMM dan Eksekusi Background",
+        en: "Handling Bluetooth Connections and Background Jobs",
+        id: "Menangani Koneksi Bluetooth dan Background Job",
       },
       blocks: [
         {
@@ -153,18 +153,18 @@ export const androidPrintFrameworkArticle: BlogArticle = {
           style: "ordered",
           items: {
             en: [
-              "Verify Bluetooth hardware support, power state, and Android 12 or newer runtime permissions.",
-              "Confirm availability of the active printer profile and source PDF payload.",
-              "Open an RFCOMM SPP socket using a 4-step connection retry strategy with 0 ms, 200 ms, 500 ms, and 1,000 ms backoff intervals.",
-              "Execute the print job inside a dedicated single-thread executor with CancellationToken awareness to keep the Android main thread responsive.",
-              "Stream ESC/POS raster data in chunks up to 1,024 bytes, performing explicit socket cleanup upon job completion or cancellation.",
+              "Check Bluetooth hardware availability, power state, and Android 12 or newer runtime permissions.",
+              "Load the selected printer profile and temporary PDF payload.",
+              "Open an RFCOMM SPP socket with a 4-step retry strategy using 0 ms, 200 ms, 500 ms, and 1,000 ms backoff delays.",
+              "Process printing in a background single-thread executor with CancellationToken support to keep the Android UI smooth.",
+              "Stream ESC/POS data in chunks up to 1,024 bytes and close sockets cleanly when done or canceled.",
             ],
             id: [
-              "Periksa dukungan hardware Bluetooth, status daya, dan runtime permission Android 12 atau lebih baru.",
-              "Pastikan ketersediaan profil printer aktif dan payload dokumen PDF sumber.",
-              "Buka socket RFCOMM SPP menggunakan strategi 4 kali connection attempt dengan jeda backoff 0 ms, 200 ms, 500 ms, dan 1.000 ms.",
-              "Jalankan print job di dalam dedicated single-thread executor dengan pemantauan CancellationToken agar Android main thread tetap responsif.",
-              "Kirim data raster ESC/POS dalam ukuran chunk hingga 1.024 bytes, dan lakukan socket cleanup eksplisit saat print job selesai atau dibatalkan.",
+              "Periksa ketersediaan hardware Bluetooth, status aktif, dan izin runtime Android 12 atau yang lebih baru.",
+              "Muat profil printer yang dipilih dan dokumen PDF sementara.",
+              "Buka socket RFCOMM SPP dengan strategi 4 kali percobaan ulang menggunakan jeda backoff 0 ms, 200 ms, 500 ms, dan 1.000 ms.",
+              "Jalankan proses pencetakan pada background single-thread executor dengan dukungan CancellationToken agar antarmuka Android tetap responsif.",
+              "Kirim data ESC/POS dalam ukuran chunk hingga 1.024 bytes dan tutup socket dengan aman saat selesai atau dibatalkan.",
             ],
           },
         },
@@ -183,10 +183,10 @@ export const androidPrintFrameworkArticle: BlogArticle = {
           type: "prose",
           paragraphs: {
             en: [
-              "By isolating Android rendering, ESC/POS raster generation, and resilient Bluetooth socket lifecycle management into discrete modules, Thermal Printer Service delivers a dependable printing pipeline tailored to physical hardware realities.",
+              "By separating document rendering, ESC/POS byte encoding, and Bluetooth connection management into distinct components, Thermal Printer Service provides a smooth and dependable receipt printing experience for everyday Android workflows.",
             ],
             id: [
-              "Dengan memisahkan rendering Android, pembuatan raster ESC/POS, dan pengelolaan siklus hidup socket Bluetooth yang tangguh ke dalam modul-modul terpisah, Thermal Printer Service menghadirkan pipeline pencetakan yang andal sesuai realitas hardware fisik.",
+              "Dengan memisahkan rendering dokumen, encoding byte ESC/POS, dan pengelolaan koneksi Bluetooth ke dalam komponen-komponen terpisah, Thermal Printer Service menghadirkan pengalaman cetak struk yang lancar dan andal untuk penggunaan Android sehari-hari.",
             ],
           },
         },

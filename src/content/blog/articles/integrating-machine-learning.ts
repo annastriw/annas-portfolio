@@ -24,20 +24,20 @@ export const integratingMachineLearningArticle: BlogArticle = {
     {
       id: "ml-pipeline",
       title: {
-        en: "Data Preprocessing and Model Exploration Pipeline",
-        id: "Pipeline Preprocessing Data dan Eksplorasi Model",
+        en: "Preparing the Dataset for Machine Learning",
+        id: "Mempersiapkan Dataset untuk Machine Learning",
       },
       blocks: [
         {
           type: "prose",
           paragraphs: {
             en: [
-              "Developing a healthcare predictive model begins with rigorous data preprocessing. The experimental dataset comprised 158,355 observations and 22 columns, encompassing 21 demographic, clinical, and lifestyle predictor features alongside a binary heart_attack target. Five categorical variables were encoded, and all 21 predictors were scaled with MinMaxScaler to ensure uniform numerical weighting.",
-              "To maintain realistic validation conditions, an 80:20 stratified split partitioned the dataset into 126,684 training rows and 31,671 testing rows. SMOTE was applied exclusively to the training partition, balancing it to 151,766 observations without leaking synthetic distributions into the evaluation set. Hyperparameter tuning via RandomizedSearchCV targeted F1-Score across four classification algorithms: Random Forest, Linear SVM, K-Nearest Neighbors, and Logistic Regression.",
+              "Building a practical health risk prediction tool starts with clean data. The project used a public dataset of 158,355 health records across 22 columns, covering 21 demographic, clinical, and lifestyle indicators with a binary heart_attack target. Categorical features were encoded, and numerical values were normalized with MinMaxScaler so that all features carried balanced weight during training.",
+              "To prevent data leakage, the dataset was split 80:20 (126,684 training rows and 31,671 test rows) using stratified sampling. SMOTE was applied only to the training set to handle class imbalance, balancing it to 151,766 samples while keeping the test set completely untainted. Hyperparameter tuning with RandomizedSearchCV evaluated F1-Scores across four algorithms: Random Forest, Linear SVM, K-Nearest Neighbors, and Logistic Regression.",
             ],
             id: [
-              "Pengembangan model prediktif kesehatan dimulai dari tahap preprocessing data yang ketat. Dataset eksperimen terdiri dari 158.355 observasi dan 22 kolom, mencakup 21 fitur prediktor demografis, klinis, dan gaya hidup bersama satu target biner heart_attack. Sebanyak 5 variabel kategorikal di-encode, dan seluruh 21 prediktor diskalakan menggunakan MinMaxScaler untuk memastikan bobot numerik yang seragam.",
-              "Untuk menjaga kondisi validasi yang realistis, stratified split 80:20 membagi dataset menjadi 126.684 baris data training dan 31.671 baris data testing. SMOTE diterapkan secara eksklusif pada partisi training sehingga seimbang menjadi 151.766 observasi tanpa membocorkan distribusi sintetis ke dalam set evaluasi. Hyperparameter tuning menggunakan RandomizedSearchCV berfokus pada F1-Score di antara empat algoritma klasifikasi: Random Forest, Linear SVM, K-Nearest Neighbors, dan Logistic Regression.",
+              "Membangun sarana prediksi risiko kesehatan yang praktis dimulai dari pengolahan data yang bersih. Proyek ini menggunakan dataset publik berisi 158.355 catatan kesehatan dengan 22 kolom, mencakup 21 indikator demografis, klinis, dan gaya hidup dengan target biner heart_attack. Fitur kategorikal di-encode, dan nilai numerik dinormalisasi menggunakan MinMaxScaler agar setiap fitur memiliki bobot yang seimbang selama pelatihan model.",
+              "Untuk mencegah kebocoran data (data leakage), dataset dibagi 80:20 (126.684 baris training dan 31.671 baris testing) menggunakan stratified sampling. SMOTE hanya diterapkan pada data training untuk menangani ketidakseimbangan kelas sehingga seimbang menjadi 151.766 sampel, sementara data testing tetap murni. Hyperparameter tuning dengan RandomizedSearchCV mengevaluasi F1-Score pada empat algoritma: Random Forest, Linear SVM, K-Nearest Neighbors, dan Logistic Regression.",
             ],
           },
         },
@@ -80,8 +80,8 @@ export const integratingMachineLearningArticle: BlogArticle = {
     {
       id: "service-integration",
       title: {
-        en: "Decoupled Model Serving via Flask REST API",
-        id: "Penyajian Model Terpisah Melalui Flask REST API",
+        en: "Serving Predictions via a Standalone Flask API",
+        id: "Menyajikan Prediksi Melalui Flask API Mandiri",
       },
       blocks: [
         {
@@ -90,18 +90,18 @@ export const integratingMachineLearningArticle: BlogArticle = {
             en: [
               "Patient Health Data in iHealth Edu",
               "Laravel Application Backend",
-              "Flask REST API Endpoint",
+              "Flask REST API Microservice",
               "Serialized Preprocessing Artifacts",
               "Random Forest Inference",
-              "Structured Risk Output",
+              "Structured Risk Payload",
             ],
             id: [
               "Data Kesehatan Pasien di iHealth Edu",
               "Backend Aplikasi Laravel",
-              "Endpoint Flask REST API",
+              "Microservice Flask REST API",
               "Artefak Preprocessing Terserialisasi",
               "Inferensi Random Forest",
-              "Output Risiko Terstruktur",
+              "Payload Risiko Terstruktur",
             ],
           },
         },
@@ -109,12 +109,12 @@ export const integratingMachineLearningArticle: BlogArticle = {
           type: "prose",
           paragraphs: {
             en: [
-              "iHealth Edu was developed in collaboration with Puskesmas Padangsari, Semarang as an integrated digital health platform encompassing screening, education modules, patient records, and ESP32 IoT biometric telemetry. Embedding machine learning into this environment required an isolated service boundary to keep Python training dependencies detached from the Laravel backend and MySQL database.",
-              "The model inference layer was exposed through a standalone Flask REST API. Using Joblib, the trained Random Forest model artifact (.pkl) was packaged alongside its corresponding MinMaxScaler, categorical mapping dictionaries, and predictor column order. This guarantees that real-time inference applies the exact transformations calculated during training. The Flask service was containerized with Docker and deployed on an Ubuntu Linux server.",
+              "In iHealth Edu, developed in collaboration with Puskesmas Padangsari in Semarang, patient screening, educational modules, health records, and ESP32 IoT biometrics live inside a Next.js and Laravel web application. Instead of running Python models directly inside the web server, the machine learning workflow was separated into its own lightweight Flask REST API.",
+              "Using Joblib, the trained Random Forest model artifact (.pkl), MinMaxScaler, and feature mapping dictionaries were saved together. This ensures that live incoming patient data undergoes the exact same mathematical transformations computed during offline training. The Flask service was containerized with Docker and deployed on a Linux Ubuntu server.",
             ],
             id: [
-              "iHealth Edu dikembangkan bekerja sama dengan Puskesmas Padangsari, Semarang sebagai platform kesehatan digital terintegrasi yang mencakup screening, modul edukasi, rekam medis pasien, dan telemetri biometrik IoT ESP32. Mengintegrasikan machine learning ke dalam lingkungan ini memerlukan batas layanan yang terisolasi agar dependensi Python tetap terpisah dari backend Laravel dan database MySQL.",
-              "Lapisan inferensi model disediakan melalui Flask REST API mandiri. Menggunakan Joblib, artefak model Random Forest (.pkl) dikemas bersama MinMaxScaler, kamus pemetaan kategorikal, dan urutan kolom prediktor yang sesuai. Hal ini menjamin bahwa inferensi real-time menerapkan transformasi yang persis sama dengan saat pelatihan. Layanan Flask dikontainerisasi dengan Docker dan di-deploy pada server Linux Ubuntu.",
+              "Pada iHealth Edu yang dikembangkan bersama Puskesmas Padangsari di Semarang, fitur screening pasien, modul edukasi, rekam medis, dan perangkat IoT ESP32 berada di dalam aplikasi web Next.js dan Laravel. Alih-alih menjalankan model Python langsung di server web utama, alur machine learning dipisahkan ke dalam microservice Flask REST API mandiri.",
+              "Menggunakan Joblib, artefak model Random Forest (.pkl), MinMaxScaler, dan kamus pemetaan fitur disimpan bersama. Langkah ini memastikan data pasien yang masuk secara real-time mengalami transformasi matematis yang persis sama dengan saat pelatihan offline. Layanan Flask dikemas menggunakan Docker dan di-deploy pada server Linux Ubuntu.",
             ],
           },
         },
@@ -123,20 +123,20 @@ export const integratingMachineLearningArticle: BlogArticle = {
     {
       id: "decision-support-boundary",
       title: {
-        en: "Translating Predictions into Actionable Decision Support",
-        id: "Menerjemahkan Prediksi Menjadi Pendukung Keputusan",
+        en: "Translating Probabilities into Useful Decision Support",
+        id: "Menerjemahkan Probabilitas Menjadi Pendukung Keputusan",
       },
       blocks: [
         {
           type: "prose",
           paragraphs: {
             en: [
-              "Random Forest was chosen for the prototype because it achieved the highest documented accuracy of 71.93% and the highest ROC-AUC of 0.8015 among compared algorithms, even though Logistic Regression scored highest in F1 (0.6618) and KNN in recall (70.40%). Integrating this model into patient care required thoughtful UX representation rather than a binary verdict.",
-              "When an authorized healthcare worker submits patient vitals, the Flask API returns a structured JSON payload containing the predicted class, numerical risk probability, rule-based supporting risk factors, and the top-5 global Random Forest feature importances. The frontend visualizes these findings as informative indicators within the broader patient history record.",
+              "Random Forest was chosen for the prototype because it achieved the highest documented accuracy of 71.93% and the highest ROC-AUC of 0.8015 among compared algorithms, even though Logistic Regression scored highest in F1 (0.6618) and KNN in recall (70.40%).",
+              "When an authorized health worker inputs patient vitals, the Flask API returns a structured JSON response containing the predicted risk category, calculated numerical probability, contextual rule-based risk factors, and global top-5 feature importances. The frontend displays these indicators as helpful visual context within the broader patient history record.",
             ],
             id: [
-              "Random Forest dipilih untuk purwarupa ini karena meraih accuracy terdokumentasi tertinggi sebesar 71,93% dan ROC-AUC tertinggi sebesar 0,8015 di antara algoritma yang dibandingkan, meskipun Logistic Regression memiliki F1 tertinggi (0,6618) dan KNN memiliki recall tertinggi (70,40%). Mengintegrasikan model ini ke dalam alur perawatan pasien membutuhkan penyajian antarmuka yang bijak, bukan sekadar vonis biner.",
-              "Saat tenaga kesehatan yang berwenang mengirimkan data pemeriksaan pasien, API Flask mengembalikan payload JSON terstruktur yang memuat kelas prediksi, probabilitas risiko numerik, faktor risiko pendukung berbasis aturan, dan lima feature importance Random Forest global teratas. Frontend memvisualisasikan hasil ini sebagai indikator informatif di dalam riwayat kesehatan pasien yang lebih luas.",
+              "Random Forest dipilih untuk purwarupa ini karena meraih akurasi terdokumentasi tertinggi sebesar 71,93% dan ROC-AUC tertinggi sebesar 0,8015 di antara algoritma yang dibandingkan, meskipun Logistic Regression memiliki F1 tertinggi (0,6618) dan KNN memiliki recall tertinggi (70,40%).",
+              "Saat tenaga kesehatan yang berwenang memasukkan data pemeriksaan pasien, API Flask mengembalikan respons JSON terstruktur yang memuat kategori risiko prediksi, probabilitas numerik, faktor risiko pendukung berbasis aturan, dan lima feature importance global teratas. Frontend menampilkan indikator ini sebagai konteks visual yang informatif di dalam riwayat kesehatan pasien.",
             ],
           },
         },
@@ -158,8 +158,8 @@ export const integratingMachineLearningArticle: BlogArticle = {
     {
       id: "clinical-limitations",
       title: {
-        en: "Explicit Clinical Limitations and Ethical Boundaries",
-        id: "Batasan Klinis Eksplisit dan Batas Etis",
+        en: "Clear Medical Boundaries and Practical Impact",
+        id: "Batasan Medis yang Jelas dan Dampak Praktis",
       },
       blocks: [
         {
@@ -178,16 +178,16 @@ export const integratingMachineLearningArticle: BlogArticle = {
           style: "unordered",
           items: {
             en: [
-              "Present predicted class and probability values as statistical indicators, not definitive medical diagnoses.",
-              "Explain rule-based risk factors as contextual reference points rather than verified clinical causes.",
-              "Position top-five feature importances as global model behavior rather than individual causal explanations.",
-              "Enforce role-based access control so that detailed medical histories remain private between patients and clinicians.",
+              "Present predictions and probability scores as statistical indicators rather than medical diagnoses.",
+              "Display rule-based risk factors as helpful reference points rather than definite causes.",
+              "Treat top feature importances as global model insights, not individualized medical advice.",
+              "Protect patient records through strict role-based access control.",
             ],
             id: [
-              "Sajikan kelas prediksi dan nilai probabilitas sebagai indikator statistik, bukan diagnosis medis definitif.",
-              "Jelaskan faktor risiko berbasis aturan sebagai titik referensi kontekstual, bukan penyebab klinis yang diverifikasi.",
-              "Posisikan lima feature importance teratas sebagai perilaku model global, bukan penjelasan kausal per pasien.",
-              "Terapkan role-based access control agar riwayat medis sensitif tetap terlindungi antara pasien dan tenaga medis.",
+              "Sajikan hasil prediksi dan skor probabilitas sebagai indikator statistik, bukan diagnosis medis.",
+              "Tampilkan faktor risiko berbasis aturan sebagai referensi pendukung, bukan penyebab mutlak.",
+              "Posisikan feature importance teratas sebagai wawasan perilaku model global, bukan saran medis individual.",
+              "Lindungi data rekam medis pasien melalui kontrol akses berbasis peran yang ketat.",
             ],
           },
         },
@@ -195,10 +195,10 @@ export const integratingMachineLearningArticle: BlogArticle = {
           type: "prose",
           paragraphs: {
             en: [
-              "A machine learning model is only as credible as its operational boundaries. By pairing a validated technical pipeline with clear decision-support framing, the system provides transparent risk indicators while strictly preserving professional medical authority.",
+              "Machine learning in healthcare is most useful when its limits are clearly communicated. By pairing solid model training with transparent decision support, the platform provides helpful early risk insights while keeping clinical judgment firmly in the hands of healthcare professionals.",
             ],
             id: [
-              "Sebuah model machine learning hanya dapat dipercaya jika batasan operasionalnya jelas. Dengan memadukan pipeline teknis yang tervalidasi dengan penyajian pendukung keputusan yang transparan, sistem memberikan indikator risiko yang bermanfaat sambil tetap menghormati wewenang tenaga medis profesional.",
+              "Penerapan machine learning di bidang kesehatan paling bermanfaat saat batasannya disampaikan secara transparan. Dengan memadukan pelatihan model yang terstruktur dan penyajian pendukung keputusan yang jelas, platform ini memberikan indikator risiko awal yang bermanfaat sambil tetap menempatkan keputusan klinis pada tenaga medis profesional.",
             ],
           },
         },
