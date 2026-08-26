@@ -13,11 +13,27 @@ export function BlogArticleHeader({ article, locale }: BlogArticleHeaderProps) {
   const isId = locale === "id";
 
   return (
-    <header className="blog-article-header">
+    <header className="blog-article-header animate-editorial-fade motion-reduce:animate-none">
       <div className="blog-article-meta">
-        <span>{article.category[locale]}</span>
-        <span>{calculateArticleReadingTime(article, locale)}</span>
-        {article.projectPeriod && <span>{article.projectPeriod[locale]}</span>}
+        <span className="font-semibold text-(--color-accent)">
+          {isId ? `[CATATAN // ${article.index}]` : `[ESSAY // ${article.index}]`}
+        </span>
+        <span className="text-(--color-border)" aria-hidden="true">
+          /
+        </span>
+        <span className="blog-article-category-badge">{article.category[locale]}</span>
+        <span className="text-(--color-border)" aria-hidden="true">
+          ·
+        </span>
+        <span className="blog-article-reading-time">{calculateArticleReadingTime(article, locale)}</span>
+        {article.projectPeriod && (
+          <>
+            <span className="text-(--color-border)" aria-hidden="true">
+              ·
+            </span>
+            <span className="blog-article-period">{article.projectPeriod[locale]}</span>
+          </>
+        )}
       </div>
 
       <h1 className="blog-article-title">{article.title[locale]}</h1>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { BlogArticle, BlogBlock } from "@/content/blog";
 import type { Locale } from "@/lib/i18n/config";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface BlogArticleBodyProps {
   article: BlogArticle;
@@ -26,8 +27,15 @@ function renderBlock(
       const List = block.style === "ordered" ? "ol" : "ul";
       return (
         <List className={`blog-list blog-list-${block.style}`} key={key}>
-          {block.items[locale].map((item) => (
-            <li key={item}>{item}</li>
+          {block.items[locale].map((item, index) => (
+            <li key={item}>
+              {block.style === "ordered" && (
+                <span className="blog-list-number" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              )}
+              <span>{item}</span>
+            </li>
           ))}
         </List>
       );
@@ -35,8 +43,13 @@ function renderBlock(
     case "flow":
       return (
         <ol className="blog-flow" key={key}>
-          {block.items[locale].map((item) => (
-            <li key={item}>{item}</li>
+          {block.items[locale].map((item, index) => (
+            <li key={item}>
+              <span className="blog-flow-step" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="blog-flow-text">{item}</span>
+            </li>
           ))}
         </ol>
       );
@@ -95,19 +108,26 @@ export function BlogArticleBody({ article, locale }: BlogArticleBodyProps) {
 
   return (
     <div className="blog-article-body">
-      {article.sections.map((section) => (
-        <section key={section.id} id={section.id} className="blog-section">
-          <h2>{section.title[locale]}</h2>
-          {section.blocks.map((block, index) => {
-            const blockKey = `${section.id}-${block.type}-${index}`;
-            return renderBlock(
-              block,
-              locale,
-              blockKey,
-              blockKey === firstFigureKey,
-            );
-          })}
-        </section>
+      {article.sections.map((section, secIdx) => (
+        <ScrollReveal key={section.id} delayMs={secIdx * 40}>
+          <section id={section.id} className="blog-section">
+            <div className="blog-section-header">
+              <span className="blog-section-num" aria-hidden="true">
+                [{String(secIdx + 1).padStart(2, "0")}]
+              </span>
+              <h2>{section.title[locale]}</h2>
+            </div>
+            {section.blocks.map((block, index) => {
+              const blockKey = `${section.id}-${block.type}-${index}`;
+              return renderBlock(
+                block,
+                locale,
+                blockKey,
+                blockKey === firstFigureKey,
+              );
+            })}
+          </section>
+        </ScrollReveal>
       ))}
     </div>
   );

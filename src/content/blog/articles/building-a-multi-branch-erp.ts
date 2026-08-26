@@ -12,8 +12,8 @@ export const multiBranchErpArticle: BlogArticle = {
     id: "Membangun ERP Multi-Cabang dari Workflow hingga Production",
   },
   abstract: {
-    en: "How UKG System moved from operational analysis to an integrated Next.js and NestJS application for two roles, eight module groups, and multiple branches.",
-    id: "Bagaimana UKG System bergerak dari analisis operasional menuju aplikasi Next.js dan NestJS terintegrasi untuk dua peran, delapan kelompok modul, dan banyak cabang.",
+    en: "How UKG System moved from operational requirements analysis to an integrated Next.js and NestJS application for two roles, eight module groups, and multiple branches.",
+    id: "Bagaimana UKG System bergerak dari analisis kebutuhan operasional menuju aplikasi Next.js dan NestJS terintegrasi untuk dua peran, delapan kelompok modul, dan banyak cabang.",
   },
   tags: ["Next.js", "NestJS", "ERP", "Katalon Studio", "Ubuntu"],
   sourceProjectSlugs: ["ukg-system"],
@@ -23,22 +23,45 @@ export const multiBranchErpArticle: BlogArticle = {
   },
   sections: [
     {
-      id: "workflow-first",
+      id: "workflow-foundation",
       title: {
-        en: "Start with the operating workflow",
-        id: "Mulai dari workflow operasional",
+        en: "Mapping the Operational Workflow First",
+        id: "Memetakan Workflow Operasional Terlebih Dahulu",
       },
       blocks: [
+        {
+          type: "flow",
+          items: {
+            en: [
+              "Operational Analysis",
+              "Role and Branch Scoping",
+              "Figma UI and UX",
+              "Next.js Frontend",
+              "NestJS REST API",
+              "Katalon Studio QA",
+              "Ubuntu VPS Live",
+            ],
+            id: [
+              "Analisis Operasional",
+              "Cakupan Peran dan Cabang",
+              "UI dan UX Figma",
+              "Frontend Next.js",
+              "REST API NestJS",
+              "QA Katalon Studio",
+              "Live di VPS Ubuntu",
+            ],
+          },
+        },
         {
           type: "prose",
           paragraphs: {
             en: [
-              "UKG System was built for CV Universal Kharisma Globalindo as a multi-branch ERP web application. My scope as Fullstack Developer started before the interface and continued through production deployment. It included requirements analysis, UI and UX work in Figma, a Next.js frontend, a NestJS backend, REST endpoints, business logic, quality assurance, and deployment to an Ubuntu VPS.",
-              "The useful starting point was not a page list. It was the movement of work through the business. Stock can be requested, approved, received, sold, and returned. Attendance belongs to a branch. Operational costs and sales records need the same branch and period context. Mapping those relationships first gave the application a clearer structure than treating each screen as an isolated CRUD task.",
+              "UKG System was developed for CV Universal Kharisma Globalindo as a unified multi-branch ERP web platform. As the Fullstack Developer, my scope spanned the entire delivery lifecycle: business requirements analysis, UI and UX prototyping in Figma, frontend engineering with Next.js, backend architecture with NestJS, business logic implementation, quality assurance with Katalon Studio, and production deployment on an Ubuntu Linux VPS.",
+              "Rather than treating the platform as a disconnected collection of CRUD tables, development started from the physical movement of goods and money through the enterprise. Stock is requested by store staff, reviewed and approved by management, received into branch inventory, sold through cashier terminals, and occasionally restored through returns. Branch context governs every stage, ensuring attendance, expenses, and transaction logs remain partitioned and verifiable.",
             ],
             id: [
-              "UKG System dibangun untuk CV Universal Kharisma Globalindo sebagai aplikasi ERP web multi-cabang. Lingkup pekerjaan saya sebagai Fullstack Developer dimulai sebelum pembuatan antarmuka dan berlanjut sampai deployment production. Pekerjaan tersebut mencakup analisis kebutuhan, UI dan UX di Figma, frontend Next.js, backend NestJS, endpoint REST, business logic, quality assurance, serta deployment ke VPS Ubuntu.",
-              "Titik awal yang berguna bukanlah daftar halaman, melainkan pergerakan pekerjaan di dalam bisnis. Stok dapat diajukan, disetujui, diterima, dijual, lalu dikembalikan. Presensi terikat pada cabang. Biaya operasional dan catatan penjualan memerlukan konteks cabang serta periode yang sama. Memetakan hubungan tersebut lebih dahulu memberi struktur aplikasi yang lebih jelas daripada memperlakukan setiap layar sebagai pekerjaan CRUD terpisah.",
+              "UKG System dikembangkan untuk CV Universal Kharisma Globalindo sebagai platform ERP web multi-cabang terpadu. Sebagai Fullstack Developer, lingkup pekerjaan saya mencakup seluruh siklus delivery: analisis kebutuhan bisnis, perancangan UI dan UX di Figma, frontend dengan Next.js, backend dengan NestJS, implementasi business logic, quality assurance dengan Katalon Studio, serta deployment production pada VPS Linux Ubuntu.",
+              "Alih-alih memperlakukan platform sebagai kumpulan tabel CRUD yang terpisah, pengembangan dimulai dari pergerakan fisik barang dan transaksi di dalam bisnis. Stok diajukan oleh staf toko, diperiksa dan disetujui oleh manajemen, diterima ke dalam inventaris cabang, dijual melalui kasir, dan dipulihkan ketika terjadi pembatalan transaksi. Konteks cabang mengatur setiap tahapan sehingga data presensi, biaya operasional, dan log transaksi tetap terisolasi serta dapat diverifikasi.",
             ],
           },
         },
@@ -47,55 +70,36 @@ export const multiBranchErpArticle: BlogArticle = {
           style: "unordered",
           items: {
             en: [
-              "Two primary roles: Owner and Employee.",
-              "Eight module groups covering access, branches and attendance, inventory, stock orders, store operations, cashier and sales, finance and reports, plus dashboards.",
-              "Branch-aware records and permissions across the operational workflow.",
+              "Two primary system roles: Owner and Employee, each with strict access boundaries.",
+              "Eight integrated module groups: User Management, Attendance, Inventory, Stock Orders, Store Operations, Cashier POS, Reports, and Analytics.",
+              "Branch-scoped data isolation across all operational records and summaries.",
             ],
             id: [
-              "Dua peran utama: Owner dan Karyawan.",
-              "Delapan kelompok modul yang mencakup akses, cabang dan presensi, inventaris, order stok, operasional toko, kasir dan penjualan, keuangan dan laporan, serta dashboard.",
-              "Catatan dan izin akses yang memahami konteks cabang di sepanjang workflow operasional.",
+              "Dua peran sistem utama: Owner dan Karyawan, masing-masing dengan batasan hak akses yang ketat.",
+              "Delapan kelompok modul terintegrasi: Manajemen Pengguna, Presensi, Inventaris, Order Stok, Operasional Toko, Kasir POS, Laporan, dan Analitik.",
+              "Isolasi data berbasis cabang di seluruh catatan operasional dan ringkasan.",
             ],
           },
         },
       ],
     },
     {
-      id: "boundaries",
+      id: "system-architecture",
       title: {
-        en: "Turn responsibilities into system boundaries",
-        id: "Ubah tanggung jawab menjadi batas sistem",
+        en: "Architecture Built Around Roles and Cross-Module Rules",
+        id: "Arsitektur yang Dibangun di Sekitar Peran dan Aturan Lintas Modul",
       },
       blocks: [
-        {
-          type: "flow",
-          items: {
-            en: [
-              "Operational requirement",
-              "Role and branch scope",
-              "Interface flow",
-              "REST and business rules",
-              "Shared records and reports",
-            ],
-            id: [
-              "Kebutuhan operasional",
-              "Cakupan peran dan cabang",
-              "Alur antarmuka",
-              "REST dan aturan bisnis",
-              "Catatan bersama dan laporan",
-            ],
-          },
-        },
         {
           type: "prose",
           paragraphs: {
             en: [
-              "The Owner needs broader cross-branch visibility, while Employee access follows the operational work assigned to that role. That distinction affects more than navigation. It shapes which records are available, which actions require approval, and how reports are filtered.",
-              "The frontend therefore had to express state and permission clearly, while the backend enforced the same workflow through NestJS business logic and REST APIs. Keeping those two views aligned mattered because hiding an action in the interface is not a replacement for enforcing its rule in the system.",
+              "The Owner role requires aggregated visibility across all operational branches, permission to approve inter-branch stock allocations, and direct access to financial statements. Conversely, the Employee role is restricted to daily branch duties such as shift check-ins, cashier transactions, operational expense logging, and inventory requests.",
+              "The most critical architectural requirement was managing inter-module dependencies. When a cashier completes a sale, the NestJS backend decrements stock quantities in real time. If a cashier cancels an order, a dedicated rollback workflow restores item counts to branch inventory. Stock orders link employee demand, owner authorization, vendor receipt, and stock availability into a single auditable chain.",
             ],
             id: [
-              "Owner memerlukan visibilitas lintas cabang yang lebih luas, sedangkan akses Karyawan mengikuti pekerjaan operasional yang ditetapkan untuk peran tersebut. Perbedaan ini tidak hanya memengaruhi navigasi. Perbedaan tersebut menentukan catatan yang tersedia, tindakan yang memerlukan persetujuan, dan cara laporan difilter.",
-              "Frontend perlu menyampaikan status dan izin akses dengan jelas, sementara backend menegakkan workflow yang sama melalui business logic NestJS dan REST API. Menjaga kedua pandangan tersebut tetap selaras penting karena menyembunyikan tindakan di antarmuka bukanlah pengganti penerapan aturan pada sistem.",
+              "Peran Owner memerlukan visibilitas agregat lintas seluruh cabang operasional, wewenang untuk menyetujui alokasi stok antar cabang, dan akses langsung ke laporan keuangan. Sebaliknya, peran Karyawan dibatasi pada tugas harian cabang seperti presensi shift, transaksi kasir, pencatatan biaya operasional, dan pengajuan kebutuhan stok.",
+              "Kebutuhan arsitektur yang paling penting adalah pengelolaan dependensi antar modul. Saat kasir menyelesaikan transaksi penjualan, backend NestJS langsung memperbarui jumlah stok secara real-time. Jika kasir membatalkan pesanan, workflow rollback mengembalikan jumlah barang ke inventaris cabang. Order stok menghubungkan pengajuan karyawan, persetujuan owner, penerimaan barang, dan ketersediaan stok dalam satu alur terstruktur.",
             ],
           },
         },
@@ -104,33 +108,33 @@ export const multiBranchErpArticle: BlogArticle = {
           src: "/assets/projects/ukg-system/documentation/01.webp",
           format: "wide",
           alt: {
-            en: "UKG System production interface showing operational information",
-            id: "Antarmuka production UKG System yang menampilkan informasi operasional",
+            en: "UKG System production dashboard showing operational inventory and sales metrics",
+            id: "Dashboard production UKG System yang menampilkan metrik inventaris dan penjualan operasional",
           },
           caption: {
-            en: "A documented operational view from the delivered UKG System application.",
-            id: "Tampilan operasional terdokumentasi dari aplikasi UKG System yang telah dikirim.",
+            en: "Documented production dashboard interface displaying branch operational status and inventory levels.",
+            id: "Tampilan dashboard production terdokumentasi yang menyajikan status operasional cabang dan level stok inventaris.",
           },
         },
       ],
     },
     {
-      id: "coupled-records",
+      id: "quality-assurance",
       title: {
-        en: "Design for changes that cross modules",
-        id: "Rancang perubahan yang melintasi modul",
+        en: "Validating Business Logic with Katalon Studio",
+        id: "Memvalidasi Logika Bisnis dengan Katalon Studio",
       },
       blocks: [
         {
           type: "prose",
           paragraphs: {
             en: [
-              "An ERP becomes meaningful where modules affect one another. In UKG System, a sales transaction changes inventory. Cancelling that transaction restores the affected stock according to the implemented workflow. Stock requests connect employees, owner approval, incoming items, and branch inventory. Operational and sales records then become inputs for reports and dashboard summaries.",
-              "These connections are where implementation discipline matters. A locally correct screen can still produce a globally incorrect record if the related stock, approval, or reporting path is ignored. I treated the cross-module workflow as part of the feature itself, not as integration work to be added later.",
+              "Because ERP errors directly impact physical inventory and financial records, quality assurance was executed systematically using Katalon Studio. The test plan combined manual test cases for edge-case user interactions with automated test suites for repetitive regression workflows.",
+              "Automated test scripts verified authentication states, role-based route guards, branch data isolation, stock order approval paths, and receipt printing calculations. Running automated checks prior to release ensured that backend business rule changes did not regress frontend state or inventory ledger accuracy.",
             ],
             id: [
-              "ERP menjadi bermakna ketika satu modul memengaruhi modul lain. Di UKG System, transaksi penjualan mengubah inventaris. Pembatalan transaksi mengembalikan stok yang terkait sesuai workflow yang diterapkan. Pengajuan stok menghubungkan karyawan, persetujuan owner, barang masuk, dan inventaris cabang. Catatan operasional serta penjualan kemudian menjadi input untuk laporan dan ringkasan dashboard.",
-              "Hubungan ini membutuhkan disiplin implementasi. Sebuah layar dapat bekerja benar secara lokal, tetapi tetap menghasilkan catatan yang salah secara keseluruhan apabila jalur stok, persetujuan, atau laporan yang terkait diabaikan. Saya memperlakukan workflow lintas modul sebagai bagian dari fitur, bukan sebagai pekerjaan integrasi yang ditambahkan belakangan.",
+              "Karena kesalahan sistem ERP berdampak langsung pada inventaris fisik dan catatan keuangan, quality assurance dijalankan secara sistematis menggunakan Katalon Studio. Rencana pengujian menggabungkan skenario manual untuk interaksi pengguna khusus dengan suite pengujian otomatis untuk alur regresi berulang.",
+              "Skrip pengujian otomatis memvalidasi status autentikasi, route guard berbasis peran, isolasi data cabang, alur persetujuan order stok, dan perhitungan cetak nota. Menjalankan pemeriksaan otomatis sebelum rilis memastikan bahwa perubahan aturan bisnis backend tidak merusak status antarmuka atau akurasi pencatatan stok.",
             ],
           },
         },
@@ -141,17 +145,17 @@ export const multiBranchErpArticle: BlogArticle = {
             id: "Catatan teknis",
           },
           text: {
-            en: "The source record documents the workflow and production status, but it does not provide measured efficiency gains, test coverage, pass rates, or business-impact percentages.",
-            id: "Catatan sumber mendokumentasikan workflow dan status production, tetapi tidak menyediakan angka peningkatan efisiensi, test coverage, pass rate, atau persentase dampak bisnis.",
+            en: "The project record documents comprehensive manual and automated testing in Katalon Studio for core workflows. It does not cite unmeasured efficiency gains, pass rate percentages, test coverage numbers, or unverified financial impact metrics.",
+            id: "Catatan proyek mendokumentasikan pengujian manual dan otomatis di Katalon Studio untuk alur utama. Catatan ini tidak mencantumkan persentase peningkatan efisiensi, pass rate, angka test coverage, atau metrik dampak finansial yang tidak terukur.",
           },
         },
       ],
     },
     {
-      id: "production",
+      id: "production-delivery",
       title: {
-        en: "Carry the workflow through production",
-        id: "Bawa workflow sampai production",
+        en: "Deploying to Ubuntu Linux VPS and Active Operations",
+        id: "Deployment ke VPS Linux Ubuntu dan Operasional Aktif",
       },
       blocks: [
         {
@@ -159,16 +163,16 @@ export const multiBranchErpArticle: BlogArticle = {
           style: "ordered",
           items: {
             en: [
-              "Design the role and branch flows in Figma.",
-              "Implement the Next.js interface and NestJS application logic.",
-              "Validate primary flows, permissions, and module integration with manual and automated testing in Katalon Studio.",
-              "Prepare the Ubuntu VPS environment, configure the production domain, and take the system live.",
+              "Configure production runtime environment and reverse proxy on an Ubuntu Linux VPS.",
+              "Bind production domain at https://ukgsystem.com with secure certificate provisioning.",
+              "Execute database migrations and seed baseline branch structure and role privileges.",
+              "Conduct final smoke testing on production endpoints before opening the system to business operations.",
             ],
             id: [
-              "Rancang alur peran dan cabang di Figma.",
-              "Implementasikan antarmuka Next.js dan logika aplikasi NestJS.",
-              "Validasi alur utama, izin akses, dan integrasi modul melalui pengujian manual serta otomatis di Katalon Studio.",
-              "Siapkan environment VPS Ubuntu, konfigurasi domain production, lalu lakukan go-live sistem.",
+              "Konfigurasi runtime environment production dan reverse proxy pada VPS Linux Ubuntu.",
+              "Hubungkan domain production pada https://ukgsystem.com dengan penyediaan sertifikat aman.",
+              "Jalankan migrasi database serta data awal struktur cabang dan hak akses peran.",
+              "Lakukan smoke testing akhir pada endpoint production sebelum membuka sistem untuk operasional bisnis.",
             ],
           },
         },
@@ -176,10 +180,10 @@ export const multiBranchErpArticle: BlogArticle = {
           type: "prose",
           paragraphs: {
             en: [
-              "The project period ran from January through March 2026. After go-live, the system remained in use for business operations. The main engineering lesson is simple: for an integrated operational product, delivery is one continuous chain from workflow analysis to production verification.",
+              "The primary development cycle took place from January through March 2026. Following go-live, UKG System remained in active production use for CV Universal Kharisma Globalindo, managing multi-branch inventory, daily retail cashier shifts, and executive reporting without third-party middleware dependencies.",
             ],
             id: [
-              "Periode proyek berlangsung dari Januari hingga Maret 2026. Setelah go-live, sistem tetap digunakan untuk operasional bisnis. Pelajaran rekayasa utamanya sederhana: untuk produk operasional yang terintegrasi, delivery merupakan satu rangkaian berkelanjutan dari analisis workflow sampai verifikasi production.",
+              "Siklus pengembangan utama berlangsung dari Januari hingga Maret 2026. Setelah go-live, UKG System terus digunakan secara aktif dalam operasional CV Universal Kharisma Globalindo, mengelola inventaris multi-cabang, shift kasir harian, dan laporan eksekutif tanpa ketergantungan middleware pihak ketiga.",
             ],
           },
         },

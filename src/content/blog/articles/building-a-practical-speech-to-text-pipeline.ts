@@ -19,32 +19,34 @@ export const speechToTextPipelineArticle: BlogArticle = {
   sourceProjectSlugs: ["speech-to-text-system"],
   sections: [
     {
-      id: "complete-path",
+      id: "input-handling",
       title: {
-        en: "Define the complete media path",
-        id: "Tentukan jalur media secara lengkap",
+        en: "Ingesting Audio and Video Sources in Google Colab",
+        id: "Penerimaan Sumber Audio dan Video di Google Colab",
       },
       blocks: [
         {
           type: "flow",
           items: {
             en: [
-              "Upload audio or video",
-              "Extract audio when needed",
-              "Convert to mono 16 kHz",
-              "Split long input into chunks",
-              "Run Wav2Vec2 inference",
-              "Assemble transcript outputs",
-              "Generate SRT and burned-in video",
+              "Audio or Video Ingestion",
+              "FFmpeg Audio Extraction",
+              "16 kHz Mono Standardization",
+              "Sequential Audio Chunking",
+              "Wav2Vec2 Acoustic Inference",
+              "Multi-Format Export TXT CSV JSON",
+              "SRT Timestamp Generation",
+              "Burned-in Subtitle Video",
             ],
             id: [
-              "Upload audio atau video",
-              "Ekstrak audio jika diperlukan",
-              "Konversi ke mono 16 kHz",
-              "Bagi input panjang menjadi beberapa chunk",
-              "Jalankan inferensi Wav2Vec2",
-              "Susun output transkrip",
-              "Buat SRT dan video burned-in",
+              "Penerimaan Audio atau Video",
+              "Ekstraksi Audio FFmpeg",
+              "Standarisasi Mono 16 kHz",
+              "Chunking Audio Sekuensial",
+              "Inferensi Akustik Wav2Vec2",
+              "Ekspor Format TXT CSV JSON",
+              "Pembuatan Timestamp SRT",
+              "Video dengan Burned-in Subtitle",
             ],
           },
         },
@@ -52,22 +54,22 @@ export const speechToTextPipelineArticle: BlogArticle = {
           type: "prose",
           paragraphs: {
             en: [
-              "The Speech-to-Text System was built as a Python workflow in Google Colab. It accepts either audio or video, then produces reusable text files, subtitle data, and a final video with subtitles embedded into the image. Thinking about the whole path matters because model inference is only one transformation in the workflow.",
-              "The project uses the pretrained facebook/wav2vec2-base-960h model through Hugging Face Transformers. The implementation record does not include model fine-tuning. Its engineering work is in preparing media for that model, processing longer inputs, shaping the outputs, and connecting those outputs to another FFmpeg stage.",
+              "The Speech-to-Text System was architected as an end-to-end Python pipeline inside Google Colab. The pipeline ingests arbitrary user media, accommodating both standalone audio tracks and video files. Because downstream acoustic models expect pure audio signals, video inputs pass through an initial FFmpeg separation phase to extract uncompressed audio streams.",
+              "Treating media ingestion as a distinct pipeline stage allows the system to standardize diverse multimedia sources into a single consistent processing contract. Google Colab serves as the operational execution environment, hosting the Python dependencies, GPU inference execution, and file storage workflows.",
             ],
             id: [
-              "Speech-to-Text System dibangun sebagai workflow Python di Google Colab. Workflow menerima audio atau video, lalu menghasilkan file teks reusable, data subtitle, dan video akhir dengan subtitle yang tertanam pada gambar. Memikirkan jalur secara utuh penting karena inferensi model hanya salah satu transformasi di dalam workflow.",
-              "Proyek menggunakan model pralatih facebook/wav2vec2-base-960h melalui Hugging Face Transformers. Catatan implementasi tidak mencakup fine-tuning model. Pekerjaan rekayasanya berada pada persiapan media untuk model tersebut, pemrosesan input panjang, penyusunan output, dan penghubungan output dengan tahap FFmpeg berikutnya.",
+              "Speech-to-Text System dirancang sebagai pipeline Python end-to-end di dalam Google Colab. Pipeline menerima berbagai media pengguna, baik rekaman audio murni maupun file video. Karena model akustik membutuhkan sinyal audio terpisah, input video diproses melalui tahap ekstraksi FFmpeg untuk memisahkan stream audio tanpa kompresi.",
+              "Memperlakukan penerimaan media sebagai tahapan pipeline tersendiri memungkinkan sistem menstandarisasi beragam format multimedia ke dalam satu kontrak pemrosesan yang konsisten. Google Colab berfungsi sebagai lingkungan eksekusi operasional yang mengelola dependensi Python, inferensi GPU, dan workflow penyimpanan file.",
             ],
           },
         },
       ],
     },
     {
-      id: "normalize-input",
+      id: "signal-preprocessing",
       title: {
-        en: "Normalize before inference",
-        id: "Normalisasi sebelum inferensi",
+        en: "Acoustic Standardization and Sequential Chunking",
+        id: "Standarisasi Akustik dan Chunking Sekuensial",
       },
       blocks: [
         {
@@ -75,16 +77,16 @@ export const speechToTextPipelineArticle: BlogArticle = {
           style: "ordered",
           items: {
             en: [
-              "Identify whether the uploaded source is audio or video.",
-              "Use FFmpeg to extract audio from a video source.",
-              "Convert the signal to one mono channel at a 16 kHz sampling rate.",
-              "Divide longer audio into smaller chunks that can be processed sequentially.",
+              "Determine uploaded media container type (audio or video).",
+              "Extract raw audio streams from video files using FFmpeg.",
+              "Resample and downmix audio signals to mono channel at 16 kHz sampling rate using Librosa.",
+              "Partition long-duration audio recordings into smaller sequential chunks for stable memory management.",
             ],
             id: [
-              "Identifikasi apakah sumber yang di-upload berupa audio atau video.",
-              "Gunakan FFmpeg untuk mengekstrak audio dari sumber video.",
-              "Konversi sinyal menjadi satu channel mono pada sampling rate 16 kHz.",
-              "Bagi audio panjang menjadi chunk yang lebih kecil agar dapat diproses secara berurutan.",
+              "Identifikasi jenis kontainer media yang diunggah (audio atau video).",
+              "Ekstrak stream audio mentah dari file video menggunakan FFmpeg.",
+              "Resample dan gabungkan sinyal audio menjadi channel mono pada sampling rate 16 kHz menggunakan Librosa.",
+              "Bagi rekaman audio berdurasi panjang menjadi beberapa chunk sekuensial untuk manajemen memori yang stabil.",
             ],
           },
         },
@@ -92,22 +94,55 @@ export const speechToTextPipelineArticle: BlogArticle = {
           type: "prose",
           paragraphs: {
             en: [
-              "A consistent input format gives the inference stage one predictable contract. Video does not reach the model directly. FFmpeg first separates its audio. Librosa and the media-processing steps then help prepare the signal in the mono 16 kHz form used by the documented model workflow.",
-              "Chunking addresses the practical shape of long media. Each chunk passes through the Wav2Vec2 processor and model, and the resulting text is combined into the final transcription. The available record describes sequential chunk processing, but it does not provide an evaluation of how chunk boundaries affect recognition quality.",
+              "Acoustic neural networks require strict adherence to waveform sampling parameters. Using Librosa and FFmpeg, audio streams are downmixed to single-channel mono and resampled to a 16 kHz sampling rate, matching the exact spectral representation required by the Wav2Vec2 acoustic feature extractor.",
+              "To handle long audio recordings without exhausting GPU memory, the preprocessed waveform is divided into sequential chunks. Each audio chunk is processed independently through the inference model, preserving temporal ordering so that timestamps can be accurately mapped back to the original recording timeline.",
             ],
             id: [
-              "Format input yang konsisten memberi tahap inferensi satu kontrak yang dapat diprediksi. Video tidak masuk ke model secara langsung. FFmpeg terlebih dahulu memisahkan audionya. Librosa dan tahap pemrosesan media kemudian membantu menyiapkan sinyal dalam bentuk mono 16 kHz yang digunakan oleh workflow model terdokumentasi.",
-              "Chunking menangani bentuk praktis media berdurasi panjang. Setiap chunk melewati processor dan model Wav2Vec2, lalu teks yang dihasilkan digabungkan menjadi transkripsi akhir. Catatan yang tersedia menjelaskan pemrosesan chunk secara berurutan, tetapi tidak menyediakan evaluasi pengaruh batas chunk terhadap kualitas pengenalan.",
+              "Jaringan saraf akustik memerlukan kepatuhan ketat terhadap parameter sampling sinyal suara. Menggunakan Librosa dan FFmpeg, stream audio diubah menjadi channel tunggal mono dan di-resample ke sampling rate 16 kHz, sesuai dengan representasi spektra yang dibutuhkan oleh ekstraktor fitur Wav2Vec2.",
+              "Untuk memproses rekaman audio panjang tanpa membebani memori GPU, gelombang audio yang telah dipreprocessing dibagi menjadi beberapa chunk sekuensial. Setiap chunk audio diproses secara independen melalui model inferensi, mempertahankan urutan temporal sehingga timestamp dapat dipetakan kembali secara presisi ke garis waktu rekaman asli.",
             ],
           },
         },
       ],
     },
     {
-      id: "outputs",
+      id: "wav2vec2-inference",
       title: {
-        en: "Make one transcript useful in several contexts",
-        id: "Buat satu transkrip berguna dalam beberapa konteks",
+        en: "Automatic Speech Recognition with Pretrained Wav2Vec2",
+        id: "Automatic Speech Recognition dengan Wav2Vec2 Pralatih",
+      },
+      blocks: [
+        {
+          type: "prose",
+          paragraphs: {
+            en: [
+              "Speech recognition is performed using the pretrained facebook/wav2vec2-base-960h model loaded via Hugging Face Transformers. The model ingests normalized 16 kHz audio tensors, processes contextual acoustic embeddings across transformer layers, and outputs decoded text tokens for each sequential audio segment.",
+              "The pipeline aggregates chunk outputs into three distinct data formats: plaintext TXT for direct reading, tabular CSV structured with Pandas for chunk-by-chunk logging, and structured JSON for programmatic consumption in downstream systems.",
+            ],
+            id: [
+              "Pengenalan ucapan dijalankan menggunakan model pralatih facebook/wav2vec2-base-960h yang dimuat melalui Hugging Face Transformers. Model menerima tensor audio 16 kHz yang telah dinormalisasi, memproses embedding akustik kontekstual pada lapisan transformer, dan menghasilkan token teks terdekode untuk setiap segmen audio.",
+              "Pipeline menggabungkan output setiap chunk ke dalam tiga format data: file teks biasa TXT untuk dibaca langsung, format tabular CSV yang disusun dengan Pandas untuk logging per segmen, dan format terstruktur JSON untuk integrasi program lanjutan.",
+            ],
+          },
+        },
+        {
+          type: "note",
+          label: {
+            en: "Factual boundary",
+            id: "Batas faktual",
+          },
+          text: {
+            en: "The project record documents an ASR pipeline using the pretrained facebook/wav2vec2-base-960h model and does not include model fine-tuning. It does not include a benchmark, Word Error Rate, Character Error Rate, or unverified transcription accuracy claims.",
+            id: "Catatan proyek mendokumentasikan pipeline ASR menggunakan model pralatih facebook/wav2vec2-base-960h dan tidak mencakup fine-tuning model. Catatan ini tidak mencakup benchmark, Word Error Rate, Character Error Rate, atau klaim akurasi transkripsi yang tidak diverifikasi.",
+          },
+        },
+      ],
+    },
+    {
+      id: "subtitles-and-ffmpeg",
+      title: {
+        en: "Automated SRT Subtitle Generation and Burned-In Video Output",
+        id: "Pembuatan Subtitle SRT Otomatis dan Output Video Burned-In",
       },
       blocks: [
         {
@@ -119,53 +154,40 @@ export const speechToTextPipelineArticle: BlogArticle = {
             id: "Output video terdokumentasi dengan subtitle yang dihasilkan workflow speech-to-text",
           },
           caption: {
-            en: "The final media stage combines the generated SRT subtitle with the original video through FFmpeg.",
-            id: "Tahap media akhir menggabungkan subtitle SRT yang dihasilkan dengan video asli melalui FFmpeg.",
+            en: "Final media stage combining generated SRT subtitle timecodes with original video via FFmpeg.",
+            id: "Tahap media akhir yang menggabungkan timecode subtitle SRT dengan video asli melalui FFmpeg.",
           },
         },
         {
           type: "prose",
           paragraphs: {
             en: [
-              "The combined transcription is exported in three documented data formats. TXT provides a direct reading format. CSV supports tabular handling through Pandas. JSON keeps the result structured for further processing. The same transcription also feeds an SRT file with subtitle order, timing, and text.",
-              "FFmpeg then uses the SRT file to create a video with burned-in subtitles. Because the subtitle is rendered into the visual frames, the final video does not depend on a separate subtitle track during playback. The project includes a before-and-after media comparison as evidence of that final transformation.",
+              "Beyond generating plain text transcripts, the workflow structures temporal segment boundaries into standardized SubRip subtitle files (SRT), formatting sequence indices, start/end timestamps, and transcribed sentences. This enables seamless subtitle track distribution.",
+              "In the final processing phase, FFmpeg composites the generated SRT subtitles directly into the video stream, producing a finished video with burned-in subtitles. This guarantees that captions display reliably across all playback devices and web browsers without requiring external subtitle track support.",
             ],
             id: [
-              "Transkripsi gabungan diekspor dalam tiga format data terdokumentasi. TXT menyediakan format baca langsung. CSV mendukung pengelolaan tabular melalui Pandas. JSON menjaga hasil tetap terstruktur untuk pemrosesan lanjutan. Transkripsi yang sama juga menjadi sumber file SRT dengan urutan subtitle, waktu, dan teks.",
-              "FFmpeg kemudian menggunakan file SRT untuk membuat video dengan burned-in subtitle. Karena subtitle dirender ke dalam frame visual, video akhir tidak bergantung pada track subtitle terpisah saat diputar. Proyek menyertakan perbandingan media sebelum dan sesudah sebagai bukti transformasi akhir tersebut.",
+              "Selain menghasilkan transkrip teks biasa, workflow ini menyusun batas segmen temporal ke dalam format subtitle standar SubRip (SRT), memformat indeks urutan, timestamp awal dan akhir, serta kalimat hasil transkripsi. Hal ini memungkinkan distribusi trek subtitle secara mandiri.",
+              "Pada tahap pemrosesan akhir, FFmpeg menggabungkan subtitle SRT langsung ke dalam stream video, menghasilkan video final dengan burned-in subtitle. Pendekatan ini memastikan bahwa takarir muncul secara andal di seluruh perangkat pemutar dan peramban web tanpa memerlukan file subtitle eksternal.",
             ],
           },
         },
         {
-          type: "note",
-          label: {
-            en: "Evaluation boundary",
-            id: "Batas evaluasi",
-          },
-          text: {
-            en: "The project record does not include a benchmark, Word Error Rate, Character Error Rate, transcription-accuracy percentage, model comparison, or production-grade accuracy claim.",
-            id: "Catatan proyek tidak mencakup benchmark, Word Error Rate, Character Error Rate, persentase akurasi transkripsi, perbandingan model, atau klaim akurasi tingkat production.",
-          },
-        },
-      ],
-    },
-    {
-      id: "practical-result",
-      title: {
-        en: "The practical result is the pipeline",
-        id: "Hasil praktisnya adalah pipeline",
-      },
-      blocks: [
-        {
-          type: "prose",
-          paragraphs: {
+          type: "list",
+          style: "unordered",
+          items: {
             en: [
-              "This implementation is best understood as an end-to-end Automatic Speech Recognition workflow built around a pretrained model. Python coordinates the stages, Wav2Vec2 performs inference, Librosa supports audio processing, Pandas structures tabular output, and FFmpeg connects the audio and video boundaries.",
-              "The value is not a new ASR model. It is a repeatable path from mixed media input to several concrete artifacts: TXT, CSV, JSON, SRT, and a video with embedded subtitles. Keeping that distinction explicit makes the project easier to evaluate on what was actually implemented.",
+              "Plaintext transcript document (TXT).",
+              "Tabular chunk dataset with time offset metadata (CSV).",
+              "Hierarchical structured JSON payload.",
+              "Standard time-coded subtitle file (SRT).",
+              "Composite MP4 video with burned-in subtitles.",
             ],
             id: [
-              "Implementasi ini paling tepat dipahami sebagai workflow Automatic Speech Recognition end-to-end yang dibangun di sekitar model pralatih. Python mengoordinasikan tahapan, Wav2Vec2 menjalankan inferensi, Librosa mendukung pemrosesan audio, Pandas menyusun output tabular, dan FFmpeg menghubungkan batas audio serta video.",
-              "Nilainya bukan model ASR baru. Nilainya adalah jalur berulang dari input media campuran menuju beberapa artefak konkret: TXT, CSV, JSON, SRT, dan video dengan subtitle tertanam. Menjaga perbedaan tersebut tetap eksplisit membuat proyek lebih mudah dinilai berdasarkan apa yang benar-benar diimplementasikan.",
+              "Dokumen transkrip teks biasa (TXT).",
+              "Dataset chunk tabular dengan metadata waktu (CSV).",
+              "Payload data hierarkis terstruktur (JSON).",
+              "File subtitle standar dengan timecode (SRT).",
+              "Video komposit MP4 dengan burned-in subtitle.",
             ],
           },
         },
