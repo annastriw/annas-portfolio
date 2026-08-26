@@ -144,7 +144,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
                 <div className="hero-portrait-frame border border-(--color-border) p-1.5 bg-(--color-background) aspect-[4/5] relative overflow-hidden rounded-[2px] hover:border-(--color-accent) transition-colors duration-300">
                   <Image
                     src="/assets/profile/pas-foto.webp"
-                    alt="Annas Tri Widagdo — Software Engineer"
+                    alt="Annas Tri Widagdo · Software Engineer"
                     width={300}
                     height={375}
                     priority

@@ -17,7 +17,7 @@ export function BlogHero({ locale }: BlogHeroProps) {
           /
         </span>
         <span className="uppercase tracking-wider">
-          {isId ? "ARSIP EDITORIAL TEKNIS" : "TECHNICAL EDITORIAL ARCHIVE"}
+          {isId ? "ARSIP TEKNIS & REKAYASA" : "TECHNICAL EDITORIAL ARCHIVE"}
         </span>
         <span className="text-(--color-muted)">
           {isId ? "· 4 ARTIKEL" : "· 4 ARTICLES"}

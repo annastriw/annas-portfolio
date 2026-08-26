@@ -53,7 +53,9 @@ export function AboutEducation({ locale }: AboutEducationProps) {
           className="flex flex-col gap-2 max-w-3xl"
         >
           <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
-            <span className="font-semibold text-(--color-accent)">{data.tag}</span>
+            <span className="font-semibold text-(--color-accent)">
+              {isId ? "[01 // PENDIDIKAN]" : "[01 // EDUCATION]"}
+            </span>
             <span className="text-(--color-border)" aria-hidden="true">
               /
             </span>
@@ -74,7 +76,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             {/* Degree & Field of Study */}
             <div className="flex flex-col gap-1">
               <h3 className="font-serif text-2xl sm:text-3xl text-(--color-foreground) font-normal m-0 tracking-tight">
-                {data.degree[locale]} — {data.fieldOfStudy[locale]}
+                {data.degree[locale]} · {data.fieldOfStudy[locale]}
               </h3>
               <p className="font-sans text-base sm:text-lg font-medium text-(--color-foreground) m-0">
                 {data.institution[locale]}
@@ -125,7 +127,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             >
               <Image
                 src={data.certificateAsset}
-                alt={`Ijazah ${data.degree[locale]} — ${data.institution[locale]}`}
+                alt={`Ijazah ${data.degree[locale]} · ${data.institution[locale]}`}
                 width={700}
                 height={480}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px"
@@ -157,7 +159,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
           className="cert-modal-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-label={data.figureLabel[locale]}
+          aria-label={typeof data.figureLabel[locale] === "string" ? data.figureLabel[locale] : "Certificate"}
           onClick={() => setIsModalOpen(false)}
         >
           <div
@@ -170,7 +172,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                   {isId ? "BUKTI AKADEMIK TERVERIFIKASI" : "VERIFIED ACADEMIC EVIDENCE"}
                 </span>
                 <h3 className="cert-modal-heading">
-                  {data.degree[locale]} — {data.fieldOfStudy[locale]}
+                  {data.degree[locale]} · {data.fieldOfStudy[locale]}
                 </h3>
                 <p className="cert-modal-issuer">
                   {data.institution[locale]} · {data.period[locale]}
@@ -190,7 +192,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             <div className="cert-modal-image-wrapper">
               <Image
                 src={data.certificateAsset}
-                alt={`Ijazah ${data.degree[locale]} — ${data.institution[locale]}`}
+                alt={`Ijazah ${data.degree[locale]} · ${data.institution[locale]}`}
                 width={1600}
                 height={1100}
                 sizes="(max-width: 1200px) 100vw, 1200px"

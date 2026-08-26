@@ -54,8 +54,8 @@ export interface CertificateData {
 export const profileData: ProfileData = {
   tag: "[02 // ABOUT]",
   subtag: {
-    en: "PERSONAL PROFILE",
-    id: "PROFIL PRIBADI",
+    en: "TECHNICAL EDITORIAL ARCHIVE",
+    id: "ARSIP TEKNIS & REKAYASA",
   },
   name: "Annas Tri Widagdo",
   headline: {
@@ -79,8 +79,8 @@ export const profileData: ProfileData = {
   portrait: {
     assetPath: "/assets/profile/pas-foto.webp",
     alt: {
-      en: "Annas Tri Widagdo — Software Engineer, Full-Stack Developer & ML Engineer",
-      id: "Annas Tri Widagdo — Software Engineer, Full-Stack Developer & ML Engineer",
+      en: "Annas Tri Widagdo · Software Engineer, Full-Stack Developer & ML Engineer",
+      id: "Annas Tri Widagdo · Software Engineer, Full-Stack Developer & ML Engineer",
     },
     figureLabel: "FIG.01 // PORTRAIT RECORD",
     caption: {
@@ -140,8 +140,8 @@ export const educationData: EducationData = {
     id: "Teknik Komputer",
   },
   period: {
-    en: "August 2022 – July 2026",
-    id: "Agustus 2022 – Juli 2026",
+    en: "August 2022 - July 2026",
+    id: "Agustus 2022 - Juli 2026",
   },
   gpa: "3.79 / 4.00",
   positioning: {

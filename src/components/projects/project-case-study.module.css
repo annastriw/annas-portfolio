@@ -7,8 +7,22 @@
 }
 
 .container {
-  inline-size: min(calc(100% - 2rem), 84rem);
+  width: 100%;
+  max-width: 80rem;
   margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .container {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .container {
+    padding-inline: 2rem;
+  }
 }
 
 /* Breadcrumb & Navigation */
@@ -850,9 +864,6 @@
 }
 
 @media (max-width: 420px) {
-  .container {
-    inline-size: min(calc(100% - 1.25rem), 84rem);
-  }
   .stackDirectory {
     grid-template-columns: minmax(0, 1fr);
   }

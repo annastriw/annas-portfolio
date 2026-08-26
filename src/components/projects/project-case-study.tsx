@@ -89,7 +89,7 @@ export function ProjectCaseStudyView({
         id: "COVER",
         src: project.cover.src,
         alt: project.cover.alt[locale],
-        caption: `${project.title[locale]} — ${project.cover.alt[locale]}`,
+        caption: `${project.title[locale]} · ${project.cover.alt[locale]}`,
         format: "cover",
       },
     ];

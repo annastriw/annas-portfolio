@@ -79,8 +79,8 @@ export function generateProfilePageJsonLd(locale: Locale): JsonLdProfilePage {
     "@type": "ProfilePage",
     name:
       locale === "id"
-        ? "Tentang & Profil Rekayasa — Annas Tri Widagdo"
-        : "About & Engineering Profile — Annas Tri Widagdo",
+        ? "Tentang & Profil Rekayasa - Annas Tri Widagdo"
+        : "About & Engineering Profile - Annas Tri Widagdo",
     url: `${SITE_URL}/${locale}/about`,
     mainEntity: generatePersonJsonLd(),
   };

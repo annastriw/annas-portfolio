@@ -104,7 +104,7 @@ export function AboutProfile({ locale }: AboutProfileProps) {
               className="flex items-center gap-3 font-mono text-xs text-(--color-muted)"
             >
               <span className="font-semibold text-(--color-accent)">
-                {data.tag}
+                {isId ? "[02 // TENTANG]" : "[02 // ABOUT]"}
               </span>
               <span className="text-(--color-border)" aria-hidden="true">
                 /

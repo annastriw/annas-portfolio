@@ -896,8 +896,22 @@ html.dark .route-loader-pill {
 }
 
 .blog-hub-container {
-  inline-size: min(calc(100% - 2rem), var(--container-max));
+  width: 100%;
+  max-width: 80rem;
   margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .blog-hub-container {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .blog-hub-container {
+    padding-inline: 2rem;
+  }
 }
 
 .blog-hero-header {
@@ -1091,8 +1105,22 @@ html.dark .route-loader-pill {
 }
 
 .blog-article-container {
-  inline-size: min(calc(100% - 2rem), var(--container-narrow));
+  width: 100%;
+  max-width: 56rem;
   margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .blog-article-container {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .blog-article-container {
+    padding-inline: 2rem;
+  }
 }
 
 .blog-detail-breadcrumb {

@@ -17,10 +17,10 @@ export interface ExperienceItem {
 export const experiencesData: ExperienceItem[] = [
   {
     id: "cv-universal-kharisma-globalindo",
-    period: "01/2026 — 04/2026",
+    period: "01/2026 - 04/2026",
     role: {
-      en: "Full-Stack Developer — Freelance Project",
-      id: "Full-Stack Developer — Proyek Freelance",
+      en: "Full-Stack Developer · Freelance Project",
+      id: "Full-Stack Developer · Proyek Freelance",
     },
     organization: {
       en: "CV Universal Kharisma Globalindo",
@@ -59,7 +59,7 @@ export const experiencesData: ExperienceItem[] = [
   },
   {
     id: "intern-ft-undip",
-    period: "08/2025 — 09/2025",
+    period: "08/2025 - 09/2025",
     role: {
       en: "UI/UX Designer Intern",
       id: "UI/UX Designer Intern",
@@ -99,7 +99,7 @@ export const experiencesData: ExperienceItem[] = [
   },
   {
     id: "intern-duta-basis-dataprima",
-    period: "07/2024 — 08/2024",
+    period: "07/2024 - 08/2024",
     role: {
       en: "Junior Game Developer Intern",
       id: "Junior Game Developer Intern",
