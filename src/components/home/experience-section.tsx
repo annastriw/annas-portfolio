@@ -11,12 +11,9 @@ export function ExperienceSection({ locale }: ExperienceSectionProps) {
   const isId = locale === "id";
 
   const copy = {
-    tag: isId ? "[02 // PENGALAMAN]" : "[02 // EXPERIENCE]",
+    tag: "[02 // EXPERIENCE]",
     subtag: isId ? "RIWAYAT PROFESIONAL" : "PROFESSIONAL TIMELINE",
     title: isId ? "Pengalaman" : "Experience",
-    subtitle: isId
-      ? "Pengalaman proyek dan magang dalam pengembangan software, desain UI/UX, dan pengalaman digital interaktif."
-      : "Professional projects and internships across software development, UI/UX design, and interactive digital experiences.",
   };
 
   return (
@@ -37,9 +34,6 @@ export function ExperienceSection({ locale }: ExperienceSectionProps) {
           <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
             {copy.title}
           </h2>
-          <p className="section-subtitle text-sm sm:text-base text-(--color-muted) leading-relaxed m-0">
-            {copy.subtitle}
-          </p>
         </ScrollReveal>
 
         {/* 3-Box Connected Timeline */}

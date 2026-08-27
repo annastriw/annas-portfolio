@@ -1,34 +1,38 @@
-import type { TechEntry } from "./tech-item";
+import type {
+  CapabilityCategory,
+  CapabilityItem,
+} from "@/content/capabilities/capabilities-data";
 import { TechItem } from "./tech-item";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
-export interface TechCategoryData {
-  id: string;
-  code: string;
-  title: string;
-  items: TechEntry[];
-}
-
 interface TechCategoryProps {
-  category: TechCategoryData;
+  category: CapabilityCategory;
   index?: number;
+  onSelectItem: (item: CapabilityItem, category: CapabilityCategory) => void;
 }
 
-export function TechCategory({ category, index = 0 }: TechCategoryProps) {
-  const delayMs = index * 100;
+export function TechCategory({
+  category,
+  index = 0,
+  onSelectItem,
+}: TechCategoryProps) {
+  const delayMs = index * 80;
 
   return (
     <ScrollReveal delayMs={delayMs} animationClass="animate-editorial-fade">
       <div
-        className="tech-directory-category flex flex-col gap-3 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) p-4 sm:p-5 rounded-[2px] hover:border-(--color-accent) transition-colors duration-300"
+        className="tech-directory-category flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-8 py-5 sm:py-6 border-b border-(--color-border) last:border-b-0"
         role="region"
         aria-label={category.title}
       >
-        {/* Category Header */}
-        <div className="flex flex-col gap-1 border-b border-(--color-border) pb-3">
-          <div className="flex items-center justify-between font-mono text-[11px] text-(--color-muted)">
-            <span className="text-(--color-accent) font-semibold">
-              {category.code}
+        {/* Left Column (Desktop): Category Index, Title, and Count */}
+        <div className="flex flex-col gap-1 lg:w-64 shrink-0">
+          <div className="flex items-center gap-2 font-mono text-xs text-(--color-muted)">
+            <span className="font-semibold text-(--color-accent)">
+              [{category.index}]
+            </span>
+            <span className="text-(--color-border)" aria-hidden="true">
+              /
             </span>
             <span className="uppercase tracking-wider">
               {category.items.length} TECHNOLOGIES
@@ -39,10 +43,17 @@ export function TechCategory({ category, index = 0 }: TechCategoryProps) {
           </h3>
         </div>
 
-        {/* Category Items List */}
-        <div className="flex flex-col gap-1.5" role="list">
+        {/* Right Column: Responsive Grid of Technology Items */}
+        <div
+          className="grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5"
+          role="list"
+        >
           {category.items.map((item) => (
-            <TechItem key={`${category.id}-${item.slug}`} item={item} />
+            <TechItem
+              key={`${category.id}-${item.slug}`}
+              item={item}
+              onSelect={(selected) => onSelectItem(selected, category)}
+            />
           ))}
         </div>
       </div>

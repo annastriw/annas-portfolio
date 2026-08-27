@@ -1,45 +1,39 @@
-import { getTechLogoPathIfPresent } from "@/lib/assets/logo-detector";
 import { TechLogo } from "./tech-logo";
-
-export interface TechEntry {
-  slug: string;
-  name: string;
-  monogram: string;
-  index: string;
-}
+import type { CapabilityItem } from "@/content/capabilities/capabilities-data";
 
 interface TechItemProps {
-  item: TechEntry;
+  item: CapabilityItem;
+  onSelect: (item: CapabilityItem) => void;
 }
 
-export function TechItem({ item }: TechItemProps) {
-  const logoPath = getTechLogoPathIfPresent(item.slug);
-
+export function TechItem({ item, onSelect }: TechItemProps) {
   return (
-    <div
-      className="tech-directory-row group flex items-center justify-between gap-3 p-2 sm:p-2.5 border border-(--color-border) bg-(--color-background) hover:border-(--color-accent) transition-all duration-200 rounded-[2px]"
-      role="listitem"
+    <button
+      type="button"
+      onClick={() => onSelect(item)}
+      className="tech-directory-row group w-full text-left flex items-center justify-between gap-3 p-2 sm:p-2.5 border border-(--color-border) bg-(--color-background) hover:border-(--color-accent) transition-all duration-200 rounded-[2px] cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
+      aria-haspopup="dialog"
+      aria-label={`View technical record for ${item.name}`}
     >
-      <div className="flex items-center gap-3">
-        <span className="font-mono text-[11px] text-(--color-accent) font-semibold transition-transform duration-200 group-hover:translate-x-0.5">
+      <div className="flex items-center gap-2.5 min-w-0">
+        <span className="font-mono text-[11px] text-(--color-accent) font-semibold shrink-0 transition-transform duration-200 group-hover:translate-x-0.5">
           {item.index}
         </span>
         <TechLogo
           name={item.name}
           monogram={item.monogram}
-          logoPath={logoPath}
         />
-        <span className="font-mono text-xs sm:text-sm font-medium text-(--color-foreground) group-hover:text-(--color-accent) transition-colors duration-150">
+        <span className="font-mono text-xs sm:text-sm font-medium text-(--color-foreground) group-hover:text-(--color-accent) transition-colors duration-150 truncate">
           {item.name}
         </span>
       </div>
 
       <span
-        className="font-mono text-[10px] text-(--color-border) group-hover:text-(--color-accent) transition-colors duration-150 select-none"
+        className="font-mono text-xs text-(--color-muted) group-hover:text-(--color-accent) transition-transform duration-150 group-hover:translate-x-0.5 select-none shrink-0"
         aria-hidden="true"
       >
-        ■
+        ↗
       </span>
-    </div>
+    </button>
   );
 }

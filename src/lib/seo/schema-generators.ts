@@ -26,14 +26,14 @@ export function generatePersonJsonLd(): JsonLdPerson {
     name: siteConfig.name,
     url: SITE_URL,
     image: `${SITE_URL}/assets/profile/pas-foto.webp`,
-    jobTitle: "Software Engineer, Full-Stack Developer & Machine Learning Engineer",
+    jobTitle: "Software Engineer",
     alumniOf: {
       "@type": "CollegeOrUniversity",
       name: "Diponegoro University",
     },
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Klaten, Central Java",
+      addressLocality: "Jakarta",
       addressCountry: "Indonesia",
     },
     sameAs: [

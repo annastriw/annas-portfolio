@@ -86,11 +86,11 @@ export const siteContact: ContactInfo = {
   linkedInUrl: "https://www.linkedin.com/in/annastriw",
   gitHub: "github.com/annastriw",
   gitHubUrl: "https://github.com/annastriw",
-  location: "Klaten, Central Java, Indonesia",
+  location: "Jakarta, Indonesia",
   timezone: "Asia/Jakarta (UTC+7)",
   status: {
-    en: "OPEN TO COLLABORATION",
-    id: "TERBUKA UNTUK KOLABORASI",
+    en: "Open to Collaboration",
+    id: "Terbuka untuk Kolaborasi",
   },
 };
 

@@ -5,7 +5,7 @@ export interface ExperienceItem {
   period: string;
   role: Record<Locale, string>;
   organization: Record<Locale, string>;
-  location: string;
+  location: Record<Locale, string>;
   type: string;
   logoFolder: string;
   logoPlaceholder: string;
@@ -17,49 +17,50 @@ export interface ExperienceItem {
 export const experiencesData: ExperienceItem[] = [
   {
     id: "cv-universal-kharisma-globalindo",
-    period: "01/2026 - 04/2026",
+    period: "JAN 2026 – APR 2026",
     role: {
-      en: "Full-Stack Developer · Freelance Project",
-      id: "Full-Stack Developer · Proyek Freelance",
+      en: "Full-Stack Web Developer",
+      id: "Full-Stack Web Developer",
     },
     organization: {
       en: "CV Universal Kharisma Globalindo",
       id: "CV Universal Kharisma Globalindo",
     },
-    location: "Klaten, Central Java, Indonesia",
-    type: "FREELANCE // PRODUCTION ERP",
+    location: {
+      en: "Klaten, Central Java, Indonesia",
+      id: "Klaten, Jawa Tengah, Indonesia",
+    },
+    type: "FREELANCE // FULL-STACK DEVELOPMENT",
     logoFolder: "universal-kharisma-globalindo",
     logoPlaceholder: "UKG",
     description: {
-      en: "Engineered and deployed UKG System, a multi-branch Enterprise Resource Planning (ERP) web application used in daily business operations.",
-      id: "Merancang dan melakukan deployment UKG System, aplikasi ERP multi-cabang berbasis web untuk operasional bisnis harian.",
+      en: "Developed a multi-branch ERP end-to-end using Next.js frontend, NestJS REST API, and MySQL database.",
+      id: "Mengembangkan ERP multi-cabang secara end-to-end menggunakan frontend Next.js, REST API NestJS, dan database MySQL.",
     },
     highlights: {
       en: [
-        "Developed UKG System, a multi-branch ERP web application using Next.js frontend, NestJS modular REST API backend, and MySQL database.",
-        "Architected end-to-end Figma UI/UX, role-based access control, operational workflows (inventory, sales, approvals, reporting), and automated cashier stock deductions.",
-        "Executed manual and automation testing using Katalon Studio, and deployed to production on a Linux Ubuntu VPS.",
+        "Developed a multi-branch ERP end-to-end using a Next.js frontend, NestJS REST API, and MySQL database.",
+        "Designed role-based workflows for inventory, sales, approvals, reporting, and automated stock updates.",
+        "Conducted manual and automated testing with Katalon Studio, then deployed the system to an Ubuntu VPS where it remains in active use.",
       ],
       id: [
-        "Mengembangkan UKG System, aplikasi ERP multi-cabang menggunakan frontend Next.js, backend REST API modular NestJS, dan basis data MySQL.",
-        "Merancang alur end-to-end dari UI/UX Figma, kontrol akses berbasis peran, alur operasional (inventaris, kasir, approval, laporan), dan rekonsiliasi stok otomatis.",
-        "Menjalankan manual testing dan automation testing dengan Katalon Studio serta melakukan deployment production pada VPS Linux Ubuntu.",
+        "Mengembangkan ERP multi-cabang secara end-to-end menggunakan frontend Next.js, REST API NestJS, dan database MySQL.",
+        "Merancang workflow berbasis role untuk inventory, penjualan, approval, laporan, dan pembaruan stok otomatis.",
+        "Menjalankan manual dan automated testing dengan Katalon Studio, kemudian melakukan deployment ke VPS Ubuntu. Sistem masih aktif digunakan hingga saat ini.",
       ],
     },
     technologies: [
       "Next.js",
       "NestJS",
       "TypeScript",
-      "REST API",
       "MySQL",
       "Katalon Studio",
-      "Linux Ubuntu VPS",
-      "Figma",
+      "Linux Ubuntu",
     ],
   },
   {
     id: "intern-ft-undip",
-    period: "08/2025 - 09/2025",
+    period: "AUG 2025 – SEP 2025",
     role: {
       en: "UI/UX Designer Intern",
       id: "UI/UX Designer Intern",
@@ -68,24 +69,27 @@ export const experiencesData: ExperienceItem[] = [
       en: "Faculty of Engineering, Diponegoro University",
       id: "Fakultas Teknik, Universitas Diponegoro",
     },
-    location: "Semarang, Central Java, Indonesia",
+    location: {
+      en: "Semarang, Central Java, Indonesia",
+      id: "Semarang, Jawa Tengah, Indonesia",
+    },
     type: "INTERNSHIP // UI/UX DESIGN",
     logoFolder: "ft-undip",
     logoPlaceholder: "FT",
     description: {
-      en: "Designed user experiences, interface wireframes, interactive prototypes, and technical system documentation for institutional engineering faculty platforms.",
-      id: "Merancang pengalaman pengguna, wireframe antarmuka, purwarupa interaktif, dan dokumentasi sistem teknis untuk platform digital Fakultas Teknik.",
+      en: "Designed wireframes, user flows, and interactive prototypes for faculty platforms.",
+      id: "Merancang wireframe, user flow, dan interactive prototype untuk platform Fakultas Teknik.",
     },
     highlights: {
       en: [
-        "Designed wireframes and user interaction flows for SITEDI (Faculty Research and Community Service Information System).",
-        "Authored the official SITEDI User Guide documenting core system workflows, key features, and user instructions.",
-        "Designed wireframes and user experience flows for the SIPERPUS FT UNDIP faculty library system.",
+        "Designed wireframes and user flows for the SITEDI research and community service information system.",
+        "Created interface flows and an interactive prototype for the SIPERPUS FT Undip library system.",
+        "Authored the SITEDI User Guide to document core workflows, features, and usage instructions.",
       ],
       id: [
-        "Merancang wireframe dan alur interaksi pengguna untuk SITEDI (Sistem Informasi Penelitian dan Pengabdian Fakultas Teknik).",
-        "Menyusun Buku Panduan Penggunaan resmi SITEDI yang mendokumentasikan alur sistem, fitur utama, dan instruksi pengguna.",
-        "Merancang wireframe dan alur pengalaman pengguna untuk sistem perpustakaan fakultas SIPERPUS FT UNDIP.",
+        "Merancang wireframe dan user flow untuk sistem informasi penelitian dan pengabdian SITEDI.",
+        "Membuat alur antarmuka dan interactive prototype untuk sistem perpustakaan SIPERPUS FT Undip.",
+        "Menyusun Buku Panduan Penggunaan SITEDI yang mendokumentasikan workflow, fitur utama, dan petunjuk penggunaan.",
       ],
     },
     technologies: [
@@ -99,7 +103,7 @@ export const experiencesData: ExperienceItem[] = [
   },
   {
     id: "intern-duta-basis-dataprima",
-    period: "07/2024 - 08/2024",
+    period: "JUL 2024 – AUG 2024",
     role: {
       en: "Junior Game Developer Intern",
       id: "Junior Game Developer Intern",
@@ -108,24 +112,27 @@ export const experiencesData: ExperienceItem[] = [
       en: "PT Duta Basis Dataprima",
       id: "PT Duta Basis Dataprima",
     },
-    location: "Bandung, West Java, Indonesia",
-    type: "INTERNSHIP // 3D & MULTIMEDIA",
+    location: {
+      en: "Bandung, West Java, Indonesia",
+      id: "Bandung, Jawa Barat, Indonesia",
+    },
+    type: "INTERNSHIP // UNITY DEVELOPMENT",
     logoFolder: "duta-basis-dataprima",
     logoPlaceholder: "DBD",
     description: {
-      en: "Engineered an interactive 360° Panoramic Virtual Tour prototype for architectural building visualization.",
-      id: "Mengembangkan purwarupa Panoramic Virtual Tour 360° interaktif untuk visualisasi proyek bangunan arsitektur.",
+      en: "Developed a Panoramic Virtual Tour prototype in Unity and C# using architectural renders produced with Lumion Pro.",
+      id: "Mengembangkan prototype Panoramic Virtual Tour menggunakan Unity dan C# dengan visual arsitektur yang dirender melalui Lumion Pro.",
     },
     highlights: {
       en: [
-        "Developed Panoramic Virtual Tour prototype in Unity (C#) using Lumion Pro 3D architectural renders.",
-        "Processed 78 rendered 360° panoramas and structured scene management across 79 distinct Unity scenes.",
-        "Implemented Physics Raycasts, Box Colliders, reusable navigation hotspot prefabs, and mouse/touch camera controls with persistent PlayerRig.",
+        "Developed a Panoramic Virtual Tour prototype in Unity and C# using architectural renders produced with Lumion Pro.",
+        "Processed 78 rendered panoramas and organized the application across 79 Unity scenes.",
+        "Implemented scene navigation using physics raycasts, box colliders, reusable hotspots, and mouse and touch controls.",
       ],
       id: [
-        "Membangun purwarupa Panoramic Virtual Tour di Unity (C#) memanfaatkan hasil render 3D Lumion Pro.",
-        "Mengolah 78 hasil render panorama 360° dan menyusun hierarki scene management pada 79 scene Unity.",
-        "Mengimplementasikan Physics Raycast, Box Collider, prefab hotspot navigasi reusable, dan kontrol kamera mouse/touch dengan PlayerRig persisten.",
+        "Mengembangkan prototype Panoramic Virtual Tour menggunakan Unity dan C# dengan visual arsitektur yang dirender melalui Lumion Pro.",
+        "Mengolah 78 hasil render panorama dan menyusun aplikasi dalam 79 Unity scenes.",
+        "Mengimplementasikan navigasi antar-scene menggunakan physics raycast, box collider, reusable hotspot, serta kontrol mouse dan touch.",
       ],
     },
     technologies: [

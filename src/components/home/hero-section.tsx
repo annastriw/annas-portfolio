@@ -13,27 +13,26 @@ export function HeroSection({ locale }: HeroSectionProps) {
   const isId = locale === "id";
 
   const copy = {
-    sectionTag: "[01 // INTRO]",
-    introTitle: isId ? "PROFIL ENGINEERING" : "ENGINEERING PROFILE",
-    greeting: isId ? "Halo, saya" : "Hello, I'm",
+    sectionTag: "[01 // PROFILE]",
+    introTitle: isId ? "RINGKASAN PROFESIONAL" : "PROFESSIONAL SUMMARY",
+    greeting: isId ? "Halo, saya" : "Hello, I’m",
     name: "Annas Tri Widagdo",
-    roleLead: isId ? "Saya seorang" : "I'm a",
+    roleLead: isId ? "Saya seorang" : "I’m a",
     personalBrand: isId
-      ? "Software Engineer, Full-Stack Developer, dan ML Engineer yang berdomisili di Klaten, Jawa Tengah. Saya mengembangkan arsitektur web andal dan sistem machine learning terapan yang berorientasi pada kebutuhan nyata."
-      : "Software Engineer, Full-Stack Developer, and ML Engineer based in Klaten, Central Java, Indonesia. I build robust web architectures and applied machine learning systems grounded in practical engineering.",
-    location: "KLATEN, CENTRAL JAVA, ID",
-    statusText: isId ? "TERSEDIA UNTUK KOLABORASI" : "OPEN TO COLLABORATION",
-    exploreCta: isId ? "Lihat Semua Proyek (10)" : "Explore Projects (10)",
-    contactTeaser: isId ? "Terbuka Untuk Kolaborasi" : "Available for Collaboration",
-    contactAction: isId ? "Kontak" : "Contact",
-    portraitTag: isId ? "[REKAM PROFIL]" : "[PROFILE RECORD]",
+      ? "Saya adalah Software Engineer yang berfokus pada full-stack web development dan machine learning. Saya mengubah permasalahan nyata menjadi sistem dan produk software dengan menghubungkan antarmuka, backend, data, dan model machine learning. Saya ingin setiap solusi yang saya kembangkan dapat bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan."
+      : "I am a Software Engineer focused on full-stack web development and machine learning. I turn real problems into software systems and products by connecting interfaces, backend systems, data, and machine learning models. I want every solution I build to work reliably, provide clear value, and be easy to use.",
+    location: "Jakarta, Indonesia",
+    statusText: isId ? "Terbuka untuk Kolaborasi" : "Open to Collaboration",
+    primaryCta: isId ? "Jelajahi Arsip Proyek" : "Explore Project Archive",
+    secondaryCta: isId ? "Mulai Percakapan" : "Start a Conversation",
+    portraitTag: "[01 // PROFILE]",
     portraitCaption: "PORTRAIT // FIG.01",
   };
 
   return (
     <section
       className="home-hero-section py-12 sm:py-16 md:py-20 border-b border-(--color-border) overflow-hidden"
-      aria-label={isId ? "Pengantar dan Profil Utama" : "Introduction and Professional Profile"}
+      aria-label={isId ? "Ringkasan Profesional" : "Professional Summary"}
     >
       <div className="home-hero-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Golden-Ratio Layout: Left Lead (~60%) / Right Portrait (~40%) */}
@@ -77,7 +76,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
               </div>
             </ScrollReveal>
 
-            {/* Concise 1-2 Sentence Factual Branding */}
+            {/* Concise Approved Factual Bio */}
             <ScrollReveal delayMs={200} animationClass="animate-editorial-fade">
               <p className="home-hero-description text-sm sm:text-base text-(--color-muted) leading-relaxed max-w-[60ch] m-0">
                 {copy.personalBrand}
@@ -110,14 +109,14 @@ export function HeroSection({ locale }: HeroSectionProps) {
               </div>
             </ScrollReveal>
 
-            {/* Primary CTA & Direct Contact Teaser */}
+            {/* Primary & Secondary CTAs */}
             <ScrollReveal delayMs={300} animationClass="animate-editorial-fade">
               <div className="home-hero-actions flex flex-wrap items-center gap-4 sm:gap-6 pt-1">
                 <Link
                   href={`/${locale}/projects`}
                   className="hero-btn-primary group inline-flex items-center gap-2 px-4 py-2.5 border border-(--color-foreground) bg-(--color-foreground) text-(--color-background) font-mono text-xs sm:text-sm font-semibold rounded-[2px] hover:bg-(--color-accent) hover:border-(--color-accent) hover:text-white transition-all duration-200"
                 >
-                  <span>{copy.exploreCta}</span>
+                  <span>{copy.primaryCta}</span>
                   <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
                     →
                   </span>
@@ -125,12 +124,11 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
                 <Link
                   href={`/${locale}/contact`}
-                  className="hero-contact-teaser group inline-flex items-center gap-1.5 py-1 text-(--color-muted) hover:text-(--color-foreground) font-mono text-xs transition-colors duration-200"
+                  className="hero-contact-secondary group inline-flex items-center gap-1.5 py-2 px-3 border border-(--color-border) text-(--color-foreground) hover:border-(--color-accent) hover:text-(--color-accent) font-mono text-xs sm:text-sm rounded-[2px] transition-colors duration-200"
                 >
-                  <span>{copy.contactTeaser}</span>
+                  <span>{copy.secondaryCta}</span>
                   <span className="text-(--color-accent) font-semibold inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-200">
-                    <span>{copy.contactAction}</span>
-                    <span>→</span>
+                    →
                   </span>
                 </Link>
               </div>

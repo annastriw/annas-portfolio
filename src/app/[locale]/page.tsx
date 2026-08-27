@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
-import { projectArchive } from "@/content/projects/project-archive";
 import { siteConfig } from "@/content/site/site-config";
 import { HeroSection } from "@/components/home/hero-section";
 import { ExperienceSection } from "@/components/home/experience-section";
@@ -56,22 +55,19 @@ export default async function LocalizedHomePage({ params }: PageProps) {
     <div className="home-landing-page">
       <JsonLd schema={[generatePersonJsonLd(), generateWebSiteJsonLd()]} />
 
-      {/* 01. Hero & Profile Introduction */}
+      {/* 01. Professional Summary */}
       <HeroSection locale={locale as Locale} />
 
-      {/* 02. Professional History & Engineering Experience Timeline */}
+      {/* 02. Experience */}
       <ExperienceSection locale={locale as Locale} />
 
-      {/* 03. Open Source & GitHub Contribution Telemetry */}
+      {/* 03. GitHub Activity */}
       <GitHubSignal locale={locale as Locale} telemetry={telemetry} />
 
-      {/* 04. Selected Work / 4 Featured Case Studies Preview */}
-      <SelectedProjects
-        projects={projectArchive}
-        locale={locale as Locale}
-      />
+      {/* 04. Selected Projects */}
+      <SelectedProjects locale={locale as Locale} />
 
-      {/* 05. Cartesian Technical Capabilities Matrix */}
+      {/* 05. Technical Capabilities */}
       <TechStackSection locale={locale as Locale} />
     </div>
   );

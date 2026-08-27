@@ -39,7 +39,7 @@ export function SystemClock() {
   return (
     <div
       className="hero-clock-display inline-flex items-baseline gap-1 font-mono text-xs text-(--color-muted)"
-      aria-label={`Current time in Klaten (UTC+7): ${time}`}
+      aria-label={`Current time in Jakarta (UTC+7): ${time}`}
     >
       <span>UTC+7 ·</span>
       <span

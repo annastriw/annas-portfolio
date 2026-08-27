@@ -12,15 +12,15 @@ export const siteIdentity: SiteIdentity = {
   brand: "annastriwidagdo.me",
   name: "Annas Tri Widagdo",
   positioning: {
-    en: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
-    id: "Software Engineer · Full-Stack Developer · Machine Learning Engineer",
+    en: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    id: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
   },
   documentTitle: {
-    en: "Annas Tri Widagdo - Software Engineer",
-    id: "Annas Tri Widagdo - Software Engineer",
+    en: "Annas Tri Widagdo | Software Engineer",
+    id: "Annas Tri Widagdo | Software Engineer",
   },
   documentDescription: {
-    en: "Technical editorial archive of Annas Tri Widagdo. Fullstack web applications, machine learning integration, and robust software architectures grounded in verified implementation evidence.",
-    id: "Arsip editorial teknis Annas Tri Widagdo. Aplikasi web fullstack, integrasi machine learning, dan arsitektur perangkat lunak andal berlandaskan bukti implementasi terverifikasi.",
+    en: "Software engineering portfolio of Annas Tri Widagdo, featuring full-stack web development, machine learning, and practical software projects.",
+    id: "Portfolio Annas Tri Widagdo yang menampilkan pengalaman dalam software engineering, full-stack web development, machine learning, dan berbagai project software.",
   },
 };

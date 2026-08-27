@@ -11,12 +11,16 @@ test("Hero section maintains factual 1-2 sentence bilingual branding and key met
     join(root, "src", "components", "home", "hero-section.tsx"),
     "utf8",
   );
+  const rolesFile = readFileSync(
+    join(root, "src", "components", "home", "hero", "continuous-roles.tsx"),
+    "utf8",
+  );
 
   assert.match(heroFile, /Annas Tri Widagdo/);
-  assert.match(heroFile, /Software Engineer/);
-  assert.match(heroFile, /Full-Stack Developer/);
-  assert.match(heroFile, /ML Engineer/);
-  assert.match(heroFile, /KLATEN, CENTRAL JAVA/);
+  assert.match(rolesFile, /Software Engineer/);
+  assert.match(rolesFile, /Full-Stack Web Developer/);
+  assert.match(rolesFile, /Machine Learning Engineer/);
+  assert.match(heroFile, /Jakarta, Indonesia/i);
   assert.match(heroFile, /SystemClock/);
   assert.match(heroFile, /ContinuousRoles/);
   assert.match(heroFile, /\/assets\/profile\/pas-foto\.webp/);
@@ -33,7 +37,7 @@ test("Experience section renders exactly the 3 approved professional entries", a
   assert.equal(experiencesData.length, 3);
   assert.equal(experiencesData[0].id, "cv-universal-kharisma-globalindo");
   assert.match(experiencesData[0].organization.en, /Universal Kharisma Globalindo/);
-  assert.match(experiencesData[0].role.en, /Full-Stack Developer/);
+  assert.match(experiencesData[0].role.en, /Full-Stack Web Developer/);
 
   assert.equal(experiencesData[1].id, "intern-ft-undip");
   assert.match(experiencesData[1].organization.en, /Faculty of Engineering, Diponegoro University/);
@@ -49,23 +53,22 @@ test("Featured projects configuration references exactly the 4 required case stu
     "../src/content/projects/featured-config.ts",
     import.meta.url,
   );
-  const { homeFeaturedConfig } = await import(moduleUrl.href);
+  const { homeFeaturedConfig, homeSelectedProjects } = await import(moduleUrl.href);
 
   assert.equal(homeFeaturedConfig.slot1Slug, "ukg-system");
   assert.equal(homeFeaturedConfig.slot2Slug, "ihealth-edu");
   assert.equal(homeFeaturedConfig.slot3Slug, "ml-for-heart-attack-risk-prediction");
   assert.equal(homeFeaturedConfig.slot4Slug, "panoramic-virtual-tour");
+  assert.equal(homeSelectedProjects.length, 4);
 });
 
-test("GitHub telemetry module provides dynamic 4-year query, GraphQL contributionLevel, and server-only token handling", () => {
+test("GitHub telemetry module provides dynamic 2-year query, GraphQL contributionLevel, and server-only token handling", () => {
   const ghFile = readFileSync(
     join(root, "src", "lib", "github", "github-data.ts"),
     "utf8",
   );
 
   assert.match(ghFile, /currentYear - 1/);
-  assert.match(ghFile, /currentYear - 2/);
-  assert.match(ghFile, /currentYear - 3/);
   assert.match(ghFile, /https:\/\/api\.github\.com\/graphql/);
   assert.match(ghFile, /contributionLevel/);
   assert.match(ghFile, /https:\/\/api\.github\.com\/search\/commits\?q=author:\$\{username\}/);
@@ -73,7 +76,7 @@ test("GitHub telemetry module provides dynamic 4-year query, GraphQL contributio
   assert.doesNotMatch(ghFile, /NEXT_PUBLIC_GITHUB_TOKEN/);
 });
 
-test("GitHub Signal component renders minimal editorial signal, 4-year selector, and truthful fallback", () => {
+test("GitHub Signal component renders minimal editorial signal, 2-year selector, and truthful fallback", () => {
   const componentFile = readFileSync(
     join(root, "src", "components", "home", "github-signal.tsx"),
     "utf8",
@@ -86,7 +89,7 @@ test("GitHub Signal component renders minimal editorial signal, 4-year selector,
   assert.match(componentFile, /selectedYearData\.totalContributions/);
   assert.match(componentFile, /ScrollReveal/);
   assert.match(componentFile, /overflow-x-auto/);
-  assert.match(componentFile, /Activity data is temporarily unavailable/);
+  assert.match(componentFile, /GitHub activity is temporarily unavailable/);
 });
 
 test("Header and Navigation maintain 5 numbered routes, locale switcher, and theme toggle", () => {

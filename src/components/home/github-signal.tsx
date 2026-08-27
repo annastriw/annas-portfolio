@@ -58,10 +58,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
   const copy = {
     tag: "[03 // GITHUB]",
     subtag: isId ? "AKTIVITAS PENGEMBANGAN" : "DEVELOPMENT SIGNAL",
-    title: isId ? "Aktivitas GitHub" : "GitHub Signal",
-    subtitle: isId
-      ? "Arsip kontribusi kode publik dan commit terbaru di GitHub @annastriw."
-      : "Public code contribution archive and recent commit activity for @annastriw on GitHub.",
+    title: isId ? "Aktivitas GitHub" : "GitHub Activity",
     visitProfile: isId ? "Lihat Profil GitHub" : "Visit GitHub Profile",
     contributionSignal: isId ? "SINYAL KONTRIBUSI" : "CONTRIBUTION SIGNAL",
     totalContributionsIn: isId ? "kontribusi pada" : "contributions in",
@@ -73,8 +70,8 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
     more: isId ? "Banyak" : "More",
     externalCue: isId ? "dibuka di tab baru" : "opens in a new tab",
     fallbackUnavailable: isId
-      ? "Data aktivitas sementara tidak tersedia."
-      : "Activity data is temporarily unavailable.",
+      ? "Aktivitas GitHub sementara tidak tersedia. Lihat profil di GitHub →"
+      : "GitHub activity is temporarily unavailable. View profile on GitHub →",
   };
 
   return (
@@ -99,9 +96,6 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
             <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
               {copy.title}
             </h2>
-            <p className="section-subtitle text-sm sm:text-base text-(--color-muted) leading-relaxed m-0">
-              {copy.subtitle}
-            </p>
           </div>
 
           <a

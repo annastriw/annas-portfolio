@@ -57,8 +57,6 @@ export async function getGitHubTelemetry(): Promise<GitHubTelemetryData> {
   const targetYears = [
     currentYear,
     currentYear - 1,
-    currentYear - 2,
-    currentYear - 3,
   ];
 
   const fallbackData: GitHubTelemetryData = {

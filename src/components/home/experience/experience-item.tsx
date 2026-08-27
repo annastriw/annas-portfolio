@@ -86,7 +86,7 @@ export function ExperienceItem({
                   {experience.organization[locale]}
                 </span>
                 <span aria-hidden="true">·</span>
-                <span>{experience.location}</span>
+                <span>{experience.location[locale]}</span>
               </div>
             </div>
           </div>
