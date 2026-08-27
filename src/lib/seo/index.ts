@@ -1,2 +1,3 @@
-export * from "./seo-types";
-export * from "./schema-generators";
+export * from "./seo-types.ts";
+export * from "./schema-generators.ts";
+export * from "./seo-metadata.ts";

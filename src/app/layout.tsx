@@ -67,12 +67,21 @@ export const metadata: Metadata = {
     title: "Annas Tri Widagdo - Software Engineer",
     description:
       "Technical editorial archive of Annas Tri Widagdo. Fullstack web applications, machine learning integration, and robust software architectures grounded in verified implementation evidence.",
+    images: [
+      {
+        url: "/assets/me/pas-foto.webp",
+        width: 800,
+        height: 1067,
+        alt: "Annas Tri Widagdo - Software Engineer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Annas Tri Widagdo - Software Engineer",
     description:
       "Technical editorial archive of Annas Tri Widagdo. Fullstack web applications, machine learning integration, and robust software architectures grounded in verified implementation evidence.",
+    images: ["/assets/me/pas-foto.webp"],
   },
 };
 

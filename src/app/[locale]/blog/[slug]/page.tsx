@@ -12,7 +12,7 @@ import {
 } from "@/content/blog";
 import { getProjectCaseStudy } from "@/content/projects/project-case-studies";
 import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
-import { generateBlogPostingJsonLd } from "@/lib/seo/schema-generators";
+import { generateBlogPostingJsonLd, createPageMetadata } from "@/lib/seo";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -38,31 +38,29 @@ export async function generateMetadata({
   const article = getBlogArticle(slug);
   if (!article) return {};
 
-  const isId = locale === "id";
   const title = `${article.title[locale]} - Annas Tri Widagdo`;
   const description = article.abstract[locale];
 
-  return {
+  const primaryProject = article.sourceProjectSlugs[0]
+    ? getProjectCaseStudy(article.sourceProjectSlugs[0])
+    : null;
+  const imageSrc = primaryProject?.cover.src || "/assets/me/pas-foto.webp";
+  const imageAlt = primaryProject?.cover.alt[locale] || title;
+
+  return createPageMetadata({
+    locale,
+    path: `blog/${slug}`,
     title,
     description,
-    alternates: {
-      canonical: `https://annastriwidagdo.me/${locale}/blog/${slug}`,
-      languages: {
-        en: `https://annastriwidagdo.me/en/blog/${slug}`,
-        id: `https://annastriwidagdo.me/id/blog/${slug}`,
+    type: "article",
+    keywords: article.tags,
+    images: [
+      {
+        url: imageSrc,
+        alt: imageAlt,
       },
-    },
-    openGraph: {
-      title,
-      description,
-      url: `https://annastriwidagdo.me/${locale}/blog/${slug}`,
-      siteName: "Annas Tri Widagdo Portfolio",
-      locale: isId ? "id_ID" : "en_US",
-      type: "article",
-      authors: ["Annas Tri Widagdo"],
-      tags: article.tags,
-    },
-  };
+    ],
+  });
 }
 
 export default async function BlogPostDetailPage({

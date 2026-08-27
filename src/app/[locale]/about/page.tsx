@@ -5,7 +5,7 @@ import { AboutProfile } from "@/components/about/about-profile";
 import { AboutEducation } from "@/components/about/about-education";
 import { AboutCertificates } from "@/components/about/about-certificates";
 import { JsonLd } from "@/components/seo/json-ld";
-import { generateProfilePageJsonLd } from "@/lib/seo/schema-generators";
+import { generateProfilePageJsonLd, createPageMetadata } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{
@@ -33,25 +33,23 @@ export async function generateMetadata({
     ? "Profil rekayasa perangkat lunak, latar belakang teknik komputer Universitas Diponegoro (IPK 3.79), dan sertifikasi Cisco, Huawei & Oracle karya Annas Tri Widagdo."
     : "Software engineering profile, Diponegoro University computer engineering foundation (GPA 3.79), and Cisco, Huawei & Oracle credentials of Annas Tri Widagdo.";
 
-  return {
+  return createPageMetadata({
+    locale,
+    path: "about",
     title,
     description,
-    alternates: {
-      canonical: `https://annastriwidagdo.me/${locale}/about`,
-      languages: {
-        en: "https://annastriwidagdo.me/en/about",
-        id: "https://annastriwidagdo.me/id/about",
+    type: "profile",
+    images: [
+      {
+        url: "/assets/me/pas-foto.webp",
+        width: 800,
+        height: 1067,
+        alt: isId
+          ? "Pas foto profil Annas Tri Widagdo"
+          : "Portrait photo of Annas Tri Widagdo",
       },
-    },
-    openGraph: {
-      title,
-      description,
-      url: `https://annastriwidagdo.me/${locale}/about`,
-      siteName: "Annas Tri Widagdo Portfolio",
-      locale: isId ? "id_ID" : "en_US",
-      type: "profile",
-    },
-  };
+    ],
+  });
 }
 
 export default async function AboutPage({ params }: PageProps) {
@@ -76,4 +74,3 @@ export default async function AboutPage({ params }: PageProps) {
     </div>
   );
 }
-

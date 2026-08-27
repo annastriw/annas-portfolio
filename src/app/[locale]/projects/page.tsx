@@ -4,8 +4,7 @@ import { isLocale, supportedLocales } from "@/lib/i18n/config";
 import { projectArchive } from "@/content/projects/project-archive";
 import { ProjectArchive } from "@/components/projects/project-archive";
 import { JsonLd } from "@/components/seo/json-ld";
-import { generateItemListJsonLd } from "@/lib/seo/schema-generators";
-import { SITE_URL } from "@/lib/seo/seo-types";
+import { generateCollectionPageJsonLd, createPageMetadata, SITE_URL } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{
@@ -30,28 +29,26 @@ export async function generateMetadata({
     ? "Arsip Proyek - Annas Tri Widagdo"
     : "Projects Archive - Annas Tri Widagdo";
   const description = isId
-    ? "Arsip 10 proyek terverifikasi Annas Tri Widagdo di bidang aplikasi web, machine learning, mobile, dan media interaktif."
-    : "An archive of 10 verified projects by Annas Tri Widagdo across web applications, machine learning, mobile, and interactive media.";
+    ? "Arsip 10 proyek rekayasa perangkat lunak terverifikasi Annas Tri Widagdo di bidang aplikasi web, machine learning, mobile, dan media interaktif."
+    : "An archive of 10 verified engineering projects by Annas Tri Widagdo across web applications, machine learning, mobile, and interactive media.";
 
-  return {
+  return createPageMetadata({
+    locale,
+    path: "projects",
     title,
     description,
-    alternates: {
-      canonical: `https://annastriwidagdo.me/${locale}/projects`,
-      languages: {
-        en: "https://annastriwidagdo.me/en/projects",
-        id: "https://annastriwidagdo.me/id/projects",
+    type: "website",
+    images: [
+      {
+        url: "/assets/projects/ukg-system/cover.webp",
+        width: 1200,
+        height: 900,
+        alt: isId
+          ? "Arsip proyek rekayasa Annas Tri Widagdo"
+          : "Engineering projects archive of Annas Tri Widagdo",
       },
-    },
-    openGraph: {
-      title,
-      description,
-      url: `https://annastriwidagdo.me/${locale}/projects`,
-      siteName: "Annas Tri Widagdo Portfolio",
-      locale: isId ? "id_ID" : "en_US",
-      type: "website",
-    },
-  };
+    ],
+  });
 }
 
 export default async function ProjectsPage({ params }: PageProps) {
@@ -62,20 +59,26 @@ export default async function ProjectsPage({ params }: PageProps) {
   }
 
   const isId = locale === "id";
+  const listName = isId ? "Arsip Proyek - Annas Tri Widagdo" : "Projects Archive - Annas Tri Widagdo";
+  const listDescription = isId
+    ? "Arsip 10 proyek rekayasa perangkat lunak terverifikasi Annas Tri Widagdo di bidang aplikasi web, machine learning, mobile, dan media interaktif."
+    : "An archive of 10 verified engineering projects by Annas Tri Widagdo across web applications, machine learning, mobile, and interactive media.";
 
-  const projectListSchema = generateItemListJsonLd(
+  const collectionSchema = generateCollectionPageJsonLd(
     projectArchive.map((project) => ({
       title: project.title[locale],
       url: `${SITE_URL}/${locale}/projects/${project.slug}`,
     })),
-    isId ? "Arsip Proyek" : "Projects Archive",
-    `${SITE_URL}/${locale}/projects`
+    listName,
+    `${SITE_URL}/${locale}/projects`,
+    listDescription,
+    locale,
   );
 
   return (
     <div className="py-8 sm:py-12 md:py-16">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <JsonLd schema={projectListSchema} />
+        <JsonLd schema={collectionSchema} />
 
         {/* Technical Editorial Header */}
         <header className="mb-10 max-w-4xl animate-editorial-fade motion-reduce:animate-none sm:mb-12 md:mb-14">

@@ -9,7 +9,7 @@ import {
   projectCaseStudies,
 } from "@/content/projects/project-case-studies";
 import { isLocale, supportedLocales } from "@/lib/i18n/config";
-import { generateProjectJsonLd } from "@/lib/seo/schema-generators";
+import { generateProjectJsonLd, createPageMetadata } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -32,28 +32,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${project.title[locale]} - Annas Tri Widagdo`;
   const description = project.overview[locale].join(" ");
-  const canonical = `https://annastriwidagdo.me/${locale}/projects/${slug}`;
 
-  return {
+  return createPageMetadata({
+    locale,
+    path: `projects/${slug}`,
     title,
     description,
-    alternates: {
-      canonical,
-      languages: {
-        en: `https://annastriwidagdo.me/en/projects/${slug}`,
-        id: `https://annastriwidagdo.me/id/projects/${slug}`,
+    type: "article",
+    images: [
+      {
+        url: project.cover.src,
+        alt: project.cover.alt[locale],
       },
-    },
-    openGraph: {
-      title,
-      description,
-      url: canonical,
-      siteName: "Annas Tri Widagdo Portfolio",
-      locale: locale === "id" ? "id_ID" : "en_US",
-      type: "article",
-      images: [{ url: project.cover.src, alt: project.cover.alt[locale] }],
-    },
-  };
+    ],
+  });
 }
 
 export default async function ProjectDetailPage({ params }: PageProps) {

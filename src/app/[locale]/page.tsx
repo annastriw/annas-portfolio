@@ -13,7 +13,8 @@ import { JsonLd } from "@/components/seo/json-ld";
 import {
   generatePersonJsonLd,
   generateWebSiteJsonLd,
-} from "@/lib/seo/schema-generators";
+  createPageMetadata,
+} from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{
@@ -33,29 +34,13 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
-  const isId = locale === "id";
-  const title = siteConfig.documentTitle[locale as Locale];
-  const description = siteConfig.documentDescription[locale as Locale];
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `https://annastriwidagdo.me/${locale}`,
-      languages: {
-        en: "https://annastriwidagdo.me/en",
-        id: "https://annastriwidagdo.me/id",
-      },
-    },
-    openGraph: {
-      title,
-      description,
-      url: `https://annastriwidagdo.me/${locale}`,
-      siteName: "Annas Tri Widagdo Portfolio",
-      locale: isId ? "id_ID" : "en_US",
-      type: "website",
-    },
-  };
+  return createPageMetadata({
+    locale,
+    path: "",
+    title: siteConfig.documentTitle[locale],
+    description: siteConfig.documentDescription[locale],
+    type: "website",
+  });
 }
 
 export default async function LocalizedHomePage({ params }: PageProps) {

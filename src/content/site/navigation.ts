@@ -1,5 +1,5 @@
 import type { LocaleNavigation } from "@/types/navigation";
-import { siteContact } from "./contact";
+import { siteContact } from "./contact.ts";
 
 export const navigationConfig: LocaleNavigation = {
   en: {

@@ -7,6 +7,7 @@ export interface JsonLdPerson {
   name: string;
   url: string;
   jobTitle: string;
+  image?: string;
   alumniOf?: {
     "@type": "CollegeOrUniversity";
     name: string;
@@ -38,7 +39,25 @@ export interface JsonLdProfilePage {
   "@type": "ProfilePage";
   name: string;
   url: string;
+  inLanguage?: string;
   mainEntity: JsonLdPerson;
+}
+
+export interface JsonLdContactPage {
+  "@context": "https://schema.org";
+  "@type": "ContactPage";
+  name: string;
+  url: string;
+  description: string;
+  inLanguage?: string;
+  mainEntity: JsonLdPerson;
+}
+
+export interface JsonLdListItem {
+  "@type": "ListItem";
+  position: number;
+  name: string;
+  url: string;
 }
 
 export interface JsonLdItemList {
@@ -47,12 +66,17 @@ export interface JsonLdItemList {
   name: string;
   url: string;
   numberOfItems: number;
-  itemListElement: Array<{
-    "@type": "ListItem";
-    position: number;
-    name: string;
-    url: string;
-  }>;
+  itemListElement: JsonLdListItem[];
+}
+
+export interface JsonLdCollectionPage {
+  "@context": "https://schema.org";
+  "@type": "CollectionPage";
+  name: string;
+  url: string;
+  description: string;
+  inLanguage?: string;
+  mainEntity: JsonLdItemList;
 }
 
 export interface JsonLdSoftwareSourceCode {
@@ -61,9 +85,11 @@ export interface JsonLdSoftwareSourceCode {
   name: string;
   description: string;
   url: string;
+  image?: string;
   author: {
     "@type": "Person";
     name: string;
+    url?: string;
   };
   programmingLanguage?: string;
   keywords?: string[];
@@ -76,12 +102,23 @@ export interface JsonLdBlogPosting {
   headline: string;
   description: string;
   url: string;
-  datePublished?: string;
+  image?: string;
   inLanguage: string;
+  mainEntityOfPage?: string;
   author: {
     "@type": "Person";
     name: string;
     url: string;
   };
+  publisher?: {
+    "@type": "Person";
+    name: string;
+    url: string;
+  };
   keywords?: string;
+  about?: Array<{
+    "@type": "CreativeWork";
+    name: string;
+    url: string;
+  }>;
 }

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContactPage } from "@/components/contact/contact-page";
-import { isLocale, supportedLocales } from "@/lib/i18n/config";
+import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
+import { JsonLd } from "@/components/seo/json-ld";
+import { generateContactPageJsonLd, createPageMetadata } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{
@@ -28,27 +30,24 @@ export async function generateMetadata({
   const description = isId
     ? "Hubungi Annas Tri Widagdo melalui email, LinkedIn, atau GitHub untuk proyek, peluang kerja, dan diskusi pengembangan software."
     : "Contact Annas Tri Widagdo by email, LinkedIn, or GitHub about projects, roles, and software development conversations.";
-  const url = `https://annastriwidagdo.me/${locale}/contact`;
 
-  return {
+  return createPageMetadata({
+    locale,
+    path: "contact",
     title,
     description,
-    alternates: {
-      canonical: url,
-      languages: {
-        en: "https://annastriwidagdo.me/en/contact",
-        id: "https://annastriwidagdo.me/id/contact",
+    type: "website",
+    images: [
+      {
+        url: "/assets/me/pas-foto.webp",
+        width: 800,
+        height: 1067,
+        alt: isId
+          ? "Kontak Annas Tri Widagdo"
+          : "Contact Annas Tri Widagdo",
       },
-    },
-    openGraph: {
-      title,
-      description,
-      url,
-      siteName: "Annas Tri Widagdo Portfolio",
-      locale: isId ? "id_ID" : "en_US",
-      type: "website",
-    },
-  };
+    ],
+  });
 }
 
 export default async function LocalizedContactPage({ params }: PageProps) {
@@ -58,5 +57,10 @@ export default async function LocalizedContactPage({ params }: PageProps) {
     notFound();
   }
 
-  return <ContactPage locale={locale} />;
+  return (
+    <>
+      <JsonLd schema={generateContactPageJsonLd(locale as Locale)} />
+      <ContactPage locale={locale} />
+    </>
+  );
 }

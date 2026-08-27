@@ -1,17 +1,20 @@
-import type { Locale } from "@/lib/i18n/config";
-import type { ProjectCaseStudy } from "@/content/projects/project-case-studies";
-import type { BlogArticle } from "@/content/blog";
-import { siteConfig } from "@/content/site/site-config";
+import type { Locale } from "../i18n/config.ts";
+import type { ProjectCaseStudy } from "../../content/projects/project-case-studies.ts";
+import { getProjectCaseStudy } from "../../content/projects/project-case-studies.ts";
+import type { BlogArticle } from "../../content/blog/index.ts";
+import { siteConfig } from "../../content/site/site-config.ts";
 import {
   SITE_URL,
   DEFAULT_AUTHOR,
   type JsonLdPerson,
   type JsonLdWebSite,
   type JsonLdProfilePage,
+  type JsonLdContactPage,
   type JsonLdItemList,
+  type JsonLdCollectionPage,
   type JsonLdSoftwareSourceCode,
   type JsonLdBlogPosting,
-} from "./seo-types";
+} from "./seo-types.ts";
 
 /**
  * Generates factual Schema.org Person JSON-LD for Annas Tri Widagdo.
@@ -22,10 +25,11 @@ export function generatePersonJsonLd(): JsonLdPerson {
     "@type": "Person",
     name: siteConfig.name,
     url: SITE_URL,
+    image: `${SITE_URL}/assets/me/pas-foto.webp`,
     jobTitle: "Software Engineer, Full-Stack Developer & Machine Learning Engineer",
     alumniOf: {
       "@type": "CollegeOrUniversity",
-      name: "Universitas Diponegoro",
+      name: "Diponegoro University",
     },
     address: {
       "@type": "PostalAddress",
@@ -38,6 +42,7 @@ export function generatePersonJsonLd(): JsonLdPerson {
     ],
     knowsAbout: [
       "Software Engineering",
+      "Full-Stack Development",
       "Next.js",
       "TypeScript",
       "React",
@@ -48,6 +53,8 @@ export function generatePersonJsonLd(): JsonLdPerson {
       "Python",
       "Scikit-learn",
       "Android & Hardware Printing Integration",
+      "Wav2Vec2 Speech-to-Text",
+      "ERP Systems",
     ],
   };
 }
@@ -74,14 +81,35 @@ export function generateWebSiteJsonLd(): JsonLdWebSite {
  * Generates Schema.org ProfilePage JSON-LD for the About page.
  */
 export function generateProfilePageJsonLd(locale: Locale): JsonLdProfilePage {
+  const isId = locale === "id";
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    name:
-      locale === "id"
-        ? "Tentang & Profil Rekayasa - Annas Tri Widagdo"
-        : "About & Engineering Profile - Annas Tri Widagdo",
+    name: isId
+      ? "Tentang & Profil Rekayasa - Annas Tri Widagdo"
+      : "About & Engineering Profile - Annas Tri Widagdo",
     url: `${SITE_URL}/${locale}/about`,
+    inLanguage: isId ? "id" : "en",
+    mainEntity: generatePersonJsonLd(),
+  };
+}
+
+/**
+ * Generates Schema.org ContactPage JSON-LD for the Contact page.
+ */
+export function generateContactPageJsonLd(locale: Locale): JsonLdContactPage {
+  const isId = locale === "id";
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: isId
+      ? "Kontak | Annas Tri Widagdo"
+      : "Contact | Annas Tri Widagdo",
+    url: `${SITE_URL}/${locale}/contact`,
+    description: isId
+      ? "Hubungi Annas Tri Widagdo melalui email, LinkedIn, atau GitHub untuk proyek, peluang kerja, dan diskusi pengembangan software."
+      : "Contact Annas Tri Widagdo by email, LinkedIn, or GitHub about projects, roles, and software development conversations.",
+    inLanguage: isId ? "id" : "en",
     mainEntity: generatePersonJsonLd(),
   };
 }
@@ -110,6 +138,27 @@ export function generateItemListJsonLd(
 }
 
 /**
+ * Generates Schema.org CollectionPage JSON-LD for Projects/Blog Hubs.
+ */
+export function generateCollectionPageJsonLd(
+  items: Array<{ title: string; url: string }>,
+  listName: string,
+  listUrl: string,
+  description: string,
+  locale: Locale,
+): JsonLdCollectionPage {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: listName,
+    url: listUrl,
+    description,
+    inLanguage: locale === "id" ? "id" : "en",
+    mainEntity: generateItemListJsonLd(items, listName, listUrl),
+  };
+}
+
+/**
  * Generates Schema.org SoftwareSourceCode / CreativeWork JSON-LD for a Project Detail page.
  */
 export function generateProjectJsonLd(
@@ -129,9 +178,11 @@ export function generateProjectJsonLd(
     name: project.title[locale],
     description: project.overview[locale].join(" "),
     url: `${SITE_URL}/${locale}/projects/${project.slug}`,
+    image: `${SITE_URL}${project.cover.src}`,
     author: {
       "@type": "Person",
       name: DEFAULT_AUTHOR,
+      url: SITE_URL,
     },
     ...(language ? { programmingLanguage: language } : {}),
     ...(keywords.length > 0 ? { keywords } : {}),
@@ -146,18 +197,41 @@ export function generateBlogPostingJsonLd(
   article: BlogArticle,
   locale: Locale,
 ): JsonLdBlogPosting {
+  const isId = locale === "id";
+  const primaryProject = article.sourceProjectSlugs[0]
+    ? getProjectCaseStudy(article.sourceProjectSlugs[0])
+    : null;
+  const imageSrc = primaryProject
+    ? `${SITE_URL}${primaryProject.cover.src}`
+    : `${SITE_URL}/assets/me/pas-foto.webp`;
+
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: article.title[locale],
     description: article.abstract[locale],
     url: `${SITE_URL}/${locale}/blog/${article.slug}`,
-    inLanguage: locale === "id" ? "id" : "en",
+    mainEntityOfPage: `${SITE_URL}/${locale}/blog/${article.slug}`,
+    inLanguage: isId ? "id" : "en",
+    image: imageSrc,
     author: {
       "@type": "Person",
       name: DEFAULT_AUTHOR,
       url: SITE_URL,
     },
+    publisher: {
+      "@type": "Person",
+      name: DEFAULT_AUTHOR,
+      url: SITE_URL,
+    },
     ...(article.tags.length > 0 ? { keywords: article.tags.join(", ") } : {}),
+    about: article.sourceProjectSlugs.map((slug) => {
+      const project = getProjectCaseStudy(slug);
+      return {
+        "@type": "CreativeWork",
+        name: project ? project.title[locale] : slug,
+        url: `${SITE_URL}/${locale}/projects/${slug}`,
+      };
+    }),
   };
 }
