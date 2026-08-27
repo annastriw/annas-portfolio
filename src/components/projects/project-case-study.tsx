@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,6 +49,9 @@ export function ProjectCaseStudyView({
   next,
 }: ProjectCaseStudyViewProps) {
   const [activeMediaIndex, setActiveMediaIndex] = useState<number | null>(null);
+  const activeTriggerRef = useRef<HTMLElement | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
   const isId = locale === "id";
   const projectsHref = `/${locale}/projects`;
 
@@ -107,24 +110,66 @@ export function ProjectCaseStudyView({
     return items;
   }, [project, locale]);
 
-  // Handle Lightbox keyboard shortcuts & body scroll lock
+  const handleCloseLightbox = () => {
+    setActiveMediaIndex(null);
+    activeTriggerRef.current?.focus();
+  };
+
+  // Handle Lightbox keyboard shortcuts, focus trap & body scroll lock
   useEffect(() => {
     if (activeMediaIndex === null) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Set initial focus on close button
+    closeBtnRef.current?.focus();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setActiveMediaIndex(null);
-      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handleCloseLightbox();
+        return;
+      }
+
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
         setActiveMediaIndex((prev) =>
           prev !== null && prev > 0 ? prev - 1 : mediaItems.length - 1,
         );
-      } else if (e.key === "ArrowRight") {
+        return;
+      }
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
         setActiveMediaIndex((prev) =>
           prev !== null && prev < mediaItems.length - 1 ? prev + 1 : 0,
         );
+        return;
+      }
+
+      if (e.key === "Tab" && lightboxRef.current) {
+        const focusableElements = Array.from(
+          lightboxRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
       }
     };
 
@@ -203,10 +248,14 @@ export function ProjectCaseStudyView({
           <figure className={styles.coverFigure}>
             <div
               className={styles.coverFrame}
-              onClick={() => setActiveMediaIndex(0)}
+              onClick={(e) => {
+                activeTriggerRef.current = e.currentTarget;
+                setActiveMediaIndex(0);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
+                  activeTriggerRef.current = e.currentTarget;
                   setActiveMediaIndex(0);
                 }
               }}
@@ -329,10 +378,14 @@ export function ProjectCaseStudyView({
                             ? styles.mobileFrame
                             : styles.wideFrame
                         }`}
-                        onClick={() => setActiveMediaIndex(mediaIndex)}
+                        onClick={(e) => {
+                          activeTriggerRef.current = e.currentTarget;
+                          setActiveMediaIndex(mediaIndex);
+                        }}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();
+                            activeTriggerRef.current = e.currentTarget;
                             setActiveMediaIndex(mediaIndex);
                           }
                         }}
@@ -480,13 +533,14 @@ export function ProjectCaseStudyView({
       {/* Interactive Lightbox Inspection Dialog */}
       {activeMedia ? (
         <div
+          ref={lightboxRef}
           className={styles.lightboxOverlay}
           role="dialog"
           aria-modal="true"
           aria-label={`${copy.inspect}: ${activeMedia.caption}`}
           onClick={(e) => {
             if (e.target === e.currentTarget) {
-              setActiveMediaIndex(null);
+              handleCloseLightbox();
             }
           }}
         >
@@ -501,8 +555,9 @@ export function ProjectCaseStudyView({
               </span>
             </div>
             <button
+              ref={closeBtnRef}
               type="button"
-              onClick={() => setActiveMediaIndex(null)}
+              onClick={handleCloseLightbox}
               className={styles.lightboxCloseBtn}
               aria-label={copy.closeLightbox}
             >

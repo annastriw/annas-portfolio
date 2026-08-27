@@ -130,6 +130,7 @@ export function ThemeToggle({ locale, className = "" }: ThemeToggleProps) {
       type="button"
       className={`editorial-theme-btn ${className}`}
       onClick={handleCycleTheme}
+      aria-label={copy.buttonLabel(currentLabel)}
       aria-describedby={descriptionId}
       title={copy.buttonLabel(currentLabel)}
     >

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Image from "next/image";
 import type { Locale } from "@/lib/i18n/config";
 import type { CertificateData } from "@/content/about/about-data";
@@ -18,6 +18,9 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
     useState<CertFilterCategory>("all");
   const [activeCertificate, setActiveCertificate] =
     useState<CertificateData | null>(null);
+  const activeTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
 
   const isId = locale === "id";
 
@@ -42,16 +45,50 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
     return certificatesData.filter((c) => c.category === selectedCategory);
   }, [selectedCategory]);
 
-  // Handle Escape key & body scroll lock for modal
+  const handleCloseModal = () => {
+    setActiveCertificate(null);
+    activeTriggerRef.current?.focus();
+  };
+
+  // Handle Escape key, focus trapping & body scroll lock for modal
   useEffect(() => {
     if (!activeCertificate) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Set initial focus to close button
+    closeBtnRef.current?.focus();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setActiveCertificate(null);
+        e.preventDefault();
+        handleCloseModal();
+        return;
+      }
+
+      if (e.key === "Tab" && modalContentRef.current) {
+        const focusableElements = Array.from(
+          modalContentRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
       }
     };
 
@@ -149,7 +186,10 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
               >
                 <button
                   type="button"
-                  onClick={() => setActiveCertificate(cert)}
+                  onClick={(e) => {
+                    activeTriggerRef.current = e.currentTarget;
+                    setActiveCertificate(cert);
+                  }}
                   aria-label={`View certificate ${cert.title[locale]}`}
                   className="flex flex-col w-full h-full text-left p-0 border-0 bg-transparent cursor-pointer group"
                 >
@@ -208,9 +248,10 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
           role="dialog"
           aria-modal="true"
           aria-label={activeCertificate.title[locale]}
-          onClick={() => setActiveCertificate(null)}
+          onClick={handleCloseModal}
         >
           <div
+            ref={modalContentRef}
             className="cert-modal-content"
             onClick={(e) => e.stopPropagation()}
           >
@@ -228,9 +269,10 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
               </div>
 
               <button
+                ref={closeBtnRef}
                 type="button"
                 className="cert-modal-close"
-                onClick={() => setActiveCertificate(null)}
+                onClick={handleCloseModal}
                 aria-label="Close certificate preview"
               >
                 ✕

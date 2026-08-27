@@ -236,6 +236,7 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
           <div
             className="splash-folio-rule-track"
             role="progressbar"
+            aria-label={isId ? "Kemajuan pembukaan arsip" : "Archive loading progress"}
             aria-valuenow={progress}
             aria-valuemin={0}
             aria-valuemax={100}

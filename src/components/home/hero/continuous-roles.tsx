@@ -42,7 +42,7 @@ export function ContinuousRoles() {
       {/* Continuous masked editorial role ticker with fixed height to prevent CLS */}
       <div
         className="hero-role-ticker inline-flex items-center gap-2 px-2.5 sm:px-3 py-1 border border-(--color-border) bg-(--color-background) rounded-[2px]"
-        aria-live="polite"
+        aria-hidden="true"
       >
         <span className="font-mono text-xs font-semibold text-(--color-accent)">
           [{currentRole.id}]

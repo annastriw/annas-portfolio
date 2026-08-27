@@ -71,6 +71,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
     yearSelectorLabel: isId ? "TAHUN ARSIP" : "ARCHIVE YEAR",
     less: isId ? "Sedikit" : "Less",
     more: isId ? "Banyak" : "More",
+    externalCue: isId ? "dibuka di tab baru" : "opens in a new tab",
     fallbackUnavailable: isId
       ? "Data aktivitas sementara tidak tersedia."
       : "Activity data is temporarily unavailable.",
@@ -116,6 +117,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
             >
               ↗
             </span>
+            <span className="sr-only"> ({copy.externalCue})</span>
           </a>
         </ScrollReveal>
 
@@ -166,6 +168,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                         type="button"
                         role="tab"
                         aria-selected={isSelected}
+                        aria-controls="github-matrix-panel"
                         onClick={() => setSelectedYear(yearObj.year)}
                         className={`px-2.5 py-1 font-mono text-xs font-medium rounded-[2px] transition-all duration-150 cursor-pointer ${
                           isSelected
@@ -185,7 +188,12 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
             <ScrollReveal delayMs={150} animationClass="animate-editorial-fade">
               <div className="flex flex-col lg:flex-row gap-3 items-stretch">
                 {/* Main Contribution Matrix Card */}
-                <div className="github-matrix-card grow min-w-0 border border-(--color-border) bg-(--color-background) p-4 sm:p-5 rounded-[2px] overflow-hidden flex flex-col gap-3">
+                <div
+                  id="github-matrix-panel"
+                  role="tabpanel"
+                  aria-label={`GitHub contributions in ${selectedYear}`}
+                  className="github-matrix-card grow min-w-0 border border-(--color-border) bg-(--color-background) p-4 sm:p-5 rounded-[2px] overflow-hidden flex flex-col gap-3"
+                >
                   <div className="overflow-x-auto pb-2 scrollbar-thin">
                     <div className="min-w-[680px] sm:min-w-[720px] flex flex-col gap-2">
                       {/* Month Labels Header (Pixel-aligned to 53 week columns) */}
@@ -313,6 +321,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                           type="button"
                           role="tab"
                           aria-selected={isSelected}
+                          aria-controls="github-matrix-panel"
                           onClick={() => setSelectedYear(yearObj.year)}
                           className={`w-full flex items-center justify-between px-2.5 py-2 font-mono text-xs rounded-[2px] transition-all duration-150 cursor-pointer ${
                             isSelected
@@ -381,6 +390,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                           <span className="text-(--color-accent) font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">
                             <span>GitHub</span>
                             <span>↗</span>
+                            <span className="sr-only"> ({copy.externalCue})</span>
                           </span>
                         </div>
                       </a>
@@ -423,6 +433,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                   >
                     ↗
                   </span>
+                  <span className="sr-only"> ({copy.externalCue})</span>
                 </a>
               </div>
             </div>

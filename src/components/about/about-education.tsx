@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import type { Locale } from "@/lib/i18n/config";
 import { educationData } from "@/content/about/about-data";
@@ -14,17 +14,50 @@ export function AboutEducation({ locale }: AboutEducationProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isId = locale === "id";
   const data = educationData;
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
 
-  // Handle Escape key & body scroll lock for modal
+  // Handle Escape key, focus trapping & body scroll lock for modal
   useEffect(() => {
     if (!isModalOpen) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Set initial focus to close button
+    closeBtnRef.current?.focus();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.preventDefault();
         setIsModalOpen(false);
+        triggerRef.current?.focus();
+        return;
+      }
+
+      if (e.key === "Tab" && modalContentRef.current) {
+        const focusableElements = Array.from(
+          modalContentRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
       }
     };
 
@@ -34,6 +67,11 @@ export function AboutEducation({ locale }: AboutEducationProps) {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isModalOpen]);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    triggerRef.current?.focus();
+  };
 
   const copy = {
     metaLine: isId
@@ -120,6 +158,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
 
             {/* Certificate Interactive Preview Card */}
             <button
+              ref={triggerRef}
               type="button"
               onClick={() => setIsModalOpen(true)}
               className="group relative border border-(--color-border) bg-(--color-background) aspect-[16/11] overflow-hidden cursor-pointer hover:border-(--color-accent) transition-all duration-300 text-left p-0 w-full rounded-[2px]"
@@ -160,9 +199,10 @@ export function AboutEducation({ locale }: AboutEducationProps) {
           role="dialog"
           aria-modal="true"
           aria-label={typeof data.figureLabel[locale] === "string" ? data.figureLabel[locale] : "Certificate"}
-          onClick={() => setIsModalOpen(false)}
+          onClick={handleCloseModal}
         >
           <div
+            ref={modalContentRef}
             className="cert-modal-content"
             onClick={(e) => e.stopPropagation()}
           >
@@ -180,9 +220,10 @@ export function AboutEducation({ locale }: AboutEducationProps) {
               </div>
 
               <button
+                ref={closeBtnRef}
                 type="button"
                 className="cert-modal-close"
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleCloseModal}
                 aria-label="Close certificate preview"
               >
                 ✕

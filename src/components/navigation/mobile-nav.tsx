@@ -135,7 +135,10 @@ export function MobileNav({ locale }: MobileNavProps) {
             </div>
 
             {/* Navigation List */}
-            <nav className="flex flex-col gap-2" role="navigation">
+            <nav
+              className="flex flex-col gap-2"
+              aria-label={isId ? "Navigasi Utama Mobile" : "Mobile Main Navigation"}
+            >
               {config.mainNav.map((item) => {
                 const localizedHref = getLocalizedHref(item.href, locale);
                 const isActive =
