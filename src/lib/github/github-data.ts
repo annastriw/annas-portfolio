@@ -32,7 +32,17 @@ export interface GitHubTelemetryData {
   latestCommits: GitHubCommitItem[];
 }
 
-function calculateLevel(count: number): 0 | 1 | 2 | 3 | 4 {
+function mapContributionLevel(
+  levelStr?: string,
+  count = 0,
+): 0 | 1 | 2 | 3 | 4 {
+  if (levelStr === "FIRST_QUARTILE") return 1;
+  if (levelStr === "SECOND_QUARTILE") return 2;
+  if (levelStr === "THIRD_QUARTILE") return 3;
+  if (levelStr === "FOURTH_QUARTILE") return 4;
+  if (levelStr === "NONE") return 0;
+
+  // Fallback if levelStr is missing
   if (count <= 0) return 0;
   if (count <= 2) return 1;
   if (count <= 5) return 2;
@@ -77,6 +87,7 @@ export async function getGitHubTelemetry(): Promise<GitHubTelemetryData> {
               weeks {
                 contributionDays {
                   contributionCount
+                  contributionLevel
                   date
                   weekday
                 }
@@ -108,12 +119,13 @@ export async function getGitHubTelemetry(): Promise<GitHubTelemetryData> {
       const rawWeeks: Array<{
         contributionDays: Array<{
           contributionCount: number;
+          contributionLevel?: string;
           date: string;
           weekday: number;
         }>;
       }> = calendar.weeks || [];
 
-      // Normalize each week to 7 days
+      // Normalize each week to 7 days (0: Sun, 1: Mon, ..., 6: Sat)
       const weeks: GitHubWeekContribution[] = rawWeeks.map((w) => {
         const days: (GitHubDayContribution | null)[] = [
           null,
@@ -130,7 +142,10 @@ export async function getGitHubTelemetry(): Promise<GitHubTelemetryData> {
               date: d.date,
               count: d.contributionCount,
               weekday: d.weekday,
-              level: calculateLevel(d.contributionCount),
+              level: mapContributionLevel(
+                d.contributionLevel,
+                d.contributionCount,
+              ),
             };
           }
         }

@@ -57,7 +57,7 @@ test("Featured projects configuration references exactly the 4 required case stu
   assert.equal(homeFeaturedConfig.slot4Slug, "panoramic-virtual-tour");
 });
 
-test("GitHub telemetry module provides dynamic 4-year query and server-only token handling", () => {
+test("GitHub telemetry module provides dynamic 4-year query, GraphQL contributionLevel, and server-only token handling", () => {
   const ghFile = readFileSync(
     join(root, "src", "lib", "github", "github-data.ts"),
     "utf8",
@@ -67,9 +67,26 @@ test("GitHub telemetry module provides dynamic 4-year query and server-only toke
   assert.match(ghFile, /currentYear - 2/);
   assert.match(ghFile, /currentYear - 3/);
   assert.match(ghFile, /https:\/\/api\.github\.com\/graphql/);
-  assert.match(ghFile, /https:\/\/api\.github\.com\/search\/commits/);
+  assert.match(ghFile, /contributionLevel/);
+  assert.match(ghFile, /https:\/\/api\.github\.com\/search\/commits\?q=author:\$\{username\}/);
   assert.match(ghFile, /process\.env\.GITHUB_TOKEN/);
   assert.doesNotMatch(ghFile, /NEXT_PUBLIC_GITHUB_TOKEN/);
+});
+
+test("GitHub Signal component renders minimal editorial signal, 4-year selector, and truthful fallback", () => {
+  const componentFile = readFileSync(
+    join(root, "src", "components", "home", "github-signal.tsx"),
+    "utf8",
+  );
+
+  assert.match(componentFile, /\[03 \/\/ GITHUB\]/);
+  assert.match(componentFile, /CONTRIBUTION SIGNAL/);
+  assert.match(componentFile, /LATEST COMMITS/);
+  assert.match(componentFile, /github\.com\/annastriw/);
+  assert.match(componentFile, /selectedYearData\.totalContributions/);
+  assert.match(componentFile, /ScrollReveal/);
+  assert.match(componentFile, /overflow-x-auto/);
+  assert.match(componentFile, /Activity data is temporarily unavailable/);
 });
 
 test("Header and Navigation maintain 5 numbered routes, locale switcher, and theme toggle", () => {

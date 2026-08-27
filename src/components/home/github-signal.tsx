@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Locale } from "@/lib/i18n/config";
 import type {
   GitHubTelemetryData,
   GitHubYearContribution,
+  GitHubWeekContribution,
 } from "@/lib/github/github-data";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
@@ -23,16 +24,36 @@ const dayNames: Record<Locale, string[]> = {
   id: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
 };
 
+function getMonthPositions(weeks: GitHubWeekContribution[]) {
+  let currentMonth = -1;
+  const positions: Array<{ month: number; weekIndex: number }> = [];
+  weeks.forEach((week, weekIndex) => {
+    const firstValidDay = week.days.find((d) => d !== null);
+    if (firstValidDay?.date) {
+      const month = parseInt(firstValidDay.date.split("-")[1], 10) - 1;
+      if (month !== currentMonth && month >= 0 && month <= 11) {
+        currentMonth = month;
+        positions.push({ month, weekIndex });
+      }
+    }
+  });
+  return positions;
+}
+
 export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
   const isId = locale === "id";
   const { isLive, years, latestCommits, profileUrl } = telemetry;
 
-  // Selected year state (defaults to the first/most recent year)
+  // Selected year state (defaults to the first / most recent year)
   const defaultYear = years.length > 0 ? years[0].year : new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState<number>(defaultYear);
 
   const selectedYearData: GitHubYearContribution | undefined =
     years.find((y) => y.year === selectedYear) || years[0];
+
+  const monthPositions = useMemo(() => {
+    return selectedYearData ? getMonthPositions(selectedYearData.weeks) : [];
+  }, [selectedYearData]);
 
   const copy = {
     tag: "[03 // GITHUB]",
@@ -42,18 +63,17 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
       ? "Arsip kontribusi kode publik dan commit terbaru di GitHub @annastriw."
       : "Public code contribution archive and recent commit activity for @annastriw on GitHub.",
     visitProfile: isId ? "Lihat Profil GitHub" : "Visit GitHub Profile",
-    totalContributions: isId ? "kontribusi pada" : "contributions in",
-    latestCommitsHeading: isId ? "COMMIT PUBLIK TERAKHIR" : "LATEST PUBLIC COMMITS",
-    signalStatusLive: isId ? "SINYAL LANGSUNG" : "LIVE SIGNAL",
+    contributionSignal: isId ? "SINYAL KONTRIBUSI" : "CONTRIBUTION SIGNAL",
+    totalContributionsIn: isId ? "kontribusi pada" : "contributions in",
+    latestCommitsHeading: isId ? "COMMIT PUBLIK TERAKHIR" : "LATEST COMMITS",
+    signalStatusLive: isId ? "SINYAL AKTIF" : "LIVE SIGNAL",
     signalStatusHolding: isId ? "INTEGRASI: MENUNGGU TOKEN" : "INTEGRATION: PENDING API",
-    noCommitsFallback: isId
-      ? "Aktivitas commit publik dapat dilihat langsung pada profil GitHub."
-      : "Public commit activity is available directly on the GitHub profile.",
+    yearSelectorLabel: isId ? "TAHUN ARSIP" : "ARCHIVE YEAR",
     less: isId ? "Sedikit" : "Less",
     more: isId ? "Banyak" : "More",
-    fallbackNote: isId
-      ? "Koneksi data langsung ke repositori GitHub @annastriw sedang dalam mode holding."
-      : "Direct live data stream to GitHub repository @annastriw is currently in holding mode.",
+    fallbackUnavailable: isId
+      ? "Data aktivitas sementara tidak tersedia."
+      : "Activity data is temporarily unavailable.",
   };
 
   return (
@@ -89,7 +109,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
             rel="noopener noreferrer"
             className="section-header-link group inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-(--color-accent) hover:underline self-start md:self-end transition-colors"
           >
-            <span>{copy.visitProfile}</span>
+            <span>github.com/annastriw</span>
             <span
               className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               aria-hidden="true"
@@ -102,12 +122,39 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
         {isLive && selectedYearData ? (
           /* Live GitHub Signal Layout */
           <div className="flex flex-col gap-6">
-            {/* Top Controls: 4-Year Selector + Live Telemetry Badge + Inline Total */}
+            {/* Top Control Bar: Contribution Signal Title + Inline Total + Mobile Year Tabs */}
             <ScrollReveal delayMs={100} animationClass="animate-editorial-fade">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-(--color-border) pb-4">
-                {/* 4-Year Selector Tabs */}
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-(--color-border) pb-3">
+                {/* Left: Contribution Signal & Inline Total */}
+                <div className="flex flex-wrap items-center gap-3 font-mono text-xs">
+                  <div className="inline-flex items-center gap-2">
+                    <span className="text-(--color-accent) font-bold">■</span>
+                    <span className="font-semibold text-(--color-foreground) uppercase tracking-wider">
+                      {copy.contributionSignal}
+                    </span>
+                  </div>
+
+                  <span className="text-(--color-border) hidden sm:inline" aria-hidden="true">
+                    /
+                  </span>
+
+                  <div className="inline-flex items-center gap-1.5 bg-(--color-surface-subtle,var(--color-background)) px-2.5 py-1 border border-(--color-border) rounded-[2px]">
+                    <span
+                      className="w-2 h-2 rounded-full bg-emerald-500 animate-subtle-beacon shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span className="font-semibold text-(--color-foreground)">
+                      {selectedYearData.totalContributions.toLocaleString()}
+                    </span>
+                    <span className="text-(--color-muted)">
+                      {copy.totalContributionsIn} {selectedYear}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Mobile / Tablet Horizontal Year Selector (< lg) */}
                 <div
-                  className="flex items-center gap-1 sm:gap-2 p-1 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) rounded-[2px]"
+                  className="flex lg:hidden items-center gap-1 p-0.5 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) rounded-[2px]"
                   role="tablist"
                   aria-label="GitHub contribution year selector"
                 >
@@ -120,9 +167,9 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                         role="tab"
                         aria-selected={isSelected}
                         onClick={() => setSelectedYear(yearObj.year)}
-                        className={`px-2.5 sm:px-3 py-1 font-mono text-xs font-medium rounded-[2px] transition-all duration-200 cursor-pointer ${
+                        className={`px-2.5 py-1 font-mono text-xs font-medium rounded-[2px] transition-all duration-150 cursor-pointer ${
                           isSelected
-                            ? "bg-(--color-foreground) text-(--color-background) font-semibold shadow-xs"
+                            ? "bg-(--color-foreground) text-(--color-background) font-semibold shadow-2xs"
                             : "text-(--color-muted) hover:text-(--color-foreground)"
                         }`}
                       >
@@ -131,100 +178,163 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                     );
                   })}
                 </div>
-
-                {/* Total Contributions Indicator & Live Status */}
-                <div className="flex items-center gap-3 font-mono text-xs">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 border border-(--color-border) bg-(--color-background) rounded-[2px]">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-subtle-beacon" aria-hidden="true" />
-                    <span className="font-semibold text-(--color-foreground)">
-                      {selectedYearData.totalContributions.toLocaleString()}
-                    </span>
-                    <span className="text-(--color-muted)">
-                      {copy.totalContributions} {selectedYear}
-                    </span>
-                  </div>
-
-                  <a
-                    href={profileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 text-(--color-muted) hover:text-(--color-accent) border border-transparent hover:border-(--color-border) transition-colors rounded-[2px]"
-                  >
-                    <span>github.com/annastriw</span>
-                    <span aria-hidden="true">↗</span>
-                  </a>
-                </div>
               </div>
             </ScrollReveal>
 
-            {/* Contribution Matrix Graph (Editorial Visualization) */}
+            {/* Matrix Card + Desktop Vertical Year Selector Rail */}
             <ScrollReveal delayMs={150} animationClass="animate-editorial-fade">
-              <div className="github-matrix-card border border-(--color-border) bg-(--color-background) p-4 sm:p-5 rounded-[2px] overflow-hidden flex flex-col gap-3">
-                <div className="overflow-x-auto pb-2 scrollbar-thin">
-                  <div className="min-w-[720px] flex flex-col gap-2">
-                    {/* Month Labels Header */}
-                    <div className="flex justify-between pl-8 pr-2 font-mono text-[10px] text-(--color-muted) uppercase tracking-wider">
-                      {monthNames[locale].map((m, idx) => (
-                        <span key={idx}>{m}</span>
-                      ))}
-                    </div>
-
-                    {/* Matrix Grid (53 Weeks x 7 Days) */}
-                    <div className="flex items-start gap-1">
-                      {/* Weekday Labels (Mon, Wed, Fri) */}
-                      <div className="flex flex-col justify-between h-[100px] py-1 font-mono text-[9px] text-(--color-muted) shrink-0 w-7">
-                        <span>{dayNames[locale][1]}</span>
-                        <span>{dayNames[locale][3]}</span>
-                        <span>{dayNames[locale][5]}</span>
+              <div className="flex flex-col lg:flex-row gap-3 items-stretch">
+                {/* Main Contribution Matrix Card */}
+                <div className="github-matrix-card grow min-w-0 border border-(--color-border) bg-(--color-background) p-4 sm:p-5 rounded-[2px] overflow-hidden flex flex-col gap-3">
+                  <div className="overflow-x-auto pb-2 scrollbar-thin">
+                    <div className="min-w-[680px] sm:min-w-[720px] flex flex-col gap-2">
+                      {/* Month Labels Header (Pixel-aligned to 53 week columns) */}
+                      <div className="flex items-center pl-7">
+                        <div
+                          className="grid w-full font-mono text-[10px] text-(--color-muted) uppercase tracking-wider"
+                          style={{
+                            gridTemplateColumns: "repeat(53, minmax(0, 1fr))",
+                            columnGap: "3px",
+                          }}
+                        >
+                          {monthPositions.map((pos) => (
+                            <span
+                              key={pos.month}
+                              style={{ gridColumnStart: pos.weekIndex + 1 }}
+                              className="col-span-4 truncate select-none"
+                            >
+                              {monthNames[locale][pos.month]}
+                            </span>
+                          ))}
+                        </div>
                       </div>
 
-                      {/* Weeks Columns */}
-                      <div className="flex gap-1 grow">
-                        {selectedYearData.weeks.map((week, wIdx) => (
-                          <div key={wIdx} className="flex flex-col gap-1 grow">
-                            {week.days.map((day, dIdx) => {
-                              if (!day) {
+                      {/* Matrix Grid (Weekday labels + 53 Weeks x 7 Days) */}
+                      <div className="flex items-start gap-2">
+                        {/* Weekday Labels (Sun to Sat, highlighting Mon, Wed, Fri) */}
+                        <div
+                          className="grid font-mono text-[9px] text-(--color-muted) shrink-0 w-5 select-none"
+                          style={{
+                            gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+                            rowGap: "3px",
+                          }}
+                        >
+                          <span className="h-2.5 sm:h-3" />
+                          <span className="h-2.5 sm:h-3 flex items-center leading-none">
+                            {dayNames[locale][1]}
+                          </span>
+                          <span className="h-2.5 sm:h-3" />
+                          <span className="h-2.5 sm:h-3 flex items-center leading-none">
+                            {dayNames[locale][3]}
+                          </span>
+                          <span className="h-2.5 sm:h-3" />
+                          <span className="h-2.5 sm:h-3 flex items-center leading-none">
+                            {dayNames[locale][5]}
+                          </span>
+                          <span className="h-2.5 sm:h-3" />
+                        </div>
+
+                        {/* 53 Weeks Columns */}
+                        <div
+                          className="grid grow"
+                          style={{
+                            gridTemplateColumns: "repeat(53, minmax(0, 1fr))",
+                            columnGap: "3px",
+                          }}
+                        >
+                          {selectedYearData.weeks.map((week, wIdx) => (
+                            <div
+                              key={wIdx}
+                              className="grid"
+                              style={{
+                                gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+                                rowGap: "3px",
+                              }}
+                            >
+                              {week.days.map((day, dIdx) => {
+                                if (!day) {
+                                  return (
+                                    <div
+                                      key={dIdx}
+                                      className="aspect-square w-full rounded-[1px] opacity-0 pointer-events-none"
+                                    />
+                                  );
+                                }
+
+                                const levelColors = [
+                                  "bg-(--color-border)/35 dark:bg-(--color-border)/40",
+                                  "bg-blue-400/40 dark:bg-blue-500/30",
+                                  "bg-blue-500/70 dark:bg-blue-400/60",
+                                  "bg-blue-600 dark:bg-blue-400",
+                                  "bg-(--color-accent)",
+                                ];
+
                                 return (
                                   <div
                                     key={dIdx}
-                                    className="aspect-square w-full rounded-[1px] opacity-0 pointer-events-none"
+                                    title={`${day.date}: ${day.count} ${copy.totalContributionsIn} ${selectedYear}`}
+                                    className={`aspect-square w-full rounded-[1px] ${levelColors[day.level]} transition-colors duration-150 hover:ring-1 hover:ring-(--color-accent) cursor-default`}
                                   />
                                 );
-                              }
+                              })}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
 
-                              const levelColors = [
-                                "bg-(--color-border)/30",
-                                "bg-blue-400/40 dark:bg-blue-500/30",
-                                "bg-blue-500/70 dark:bg-blue-400/60",
-                                "bg-blue-600 dark:bg-blue-400",
-                                "bg-(--color-accent)",
-                              ];
-
-                              return (
-                                <div
-                                  key={dIdx}
-                                  title={`${day.date}: ${day.count} ${copy.totalContributions}`}
-                                  className={`aspect-square w-full rounded-[1px] ${levelColors[day.level]} transition-colors duration-150 hover:ring-1 hover:ring-(--color-accent) cursor-default`}
-                                />
-                              );
-                            })}
-                          </div>
-                        ))}
+                      {/* Color Scale Legend */}
+                      <div className="flex items-center justify-end gap-2 pt-2 border-t border-(--color-border)/60 font-mono text-[10px] text-(--color-muted)">
+                        <span>{copy.less}</span>
+                        <div className="flex gap-1">
+                          <span className="w-2.5 h-2.5 rounded-[1px] bg-(--color-border)/35 dark:bg-(--color-border)/40" />
+                          <span className="w-2.5 h-2.5 rounded-[1px] bg-blue-400/40 dark:bg-blue-500/30" />
+                          <span className="w-2.5 h-2.5 rounded-[1px] bg-blue-500/70 dark:bg-blue-400/60" />
+                          <span className="w-2.5 h-2.5 rounded-[1px] bg-blue-600 dark:bg-blue-400" />
+                          <span className="w-2.5 h-2.5 rounded-[1px] bg-(--color-accent)" />
+                        </div>
+                        <span>{copy.more}</span>
                       </div>
                     </div>
+                  </div>
+                </div>
 
-                    {/* Color Scale Legend */}
-                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-(--color-border)/60 font-mono text-[10px] text-(--color-muted)">
-                      <span>{copy.less}</span>
-                      <div className="flex gap-1">
-                        <span className="w-2.5 h-2.5 rounded-[1px] bg-(--color-border)/30" />
-                        <span className="w-2.5 h-2.5 rounded-[1px] bg-blue-400/40 dark:bg-blue-500/30" />
-                        <span className="w-2.5 h-2.5 rounded-[1px] bg-blue-500/70 dark:bg-blue-400/60" />
-                        <span className="w-2.5 h-2.5 rounded-[1px] bg-blue-600 dark:bg-blue-400" />
-                        <span className="w-2.5 h-2.5 rounded-[1px] bg-(--color-accent)" />
-                      </div>
-                      <span>{copy.more}</span>
-                    </div>
+                {/* Desktop Compact Vertical Year Selector Rail (>= lg) */}
+                <div className="hidden lg:flex flex-col justify-between w-32 shrink-0 border border-(--color-border) bg-(--color-background) p-2.5 rounded-[2px]">
+                  <div className="font-mono text-[10px] uppercase font-semibold text-(--color-muted) tracking-wider px-2 py-1 border-b border-(--color-border)/60 mb-2">
+                    {copy.yearSelectorLabel}
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 grow justify-around" role="tablist" aria-label="GitHub contribution year selector">
+                    {years.map((yearObj) => {
+                      const isSelected = yearObj.year === selectedYear;
+                      return (
+                        <button
+                          key={yearObj.year}
+                          type="button"
+                          role="tab"
+                          aria-selected={isSelected}
+                          onClick={() => setSelectedYear(yearObj.year)}
+                          className={`w-full flex items-center justify-between px-2.5 py-2 font-mono text-xs rounded-[2px] transition-all duration-150 cursor-pointer ${
+                            isSelected
+                              ? "bg-(--color-foreground) text-(--color-background) font-semibold shadow-xs"
+                              : "text-(--color-muted) hover:text-(--color-foreground) hover:bg-(--color-surface-subtle,rgba(0,0,0,0.03))"
+                          }`}
+                        >
+                          <span>{yearObj.year}</span>
+                          <span
+                            className={`text-[10px] tabular-nums ${
+                              isSelected ? "opacity-80" : "text-(--color-muted)"
+                            }`}
+                          >
+                            {yearObj.totalContributions}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="pt-2 border-t border-(--color-border)/60 font-mono text-[9px] text-(--color-muted) text-center">
+                    TELEMETRY
                   </div>
                 </div>
               </div>
@@ -242,7 +352,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {latestCommits.map((commit, idx) => (
+                    {latestCommits.slice(0, 2).map((commit, idx) => (
                       <a
                         key={idx}
                         href={commit.url}
@@ -253,9 +363,9 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                         <div className="flex flex-col gap-1.5">
                           <div className="flex items-center justify-between gap-2 font-mono text-xs text-(--color-muted)">
                             <span className="font-semibold text-(--color-foreground) truncate">
-                              {commit.repo}
+                              {String(idx + 1).padStart(2, "0")} / {commit.repo}
                             </span>
-                            <span className="px-1.5 py-0.5 border border-(--color-border) text-[10px] rounded-[2px] shrink-0">
+                            <span className="px-1.5 py-0.5 border border-(--color-border) text-[10px] rounded-[2px] shrink-0 font-mono">
                               {commit.sha}
                             </span>
                           </div>
@@ -265,7 +375,9 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                         </div>
 
                         <div className="flex items-center justify-between gap-2 border-t border-(--color-border)/60 pt-2 font-mono text-[11px] text-(--color-muted)">
-                          <span>{commit.date}</span>
+                          <span>
+                            {commit.sha} · {commit.date}
+                          </span>
                           <span className="text-(--color-accent) font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">
                             <span>GitHub</span>
                             <span>↗</span>
@@ -279,38 +391,36 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
             )}
           </div>
         ) : (
-          /* Minimal Truthful Fallback */
+          /* Truthful Fallback State (when token or API is unavailable) */
           <ScrollReveal delayMs={150} animationClass="animate-editorial-fade">
             <div className="github-hold-card border border-(--color-border) bg-(--color-background) p-5 sm:p-6 flex flex-col gap-4 rounded-[2px]">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-(--color-border) pb-3 font-mono text-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-(--color-accent) font-bold">■</span>
-                  <span className="font-semibold text-(--color-foreground)">GITHUB TELEMETRY</span>
-                  <span className="text-(--color-border)">/</span>
-                  <span className="text-(--color-muted)">github.com/annastriw</span>
+                  <span className="font-semibold text-(--color-foreground)">GITHUB SIGNAL</span>
                 </div>
 
-                <div className="inline-flex items-center gap-2 bg-(--color-surface-subtle,var(--color-background)) px-3 py-0.5 border border-(--color-border) rounded-[2px]">
-                  <span className="w-2 h-2 rounded-full bg-amber-500" aria-hidden="true" />
-                  <span className="font-semibold text-(--color-foreground) text-[11px]">
-                    {copy.signalStatusHolding}
-                  </span>
+                <div className="inline-flex items-center gap-2 bg-(--color-surface-subtle,var(--color-background)) px-2.5 py-0.5 border border-(--color-border) rounded-[2px] text-[11px] text-(--color-muted)">
+                  <span>{copy.signalStatusHolding}</span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-center">
-                <p className="text-xs sm:text-sm text-(--color-muted) leading-relaxed m-0">
-                  {copy.fallbackNote}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <p className="text-xs sm:text-sm text-(--color-muted) m-0 leading-relaxed">
+                  {copy.fallbackUnavailable}
                 </p>
 
                 <a
                   href={profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center justify-center gap-2 px-4 py-2 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) hover:border-(--color-accent) font-mono text-xs font-semibold text-(--color-foreground) transition-all duration-200 rounded-[2px]"
+                  className="group inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-(--color-accent) hover:underline transition-colors shrink-0"
                 >
                   <span>github.com/annastriw</span>
-                  <span className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true">
+                  <span
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden="true"
+                  >
                     ↗
                   </span>
                 </a>
