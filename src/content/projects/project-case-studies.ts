@@ -610,7 +610,7 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       alt: { en: "Thermal Printer Service Android application identity", id: "Identitas aplikasi Android Thermal Printer Service" },
       position: "center",
     },
-    videoSrc: "/assets/projects/thermal-printer-service/TPS-video.webm",
+    videoSrc: "/assets/projects/thermal-printer-service/demo.webm",
     evidence: [
       {
         id: "FIG.01",

@@ -1,4 +1,4 @@
-import { supportedLocales, type Locale, defaultLocale } from "./config";
+import { supportedLocales, type Locale } from "./config";
 
 /**
  * Strips the locale segment from the start of a pathname.
@@ -11,18 +11,6 @@ export function stripLocaleFromPath(pathname: string): string {
     segments.shift();
   }
   return segments.length > 0 ? `/${segments.join("/")}` : "";
-}
-
-/**
- * Extracts the current locale from a pathname if present.
- */
-export function getLocaleFromPath(pathname: string): Locale {
-  if (!pathname) return defaultLocale;
-  const segments = pathname.split("/").filter(Boolean);
-  if (segments.length > 0 && supportedLocales.includes(segments[0] as Locale)) {
-    return segments[0] as Locale;
-  }
-  return defaultLocale;
 }
 
 /**

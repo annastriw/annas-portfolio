@@ -109,14 +109,6 @@ export const profileData: ProfileData = {
   },
 };
 
-// Backward-compatible alias for existing consumers while migrating
-export const biographyData = {
-  intro: profileData.lead,
-  headline: profileData.headline,
-  paragraphs: profileData.paragraphs,
-  specifications: profileData.metadata,
-};
-
 export const educationData: EducationData = {
   tag: "[01 // EDUCATION]",
   subtag: {
@@ -156,7 +148,7 @@ export const educationData: EducationData = {
     en: "Completed undergraduate degree in Computer Engineering with academic focus on software engineering, computer networks, distributed systems, and applied machine learning.",
     id: "Menyelesaikan pendidikan Sarjana Teknik Komputer dengan fokus akademik pada rekayasa perangkat lunak, jaringan komputer, sistem terdistribusi, dan machine learning terapan.",
   },
-  certificateAsset: "/assets/certificates/bachelor_certificate.webp",
+  certificateAsset: "/assets/certificates/bachelor-certificate.webp",
   figureLabel: {
     en: "FIG.01 // BACHELOR CERTIFICATE",
     id: "FIG.01 // IJAZAH SARJANA TEKNIK",
@@ -180,7 +172,7 @@ export const certificatesData: CertificateData[] = [
     },
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
-    assetPath: "/assets/certificates/ccna_enterprise_networking_security_and_automation.webp",
+    assetPath: "/assets/certificates/ccna-enterprise-networking-security-and-automation.webp",
     badge: "CISCO VERIFIED",
   },
   {
@@ -191,7 +183,7 @@ export const certificatesData: CertificateData[] = [
     },
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
-    assetPath: "/assets/certificates/ccnav7_switching_routing_and_wireless_essentials.webp",
+    assetPath: "/assets/certificates/ccnav7-switching-routing-and-wireless-essentials.webp",
     badge: "CISCO VERIFIED",
   },
   {
@@ -202,7 +194,7 @@ export const certificatesData: CertificateData[] = [
     },
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
-    assetPath: "/assets/certificates/ccnav7_introduction_to_networks.webp",
+    assetPath: "/assets/certificates/ccnav7-introduction-to-networks.webp",
     badge: "CISCO VERIFIED",
   },
   {
@@ -213,7 +205,7 @@ export const certificatesData: CertificateData[] = [
     },
     issuer: "Huawei Technologies Co., Ltd.",
     category: "ai-databases",
-    assetPath: "/assets/certificates/hcia_ai_v3_5.webp",
+    assetPath: "/assets/certificates/hcia-ai-v3-5.webp",
     badge: "HUAWEI CERTIFIED",
   },
   {
@@ -224,7 +216,7 @@ export const certificatesData: CertificateData[] = [
     },
     issuer: "Oracle Academy",
     category: "ai-databases",
-    assetPath: "/assets/certificates/database_design.webp",
+    assetPath: "/assets/certificates/database-design.webp",
     badge: "ORACLE ACADEMY",
   },
   {
@@ -235,7 +227,7 @@ export const certificatesData: CertificateData[] = [
     },
     issuer: "Oracle Academy",
     category: "ai-databases",
-    assetPath: "/assets/certificates/database_foundations.webp",
+    assetPath: "/assets/certificates/database-foundations.webp",
     badge: "ORACLE ACADEMY",
   },
   {
@@ -246,7 +238,7 @@ export const certificatesData: CertificateData[] = [
     },
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
-    assetPath: "/assets/certificates/it_essentials_pc_hardware_and_software.webp",
+    assetPath: "/assets/certificates/it-essentials-pc-hardware-and-software.webp",
     badge: "CISCO VERIFIED",
   },
   {
@@ -257,7 +249,7 @@ export const certificatesData: CertificateData[] = [
     },
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
-    assetPath: "/assets/certificates/introduction_to_iot_and_digital_transformation.webp",
+    assetPath: "/assets/certificates/introduction-to-iot-and-digital-transformation.webp",
     badge: "CISCO VERIFIED",
   },
 ];

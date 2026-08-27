@@ -1,6 +1,10 @@
 import type { Locale } from "@/lib/i18n/config";
-import { navigationConfig } from "./navigation.ts";
-import type { NavItem, SocialLink, NavigationConfig } from "@/types/navigation";
+import {
+  navigationConfig,
+  type NavItem,
+  type SocialLink,
+  type NavigationConfig,
+} from "./navigation.ts";
 import { siteIdentity } from "./identity.ts";
 import { siteContact } from "./contact.ts";
 
