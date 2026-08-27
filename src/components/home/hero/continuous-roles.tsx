@@ -69,23 +69,27 @@ export function ContinuousRoles() {
   return (
     <div
       className="hero-roles-controls flex flex-wrap items-center gap-2 sm:gap-2.5"
-      role="tablist"
+      role="region"
       aria-label="Professional Roles"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
       onBlur={() => setIsPaused(false)}
     >
+      {/* Static screen reader summary (does not update on timer to prevent repetitive announcements) */}
+      <span className="sr-only">
+        Professional roles: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.
+      </span>
+
       {roles.map((role, idx) => {
         const isActive = idx === currentIndex;
         return (
           <button
             key={role.id}
             type="button"
-            role="tab"
-            aria-selected={isActive}
+            aria-pressed={isActive}
             onClick={() => selectRole(idx)}
-            className={`hero-role-btn group inline-flex items-center gap-2 px-3 py-1.5 border font-mono text-xs sm:text-sm font-medium rounded-[2px] transition-all duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 ${
+            className={`hero-role-btn group inline-flex items-center gap-2 px-3.5 py-2 min-h-[44px] border font-mono text-xs sm:text-sm font-medium rounded-[2px] transition-all duration-200 cursor-pointer whitespace-nowrap focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 ${
               isActive
                 ? "border-(--color-accent) bg-(--color-surface-subtle,rgba(49,94,251,0.05)) text-(--color-foreground) shadow-2xs"
                 : "border-(--color-border) bg-(--color-background) text-(--color-muted) hover:text-(--color-foreground) hover:border-(--color-accent)/60"
@@ -97,10 +101,11 @@ export function ContinuousRoles() {
                   ? "text-(--color-accent)"
                   : "text-(--color-muted) group-hover:text-(--color-accent)"
               }`}
+              aria-hidden="true"
             >
               [{role.id}]
             </span>
-            <span className="overflow-hidden inline-block">
+            <span className="inline-block whitespace-nowrap">
               <span
                 key={isActive ? `active-${role.id}` : `inactive-${role.id}`}
                 className={`inline-block ${
@@ -121,12 +126,6 @@ export function ContinuousRoles() {
           </button>
         );
       })}
-
-      {/* Static screen reader summary */}
-      <span className="sr-only">
-        Active role: [{roles[currentIndex].id}] {roles[currentIndex].title}. All
-        roles: {roles.map((r) => `[${r.id}] ${r.title}`).join(", ")}.
-      </span>
     </div>
   );
 }

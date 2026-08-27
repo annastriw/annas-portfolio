@@ -5,15 +5,19 @@ import type {
 import { TechItem } from "./tech-item";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
+import type { Locale } from "@/lib/i18n/config";
+
 interface TechCategoryProps {
   category: CapabilityCategory;
   index?: number;
+  locale?: Locale;
   onSelectItem: (item: CapabilityItem, category: CapabilityCategory) => void;
 }
 
 export function TechCategory({
   category,
   index = 0,
+  locale = "en",
   onSelectItem,
 }: TechCategoryProps) {
   const delayMs = index * 60;
@@ -49,6 +53,7 @@ export function TechCategory({
             <TechItem
               key={`${category.id}-${item.slug}`}
               item={item}
+              locale={locale}
               onSelect={(selected) => onSelectItem(selected, category)}
             />
           ))}

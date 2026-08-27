@@ -63,11 +63,11 @@ export function SelectedProjects({ locale }: SelectedProjectsProps) {
           <div className="home-selected-bottom-bar flex items-center justify-end border border-(--color-border) bg-(--color-background) p-3.5 sm:p-4 rounded-[2px] hover:border-(--color-accent) transition-colors duration-300">
             <Link
               href={`/${locale}/projects`}
-              className="bottom-bar-cta group inline-flex items-center gap-2 font-mono text-xs sm:text-sm font-semibold text-(--color-accent) hover:underline"
+              className="bottom-bar-cta group inline-flex items-center gap-2 min-h-[44px] px-3 py-2 font-mono text-xs sm:text-sm font-semibold text-(--color-accent) hover:underline focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 rounded-[2px]"
             >
               <span>{copy.archiveCta}</span>
               <span
-                className="transition-transform duration-200 group-hover:translate-x-1"
+                className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"
                 aria-hidden="true"
               >
                 →

@@ -105,6 +105,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
             key={category.id}
             category={category}
             index={idx}
+            locale={locale}
             onSelectItem={handleSelectItem}
           />
         ))}
@@ -124,7 +125,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
             aria-labelledby="tech-dialog-title"
             aria-describedby="tech-dialog-desc"
             onClick={(e) => e.stopPropagation()}
-            className="tech-dialog-content relative w-full max-w-[540px] border border-(--color-border) bg-(--color-background) p-6 sm:p-7 rounded-[2px] shadow-2xl flex flex-col gap-4 animate-editorial-fade motion-reduce:animate-none"
+            className="tech-dialog-content relative w-full max-w-[540px] max-h-[calc(100dvh-32px)] overflow-y-auto border border-(--color-border) bg-(--color-background) p-5 sm:p-7 rounded-[2px] shadow-2xl flex flex-col gap-4 animate-editorial-fade motion-reduce:animate-none"
           >
             {/* Header: Category Metadata & Close Action */}
             <div className="flex items-center justify-between gap-3 border-b border-(--color-border) pb-3.5">
@@ -147,7 +148,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
                 aria-label={
                   isId ? "Tutup detail teknis" : "Close technical record"
                 }
-                className="font-mono text-xs text-(--color-muted) hover:text-(--color-foreground) p-1 border border-(--color-border) hover:border-(--color-accent) rounded-[2px] cursor-pointer transition-colors"
+                className="font-mono text-xs text-(--color-muted) hover:text-(--color-foreground) min-h-[44px] min-w-[44px] px-3 py-2 border border-(--color-border) hover:border-(--color-accent) rounded-[2px] cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 flex items-center justify-center"
               >
                 ✕ ESC
               </button>
@@ -188,7 +189,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
               <button
                 type="button"
                 onClick={handleClose}
-                className="font-mono text-xs font-semibold text-(--color-accent) hover:underline cursor-pointer"
+                className="font-mono text-xs font-semibold text-(--color-accent) hover:underline cursor-pointer min-h-[44px] inline-flex items-center px-2 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 rounded-[2px]"
               >
                 {isId ? "Tutup Dialog" : "Close Record"}
               </button>

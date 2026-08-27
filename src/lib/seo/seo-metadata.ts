@@ -76,7 +76,9 @@ export function createPageMetadata({
       alternateLocale: isId ? ["en_US"] : ["id_ID"],
       type,
       images: resolvedImages.map((img) => ({
-        url: img.url,
+        url: img.url.startsWith("http")
+          ? img.url
+          : `${SITE_URL}${img.url.startsWith("/") ? "" : "/"}${img.url}`,
         ...(img.width ? { width: img.width } : {}),
         ...(img.height ? { height: img.height } : {}),
         ...(img.alt ? { alt: img.alt } : {}),
@@ -86,7 +88,11 @@ export function createPageMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: resolvedImages.map((img) => img.url),
+      images: resolvedImages.map((img) =>
+        img.url.startsWith("http")
+          ? img.url
+          : `${SITE_URL}${img.url.startsWith("/") ? "" : "/"}${img.url}`,
+      ),
     },
   };
 }

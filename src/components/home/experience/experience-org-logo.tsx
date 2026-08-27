@@ -3,23 +3,22 @@ import Image from "next/image";
 interface ExperienceOrgLogoProps {
   logoPath?: string | null;
   placeholder: string;
-  orgName: string;
+  orgName?: string;
 }
 
 export function ExperienceOrgLogo({
   logoPath,
   placeholder,
-  orgName,
 }: ExperienceOrgLogoProps) {
   if (logoPath) {
     return (
       <div
         className="experience-org-logo aspect-square w-8 h-8 sm:w-9 sm:h-9 shrink-0 border border-(--color-border) bg-(--color-background) p-1 flex items-center justify-center relative overflow-hidden rounded-[2px]"
-        aria-label={`${orgName} logo`}
+        aria-hidden="true"
       >
         <Image
           src={logoPath}
-          alt={`${orgName} logo`}
+          alt=""
           width={36}
           height={36}
           sizes="36px"
@@ -34,7 +33,7 @@ export function ExperienceOrgLogo({
   return (
     <div
       className="experience-org-logo aspect-square w-8 h-8 sm:w-9 sm:h-9 shrink-0 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) flex items-center justify-center text-center select-none rounded-[2px]"
-      aria-label={`${orgName} monogram`}
+      aria-hidden="true"
     >
       <span className="font-mono text-[11px] sm:text-xs font-bold tracking-tight text-(--color-foreground)">
         {placeholder}

@@ -123,11 +123,11 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
             href={profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="section-header-link group inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-(--color-accent) hover:underline self-start md:self-end transition-colors"
+            className="section-header-link group inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-(--color-accent) hover:underline self-start md:self-end transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 rounded-[2px]"
           >
             <span>github.com/annastriw</span>
             <span
-              className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none"
               aria-hidden="true"
             >
               ↗
@@ -188,7 +188,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                         aria-selected={isSelected}
                         aria-controls="github-matrix-panel"
                         onClick={() => setSelectedYear(yearObj.year)}
-                        className={`px-2.5 py-1 font-mono text-xs font-medium rounded-[2px] transition-all duration-150 cursor-pointer ${
+                        className={`px-3 py-2 min-h-[44px] flex items-center justify-center font-mono text-xs font-medium rounded-[2px] transition-all duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 ${
                           isSelected
                             ? "bg-(--color-foreground) text-(--color-background) font-semibold shadow-2xs"
                             : "text-(--color-muted) hover:text-(--color-foreground)"
@@ -212,7 +212,16 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                   aria-label={`GitHub contributions in ${selectedYear}`}
                   className="github-matrix-card grow min-w-0 border border-(--color-border) bg-(--color-background) p-4 sm:p-5 rounded-[2px] overflow-hidden flex flex-col gap-3"
                 >
-                  <div className="overflow-x-auto pb-2 scrollbar-thin">
+                  <div
+                    tabIndex={0}
+                    role="region"
+                    aria-label={
+                      isId
+                        ? "Kalender kontribusi GitHub (dapat digulir horizontal)"
+                        : "GitHub contribution calendar (horizontally scrollable)"
+                    }
+                    className="overflow-x-auto pb-2 scrollbar-thin focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 rounded-[2px]"
+                  >
                     <div className="min-w-[680px] sm:min-w-[720px] flex flex-col gap-2">
                       {/* Month Labels Header (Pixel-aligned to 53 week columns) */}
                       <div className="flex items-center pl-7">
@@ -345,7 +354,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                           aria-selected={isSelected}
                           aria-controls="github-matrix-panel"
                           onClick={() => setSelectedYear(yearObj.year)}
-                          className={`w-full flex items-center justify-between px-2.5 py-2 font-mono text-xs rounded-[2px] transition-all duration-150 cursor-pointer ${
+                          className={`w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] font-mono text-xs rounded-[2px] transition-all duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 ${
                             isSelected
                               ? "bg-(--color-foreground) text-(--color-background) font-semibold shadow-xs"
                               : "text-(--color-muted) hover:text-(--color-foreground) hover:bg-(--color-surface-subtle,rgba(0,0,0,0.03))"
@@ -392,7 +401,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                         href={commit.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group border border-(--color-border) bg-(--color-background) p-4 rounded-[2px] hover:border-(--color-accent) transition-all duration-200 flex flex-col justify-between gap-3 shadow-2xs"
+                        className="group border border-(--color-border) bg-(--color-background) p-4 rounded-[2px] hover:border-(--color-accent) transition-all duration-200 flex flex-col justify-between gap-3 shadow-2xs focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2"
                       >
                         <div className="flex flex-col gap-1.5">
                           <div className="flex items-center justify-between gap-2 font-mono text-xs text-(--color-muted)">
@@ -412,7 +421,7 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                           <span>
                             {commit.sha} · {commit.date}
                           </span>
-                          <span className="text-(--color-accent) font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">
+                          <span className="text-(--color-accent) font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none transition-transform duration-200">
                             <span>GitHub</span>
                             <span>↗</span>
                             <span className="sr-only">
@@ -450,11 +459,11 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                   href={profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-(--color-accent) hover:underline transition-colors shrink-0"
+                  className="group inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-(--color-accent) hover:underline transition-colors shrink-0 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 rounded-[2px]"
                 >
                   <span>github.com/annastriw</span>
                   <span
-                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none"
                     aria-hidden="true"
                   >
                     ↗

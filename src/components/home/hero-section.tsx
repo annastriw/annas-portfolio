@@ -94,14 +94,14 @@ export function HeroSection({ locale }: HeroSectionProps) {
                     src="/assets/profile/pas-foto.webp"
                     alt={
                       isId
-                        ? "Annas Tri Widagdo · Software Engineer"
-                        : "Annas Tri Widagdo · Software Engineer"
+                        ? "Foto potret Annas Tri Widagdo"
+                        : "Portrait photo of Annas Tri Widagdo"
                     }
                     width={300}
                     height={400}
                     priority
                     sizes="(max-width: 640px) 260px, (max-width: 1024px) 280px, 300px"
-                    className="hero-portrait-img object-cover object-top w-full h-full transition-transform duration-500 hover:scale-[1.02]"
+                    className="hero-portrait-img object-cover object-top w-full h-full transition-transform duration-500 hover:scale-[1.02] motion-reduce:transform-none"
                   />
                 </div>
                 <figcaption className="hero-portrait-caption flex justify-between items-center font-mono text-[11px] text-(--color-muted) px-1">
@@ -150,11 +150,11 @@ export function HeroSection({ locale }: HeroSectionProps) {
               <div className="home-hero-actions flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-1">
                 <Link
                   href={`/${locale}/projects`}
-                  className="hero-btn-primary group inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-(--color-foreground) bg-(--color-foreground) text-(--color-background) font-mono text-xs sm:text-sm font-semibold rounded-[2px] hover:bg-(--color-accent) hover:border-(--color-accent) hover:text-white transition-all duration-200"
+                  className="hero-btn-primary group inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] border border-(--color-foreground) bg-(--color-foreground) text-(--color-background) font-mono text-xs sm:text-sm font-semibold rounded-[2px] hover:bg-(--color-accent) hover:border-(--color-accent) hover:text-white transition-all duration-200 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2"
                 >
                   <span>{copy.primaryCta}</span>
                   <span
-                    className="transition-transform duration-200 group-hover:translate-x-1"
+                    className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"
                     aria-hidden="true"
                   >
                     →
@@ -163,11 +163,11 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
                 <Link
                   href={`/${locale}/contact`}
-                  className="hero-contact-secondary group inline-flex items-center justify-center gap-1.5 py-2.5 px-4 border border-(--color-border) text-(--color-foreground) hover:border-(--color-accent) hover:text-(--color-accent) font-mono text-xs sm:text-sm font-medium rounded-[2px] transition-colors duration-200"
+                  className="hero-contact-secondary group inline-flex items-center justify-center gap-1.5 py-2.5 px-4 min-h-[44px] border border-(--color-border) text-(--color-foreground) hover:border-(--color-accent) hover:text-(--color-accent) font-mono text-xs sm:text-sm font-medium rounded-[2px] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2"
                 >
                   <span>{copy.secondaryCta}</span>
                   <span
-                    className="text-(--color-accent) font-semibold inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-200"
+                    className="text-(--color-accent) font-semibold inline-flex items-center gap-1 group-hover:translate-x-1 motion-reduce:transform-none transition-transform duration-200"
                     aria-hidden="true"
                   >
                     →
