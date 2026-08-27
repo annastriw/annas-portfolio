@@ -141,6 +141,7 @@ test("generatePersonJsonLd outputs factual credentials without forbidden claims"
   assert.equal(person["@type"], "Person");
   assert.equal(person.name, "Annas Tri Widagdo");
   assert.equal(person.url, "https://annastriwidagdo.me");
+  assert.equal(person.image, "https://annastriwidagdo.me/assets/profile/pas-foto.webp");
   assert.equal(person.alumniOf?.name, "Diponegoro University");
   assert.match(person.address?.addressLocality ?? "", /Klaten/);
   assert.equal(person.address?.addressCountry, "Indonesia");

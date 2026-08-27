@@ -21,7 +21,7 @@ export interface PageMetadataOptions {
 }
 
 const DEFAULT_IMAGE: PageMetadataImage = {
-  url: "/assets/me/pas-foto.webp",
+  url: "/assets/profile/pas-foto.webp",
   width: 800,
   height: 1067,
   alt: "Annas Tri Widagdo - Software Engineer",

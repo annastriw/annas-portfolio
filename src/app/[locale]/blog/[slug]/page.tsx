@@ -44,7 +44,7 @@ export async function generateMetadata({
   const primaryProject = article.sourceProjectSlugs[0]
     ? getProjectCaseStudy(article.sourceProjectSlugs[0])
     : null;
-  const imageSrc = primaryProject?.cover.src || "/assets/me/pas-foto.webp";
+  const imageSrc = primaryProject?.cover.src || "/assets/profile/pas-foto.webp";
   const imageAlt = primaryProject?.cover.alt[locale] || title;
 
   return createPageMetadata({

@@ -39,7 +39,7 @@ export async function generateMetadata({
     type: "website",
     images: [
       {
-        url: "/assets/me/pas-foto.webp",
+        url: "/assets/profile/pas-foto.webp",
         width: 800,
         height: 1067,
         alt: isId

@@ -25,7 +25,7 @@ export function generatePersonJsonLd(): JsonLdPerson {
     "@type": "Person",
     name: siteConfig.name,
     url: SITE_URL,
-    image: `${SITE_URL}/assets/me/pas-foto.webp`,
+    image: `${SITE_URL}/assets/profile/pas-foto.webp`,
     jobTitle: "Software Engineer, Full-Stack Developer & Machine Learning Engineer",
     alumniOf: {
       "@type": "CollegeOrUniversity",
@@ -203,7 +203,7 @@ export function generateBlogPostingJsonLd(
     : null;
   const imageSrc = primaryProject
     ? `${SITE_URL}${primaryProject.cover.src}`
-    : `${SITE_URL}/assets/me/pas-foto.webp`;
+    : `${SITE_URL}/assets/profile/pas-foto.webp`;
 
   return {
     "@context": "https://schema.org",
