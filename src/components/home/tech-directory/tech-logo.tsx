@@ -1,7 +1,6 @@
 interface TechLogoProps {
   name: string;
   monogram: string;
-  logoPath?: string | null;
 }
 
 export function TechLogo({ name, monogram }: TechLogoProps) {

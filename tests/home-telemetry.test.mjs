@@ -6,7 +6,7 @@ import test from "node:test";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-test("Hero section maintains factual 1-2 sentence bilingual branding and key metadata", () => {
+test("Hero section maintains factual 1-2 sentence bilingual branding, 3 full role controls, and key metadata", () => {
   const heroFile = readFileSync(
     join(root, "src", "components", "home", "hero-section.tsx"),
     "utf8",
@@ -20,14 +20,21 @@ test("Hero section maintains factual 1-2 sentence bilingual branding and key met
   assert.match(rolesFile, /Software Engineer/);
   assert.match(rolesFile, /Full-Stack Web Developer/);
   assert.match(rolesFile, /Machine Learning Engineer/);
+  assert.match(rolesFile, /CYCLE_INTERVAL_MS = 4000/);
+  assert.match(rolesFile, /onMouseEnter/);
+  assert.match(rolesFile, /onFocus/);
+  assert.match(rolesFile, /prefers-reduced-motion/);
   assert.match(heroFile, /Jakarta, Indonesia/i);
   assert.match(heroFile, /SystemClock/);
   assert.match(heroFile, /ContinuousRoles/);
   assert.match(heroFile, /\/assets\/profile\/pas-foto\.webp/);
+  assert.match(heroFile, /PORTRAIT \/\/ FIG\.01/);
+  assert.match(heroFile, /Explore Project Archive/);
+  assert.match(heroFile, /Start a Conversation/);
   assert.ok(existsSync(join(root, "public", "assets", "profile", "pas-foto.webp")));
 });
 
-test("Experience section renders exactly the 3 approved professional entries", async () => {
+test("Experience section renders connected timeline following exact approved hierarchy and monograms", async () => {
   const moduleUrl = new URL(
     "../src/content/experience/experience-data.ts",
     import.meta.url,
@@ -38,17 +45,28 @@ test("Experience section renders exactly the 3 approved professional entries", a
   assert.equal(experiencesData[0].id, "cv-universal-kharisma-globalindo");
   assert.match(experiencesData[0].organization.en, /Universal Kharisma Globalindo/);
   assert.match(experiencesData[0].role.en, /Full-Stack Web Developer/);
+  assert.equal(experiencesData[0].logoPlaceholder, "UKG");
 
   assert.equal(experiencesData[1].id, "intern-ft-undip");
   assert.match(experiencesData[1].organization.en, /Faculty of Engineering, Diponegoro University/);
   assert.match(experiencesData[1].role.en, /UI\/UX Designer Intern/);
+  assert.equal(experiencesData[1].logoPlaceholder, "FT");
 
   assert.equal(experiencesData[2].id, "intern-duta-basis-dataprima");
   assert.match(experiencesData[2].organization.en, /PT Duta Basis Dataprima/);
   assert.match(experiencesData[2].role.en, /Junior Game Developer Intern/);
+  assert.equal(experiencesData[2].logoPlaceholder, "DBD");
+
+  const itemFile = readFileSync(
+    join(root, "src", "components", "home", "experience", "experience-item.tsx"),
+    "utf8",
+  );
+  assert.match(itemFile, /timeline-spine-col/);
+  assert.match(itemFile, /experience-highlights/);
+  assert.match(itemFile, /STACK \/\//);
 });
 
-test("Featured projects configuration references exactly the 4 required case studies", async () => {
+test("Featured projects renders 4-row full-width editorial index with single archive CTA and no project count", async () => {
   const moduleUrl = new URL(
     "../src/content/projects/featured-config.ts",
     import.meta.url,
@@ -60,6 +78,25 @@ test("Featured projects configuration references exactly the 4 required case stu
   assert.equal(homeFeaturedConfig.slot3Slug, "ml-for-heart-attack-risk-prediction");
   assert.equal(homeFeaturedConfig.slot4Slug, "panoramic-virtual-tour");
   assert.equal(homeSelectedProjects.length, 4);
+
+  const sectionFile = readFileSync(
+    join(root, "src", "components", "home", "selected-projects.tsx"),
+    "utf8",
+  );
+  const itemFile = readFileSync(
+    join(root, "src", "components", "home", "projects", "featured-project-item.tsx"),
+    "utf8",
+  );
+
+  assert.match(sectionFile, /\[04 \/\/ SELECTED PROJECTS\]/);
+  assert.match(sectionFile, /home-projects-index/);
+  assert.match(sectionFile, /Explore Project Archive/);
+  assert.doesNotMatch(sectionFile, /10 projects|all 10/i);
+
+  assert.match(itemFile, /project-index-row/);
+  assert.match(itemFile, /project-row-thumbnail/);
+  assert.match(itemFile, /STACK \/\//);
+  assert.match(itemFile, /View Case Study/);
 });
 
 test("GitHub telemetry module provides dynamic 2-year query, GraphQL contributionLevel, and server-only token handling", () => {
@@ -90,6 +127,43 @@ test("GitHub Signal component renders minimal editorial signal, 2-year selector,
   assert.match(componentFile, /ScrollReveal/);
   assert.match(componentFile, /overflow-x-auto/);
   assert.match(componentFile, /GitHub activity is temporarily unavailable/);
+});
+
+test("Technical Capabilities directory renders 6 stacked categories with accessible modal dialog", async () => {
+  const moduleUrl = new URL(
+    "../src/content/capabilities/capabilities-data.ts",
+    import.meta.url,
+  );
+  const { capabilitiesCategories } = await import(moduleUrl.href);
+
+  assert.equal(capabilitiesCategories.length, 6);
+  assert.equal(capabilitiesCategories[0].title, "Frontend Engineering");
+  assert.equal(capabilitiesCategories[1].title, "Backend & Data");
+  assert.equal(capabilitiesCategories[2].title, "Mobile & Native Development");
+  assert.equal(capabilitiesCategories[3].title, "Machine Learning & Data Science");
+  assert.equal(capabilitiesCategories[4].title, "Testing & Deployment");
+  assert.equal(capabilitiesCategories[5].title, "Design & Other");
+
+  const dirFile = readFileSync(
+    join(root, "src", "components", "home", "tech-directory", "tech-directory.tsx"),
+    "utf8",
+  );
+  const catFile = readFileSync(
+    join(root, "src", "components", "home", "tech-directory", "tech-category.tsx"),
+    "utf8",
+  );
+  const itemFile = readFileSync(
+    join(root, "src", "components", "home", "tech-directory", "tech-item.tsx"),
+    "utf8",
+  );
+
+  assert.match(dirFile, /tech-dialog-content/);
+  assert.match(dirFile, /aria-modal="true"/);
+  assert.match(dirFile, /document\.body\.style\.overflow = "hidden"/);
+  assert.match(dirFile, /Escape/);
+  assert.match(catFile, /tech-directory-category/);
+  assert.match(itemFile, /tech-directory-row/);
+  assert.match(itemFile, /aria-haspopup="dialog"/);
 });
 
 test("Header and Navigation maintain 5 numbered routes, locale switcher, and theme toggle", () => {

@@ -41,7 +41,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
     }
   };
 
-  // Keyboard trap and Escape listener
+  // Keyboard trap, Escape listener, and body scroll lock
   useEffect(() => {
     if (!selectedRecord) return;
 
@@ -98,8 +98,8 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
       role="region"
       aria-label="Technical Capabilities Directory"
     >
-      {/* 6 Vertically Stacked Editorial Categories */}
-      <div className="flex flex-col">
+      {/* 6 Vertically Stacked Editorial Categories Separated by Thin Rules */}
+      <div className="flex flex-col border-t border-(--color-border)">
         {capabilitiesCategories.map((category, idx) => (
           <TechCategory
             key={category.id}
@@ -113,7 +113,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
       {/* Accessible Technical Record Dialog */}
       {selectedRecord && (
         <div
-          className="tech-dialog-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
+          className="tech-dialog-overlay fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
           onClick={handleClose}
           aria-hidden="true"
         >
@@ -124,7 +124,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
             aria-labelledby="tech-dialog-title"
             aria-describedby="tech-dialog-desc"
             onClick={(e) => e.stopPropagation()}
-            className="tech-dialog-content relative w-full max-w-lg sm:max-w-xl border border-(--color-border) bg-(--color-background) p-6 sm:p-7 rounded-[2px] shadow-2xl flex flex-col gap-4 animate-editorial-fade motion-reduce:animate-none"
+            className="tech-dialog-content relative w-full max-w-[540px] border border-(--color-border) bg-(--color-background) p-6 sm:p-7 rounded-[2px] shadow-2xl flex flex-col gap-4 animate-editorial-fade motion-reduce:animate-none"
           >
             {/* Header: Category Metadata & Close Action */}
             <div className="flex items-center justify-between gap-3 border-b border-(--color-border) pb-3.5">
@@ -135,7 +135,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
                 <span className="text-(--color-border)" aria-hidden="true">
                   /
                 </span>
-                <span className="uppercase tracking-wider">
+                <span className="uppercase tracking-wider font-semibold text-(--color-foreground)">
                   {selectedRecord.category.title}
                 </span>
               </div>
@@ -144,7 +144,9 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
                 ref={closeButtonRef}
                 type="button"
                 onClick={handleClose}
-                aria-label={isId ? "Tutup detail teknis" : "Close technical record"}
+                aria-label={
+                  isId ? "Tutup detail teknis" : "Close technical record"
+                }
                 className="font-mono text-xs text-(--color-muted) hover:text-(--color-foreground) p-1 border border-(--color-border) hover:border-(--color-accent) rounded-[2px] cursor-pointer transition-colors"
               >
                 ✕ ESC

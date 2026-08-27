@@ -17,7 +17,6 @@ export function SelectedProjects({ locale }: SelectedProjectsProps) {
 
   const copy = {
     tag: "[04 // SELECTED PROJECTS]",
-    subtag: isId ? "PROYEK PILIHAN" : "FEATURED PROJECTS",
     title: isId ? "Proyek Pilihan" : "Selected Projects",
     archiveCta: isId ? "Jelajahi Arsip Proyek" : "Explore Project Archive",
   };
@@ -34,19 +33,21 @@ export function SelectedProjects({ locale }: SelectedProjectsProps) {
           className="home-section-header flex flex-col gap-2 max-w-2xl"
         >
           <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
-            <span className="font-semibold text-(--color-accent)">{copy.tag}</span>
-            <span className="text-(--color-border)" aria-hidden="true">
-              /
+            <span className="font-semibold text-(--color-accent)">
+              {copy.tag}
             </span>
-            <span>{copy.subtag}</span>
           </div>
           <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
             {copy.title}
           </h2>
         </ScrollReveal>
 
-        {/* 4-Slot Editorial Grid (2x2) */}
-        <div className="home-featured-grid grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-7">
+        {/* 4-Row Full-Width Editorial Project Index */}
+        <div
+          className="home-projects-index flex flex-col"
+          role="list"
+          aria-label={copy.title}
+        >
           {homeSelectedProjects.map((project: HomeSelectedProject) => (
             <FeaturedProjectItem
               key={project.slug}
@@ -57,7 +58,7 @@ export function SelectedProjects({ locale }: SelectedProjectsProps) {
           ))}
         </div>
 
-        {/* Single Archive Action at End of Section */}
+        {/* Single Archive Action at End of Section (No Project Count) */}
         <ScrollReveal delayMs={200} animationClass="animate-editorial-fade">
           <div className="home-selected-bottom-bar flex items-center justify-end border border-(--color-border) bg-(--color-background) p-3.5 sm:p-4 rounded-[2px] hover:border-(--color-accent) transition-colors duration-300">
             <Link

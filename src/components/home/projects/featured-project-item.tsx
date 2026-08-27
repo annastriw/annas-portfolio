@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import type { HomeSelectedProject } from "@/content/projects/featured-config";
 import type { Locale } from "@/lib/i18n/config";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -18,73 +17,83 @@ export function FeaturedProjectItem({
 }: FeaturedProjectItemProps) {
   const isId = locale === "id";
   const href = `/${locale}/projects/${project.slug}`;
-  const delayMs = Number.parseInt(index, 10) * 100;
+  const delayMs = Number.parseInt(index, 10) * 80;
   const actionLabel = isId ? "Lihat Studi Kasus" : "View Case Study";
 
   return (
     <ScrollReveal delayMs={delayMs} animationClass="animate-editorial-fade">
       <article
-        className="featured-card group border border-(--color-border) bg-(--color-background) hover:border-(--color-accent) transition-all duration-300 rounded-[2px]"
+        className="project-index-row group border-b border-(--color-border) first:border-t hover:bg-(--color-surface-subtle,rgba(0,0,0,0.02)) transition-colors duration-200"
         aria-label={project.title[locale]}
       >
         <Link
           href={href}
-          className="featured-card-link flex flex-col h-full p-5 sm:p-6 text-inherit no-underline"
+          className="project-row-link flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 lg:gap-8 py-5 sm:py-6 text-inherit no-underline"
         >
-          {/* Metadata Top: Index, Role, Status */}
-          <div className="featured-card-meta-top flex items-center justify-between gap-2 mb-4 font-mono text-xs text-(--color-muted)">
-            <div className="featured-meta-left flex items-center gap-2">
-              <span className="featured-index text-(--color-accent) font-semibold">
-                [{index}]
-              </span>
-              <span className="featured-role text-(--color-foreground) font-medium text-[11px]">
-                {project.role[locale]}
-              </span>
-            </div>
-            <span className="featured-status font-mono font-semibold text-(--color-accent) text-[11px] tracking-tight">
-              {project.status[locale]}
+          {/* Left Column: Index & Small Landscape Thumbnail */}
+          <div className="flex items-start md:items-center gap-3.5 sm:gap-4 shrink-0">
+            <span className="font-mono text-xs sm:text-sm font-semibold text-(--color-accent) shrink-0 w-7">
+              [{index}]
             </span>
+            <div className="project-row-thumbnail aspect-[16/10] w-36 sm:w-44 lg:w-48 overflow-hidden bg-(--color-surface-subtle) relative shrink-0 border border-(--color-border) rounded-[2px]">
+              <Image
+                src={project.coverImage}
+                alt={project.coverAlt[locale]}
+                fill
+                sizes="(max-width: 640px) 144px, (max-width: 1024px) 176px, 192px"
+                className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                loading="lazy"
+              />
+            </div>
           </div>
 
-          {/* Media / Thumbnail */}
-          <div className="featured-card-media aspect-[4/3] overflow-hidden bg-(--color-surface-subtle) relative mb-4 border border-(--color-border)">
-            <Image
-              src={project.coverImage}
-              alt={project.coverAlt[locale]}
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 580px"
-              className="featured-card-img object-cover object-top transition-transform duration-500 group-hover:scale-[1.025]"
-              loading="lazy"
-            />
-          </div>
+          {/* Middle Column: Title + Beside Metadata, Summary, and Inline Tech Stack */}
+          <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+            {/* Title & Beside Metadata (Status & Role on Desktop) */}
+            <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+              <h3 className="font-serif text-xl sm:text-2xl font-normal text-(--color-foreground) group-hover:text-(--color-accent) transition-colors duration-200 m-0">
+                {project.title[locale]}
+              </h3>
+              <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs">
+                <span className="text-(--color-accent) font-semibold">
+                  {project.status[locale]}
+                </span>
+                <span className="text-(--color-border)" aria-hidden="true">
+                  /
+                </span>
+                <span className="text-(--color-muted)">
+                  {project.role[locale]}
+                </span>
+              </div>
+            </div>
 
-          {/* Title & Summary */}
-          <div className="featured-card-body flex-1 flex flex-col gap-1.5 mb-4">
-            <h3 className="featured-card-title font-serif text-xl sm:text-2xl font-normal text-(--color-foreground) group-hover:text-(--color-accent) transition-colors duration-200 m-0 flex justify-between items-baseline gap-2">
-              <span>{project.title[locale]}</span>
-              <span
-                className="featured-arrow font-sans text-(--color-muted) group-hover:text-(--color-accent) transition-transform duration-200 text-sm"
-                aria-hidden="true"
-              >
-                ↗
-              </span>
-            </h3>
-            <p className="featured-card-summary text-xs sm:text-sm text-(--color-muted) leading-relaxed m-0 mt-1">
+            {/* Short Summary */}
+            <p className="text-xs sm:text-sm text-(--color-muted) leading-relaxed m-0 line-clamp-2">
               {project.summary[locale]}
             </p>
-          </div>
 
-          {/* Footer: Stack & Action */}
-          <div className="featured-card-footer border-t border-(--color-border) pt-3.5 flex flex-col gap-2 font-mono text-xs">
-            <div className="featured-footer-stack flex items-baseline justify-between gap-2">
-              <span className="text-(--color-muted) text-[11px]">STACK:</span>
-              <span className="text-(--color-muted) text-right text-[11px]">
-                {project.technologies.join(" · ")}
+            {/* Plain Inline Tech Stack (no pills) */}
+            <div className="font-mono text-xs text-(--color-muted) pt-1 flex flex-wrap items-baseline gap-1.5">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-(--color-muted)">
+                STACK //
+              </span>
+              <span className="text-(--color-foreground)">
+                {project.technologies.slice(0, 6).join(" · ")}
               </span>
             </div>
-            <div className="featured-footer-action flex items-center justify-end text-(--color-accent) text-xs font-semibold group-hover:underline pt-0.5">
-              <span>{actionLabel} →</span>
-            </div>
+          </div>
+
+          {/* Right Column: Case-study Action */}
+          <div className="shrink-0 flex items-center md:self-center pt-2 md:pt-0">
+            <span className="font-mono text-xs font-semibold text-(--color-accent) group-hover:underline inline-flex items-center gap-1.5 whitespace-nowrap">
+              <span>{actionLabel}</span>
+              <span
+                className="transition-transform duration-200 group-hover:translate-x-1"
+                aria-hidden="true"
+              >
+                →
+              </span>
+            </span>
           </div>
         </Link>
       </article>

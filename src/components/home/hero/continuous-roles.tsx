@@ -1,104 +1,131 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useSyncExternalStore,
+} from "react";
 
 const roles = [
   { id: "01", title: "Software Engineer" },
   { id: "02", title: "Full-Stack Web Developer" },
   { id: "03", title: "Machine Learning Engineer" },
-];
+] as const;
 
 const CYCLE_INTERVAL_MS = 4000;
 
+function subscribeReducedMotion(callback: () => void) {
+  if (typeof window === "undefined") return () => {};
+  const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mediaQuery.addEventListener("change", callback);
+  return () => mediaQuery.removeEventListener("change", callback);
+}
+
+function getReducedMotionSnapshot() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function getReducedMotionServerSnapshot() {
+  return false;
+}
+
 export function ContinuousRoles() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot
+  );
 
   const nextRole = useCallback(() => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % roles.length);
-      setIsTransitioning(false);
-    }, 400);
+    setCurrentIndex((prev) => (prev + 1) % roles.length);
   }, []);
 
   const selectRole = (index: number) => {
-    if (index === currentIndex) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex(index);
-      setIsTransitioning(false);
-    }, 200);
+    setCurrentIndex(index);
   };
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    if (prefersReducedMotion || isPaused) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
 
-    if (prefersReducedMotion || isPaused) return;
-
-    const timer = setInterval(() => {
+    timerRef.current = setInterval(() => {
       nextRole();
     }, CYCLE_INTERVAL_MS);
 
-    return () => clearInterval(timer);
-  }, [isPaused, nextRole]);
-
-  const currentRole = roles[currentIndex];
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isPaused, prefersReducedMotion, nextRole]);
 
   return (
     <div
-      className="hero-roles-wrapper inline-flex items-center"
+      className="hero-roles-controls flex flex-wrap items-center gap-2 sm:gap-2.5"
+      role="tablist"
       aria-label="Professional Roles"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
       onBlur={() => setIsPaused(false)}
     >
-      {/* Continuous masked editorial role ticker with manual role controls */}
-      <div
-        className="hero-role-ticker inline-flex items-center gap-2 px-2.5 sm:px-3 py-1 border border-(--color-border) bg-(--color-background) rounded-[2px]"
-        aria-hidden="true"
-      >
-        <span className="font-mono text-xs font-semibold text-(--color-accent)">
-          [{currentRole.id}]
-        </span>
-        <div className="overflow-hidden h-5 sm:h-6 flex items-center min-w-[170px] sm:min-w-[220px]">
-          <span
-            className={`font-mono text-xs sm:text-sm font-semibold text-(--color-foreground) transition-all duration-400 ease-out transform ${
-              isTransitioning
-                ? "-translate-y-2 opacity-0"
-                : "translate-y-0 opacity-100"
+      {roles.map((role, idx) => {
+        const isActive = idx === currentIndex;
+        return (
+          <button
+            key={role.id}
+            type="button"
+            role="tab"
+            aria-selected={isActive}
+            onClick={() => selectRole(idx)}
+            className={`hero-role-btn group inline-flex items-center gap-2 px-3 py-1.5 border font-mono text-xs sm:text-sm font-medium rounded-[2px] transition-all duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 ${
+              isActive
+                ? "border-(--color-accent) bg-(--color-surface-subtle,rgba(49,94,251,0.05)) text-(--color-foreground) shadow-2xs"
+                : "border-(--color-border) bg-(--color-background) text-(--color-muted) hover:text-(--color-foreground) hover:border-(--color-accent)/60"
             }`}
           >
-            {currentRole.title}
-          </span>
-        </div>
-
-        {/* Minimal dot indicators for manual role selection */}
-        <div className="flex items-center gap-1 pl-1 border-l border-(--color-border)">
-          {roles.map((r, idx) => (
-            <button
-              key={r.id}
-              type="button"
-              tabIndex={-1}
-              onClick={() => selectRole(idx)}
-              aria-label={`Select ${r.title}`}
-              className={`w-1.5 h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
-                idx === currentIndex
-                  ? "bg-(--color-accent) scale-125"
-                  : "bg-(--color-border) hover:bg-(--color-muted)"
+            <span
+              className={`text-xs font-semibold font-mono transition-colors duration-200 ${
+                isActive
+                  ? "text-(--color-accent)"
+                  : "text-(--color-muted) group-hover:text-(--color-accent)"
               }`}
-            />
-          ))}
-        </div>
-      </div>
+            >
+              [{role.id}]
+            </span>
+            <span className="overflow-hidden inline-block">
+              <span
+                key={isActive ? `active-${role.id}` : `inactive-${role.id}`}
+                className={`inline-block ${
+                  isActive && !prefersReducedMotion
+                    ? "animate-editorial-fade"
+                    : ""
+                }`}
+              >
+                {role.title}
+              </span>
+            </span>
+            {isActive && (
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-(--color-accent) shrink-0 ml-0.5"
+                aria-hidden="true"
+              />
+            )}
+          </button>
+        );
+      })}
 
-      {/* Screen-reader static fallback */}
+      {/* Static screen reader summary */}
       <span className="sr-only">
-        {roles.map((r) => `[${r.id}] ${r.title}`).join(" · ")}
+        Active role: [{roles[currentIndex].id}] {roles[currentIndex].title}. All
+        roles: {roles.map((r) => `[${r.id}] ${r.title}`).join(", ")}.
       </span>
     </div>
   );

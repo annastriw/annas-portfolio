@@ -11,18 +11,12 @@ export function TechItem({ item, onSelect }: TechItemProps) {
     <button
       type="button"
       onClick={() => onSelect(item)}
-      className="tech-directory-row group w-full text-left flex items-center justify-between gap-3 p-2 sm:p-2.5 border border-(--color-border) bg-(--color-background) hover:border-(--color-accent) transition-all duration-200 rounded-[2px] cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
+      className="tech-directory-row group w-full text-left flex items-center justify-between gap-2.5 p-2 sm:p-2.5 border border-(--color-border) bg-(--color-background) hover:border-(--color-accent) transition-all duration-200 rounded-[2px] cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
       aria-haspopup="dialog"
       aria-label={`View technical record for ${item.name}`}
     >
       <div className="flex items-center gap-2.5 min-w-0">
-        <span className="font-mono text-[11px] text-(--color-accent) font-semibold shrink-0 transition-transform duration-200 group-hover:translate-x-0.5">
-          {item.index}
-        </span>
-        <TechLogo
-          name={item.name}
-          monogram={item.monogram}
-        />
+        <TechLogo name={item.name} monogram={item.monogram} />
         <span className="font-mono text-xs sm:text-sm font-medium text-(--color-foreground) group-hover:text-(--color-accent) transition-colors duration-150 truncate">
           {item.name}
         </span>

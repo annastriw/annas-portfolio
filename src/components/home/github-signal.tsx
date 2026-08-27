@@ -15,8 +15,34 @@ interface GitHubSignalProps {
 }
 
 const monthNames: Record<Locale, string[]> = {
-  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-  id: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
+  en: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+  id: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Agu",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Des",
+  ],
 };
 
 const dayNames: Record<Locale, string[]> = {
@@ -45,7 +71,8 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
   const { isLive, years, latestCommits, profileUrl } = telemetry;
 
   // Selected year state (defaults to the first / most recent year)
-  const defaultYear = years.length > 0 ? years[0].year : new Date().getFullYear();
+  const defaultYear =
+    years.length > 0 ? years[0].year : new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState<number>(defaultYear);
 
   const selectedYearData: GitHubYearContribution | undefined =
@@ -57,15 +84,11 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
 
   const copy = {
     tag: "[03 // GITHUB]",
-    subtag: isId ? "AKTIVITAS PENGEMBANGAN" : "DEVELOPMENT SIGNAL",
     title: isId ? "Aktivitas GitHub" : "GitHub Activity",
-    visitProfile: isId ? "Lihat Profil GitHub" : "Visit GitHub Profile",
     contributionSignal: isId ? "SINYAL KONTRIBUSI" : "CONTRIBUTION SIGNAL",
     totalContributionsIn: isId ? "kontribusi pada" : "contributions in",
     latestCommitsHeading: isId ? "COMMIT PUBLIK TERAKHIR" : "LATEST COMMITS",
-    signalStatusLive: isId ? "SINYAL AKTIF" : "LIVE SIGNAL",
-    signalStatusHolding: isId ? "INTEGRASI: MENUNGGU TOKEN" : "INTEGRATION: PENDING API",
-    yearSelectorLabel: isId ? "TAHUN ARSIP" : "ARCHIVE YEAR",
+    yearSelectorLabel: isId ? "TAHUN" : "YEAR",
     less: isId ? "Sedikit" : "Less",
     more: isId ? "Banyak" : "More",
     externalCue: isId ? "dibuka di tab baru" : "opens in a new tab",
@@ -87,11 +110,9 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
         >
           <div className="flex flex-col gap-2 max-w-2xl">
             <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
-              <span className="font-semibold text-(--color-accent)">{copy.tag}</span>
-              <span className="text-(--color-border)" aria-hidden="true">
-                /
+              <span className="font-semibold text-(--color-accent)">
+                {copy.tag}
               </span>
-              <span>{copy.subtag}</span>
             </div>
             <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
               {copy.title}
@@ -130,13 +151,16 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                     </span>
                   </div>
 
-                  <span className="text-(--color-border) hidden sm:inline" aria-hidden="true">
+                  <span
+                    className="text-(--color-border) hidden sm:inline"
+                    aria-hidden="true"
+                  >
                     /
                   </span>
 
                   <div className="inline-flex items-center gap-1.5 bg-(--color-surface-subtle,var(--color-background)) px-2.5 py-1 border border-(--color-border) rounded-[2px]">
                     <span
-                      className="w-2 h-2 rounded-full bg-emerald-500 animate-subtle-beacon shrink-0"
+                      className="w-2 h-2 rounded-full bg-emerald-500 shrink-0"
                       aria-hidden="true"
                     />
                     <span className="font-semibold text-(--color-foreground)">
@@ -306,7 +330,11 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                     {copy.yearSelectorLabel}
                   </div>
 
-                  <div className="flex flex-col gap-1.5 grow justify-around" role="tablist" aria-label="GitHub contribution year selector">
+                  <div
+                    className="flex flex-col gap-1.5 grow justify-around"
+                    role="tablist"
+                    aria-label="GitHub contribution year selector"
+                  >
                     {years.map((yearObj) => {
                       const isSelected = yearObj.year === selectedYear;
                       return (
@@ -345,7 +373,10 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
 
             {/* Latest 2 Public Commits */}
             {latestCommits.length > 0 && (
-              <ScrollReveal delayMs={200} animationClass="animate-editorial-fade">
+              <ScrollReveal
+                delayMs={200}
+                animationClass="animate-editorial-fade"
+              >
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2 font-mono text-xs text-(--color-muted)">
                     <span className="text-(--color-accent) font-bold">■</span>
@@ -384,7 +415,10 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
                           <span className="text-(--color-accent) font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">
                             <span>GitHub</span>
                             <span>↗</span>
-                            <span className="sr-only"> ({copy.externalCue})</span>
+                            <span className="sr-only">
+                              {" "}
+                              ({copy.externalCue})
+                            </span>
                           </span>
                         </div>
                       </a>
@@ -401,11 +435,9 @@ export function GitHubSignal({ locale, telemetry }: GitHubSignalProps) {
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-(--color-border) pb-3 font-mono text-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-(--color-accent) font-bold">■</span>
-                  <span className="font-semibold text-(--color-foreground)">GITHUB SIGNAL</span>
-                </div>
-
-                <div className="inline-flex items-center gap-2 bg-(--color-surface-subtle,var(--color-background)) px-2.5 py-0.5 border border-(--color-border) rounded-[2px] text-[11px] text-(--color-muted)">
-                  <span>{copy.signalStatusHolding}</span>
+                  <span className="font-semibold text-(--color-foreground)">
+                    GITHUB SIGNAL
+                  </span>
                 </div>
               </div>
 
