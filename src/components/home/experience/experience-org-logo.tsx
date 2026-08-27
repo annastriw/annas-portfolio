@@ -22,6 +22,8 @@ export function ExperienceOrgLogo({
           alt={`${orgName} logo`}
           width={48}
           height={48}
+          sizes="48px"
+          loading="lazy"
           className="w-full h-full object-contain"
         />
       </div>

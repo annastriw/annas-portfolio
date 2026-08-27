@@ -148,7 +148,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
                     width={300}
                     height={375}
                     priority
-                    sizes="(max-width: 768px) 100vw, 300px"
+                    sizes="(max-width: 640px) 260px, (max-width: 1024px) 280px, 300px"
                     className="hero-portrait-img object-cover object-top w-full h-full transition-transform duration-500 hover:scale-[1.02]"
                   />
                 </div>

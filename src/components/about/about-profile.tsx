@@ -33,7 +33,7 @@ export function AboutProfile({ locale }: AboutProfileProps) {
                   width={340}
                   height={425}
                   priority
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 340px"
+                  sizes="(max-width: 640px) 340px, (max-width: 1024px) 340px, 340px"
                   className="object-cover object-top w-full h-full transition-transform duration-500 hover:scale-[1.02]"
                 />
               </div>

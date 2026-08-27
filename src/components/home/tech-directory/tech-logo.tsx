@@ -18,6 +18,8 @@ export function TechLogo({ name, monogram, logoPath }: TechLogoProps) {
           alt={`${name} icon`}
           width={24}
           height={24}
+          sizes="24px"
+          loading="lazy"
           className="w-full h-full object-contain"
         />
       </div>

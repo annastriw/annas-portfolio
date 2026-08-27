@@ -38,7 +38,7 @@ export function FeaturedProjectItem({ project, index, locale }: FeaturedProjectI
 
           <div className="featured-card-media aspect-[4/3] overflow-hidden bg-(--color-surface-subtle) relative mb-4 border border-(--color-border)">
             {project.coverImage ? (
-              <Image src={project.coverImage} alt={project.coverAlt[locale]} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 640px" className="featured-card-img object-cover object-top transition-transform duration-500 group-hover:scale-[1.025]" loading="lazy" />
+              <Image src={project.coverImage} alt={project.coverAlt[locale]} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 580px" className="featured-card-img object-cover object-top transition-transform duration-500 group-hover:scale-[1.025]" loading="lazy" />
             ) : (
               <EditorialPlaceholder figureNumber={index} category={project.category} locale={locale} />
             )}
