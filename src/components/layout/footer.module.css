@@ -322,6 +322,20 @@
   .backToTop,
   .backToTop::after,
   .backToTopArrow {
-    transition-duration: 0.01ms;
+    transition: none !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .footerLink[data-kind="external"]:hover .linkArrow,
+  .footerLink[data-kind="external"]:focus-visible .linkArrow,
+  .footerLink[data-kind="email"]:hover .linkArrow,
+  .footerLink[data-kind="email"]:focus-visible .linkArrow,
+  .footerLink[data-kind="contact"]:hover .linkArrow,
+  .footerLink[data-kind="contact"]:focus-visible .linkArrow,
+  .backToTop:hover .backToTopArrow,
+  .backToTop:focus-visible .backToTopArrow,
+  .wordmark:hover .wordmarkMarker,
+  .wordmark:focus-visible .wordmarkMarker {
+    transform: none !important;
   }
 }

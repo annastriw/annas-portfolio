@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import type { Locale } from "@/lib/i18n/config";
 import { themePreferences, type ThemePreference } from "@/components/theme/theme-config";
@@ -106,7 +106,6 @@ function getServerMountedSnapshot() {
 }
 
 export function ThemeToggle({ locale, className = "" }: ThemeToggleProps) {
-  const descriptionId = useId();
   const isMounted = useSyncExternalStore(
     subscribeToMount,
     getMountedSnapshot,
@@ -131,7 +130,6 @@ export function ThemeToggle({ locale, className = "" }: ThemeToggleProps) {
       className={`editorial-theme-btn ${className}`}
       onClick={handleCycleTheme}
       aria-label={copy.buttonLabel(currentLabel)}
-      aria-describedby={descriptionId}
       title={copy.buttonLabel(currentLabel)}
     >
       <span className="theme-btn-tag">THM</span>
@@ -141,9 +139,6 @@ export function ThemeToggle({ locale, className = "" }: ThemeToggleProps) {
         {currentPreference === "system" && <SystemIcon />}
       </span>
       <span className="theme-btn-code">{currentShort}</span>
-      <span id={descriptionId} className="sr-only">
-        {copy.buttonLabel(currentLabel)}
-      </span>
     </button>
   );
 }

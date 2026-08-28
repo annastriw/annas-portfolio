@@ -34,7 +34,11 @@ export function Footer({ locale }: FooterProps) {
 
         <div className={styles.mainGrid}>
           <div className={styles.brandBlock}>
-            <Link className={styles.wordmark} href={`/${locale}`}>
+            <Link
+              className={styles.wordmark}
+              href={`/${locale}`}
+              aria-label={isId ? "annastriwidagdo.me - Beranda" : "annastriwidagdo.me - Home"}
+            >
               <span className={styles.wordmarkMarker} aria-hidden="true">
                 {"\u25A0"}
               </span>
