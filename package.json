@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node tests/global-shell-identity.test.mjs && node tests/header-and-navigation.test.mjs && node tests/home-telemetry.test.mjs && node tests/about-editorial.test.mjs && node tests/blog-articles.test.mjs && node tests/contact.test.mjs && node tests/project-archive.test.mjs && node tests/project-case-studies.test.mjs && node tests/seo-metadata.test.mjs && node scripts/validate-content.mjs",
+    "test": "node tests/global-shell-identity.test.mjs && node tests/header-and-navigation.test.mjs && node tests/splash-and-telemetry.test.mjs && node tests/home-telemetry.test.mjs && node tests/about-editorial.test.mjs && node tests/blog-articles.test.mjs && node tests/contact.test.mjs && node tests/project-archive.test.mjs && node tests/project-case-studies.test.mjs && node tests/seo-metadata.test.mjs && node scripts/validate-content.mjs",
     "validate:content": "node scripts/validate-content.mjs"
   },
   "dependencies": {

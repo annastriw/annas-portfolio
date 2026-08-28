@@ -28,6 +28,20 @@ const routeInfoMap: Record<
   },
 };
 
+const TRANSIT_VISIBLE_DURATION_MS = 1000;
+
+function resolveRouteKey(pathname: string): "home" | "about" | "projects" | "blog" | "contact" {
+  if (!pathname) return "home";
+  const segments = pathname.split("/").filter(Boolean);
+  // segments[0] is locale ('en' or 'id')
+  const section = segments[1] || "";
+  if (section === "about") return "about";
+  if (section === "projects") return "projects";
+  if (section === "blog") return "blog";
+  if (section === "contact") return "contact";
+  return "home";
+}
+
 export function RouteTransitBar({ locale = "en" }: RouteTransitBarProps) {
   const pathname = usePathname();
   const [prevPathname, setPrevPathname] = useState(pathname);
@@ -43,12 +57,7 @@ export function RouteTransitBar({ locale = "en" }: RouteTransitBarProps) {
     setNavKey((k) => k + 1);
   }
 
-  let routeKey = "home";
-  if (pathname.includes("/about")) routeKey = "about";
-  else if (pathname.includes("/projects")) routeKey = "projects";
-  else if (pathname.includes("/blog")) routeKey = "blog";
-  else if (pathname.includes("/contact")) routeKey = "contact";
-
+  const routeKey = resolveRouteKey(pathname);
   const currentRoute = routes[routeKey] || routes.home;
 
   useEffect(() => {
@@ -56,7 +65,7 @@ export function RouteTransitBar({ locale = "en" }: RouteTransitBarProps) {
 
     const timer = setTimeout(() => {
       setIsNavigating(false);
-    }, 400);
+    }, TRANSIT_VISIBLE_DURATION_MS);
 
     return () => clearTimeout(timer);
   }, [isNavigating, navKey]);

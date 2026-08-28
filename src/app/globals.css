@@ -423,18 +423,29 @@ html.splash-dismissed .site-main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .initial-splash-overlay {
+  .splash-editorial-caret {
     display: none !important;
   }
-  html.splash-active .site-header,
-  html.splash-active .site-main {
-    opacity: 1 !important;
-    pointer-events: auto !important;
+  .brand-in-transit {
+    transition: none !important;
+  }
+  .splash-folio-header,
+  .splash-editorial-subtitle,
+  .splash-folio-footer,
+  .splash-element-fade {
+    transition: none !important;
+  }
+  .splash-folio-rule-fill {
+    transition: none !important;
+  }
+  html.splash-active.splash-revealing .site-header,
+  html.splash-active.splash-revealing .site-main {
+    transition: none !important;
   }
 }
 
 /* ==========================================================================
-   Top-Right Route Loading Indicator (Snappy 400ms Transit Pill)
+   Top-Right Route Loading Indicator (1-Second Route Telemetry Box)
    ========================================================================== */
 
 .top-right-route-loader {
@@ -525,7 +536,7 @@ html.dark .route-loader-pill {
   inline-size: 100%;
   background: var(--accent);
   transform-origin: left center;
-  animation: routeBarSweep 0.38s var(--ease-editorial) forwards;
+  animation: routeBarSweep 0.95s var(--ease-editorial) forwards;
 }
 
 @keyframes routeBarSweep {

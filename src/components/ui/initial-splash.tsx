@@ -15,11 +15,6 @@ function subscribe() {
 function getSplashEligibility(): boolean {
   if (typeof window === "undefined") return true;
   try {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReducedMotion) return false;
-
     const alreadyShown = window.sessionStorage.getItem("annas_splash_shown");
     return !alreadyShown;
   } catch {
@@ -31,20 +26,41 @@ function getServerSplashEligibility(): boolean {
   return true;
 }
 
-const SPLASH_TOTAL_DURATION_MS = 2700;
-const TYPING_START_MS = 200;
-const TYPING_DURATION_MS = 900; // 200ms to 1100ms (~53ms per char)
+function subscribeReducedMotion(callback: () => void) {
+  if (typeof window === "undefined") return () => {};
+  const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mql.addEventListener("change", callback);
+  return () => mql.removeEventListener("change", callback);
+}
+
+function getReducedMotion(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function getServerReducedMotion(): boolean {
+  return false;
+}
+
+const SPLASH_TOTAL_DURATION_MS = 4000;
+const TYPING_START_MS = 250;
+const TYPING_DURATION_MS = 1400; // 250ms to 1650ms (~77ms per char)
 const PROGRESS_START_MS = 400;
-const PROGRESS_DURATION_MS = 1400; // 400ms to 1800ms
-const HOLD_START_MS = 1800;
-const TRANSIT_START_MS = 2100;
-const REVEAL_PAGE_MS = 2300;
+const PROGRESS_DURATION_MS = 2500; // 400ms to 2900ms
+const HOLD_START_MS = 1650;
+const TRANSIT_START_MS = 3100;
+const REVEAL_PAGE_MS = 3500;
 
 export function InitialSplash({ locale = "en" }: InitialSplashProps) {
   const isEligible = useSyncExternalStore(
     subscribe,
     getSplashEligibility,
     getServerSplashEligibility,
+  );
+  const isReducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    getServerReducedMotion,
   );
 
   const [stage, setStage] = useState<"init" | "typing" | "hold" | "transit" | "done">("init");
@@ -63,114 +79,145 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
       return;
     }
 
-    // Ensure splash-active is present on root while splash is playing
+    // Ensure splash-active is present on root while splash is active
     document.documentElement.classList.add("splash-active");
     document.documentElement.classList.remove("splash-dismissed");
 
-    // Standard 2.7-Second Editorial Folio Choreography (REV-03):
-    // 0–200ms: Editorial folio canvas & masthead metadata appear (stage "init")
-    // 200–1100ms: Controlled typesetting character reveal into stable baseline (~53ms/char, stage "typing")
-    // 400–1800ms: Thin publication folio progress rule advances smoothly across the track
-    // 1100–1800ms: Completed wordmark remains clearly visible while folio rule completes
-    // 1800–2100ms: Editorial composition reaches complete state hold (stage "hold")
-    // 2100–2550ms: Splash wordmark smoothly glides via FLIP to Header brand position (stage "transit")
-    // 2300–2700ms: Page content and Header fade in seamlessly under the landing wordmark
-    // 2700ms: Done and fully unmounted (stage "done")
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    const intervals: ReturnType<typeof setInterval>[] = [];
 
-    const typingStartTimeout = setTimeout(() => {
-      setStage("typing");
-      const totalChars = fullText.length;
-      const typingIntervalMs = Math.floor(TYPING_DURATION_MS / totalChars);
+    if (isReducedMotion) {
+      // 4-Second Reduced-Motion Static Folio:
+      // Displays full static wordmark, static roles, and static progress representation
+      // without typewriter, ticker, FLIP movement, or blinking animations.
+      const pageRevealTimeout = setTimeout(() => {
+        document.documentElement.classList.add("splash-revealing");
+      }, REVEAL_PAGE_MS);
+      timeouts.push(pageRevealTimeout);
 
-      let charCount = 0;
-      const typeTimer = setInterval(() => {
-        charCount += 1;
-        setTypedChars(charCount);
-        if (charCount >= totalChars) {
-          clearInterval(typeTimer);
+      const doneTimeout = setTimeout(() => {
+        try {
+          window.sessionStorage.setItem("annas_splash_shown", "1");
+        } catch {
+          // Ignored
         }
-      }, typingIntervalMs);
-    }, TYPING_START_MS);
+        document.documentElement.classList.remove("splash-active", "splash-revealing");
+        document.documentElement.classList.add("splash-dismissed");
+        setStage("done");
+      }, SPLASH_TOTAL_DURATION_MS);
+      timeouts.push(doneTimeout);
+    } else {
+      // Standard 4-Second Editorial Folio Choreography (Global Shell 04):
+      // 0–250ms: Editorial folio canvas & masthead metadata appear (stage "init")
+      // 250–1650ms: Controlled typesetting character reveal into stable baseline (~77ms/char, stage "typing")
+      // 400–2900ms: Thin publication folio progress rule advances smoothly across the track (0% -> 100%)
+      // 1650–3100ms: Complete editorial composition holds with full wordmark & roles (stage "hold")
+      // 3100–3650ms: Splash wordmark smoothly glides via FLIP to Header brand position (stage "transit")
+      // 3500–4000ms: Page content and Header fade in seamlessly under the landing wordmark (splash-revealing)
+      // 4000ms: Done and fully unmounted (stage "done")
 
-    const progressStartTimeout = setTimeout(() => {
-      const startTime = Date.now();
+      const typingStartTimeout = setTimeout(() => {
+        setStage("typing");
+        const totalChars = fullText.length;
+        const typingIntervalMs = Math.floor(TYPING_DURATION_MS / totalChars);
 
-      const progressInterval = setInterval(() => {
-        const elapsed = Date.now() - startTime;
-        const rawProgress = Math.min(100, Math.round((elapsed / PROGRESS_DURATION_MS) * 100));
-        setProgress(rawProgress);
+        let charCount = 0;
+        const typeTimer = setInterval(() => {
+          charCount += 1;
+          setTypedChars(charCount);
+          if (charCount >= totalChars) {
+            clearInterval(typeTimer);
+          }
+        }, typingIntervalMs);
+        intervals.push(typeTimer);
+      }, TYPING_START_MS);
+      timeouts.push(typingStartTimeout);
 
-        if (rawProgress >= 100) {
-          clearInterval(progressInterval);
+      const progressStartTimeout = setTimeout(() => {
+        const startTime = Date.now();
+
+        const progressInterval = setInterval(() => {
+          const elapsed = Date.now() - startTime;
+          const rawProgress = Math.min(100, Math.round((elapsed / PROGRESS_DURATION_MS) * 100));
+          setProgress(rawProgress);
+
+          if (rawProgress >= 100) {
+            clearInterval(progressInterval);
+          }
+        }, 25);
+        intervals.push(progressInterval);
+      }, PROGRESS_START_MS);
+      timeouts.push(progressStartTimeout);
+
+      const holdTimeout = setTimeout(() => {
+        setStage("hold");
+      }, HOLD_START_MS);
+      timeouts.push(holdTimeout);
+
+      const transitTimeout = setTimeout(() => {
+        // Calculate FLIP transform from Splash wordmark to Header brand anchor
+        const headerBrandEl = document.getElementById("site-header-brand");
+        const splashBrandEl = splashWordmarkRef.current;
+
+        if (headerBrandEl && splashBrandEl) {
+          const targetRect = headerBrandEl.getBoundingClientRect();
+          const sourceRect = splashBrandEl.getBoundingClientRect();
+
+          const deltaX = targetRect.left - sourceRect.left;
+          const deltaY = targetRect.top - sourceRect.top;
+          const scaleX = targetRect.width / sourceRect.width;
+          const scaleY = targetRect.height / sourceRect.height;
+
+          setTransformStyle({
+            transform: `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scaleX}, ${scaleY})`,
+            transformOrigin: "0 0",
+          });
         }
-      }, 25);
-    }, PROGRESS_START_MS);
 
-    const holdTimeout = setTimeout(() => {
-      setStage("hold");
-    }, HOLD_START_MS);
+        setStage("transit");
+      }, TRANSIT_START_MS);
+      timeouts.push(transitTimeout);
 
-    const transitTimeout = setTimeout(() => {
-      // Calculate FLIP transform from Splash wordmark to Header brand anchor
-      const headerBrandEl = document.getElementById("site-header-brand");
-      const splashBrandEl = splashWordmarkRef.current;
+      const pageRevealTimeout = setTimeout(() => {
+        document.documentElement.classList.add("splash-revealing");
+      }, REVEAL_PAGE_MS);
+      timeouts.push(pageRevealTimeout);
 
-      if (headerBrandEl && splashBrandEl) {
-        const targetRect = headerBrandEl.getBoundingClientRect();
-        const sourceRect = splashBrandEl.getBoundingClientRect();
-
-        const deltaX = targetRect.left - sourceRect.left;
-        const deltaY = targetRect.top - sourceRect.top;
-        const scaleX = targetRect.width / sourceRect.width;
-        const scaleY = targetRect.height / sourceRect.height;
-
-        setTransformStyle({
-          transform: `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scaleX}, ${scaleY})`,
-          transformOrigin: "0 0",
-        });
-      }
-
-      setStage("transit");
-    }, TRANSIT_START_MS);
-
-    const pageRevealTimeout = setTimeout(() => {
-      document.documentElement.classList.add("splash-revealing");
-    }, REVEAL_PAGE_MS);
-
-    const doneTimeout = setTimeout(() => {
-      try {
-        window.sessionStorage.setItem("annas_splash_shown", "1");
-      } catch {
-        // Ignored
-      }
-      document.documentElement.classList.remove("splash-active", "splash-revealing");
-      document.documentElement.classList.add("splash-dismissed");
-      setStage("done");
-    }, SPLASH_TOTAL_DURATION_MS);
+      const doneTimeout = setTimeout(() => {
+        try {
+          window.sessionStorage.setItem("annas_splash_shown", "1");
+        } catch {
+          // Ignored
+        }
+        document.documentElement.classList.remove("splash-active", "splash-revealing");
+        document.documentElement.classList.add("splash-dismissed");
+        setStage("done");
+      }, SPLASH_TOTAL_DURATION_MS);
+      timeouts.push(doneTimeout);
+    }
 
     return () => {
-      clearTimeout(typingStartTimeout);
-      clearTimeout(progressStartTimeout);
-      clearTimeout(holdTimeout);
-      clearTimeout(transitTimeout);
-      clearTimeout(pageRevealTimeout);
-      clearTimeout(doneTimeout);
+      timeouts.forEach(clearTimeout);
+      intervals.forEach(clearInterval);
     };
-  }, [isEligible]);
+  }, [isEligible, isReducedMotion, fullText]);
 
   if (!isEligible || stage === "done") {
     return null;
   }
 
-  const displayedText = fullText.slice(0, typedChars);
-  const formattedProgress = String(progress).padStart(2, "0");
-  const isTransit = stage === "transit";
-  const showCaret = stage === "typing" && typedChars < fullText.length;
+  const effectiveStage = isReducedMotion && stage === "init" ? "hold" : stage;
+  const displayedText = isReducedMotion ? fullText : fullText.slice(0, typedChars);
+  const effectiveProgress = isReducedMotion ? 100 : progress;
+  const formattedProgress = String(effectiveProgress).padStart(2, "0");
+  const isTransit = effectiveStage === "transit";
+  const showCaret = !isReducedMotion && effectiveStage === "typing" && typedChars < fullText.length;
 
   return (
     <div
-      className={`initial-splash-overlay stage-${stage}`}
+      className={`initial-splash-overlay stage-${effectiveStage}`}
       role="status"
+      tabIndex={-1}
       aria-label={isId ? "Pembukaan arsip editorial" : "Editorial archive folio opening"}
     >
       <div className="splash-folio-container">
