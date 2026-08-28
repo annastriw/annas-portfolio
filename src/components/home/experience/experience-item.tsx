@@ -54,7 +54,7 @@ export function ExperienceItem({
         {/* 1. Role (Prominent) */}
         <div className="flex flex-col gap-1">
           <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 sm:gap-4">
               <ExperienceOrgLogo
                 logoPath={logoPath}
                 placeholder={experience.logoPlaceholder}
@@ -72,7 +72,7 @@ export function ExperienceItem({
           </div>
 
           {/* 2. Organization, 3. Period (mobile), 4. Location */}
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-xs text-(--color-muted) pl-0 sm:pl-11">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-xs text-(--color-muted) pl-0 sm:pl-16 md:pl-18">
             <span className="text-(--color-foreground) font-medium">
               {experience.organization[locale]}
             </span>
@@ -91,7 +91,7 @@ export function ExperienceItem({
 
         {/* 5. Three Concise Contribution Points */}
         <ul
-          className="experience-highlights flex flex-col gap-2 list-none m-0 p-0 pl-0 sm:pl-11 pt-1"
+          className="experience-highlights flex flex-col gap-2 list-none m-0 p-0 pl-0 sm:pl-16 md:pl-18 pt-1"
           role="list"
         >
           {experience.highlights[locale].map((highlight, idx) => (
@@ -111,7 +111,7 @@ export function ExperienceItem({
         </ul>
 
         {/* 6. Stack Metadata */}
-        <div className="experience-stack font-mono text-xs text-(--color-muted) pl-0 sm:pl-11 pt-2">
+        <div className="experience-stack font-mono text-xs text-(--color-muted) pl-0 sm:pl-16 md:pl-18 pt-2">
           <span className="text-[11px] font-semibold uppercase tracking-wider text-(--color-muted)">
             {isId ? "STACK // " : "STACK // "}
           </span>

@@ -36,10 +36,15 @@ function getReducedMotionServerSnapshot() {
 
 interface ContinuousRolesProps {
   locale?: Locale;
+  roleIntro?: string;
 }
 
-export function ContinuousRoles({ locale = "en" }: ContinuousRolesProps) {
+export function ContinuousRoles({
+  locale = "en",
+  roleIntro,
+}: ContinuousRolesProps) {
   const isId = locale === "id";
+  const intro = roleIntro ?? (isId ? "Saya seorang" : "I'm a");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -76,7 +81,7 @@ export function ContinuousRoles({ locale = "en" }: ContinuousRolesProps) {
 
   return (
     <div
-      className="hero-roles-module inline-flex py-1 max-w-full"
+      className="hero-roles-module inline-flex max-w-full"
       role="region"
       aria-label={isId ? "Peran Profesional" : "Professional Roles"}
       onMouseEnter={() => setIsPaused(true)}
@@ -87,12 +92,12 @@ export function ContinuousRoles({ locale = "en" }: ContinuousRolesProps) {
       {/* Screen Reader Static Label */}
       <span className="sr-only">
         {isId
-          ? `Peran aktif: [${activeRole.id}] ${activeRole.title}. Peran tersedia: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`
-          : `Active role: [${activeRole.id}] ${activeRole.title}. Available roles: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`}
+          ? `${intro}: [${activeRole.id}] ${activeRole.title}. Peran tersedia: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`
+          : `${intro}: [${activeRole.id}] ${activeRole.title}. Available roles: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`}
       </span>
 
       {/* Main Single Role Box with Integrated Three Dot Indicators */}
-      <div className="hero-role-display inline-flex items-center justify-between gap-3 sm:gap-4 px-3 sm:px-3.5 py-2 min-h-[44px] border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) rounded-none max-w-full">
+      <div className="hero-role-display inline-flex items-center justify-between gap-2.5 sm:gap-3.5 px-3 sm:px-3.5 py-1.5 sm:py-2 min-h-[40px] sm:min-h-[44px] border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) rounded-none max-w-full">
         <div className="flex items-center gap-2 sm:gap-2.5 min-w-0" aria-hidden="true">
           <span className="font-mono text-xs font-bold text-(--color-accent) shrink-0">
             [{activeRole.id}]
@@ -102,7 +107,7 @@ export function ContinuousRoles({ locale = "en" }: ContinuousRolesProps) {
           </span>
 
           {/* Masked Vertical Reel for Active Role */}
-          <div className="hero-role-reel relative overflow-hidden h-6 sm:h-7 min-w-[170px] sm:min-w-[210px] md:min-w-[240px] flex items-center">
+          <div className="hero-role-reel relative overflow-hidden h-6 sm:h-7 min-w-[165px] sm:min-w-[200px] md:min-w-[230px] flex items-center">
             {roles.map((role, idx) => {
               const isCurrent = idx === currentIndex;
               return (
@@ -125,7 +130,7 @@ export function ContinuousRoles({ locale = "en" }: ContinuousRolesProps) {
 
         {/* Integrated Three Dot Indicators */}
         <div
-          className="hero-role-dots flex items-center gap-1 sm:gap-1.5 shrink-0 pl-2.5 sm:pl-3 border-l border-(--color-border)/70"
+          className="hero-role-dots flex items-center gap-1 sm:gap-1.5 shrink-0 pl-2 sm:pl-2.5 border-l border-(--color-border)/70"
           role="group"
           aria-label={isId ? "Pemilih peran" : "Role selector"}
         >
@@ -142,7 +147,7 @@ export function ContinuousRoles({ locale = "en" }: ContinuousRolesProps) {
                 aria-pressed={isActive}
                 aria-label={label}
                 onClick={() => selectRole(idx)}
-                className="group relative flex items-center justify-center p-1 min-w-[24px] min-h-[28px] sm:min-w-[28px] sm:min-h-[32px] cursor-pointer rounded-none transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
+                className="group relative flex items-center justify-center p-1 min-w-[22px] min-h-[26px] sm:min-w-[26px] sm:min-h-[30px] cursor-pointer rounded-none transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
               >
                 <span
                   className={`block rounded-full transition-all duration-300 motion-reduce:transition-none ${

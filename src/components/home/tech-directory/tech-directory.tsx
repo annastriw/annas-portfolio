@@ -160,6 +160,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
                 slug={selectedRecord.item.slug}
                 name={selectedRecord.item.name}
                 monogram={selectedRecord.item.monogram}
+                size="large"
               />
               <div className="flex flex-col">
                 <span className="font-mono text-[11px] text-(--color-accent) font-semibold">

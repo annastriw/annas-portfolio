@@ -1766,17 +1766,17 @@ html.dark .hero-status-ping {
 }
 
 /* ==========================================================================
-   Editorial Action Buttons (Bordered Primary & Borderless Secondary)
+   Editorial Action Buttons (Slimmer Bordered Primary & Borderless Secondary)
    ========================================================================== */
 
-.btn-editorial-primary,
-.btn-editorial-secondary {
+/* Primary Action: Slimmer visible border, strong typography, accent color relationship */
+.btn-editorial-primary {
   display: inline-flex;
-  min-height: 3.25rem;
+  min-height: 2.75rem;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.75rem 1.25rem;
+  gap: 0.875rem;
+  padding: 0.625rem 1.125rem;
   border-radius: 0;
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -1785,15 +1785,18 @@ html.dark .hero-status-ping {
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
-  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, transform 150ms ease;
-}
-
-/* Primary Action: Visible border, strong typography, accent color relationship */
-.btn-editorial-primary {
   border: 1px solid var(--accent);
   background: color-mix(in srgb, var(--accent) 3%, transparent);
   color: var(--foreground);
   font-weight: 700;
+  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, transform 150ms ease;
+}
+
+@media (min-width: 640px) {
+  .btn-editorial-primary {
+    min-height: 3rem;
+    padding: 0.6875rem 1.25rem;
+  }
 }
 
 .btn-editorial-primary .btn-arrow {
@@ -1824,12 +1827,52 @@ html.dark .btn-editorial-primary:focus-visible {
   transform: translate(3px, -3px);
 }
 
-/* Secondary Action: Borderless editorial action style */
+/* Secondary Action: Genuinely Borderless Editorial Link with Horizontal Underline Draw & Arrow Slide */
 .btn-editorial-secondary {
-  border: 1px solid transparent;
-  background: transparent;
+  position: relative;
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 0.625rem 0.25rem;
+  border: none !important;
+  background: transparent !important;
   color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 200ms ease;
+}
+
+@media (min-width: 640px) {
+  .btn-editorial-secondary {
+    min-height: 3rem;
+    padding: 0.6875rem 0.5rem;
+  }
+}
+
+/* Secondary Action Text & Animated Underline */
+.btn-editorial-secondary .btn-label-wrap {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.btn-editorial-secondary .btn-label-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 1.5px;
+  background-color: var(--accent);
+  transition: width 240ms var(--ease-editorial);
 }
 
 .btn-editorial-secondary .btn-arrow {
@@ -1837,13 +1880,20 @@ html.dark .btn-editorial-primary:focus-visible {
   font-family: var(--font-mono);
   font-size: 0.9375rem;
   transition: transform 200ms var(--ease-editorial), color 200ms ease;
+  display: inline-block;
 }
 
+/* Secondary Action Hover & Focus: Text color change, underline expansion, arrow translation */
 .btn-editorial-secondary:hover,
 .btn-editorial-secondary:focus-visible {
   color: var(--foreground);
-  background: var(--color-surface-subtle);
-  border-color: transparent;
+  background: transparent !important;
+  border: none !important;
+}
+
+.btn-editorial-secondary:hover .btn-label-wrap::after,
+.btn-editorial-secondary:focus-visible .btn-label-wrap::after {
+  width: 100%;
 }
 
 .btn-editorial-secondary:hover .btn-arrow,
@@ -1852,23 +1902,36 @@ html.dark .btn-editorial-primary:focus-visible {
   transform: translate(3px, -3px);
 }
 
-.btn-editorial-primary:active,
-.btn-editorial-secondary:active {
+.btn-editorial-primary:active {
   transform: translateY(1px);
 }
 
-.btn-editorial-primary:focus-visible,
-.btn-editorial-secondary:focus-visible {
+.btn-editorial-secondary:active {
+  transform: none;
+}
+
+.btn-editorial-primary:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
+.btn-editorial-secondary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 @media (max-width: 479px) {
-  .btn-editorial-primary,
+  .btn-editorial-primary {
+    white-space: normal;
+    font-size: 0.6875rem;
+    padding: 0.625rem 0.875rem;
+  }
+
   .btn-editorial-secondary {
     white-space: normal;
     font-size: 0.6875rem;
-    padding: 0.75rem 1rem;
+    padding: 0.625rem 0.25rem;
   }
 }
 
@@ -1903,7 +1966,8 @@ html.dark .btn-editorial-primary:focus-visible {
   .btn-editorial-primary,
   .btn-editorial-secondary,
   .btn-editorial-primary .btn-arrow,
-  .btn-editorial-secondary .btn-arrow {
+  .btn-editorial-secondary .btn-arrow,
+  .btn-editorial-secondary .btn-label-wrap::after {
     transition: none !important;
     transform: none !important;
   }

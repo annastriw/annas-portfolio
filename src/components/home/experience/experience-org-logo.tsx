@@ -18,15 +18,15 @@ export function ExperienceOrgLogo({
   if (logoPath && !hasError) {
     return (
       <div
-        className="experience-org-logo aspect-square w-8 h-8 sm:w-9 sm:h-9 shrink-0 border border-(--color-border) bg-(--color-background) p-1 flex items-center justify-center relative overflow-hidden rounded-[2px]"
+        className="experience-org-logo aspect-square w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 shrink-0 border border-(--color-border) bg-(--color-background) p-1 sm:p-1.5 flex items-center justify-center relative overflow-hidden rounded-[2px]"
         aria-hidden="true"
       >
         <Image
           src={logoPath}
           alt=""
-          width={36}
-          height={36}
-          sizes="36px"
+          width={56}
+          height={56}
+          sizes="(max-width: 640px) 44px, 56px"
           loading="lazy"
           unoptimized
           onError={() => setHasError(true)}
@@ -39,10 +39,10 @@ export function ExperienceOrgLogo({
   // Graceful editorial fallback monogram with square corners
   return (
     <div
-      className="experience-org-logo aspect-square w-8 h-8 sm:w-9 sm:h-9 shrink-0 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) flex items-center justify-center text-center select-none rounded-[2px]"
+      className="experience-org-logo aspect-square w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 shrink-0 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) flex items-center justify-center text-center select-none rounded-[2px]"
       aria-hidden="true"
     >
-      <span className="font-mono text-[11px] sm:text-xs font-bold tracking-tight text-(--color-foreground)">
+      <span className="font-mono text-xs sm:text-sm md:text-base font-bold tracking-tight text-(--color-foreground)">
         {placeholder}
       </span>
     </div>
