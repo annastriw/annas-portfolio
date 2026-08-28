@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
-import { getLocalizedHref } from "@/lib/i18n/paths";
+import { getLocalizedHref, isRouteActive } from "@/lib/i18n/paths";
 import { navigationConfig } from "@/content/site/navigation";
 import { siteIdentity } from "@/content/site/identity";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -29,36 +29,51 @@ export function MobileNav({ locale }: MobileNavProps) {
     setIsOpen(false);
   }
 
-  // Lock body scroll, manage focus trap, handle Escape key and window resize
+  // Lock body scroll, manage focus trap, handle Escape key, window resize, and background focus prevention
   useEffect(() => {
     if (!isOpen) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Focus the first link or dialog on open
+    // Set aria-hidden on background elements to prevent screen reader/focus leaks
+    const mainContent = document.getElementById("main-content");
+    const siteFooter = document.querySelector("footer");
+    if (mainContent) mainContent.setAttribute("aria-hidden", "true");
+    if (siteFooter) siteFooter.setAttribute("aria-hidden", "true");
+
     const sheetEl = sheetRef.current;
-    const focusableElements = sheetEl?.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    );
-    if (focusableElements && focusableElements.length > 0) {
-      focusableElements[0].focus();
+    const triggerEl = triggerRef.current;
+
+    // Helper to get all focusable elements within the modal dialog + trigger
+    const getFocusables = (): HTMLElement[] => {
+      if (!sheetEl) return [];
+      const sheetFocusables = Array.from(
+        sheetEl.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      return triggerEl ? [triggerEl, ...sheetFocusables] : sheetFocusables;
+    };
+
+    // Initially focus the first navigation link inside the sheet
+    const navLinks = sheetEl?.querySelectorAll<HTMLElement>("nav a[href]");
+    if (navLinks && navLinks.length > 0) {
+      navLinks[0].focus();
+    } else {
+      triggerEl?.focus();
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
         setIsOpen(false);
-        triggerRef.current?.focus();
+        triggerEl?.focus();
         return;
       }
 
-      if (e.key === "Tab" && sheetEl) {
-        const focusables = Array.from(
-          sheetEl.querySelectorAll<HTMLElement>(
-            'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-          ),
-        );
+      if (e.key === "Tab") {
+        const focusables = getFocusables();
         if (focusables.length === 0) return;
 
         const firstEl = focusables[0];
@@ -89,10 +104,24 @@ export function MobileNav({ locale }: MobileNavProps) {
 
     return () => {
       document.body.style.overflow = originalOverflow;
+      if (mainContent) mainContent.removeAttribute("aria-hidden");
+      if (siteFooter) siteFooter.removeAttribute("aria-hidden");
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
     };
   }, [isOpen]);
+
+  const handleNavClick = (e: React.MouseEvent, isActive: boolean) => {
+    if (isActive) {
+      e.preventDefault();
+      setIsOpen(false);
+      setTimeout(() => {
+        triggerRef.current?.focus();
+      }, 0);
+    } else {
+      setIsOpen(false);
+    }
+  };
 
   return (
     <div className="mobile-nav-container">
@@ -100,7 +129,7 @@ export function MobileNav({ locale }: MobileNavProps) {
       <button
         ref={triggerRef}
         type="button"
-        className="mobile-nav-toggle inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-(--header-border) bg-(--header-bg) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) transition-colors"
+        className="mobile-nav-toggle inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-(--header-border) bg-(--header-bg) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 transition-colors"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-sheet"
@@ -119,7 +148,7 @@ export function MobileNav({ locale }: MobileNavProps) {
         <div
           ref={sheetRef}
           id="mobile-nav-sheet"
-          className="fixed inset-0 top-[49px] z-50 bg-(--color-background) border-t border-(--header-border) overflow-y-auto p-5 sm:p-8 flex flex-col justify-between gap-8 animate-in fade-in slide-in-from-top-2 duration-200"
+          className="mobile-nav-sheet p-5 sm:p-8 flex flex-col justify-between gap-8"
           role="dialog"
           aria-modal="true"
           aria-label={isId ? "Daftar Isi Navigasi" : "Table of Contents Navigation"}
@@ -142,17 +171,17 @@ export function MobileNav({ locale }: MobileNavProps) {
             >
               {config.mainNav.map((item) => {
                 const localizedHref = getLocalizedHref(item.href, locale);
-                const isActive =
-                  pathname === localizedHref ||
-                  (item.href !== "/" && pathname?.startsWith(`${localizedHref}/`));
+                const isActive = isRouteActive(item.href, pathname, locale);
 
                 return (
                   <Link
                     key={item.key}
                     href={localizedHref}
-                    onClick={() => setIsOpen(false)}
-                    className={`group flex items-center justify-between p-2.5 border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) hover:border-(--color-accent) transition-all ${
-                      isActive ? "border-(--color-accent) bg-(--color-background)" : ""
+                    onClick={(e) => handleNavClick(e, isActive)}
+                    className={`group flex items-center justify-between p-2.5 border rounded-[2px] transition-all focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 ${
+                      isActive
+                        ? "border-(--color-accent) bg-(--color-background) font-semibold"
+                        : "border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) hover:border-(--color-accent)"
                     }`}
                     aria-current={isActive ? "page" : undefined}
                   >
@@ -187,7 +216,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                 {isId ? "SISTEM //" : "SYSTEM //"}
               </span>
               <div className="flex items-center gap-3">
-                <LocaleSwitcher locale={locale} />
+                <LocaleSwitcher locale={locale} onSelect={() => setIsOpen(false)} />
                 <ThemeToggle locale={locale} />
               </div>
             </div>

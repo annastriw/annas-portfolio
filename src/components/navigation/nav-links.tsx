@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
-import { getLocalizedHref } from "@/lib/i18n/paths";
+import { getLocalizedHref, isRouteActive } from "@/lib/i18n/paths";
 import { navigationConfig } from "@/content/site/navigation";
 
 interface NavLinksProps {
@@ -26,15 +26,13 @@ export function NavLinks({
     <ul className={`nav-link-list flex items-center gap-1 sm:gap-2 list-none m-0 p-0 ${className}`}>
       {config.mainNav.map((item) => {
         const localizedHref = getLocalizedHref(item.href, locale);
-        const isActive =
-          pathname === localizedHref ||
-          (item.href !== "/" && pathname?.startsWith(`${localizedHref}/`));
+        const isActive = isRouteActive(item.href, pathname, locale);
 
         return (
           <li key={item.key} className="nav-link-item inline-flex">
             <Link
               href={localizedHref}
-              className={`header-nav-link group relative inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs font-medium uppercase tracking-tight transition-all duration-200 ${
+              className={`header-nav-link group relative inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs font-medium uppercase tracking-tight transition-all duration-200 rounded-[2px] focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 ${
                 isActive
                   ? "text-(--color-foreground) font-semibold"
                   : "text-(--color-muted) hover:text-(--color-foreground)"

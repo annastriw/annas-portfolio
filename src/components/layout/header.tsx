@@ -21,17 +21,21 @@ export function Header({ locale }: HeaderProps) {
           <Link
             href={`/${locale}`}
             id="site-header-brand"
-            className="brand-link group inline-flex items-baseline gap-2 text-(--color-foreground) hover:opacity-90 transition-opacity"
+            className="brand-link group inline-flex items-baseline gap-2 text-(--color-foreground) rounded-[2px] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-4"
             aria-label={locale === "id" ? "annastriwidagdo.me - Beranda" : "annastriwidagdo.me - Home"}
           >
             <span
-              className="brand-marker text-(--color-accent) text-xs leading-none transition-transform duration-200 group-hover:scale-110"
+              className="brand-marker text-(--color-foreground) group-hover:text-(--color-accent) group-focus-visible:text-(--color-accent) text-xs leading-none transition-colors duration-200"
               aria-hidden="true"
             >
               ■
             </span>
-            <span className="brand-wordmark font-mono text-sm sm:text-base font-semibold tracking-tight text-(--color-foreground)">
+            <span className="brand-wordmark font-mono text-sm sm:text-base font-semibold tracking-tight text-(--color-foreground) whitespace-nowrap relative">
               annastriwidagdo.me
+              <span
+                className="brand-underline absolute -bottom-0.5 left-0 right-0 h-[1px] bg-(--color-accent) opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200"
+                aria-hidden="true"
+              />
             </span>
           </Link>
         </div>

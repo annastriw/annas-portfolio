@@ -72,9 +72,9 @@ export function LocaleSwitcher({
               ) : (
                 <Link
                   href={targetHref}
-                  className="lang-btn lang-btn-link"
+                  className="lang-btn lang-btn-link rounded-[2px] focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
                   lang={loc}
-                  title={`Switch to ${localeNames[loc].full}`}
+                  title={locale === "id" ? `Ganti ke ${localeNames[loc].full}` : `Switch to ${localeNames[loc].full}`}
                   onClick={onSelect}
                   aria-label={`${localeNames[loc].short}: ${switchLanguageTo} ${localeNames[loc].full}`}
                 >

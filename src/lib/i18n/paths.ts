@@ -1,4 +1,4 @@
-import { supportedLocales, type Locale } from "./config";
+import { supportedLocales, type Locale } from "./config.ts";
 
 /**
  * Strips the locale segment from the start of a pathname.
@@ -34,4 +34,25 @@ export function getLocalizedHref(href: string, locale: Locale): string {
   }
   const cleanHref = href.startsWith("/") ? href : `/${href}`;
   return `/${locale}${cleanHref === "/" ? "" : cleanHref}`;
+}
+
+/**
+ * Determines whether a given navigation item href is active for the current pathname.
+ * - Home ("/" or "") is active only when pathname exactly matches the localized root (e.g. "/en" or "/en/").
+ * - Other routes (e.g. "/projects", "/blog") are active when pathname matches the route exactly or starts with its prefix (e.g. "/en/projects/ukg-system").
+ */
+export function isRouteActive(itemHref: string, currentPathname: string | null | undefined, locale: Locale): boolean {
+  if (!currentPathname) {
+    return itemHref === "/" || itemHref === "";
+  }
+
+  // Normalize by stripping trailing slashes
+  const cleanPathname = currentPathname.replace(/\/+$/, "") || `/${locale}`;
+  const localizedHref = getLocalizedHref(itemHref, locale).replace(/\/+$/, "") || `/${locale}`;
+
+  if (itemHref === "/" || itemHref === "") {
+    return cleanPathname === localizedHref;
+  }
+
+  return cleanPathname === localizedHref || cleanPathname.startsWith(`${localizedHref}/`);
 }
