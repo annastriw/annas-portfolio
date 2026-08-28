@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode, type CSSProperties } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -13,43 +13,64 @@ interface ScrollRevealProps {
 export function ScrollReveal({
   children,
   className = "",
-  animationClass = "animate-editorial-fade",
   delayMs = 0,
-  threshold = 0.1,
+  threshold = 0.05,
 }: ScrollRevealProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const element = domRef.current;
+    if (
+      !element ||
+      typeof window === "undefined" ||
+      typeof IntersectionObserver === "undefined"
+    ) {
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      element.setAttribute("data-reveal-state", "visible");
+      return;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const isAlreadyInViewport =
+      rect.top < window.innerHeight && rect.bottom > 0;
+
+    if (isAlreadyInViewport) {
+      element.setAttribute("data-reveal-state", "visible");
+      return;
+    }
+
+    element.setAttribute("data-reveal-state", "hidden");
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          element.setAttribute("data-reveal-state", "visible");
           observer.disconnect();
         }
       },
-      { threshold, rootMargin: "0px 0px -50px 0px" }
+      { threshold, rootMargin: "0px 0px -40px 0px" }
     );
 
-    const currentElem = domRef.current;
-    if (currentElem) {
-      observer.observe(currentElem);
-    }
+    observer.observe(element);
 
     return () => {
       observer.disconnect();
     };
   }, [threshold]);
 
+  const style: CSSProperties = {
+    transitionDelay: delayMs > 0 ? `${delayMs}ms` : undefined,
+  };
+
   return (
     <div
       ref={domRef}
-      style={{
-        animationDelay: isVisible && delayMs > 0 ? `${delayMs}ms` : undefined,
-      }}
-      className={`${className} ${
-        isVisible ? animationClass : "opacity-0"
-      } motion-reduce:!opacity-100 motion-reduce:!animate-none`}
+      data-reveal-state="visible"
+      style={style}
+      className={`scroll-reveal-container ${className}`}
     >
       {children}
     </div>

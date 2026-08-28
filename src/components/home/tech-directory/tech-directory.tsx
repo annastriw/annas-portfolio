@@ -157,6 +157,7 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
             {/* Content: Technology Name, Monogram & Index */}
             <div className="flex items-center gap-3.5 pt-1">
               <TechLogo
+                slug={selectedRecord.item.slug}
                 name={selectedRecord.item.name}
                 monogram={selectedRecord.item.monogram}
               />

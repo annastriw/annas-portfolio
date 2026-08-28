@@ -82,7 +82,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         },
       },
       {
-        slug: "laravel-backend",
+        slug: "laravel",
         name: "Laravel",
         monogram: "LV",
         index: "02.02",
@@ -198,7 +198,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         },
       },
       {
-        slug: "transformers",
+        slug: "hugging-face-transformers",
         name: "Hugging Face Transformers",
         monogram: "HF",
         index: "04.04",

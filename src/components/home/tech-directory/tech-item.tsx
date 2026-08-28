@@ -24,7 +24,7 @@ export function TechItem({ item, locale = "en", onSelect }: TechItemProps) {
       }
     >
       <div className="flex items-center gap-2.5 min-w-0">
-        <TechLogo name={item.name} monogram={item.monogram} />
+        <TechLogo slug={item.slug} name={item.name} monogram={item.monogram} />
         <span className="font-mono text-xs sm:text-sm font-medium text-(--color-foreground) group-hover:text-(--color-accent) transition-colors duration-150 truncate">
           {item.name}
         </span>

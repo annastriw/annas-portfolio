@@ -31,7 +31,7 @@ export const experiencesData: ExperienceItem[] = [
       id: "Klaten, Jawa Tengah, Indonesia",
     },
     type: "FREELANCE // FULL-STACK DEVELOPMENT",
-    logoFolder: "universal-kharisma-globalindo",
+    logoFolder: "cv-universal-kharisma-globalindo",
     logoPlaceholder: "UKG",
     description: {
       en: "Developed a multi-branch ERP end-to-end using Next.js frontend, NestJS REST API, and MySQL database.",
@@ -74,7 +74,7 @@ export const experiencesData: ExperienceItem[] = [
       id: "Semarang, Jawa Tengah, Indonesia",
     },
     type: "INTERNSHIP // UI/UX DESIGN",
-    logoFolder: "ft-undip",
+    logoFolder: "faculty-engineering-undip",
     logoPlaceholder: "FT",
     description: {
       en: "Designed wireframes, user flows, and interactive prototypes for faculty platforms.",
@@ -117,7 +117,7 @@ export const experiencesData: ExperienceItem[] = [
       id: "Bandung, Jawa Barat, Indonesia",
     },
     type: "INTERNSHIP // UNITY DEVELOPMENT",
-    logoFolder: "duta-basis-dataprima",
+    logoFolder: "pt-duta-basis-dataprima",
     logoPlaceholder: "DBD",
     description: {
       en: "Developed a Panoramic Virtual Tour prototype in Unity and C# using architectural renders produced with Lumion Pro.",

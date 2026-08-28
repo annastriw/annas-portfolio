@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 
 interface ExperienceOrgLogoProps {
@@ -10,7 +13,9 @@ export function ExperienceOrgLogo({
   logoPath,
   placeholder,
 }: ExperienceOrgLogoProps) {
-  if (logoPath) {
+  const [hasError, setHasError] = useState(false);
+
+  if (logoPath && !hasError) {
     return (
       <div
         className="experience-org-logo aspect-square w-8 h-8 sm:w-9 sm:h-9 shrink-0 border border-(--color-border) bg-(--color-background) p-1 flex items-center justify-center relative overflow-hidden rounded-[2px]"
@@ -23,6 +28,8 @@ export function ExperienceOrgLogo({
           height={36}
           sizes="36px"
           loading="lazy"
+          unoptimized
+          onError={() => setHasError(true)}
           className="w-full h-full object-contain"
         />
       </div>

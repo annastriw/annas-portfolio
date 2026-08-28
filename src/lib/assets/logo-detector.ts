@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 function getLogoPathIfPresent(
-  category: "tech" | "experience",
+  category: "technologies" | "organizations" | "tech" | "experience",
   slug: string,
   extensions: readonly string[],
 ): string | null {
@@ -30,9 +30,15 @@ function getLogoPathIfPresent(
 }
 
 export function getTechLogoPathIfPresent(slug: string): string | null {
-  return getLogoPathIfPresent("tech", slug, ["svg", "webp", "png"]);
+  return (
+    getLogoPathIfPresent("technologies", slug, ["svg", "webp", "png"]) ??
+    getLogoPathIfPresent("tech", slug, ["svg", "webp", "png"])
+  );
 }
 
 export function getExperienceLogoPathIfPresent(folderName: string): string | null {
-  return getLogoPathIfPresent("experience", folderName, ["webp", "svg", "png"]);
+  return (
+    getLogoPathIfPresent("organizations", folderName, ["svg", "webp", "png"]) ??
+    getLogoPathIfPresent("experience", folderName, ["svg", "webp", "png"])
+  );
 }
