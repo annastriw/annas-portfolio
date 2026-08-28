@@ -8,6 +8,8 @@ import {
   useSyncExternalStore,
 } from "react";
 
+import type { Locale } from "@/lib/i18n/config";
+
 const roles = [
   { id: "01", title: "Software Engineer" },
   { id: "02", title: "Full-Stack Web Developer" },
@@ -32,7 +34,12 @@ function getReducedMotionServerSnapshot() {
   return false;
 }
 
-export function ContinuousRoles() {
+interface ContinuousRolesProps {
+  locale?: Locale;
+}
+
+export function ContinuousRoles({ locale = "en" }: ContinuousRolesProps) {
+  const isId = locale === "id";
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -69,9 +76,9 @@ export function ContinuousRoles() {
 
   return (
     <div
-      className="hero-roles-module flex flex-wrap items-center gap-2.5 sm:gap-3 py-1"
+      className="hero-roles-module inline-flex py-1 max-w-full"
       role="region"
-      aria-label="Professional Roles"
+      aria-label={isId ? "Peran Profesional" : "Professional Roles"}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}
@@ -79,74 +86,76 @@ export function ContinuousRoles() {
     >
       {/* Screen Reader Static Label */}
       <span className="sr-only">
-        Active role: [{activeRole.id}] {activeRole.title}. Available roles: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.
+        {isId
+          ? `Peran aktif: [${activeRole.id}] ${activeRole.title}. Peran tersedia: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`
+          : `Active role: [${activeRole.id}] ${activeRole.title}. Available roles: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`}
       </span>
 
-      {/* Main Single Active Role Ticker / Reel */}
-      <div
-        className="hero-role-display inline-flex items-center gap-2.5 sm:gap-3 px-3 sm:px-3.5 py-2 min-h-[44px] border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) rounded-none"
-        aria-hidden="true"
-      >
-        <span className="font-mono text-xs font-bold text-(--color-accent) shrink-0">
-          [{activeRole.id}]
-        </span>
-        <span className="text-(--color-border) text-xs" aria-hidden="true">
-          /
-        </span>
+      {/* Main Single Role Box with Integrated Three Dot Indicators */}
+      <div className="hero-role-display inline-flex items-center justify-between gap-3 sm:gap-4 px-3 sm:px-3.5 py-2 min-h-[44px] border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) rounded-none max-w-full">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0" aria-hidden="true">
+          <span className="font-mono text-xs font-bold text-(--color-accent) shrink-0">
+            [{activeRole.id}]
+          </span>
+          <span className="text-(--color-border) text-xs" aria-hidden="true">
+            /
+          </span>
 
-        {/* Masked Vertical Reel for Active Role (No layout shift, longest title fits) */}
-        <div className="hero-role-reel relative overflow-hidden h-6 sm:h-7 min-w-[170px] sm:min-w-[240px] md:min-w-[260px] flex items-center">
+          {/* Masked Vertical Reel for Active Role */}
+          <div className="hero-role-reel relative overflow-hidden h-6 sm:h-7 min-w-[170px] sm:min-w-[210px] md:min-w-[240px] flex items-center">
+            {roles.map((role, idx) => {
+              const isCurrent = idx === currentIndex;
+              return (
+                <div
+                  key={role.id}
+                  className={`absolute inset-0 flex items-center font-sans font-medium text-xs sm:text-sm md:text-base text-(--color-foreground) whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                    isCurrent
+                      ? "opacity-100 translate-y-0 pointer-events-auto"
+                      : idx < currentIndex
+                      ? "opacity-0 -translate-y-full pointer-events-none"
+                      : "opacity-0 translate-y-full pointer-events-none"
+                  }`}
+                >
+                  {role.title}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Integrated Three Dot Indicators */}
+        <div
+          className="hero-role-dots flex items-center gap-1 sm:gap-1.5 shrink-0 pl-2.5 sm:pl-3 border-l border-(--color-border)/70"
+          role="group"
+          aria-label={isId ? "Pemilih peran" : "Role selector"}
+        >
           {roles.map((role, idx) => {
-            const isCurrent = idx === currentIndex;
+            const isActive = idx === currentIndex;
+            const label = isId
+              ? `Tampilkan peran ${role.title}`
+              : `Show ${role.title} role`;
+
             return (
-              <div
+              <button
                 key={role.id}
-                className={`absolute inset-0 flex items-center font-sans font-medium text-xs sm:text-sm md:text-base text-(--color-foreground) whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
-                  isCurrent
-                    ? "opacity-100 translate-y-0 pointer-events-auto"
-                    : idx < currentIndex
-                    ? "opacity-0 -translate-y-2 pointer-events-none"
-                    : "opacity-0 translate-y-2 pointer-events-none"
-                }`}
+                type="button"
+                aria-pressed={isActive}
+                aria-label={label}
+                onClick={() => selectRole(idx)}
+                className="group relative flex items-center justify-center p-1 min-w-[24px] min-h-[28px] sm:min-w-[28px] sm:min-h-[32px] cursor-pointer rounded-none transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
               >
-                {role.title}
-              </div>
+                <span
+                  className={`block rounded-full transition-all duration-300 motion-reduce:transition-none ${
+                    isActive
+                      ? "w-3 sm:w-3.5 h-1.5 bg-(--color-accent)"
+                      : "w-1.5 h-1.5 bg-(--color-border) group-hover:bg-(--color-muted)"
+                  }`}
+                  aria-hidden="true"
+                />
+              </button>
             );
           })}
         </div>
-
-        {/* Live Active Accent Dot */}
-        <span
-          className="w-1.5 h-1.5 rounded-full bg-(--color-accent) shrink-0 ml-0.5"
-          aria-hidden="true"
-        />
-      </div>
-
-      {/* Manual Role Selector Controls */}
-      <div
-        className="hero-role-manual-controls inline-flex items-center gap-1 border border-(--color-border) bg-(--color-background) p-0.5 rounded-none"
-        role="group"
-        aria-label="Direct role selection"
-      >
-        {roles.map((role, idx) => {
-          const isActive = idx === currentIndex;
-          return (
-            <button
-              key={role.id}
-              type="button"
-              aria-pressed={isActive}
-              aria-label={`Select role ${role.id}: ${role.title}`}
-              onClick={() => selectRole(idx)}
-              className={`hero-role-manual-btn inline-flex items-center justify-center px-2.5 py-1 min-h-[38px] min-w-[38px] font-mono text-xs font-semibold rounded-none cursor-pointer transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 ${
-                isActive
-                  ? "bg-(--color-accent) text-white dark:text-[#0c0e11] shadow-2xs"
-                  : "text-(--color-muted) hover:text-(--color-foreground) hover:bg-(--color-surface-subtle)"
-              }`}
-            >
-              <span>[{role.id}]</span>
-            </button>
-          );
-        })}
       </div>
     </div>
   );
