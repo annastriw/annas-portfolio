@@ -68,7 +68,11 @@ export function RouteTransitBar({ locale = "en" }: RouteTransitBarProps) {
       className="top-right-route-loader"
       role="status"
       aria-live="polite"
-      aria-label={`Navigating to ${currentRoute.label}`}
+      aria-label={
+        activeLocale === "id"
+          ? `Menuju ${currentRoute.label}`
+          : `Navigating to ${currentRoute.label}`
+      }
     >
       <div className="route-loader-pill">
         <div className="route-loader-header">

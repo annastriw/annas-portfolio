@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useSyncExternalStore } from "react";
 import type { Locale } from "@/lib/i18n/config";
+import { siteIdentity } from "@/content/site/identity";
 
 interface InitialSplashProps {
   locale?: Locale;
@@ -170,7 +171,7 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
     <div
       className={`initial-splash-overlay stage-${stage}`}
       role="status"
-      aria-label="Editorial archive folio opening"
+      aria-label={isId ? "Pembukaan arsip editorial" : "Editorial archive folio opening"}
     >
       <div className="splash-folio-container">
         {/* Top Editorial Masthead Meta */}
@@ -213,11 +214,11 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
             className={`splash-editorial-subtitle ${isTransit ? "splash-element-fade" : ""}`}
             aria-hidden="true"
           >
-            <span>SOFTWARE ENGINEER</span>
+            <span>{siteIdentity.roles[0].toUpperCase()}</span>
             <span className="splash-sub-sep">·</span>
-            <span>FULL-STACK DEVELOPER</span>
+            <span>{siteIdentity.roles[1].toUpperCase()}</span>
             <span className="splash-sub-sep">·</span>
-            <span>ML ENGINEER</span>
+            <span>{siteIdentity.roles[2].toUpperCase()}</span>
           </div>
         </div>
 
@@ -229,7 +230,7 @@ export function InitialSplash({ locale = "en" }: InitialSplashProps) {
           <div className="splash-folio-rule-meta">
             <span className="splash-folio-entry">ENTRY 001</span>
             <span className="splash-folio-status">
-              {isId ? "MEMBUKA ARSIP TEKNIKAL" : "OPENING TECHNICAL ARCHIVE"}
+              {isId ? "MEMBUKA ARSIP TEKNIS" : "OPENING TECHNICAL ARCHIVE"}
             </span>
             <span className="splash-folio-pagination">{formattedProgress}% · 01 / 01</span>
           </div>

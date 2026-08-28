@@ -24,7 +24,7 @@ test("Hero section maintains factual 1-2 sentence bilingual branding, 3 full rol
   assert.match(rolesFile, /onMouseEnter/);
   assert.match(rolesFile, /onFocus/);
   assert.match(rolesFile, /prefers-reduced-motion/);
-  assert.match(heroFile, /Jakarta, Indonesia/i);
+  assert.match(heroFile, /(Jakarta, Indonesia|siteIdentity\.location)/i);
   assert.match(heroFile, /SystemClock/);
   assert.match(heroFile, /ContinuousRoles/);
   assert.match(heroFile, /\/assets\/profile\/pas-foto\.webp/);

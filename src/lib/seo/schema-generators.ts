@@ -26,7 +26,7 @@ export function generatePersonJsonLd(): JsonLdPerson {
     name: siteConfig.name,
     url: SITE_URL,
     image: `${SITE_URL}/assets/profile/pas-foto.webp`,
-    jobTitle: "Software Engineer",
+    jobTitle: siteConfig.primaryJobTitle,
     alumniOf: {
       "@type": "CollegeOrUniversity",
       name: "Diponegoro University",

@@ -5,16 +5,21 @@ import {
   type SocialLink,
   type NavigationConfig,
 } from "./navigation.ts";
-import { siteIdentity } from "./identity.ts";
+import { siteIdentity, type ProfessionalRole } from "./identity.ts";
 import { siteContact } from "./contact.ts";
 
 export interface SiteConfig {
   brand: string;
   name: string;
+  primaryJobTitle: string;
+  roles: readonly ProfessionalRole[];
   positioning: {
     en: string;
     id: string;
   };
+  location: string;
+  locationMetadata: string;
+  timezone: string;
   documentTitle: {
     en: string;
     id: string;
@@ -41,7 +46,12 @@ export interface SiteConfig {
 export const siteConfig: SiteConfig = {
   brand: siteIdentity.brand,
   name: siteIdentity.name,
+  primaryJobTitle: siteIdentity.primaryJobTitle,
+  roles: siteIdentity.roles,
   positioning: siteIdentity.positioning,
+  location: siteIdentity.location,
+  locationMetadata: siteIdentity.locationMetadata,
+  timezone: siteIdentity.timezone,
   documentTitle: siteIdentity.documentTitle,
   documentDescription: siteIdentity.documentDescription,
   contact: {

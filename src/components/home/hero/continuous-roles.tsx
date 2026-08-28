@@ -9,11 +9,12 @@ import {
 } from "react";
 
 import type { Locale } from "@/lib/i18n/config";
+import { siteIdentity } from "@/content/site/identity";
 
 const roles = [
-  { id: "01", title: "Software Engineer" },
-  { id: "02", title: "Full-Stack Web Developer" },
-  { id: "03", title: "Machine Learning Engineer" },
+  { id: "01", title: siteIdentity.roles[0] },
+  { id: "02", title: siteIdentity.roles[1] },
+  { id: "03", title: siteIdentity.roles[2] },
 ] as const;
 
 const CYCLE_INTERVAL_MS = 4000;

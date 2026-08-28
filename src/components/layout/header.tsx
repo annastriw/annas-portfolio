@@ -40,7 +40,7 @@ export function Header({ locale }: HeaderProps) {
         <nav
           className="desktop-nav hidden lg:flex items-center gap-1 xl:gap-2"
           role="navigation"
-          aria-label="Main Navigation"
+          aria-label={locale === "id" ? "Navigasi Utama" : "Main Navigation"}
         >
           <NavLinks locale={locale} />
         </nav>

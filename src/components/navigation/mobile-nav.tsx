@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
 import { getLocalizedHref } from "@/lib/i18n/paths";
 import { navigationConfig } from "@/content/site/navigation";
+import { siteIdentity } from "@/content/site/identity";
 import { LocaleSwitcher } from "./locale-switcher";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -192,8 +193,8 @@ export function MobileNav({ locale }: MobileNavProps) {
             </div>
 
             <div className="flex items-center justify-between font-mono text-[11px] text-(--color-muted) pt-2">
-              <span>KLATEN, ID · UTC+7</span>
-              <span>annastriwidagdo.me</span>
+              <span>{siteIdentity.locationMetadata}</span>
+              <span>{siteIdentity.brand}</span>
             </div>
           </div>
         </div>

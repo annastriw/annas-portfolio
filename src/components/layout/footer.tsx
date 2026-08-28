@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { siteContact } from "@/content/site/contact";
+import { siteIdentity } from "@/content/site/identity";
 import { BackToTop } from "./back-to-top";
 import styles from "./footer.module.css";
 
@@ -40,9 +41,9 @@ export function Footer({ locale }: FooterProps) {
               <span className={styles.wordmarkText}>annastriwidagdo.me</span>
             </Link>
             <ul className={styles.roleList} aria-label={copy.rolesLabel}>
-              <li>Software Engineer</li>
-              <li>Full-Stack Developer</li>
-              <li>ML Engineer</li>
+              {siteIdentity.roles.map((role) => (
+                <li key={role}>{role}</li>
+              ))}
             </ul>
           </div>
 

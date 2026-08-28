@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { SystemClock } from "./system-clock";
 import { ContinuousRoles } from "./hero/continuous-roles";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { siteIdentity } from "@/content/site/identity";
 
 interface HeroSectionProps {
   locale: Locale;
@@ -21,7 +22,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
     personalBrand: isId
       ? "Saya adalah Software Engineer yang berfokus pada full-stack web development dan machine learning. Saya mengubah permasalahan nyata menjadi sistem dan produk software dengan menghubungkan antarmuka, backend, data, dan model machine learning. Saya ingin setiap solusi yang saya kembangkan dapat bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan."
       : "I am a Software Engineer focused on full-stack web development and machine learning. I turn real problems into software systems and products by connecting interfaces, backend systems, data, and machine learning models. I want every solution I build to work reliably, provide clear value, and be easy to use.",
-    location: "Jakarta, Indonesia",
+    location: siteIdentity.location,
     statusText: isId ? "Terbuka untuk Kolaborasi" : "Open to Collaboration",
     primaryCta: isId ? "Jelajahi Arsip Proyek" : "Explore Project Archive",
     secondaryCta: isId ? "Mulai Percakapan" : "Start a Conversation",

@@ -1,9 +1,22 @@
 import type { Locale } from "@/lib/i18n/config";
 
+export const professionalRoles = [
+  "Software Engineer",
+  "Full-Stack Web Developer",
+  "Machine Learning Engineer",
+] as const;
+
+export type ProfessionalRole = (typeof professionalRoles)[number];
+
 export interface SiteIdentity {
   brand: string;
   name: string;
+  primaryJobTitle: string;
+  roles: typeof professionalRoles;
   positioning: Record<Locale, string>;
+  location: string;
+  locationMetadata: string;
+  timezone: string;
   documentTitle: Record<Locale, string>;
   documentDescription: Record<Locale, string>;
 }
@@ -11,10 +24,15 @@ export interface SiteIdentity {
 export const siteIdentity: SiteIdentity = {
   brand: "annastriwidagdo.me",
   name: "Annas Tri Widagdo",
+  primaryJobTitle: "Software Engineer",
+  roles: professionalRoles,
   positioning: {
     en: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
     id: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
   },
+  location: "Jakarta, Indonesia",
+  locationMetadata: "JAKARTA, INDONESIA · UTC+7",
+  timezone: "Asia/Jakarta (UTC+7)",
   documentTitle: {
     en: "Annas Tri Widagdo | Software Engineer",
     id: "Annas Tri Widagdo | Software Engineer",

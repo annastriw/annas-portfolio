@@ -25,6 +25,7 @@ export interface NavigationConfig {
     closeMenu: string;
     switchLanguage: string;
     navigation: string;
+    mainNavigation: string;
     connect: string;
     system: string;
     theme: string;
@@ -96,6 +97,7 @@ export const navigationConfig: LocaleNavigation = {
       closeMenu: "Close menu",
       switchLanguage: "Switch language",
       navigation: "Navigation",
+      mainNavigation: "Main Navigation",
       connect: "Connect",
       system: "System",
       theme: "Theme",
@@ -163,6 +165,7 @@ export const navigationConfig: LocaleNavigation = {
       closeMenu: "Tutup menu",
       switchLanguage: "Ganti bahasa",
       navigation: "Navigasi",
+      mainNavigation: "Navigasi Utama",
       connect: "Terhubung",
       system: "Sistem",
       theme: "Tema",
