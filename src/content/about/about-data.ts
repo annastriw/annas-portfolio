@@ -334,17 +334,17 @@ export const credentialFilters: CredentialFilter[] = [
   {
     key: "all",
     label: { en: "All Credentials", id: "Semua Sertifikasi" },
-    count: 8,
+    count: certificatesData.length,
   },
   {
     key: "cisco-systems",
     label: { en: "Cisco & Systems", id: "Cisco & Sistem" },
-    count: 5,
+    count: certificatesData.filter((c) => c.category === "cisco-systems").length,
   },
   {
     key: "ai-databases",
     label: { en: "AI & Databases", id: "AI & Basis Data" },
-    count: 3,
+    count: certificatesData.filter((c) => c.category === "ai-databases").length,
   },
 ];
 

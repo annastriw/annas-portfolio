@@ -362,3 +362,62 @@ test("AboutEducation component renders exact academic records, full thesis title
   assert.doesNotMatch(educationFile, /Best Graduate/i);
 });
 
+test("AboutCertificates component renders approved editorial archive grid, responsive layout, dynamic filters, and accessible dialog modal", () => {
+  const certFile = readFileSync(
+    join(root, "src", "components", "about", "about-certificates.tsx"),
+    "utf8",
+  );
+
+  // Section tags & headings
+  assert.match(certFile, /\[03 \/\/ CREDENTIALS\]/);
+  assert.match(certFile, /\[03 \/\/ SERTIFIKASI\]/);
+  assert.match(certFile, /copy\.subtag\[locale\]/);
+  assert.match(certFile, /copy\.title\[locale\]/);
+  assert.match(certFile, /copy\.summary\[locale\]/);
+
+  // Filter Group & Accessible Controls
+  assert.match(certFile, /role="group"/);
+  assert.match(certFile, /copy\.accessibility\.filterLabel\[locale\]/);
+  assert.match(certFile, /aria-pressed=\{isSelected\}/);
+  assert.match(certFile, /min-h-\[44px\]/);
+  assert.match(certFile, /focus-visible:outline-2/);
+
+  // Technical Editorial Archive Grid & Responsive Breakpoints
+  assert.match(certFile, /grid-cols-1 md:grid-cols-2 xl:grid-cols-3/);
+  assert.match(certFile, /aspect-\[16\/11\]/);
+  assert.match(certFile, /object-contain/);
+  assert.match(certFile, /group-hover:scale-\[1\.02\]/);
+
+  // Figure numbers, Neutral Issuers, and Official Titles
+  assert.match(certFile, /FIG\.\{figureNum\}/);
+  assert.match(certFile, /cert\.issuer/);
+  assert.match(certFile, /cert\.title\[locale\]/);
+
+  // Accessible Inspection Button on Cards
+  assert.match(certFile, /aria-label=/);
+  assert.match(certFile, /Lihat sertifikat/);
+  assert.match(certFile, /Inspect certificate:/);
+
+  // Accessible Document Preview Modal & Semantics
+  assert.match(certFile, /role="dialog"/);
+  assert.match(certFile, /aria-modal="true"/);
+  assert.match(certFile, /aria-labelledby=\{`cert-dialog-heading-\$\{activeCertificate\.id\}`\}/);
+  assert.match(certFile, /activeCertificate\.issuer/);
+  assert.match(certFile, /activeCertificate\.title\[locale\]/);
+  assert.match(certFile, /copy\.accessibility\.closeLabel\[locale\]/);
+
+  // Keyboard accessibility and focus management
+  assert.match(certFile, /key === "Escape"/);
+  assert.match(certFile, /key === "Tab"/);
+  assert.match(certFile, /activeTriggerRef\.current\?\.focus\(\)/);
+  assert.match(certFile, /closeBtnRef\.current\?\.focus\(\)/);
+  assert.match(certFile, /document\.body\.style\.overflow\s*=\s*"hidden"/);
+
+  // Prohibited claims & elements absent from component
+  assert.doesNotMatch(certFile, /CISCO VERIFIED/i);
+  assert.doesNotMatch(certFile, /HUAWEI CERTIFIED/i);
+  assert.doesNotMatch(certFile, /Dicoding/i);
+  assert.doesNotMatch(certFile, /PL\/SQL/i);
+  assert.doesNotMatch(certFile, /backdrop-blur/); // No glassmorphic badges on thumbnails
+});
+
