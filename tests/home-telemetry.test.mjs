@@ -6,7 +6,7 @@ import test from "node:test";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-test("Hero section maintains factual 1-2 sentence bilingual branding, 3 full role controls, and key metadata", () => {
+test("Hero section maintains factual 3-sentence bilingual bio, 3 full role controls, and key metadata", () => {
   const heroFile = readFileSync(
     join(root, "src", "components", "home", "hero-section.tsx"),
     "utf8",
@@ -32,7 +32,35 @@ test("Hero section maintains factual 1-2 sentence bilingual branding, 3 full rol
   assert.match(heroFile, /Explore Project Archive/);
   assert.match(heroFile, /Start a Conversation/);
   assert.ok(existsSync(join(root, "public", "assets", "profile", "pas-foto.webp")));
+
+  // Exact 3-sentence approved bio in EN and ID
+  const expectedBioEn =
+    "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, focused on full-stack web development and machine learning. I turn problems into software products designed around what users actually need. I want every solution I develop to work reliably, provide clear value, and be easy to use.";
+  const expectedBioId =
+    "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development dan machine learning. Saya mengubah permasalahan menjadi software product yang dirancang berdasarkan kebutuhan pengguna. Saya ingin setiap solusi yang saya kembangkan bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan.";
+
+  assert.match(heroFile, new RegExp(escapeRegex(expectedBioEn)));
+  assert.match(heroFile, new RegExp(escapeRegex(expectedBioId)));
+
+  // Sentence count checks (exactly 3 sentences in each locale)
+  const enSentences = expectedBioEn.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const idSentences = expectedBioId.split(/(?<=[.!?])\s+/).filter(Boolean);
+  assert.equal(enSentences.length, 3);
+  assert.equal(idSentences.length, 3);
+
+  // Exact terminology requirements
+  assert.match(expectedBioEn, /fresh graduate/);
+  assert.match(expectedBioId, /fresh graduate/);
+  assert.match(expectedBioId, /software product/);
+
+  // Absence of previous bio copy and removed technical-layer list
+  assert.doesNotMatch(heroFile, /connecting interfaces, backend systems, data/i);
+  assert.doesNotMatch(heroFile, /Saya mengubah permasalahan nyata menjadi sistem dan produk/i);
 });
+
+function escapeRegex(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 test("Experience section renders connected timeline following exact approved hierarchy and monograms", async () => {
   const moduleUrl = new URL(

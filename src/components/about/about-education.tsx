@@ -80,10 +80,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
         {/* Section Header */}
-        <ScrollReveal
-          animationClass="animate-editorial-fade"
-          className="flex flex-col gap-2 max-w-3xl"
-        >
+        <ScrollReveal className="flex flex-col gap-2 max-w-3xl">
           <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
             <span className="font-semibold text-(--color-accent)">
               {isId ? "[02 // PENDIDIKAN]" : "[02 // EDUCATION]"}
@@ -102,7 +99,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
         <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] xl:grid-cols-[1.4fr_1fr] gap-8 lg:gap-12 items-start">
           {/* Left Column: Academic Credentials Record & Thesis */}
           <ScrollReveal
-            animationClass="animate-editorial-fade"
+            delayMs={100}
             className="flex flex-col gap-5 sm:gap-6"
           >
             {/* Degree & Institution */}
@@ -148,7 +145,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
 
           {/* Right Column: Bachelor Certificate Document Evidence */}
           <ScrollReveal
-            animationClass="animate-editorial-fade"
+            delayMs={150}
             className="flex flex-col gap-2"
           >
             <figure className="m-0 flex flex-col gap-2 w-full">

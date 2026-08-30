@@ -102,17 +102,17 @@ export const profileData: ProfileData = {
     id: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
   },
   lead: {
-    en: "A Computer Engineering graduate with hands-on experience in software engineering, full-stack web development, and machine learning, focused on turning real problems into reliable and useful products.",
-    id: "Lulusan Teknik Komputer dengan pengalaman langsung dalam software engineering, full-stack web development, dan machine learning, dengan fokus mengubah permasalahan nyata menjadi produk yang andal dan bermanfaat.",
+    en: "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, focused on full-stack web development and machine learning.",
+    id: "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development dan machine learning.",
   },
   paragraphs: {
     en: [
-      "My background in Computer Engineering shaped the way I see software as a complete system rather than a collection of separate features. Through academic work, internships, and project experience, I developed practical experience across software engineering, full-stack web development, and machine learning.",
-      "I start by understanding the problem, then connect interfaces, backend systems, data flows, and machine learning models into a structured product. I care about the result as much as the implementation: software should work reliably, provide clear value, and remain easy to use.",
+      "I built my experience through academic work, internships, and projects, developing different parts of a product from interfaces and backend systems to data flows and machine learning model integration. These experiences shaped the way I see software as a complete system rather than a collection of separate features.",
+      "When developing a product, I begin by understanding the problem, shaping the right solution, and implementing it in a structured way. I aim to build products that are reliable, useful, and easy to use, while continuing to learn, grow, and take on new challenges.",
     ],
     id: [
-      "Latar belakang Teknik Komputer membentuk cara saya melihat software sebagai satu sistem yang utuh, bukan sekadar kumpulan fitur yang berdiri sendiri. Melalui perkuliahan, pengalaman magang, dan berbagai project, saya membangun pengalaman praktis dalam software engineering, full-stack web development, dan machine learning.",
-      "Saya memulai dengan memahami masalah, kemudian menghubungkan antarmuka, backend, alur data, dan model machine learning menjadi produk yang terstruktur. Bagi saya, hasil sama pentingnya dengan proses implementasi: software harus bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan.",
+      "Saya membangun pengalaman melalui perkuliahan, magang, dan project dengan mengembangkan berbagai bagian produk, mulai dari antarmuka dan backend hingga alur data dan integrasi model machine learning. Pengalaman tersebut membentuk cara saya melihat software sebagai sebuah sistem yang utuh, bukan sekadar kumpulan fitur.",
+      "Dalam mengembangkan produk, saya memulai dengan memahami masalah, menyusun solusi yang tepat, lalu mengimplementasikannya secara terstruktur. Saya ingin menghasilkan produk yang andal, bermanfaat, dan mudah digunakan, sekaligus terus membuka ruang untuk belajar, berkembang, dan menghadapi tantangan baru.",
     ],
   },
   portrait: {
@@ -184,8 +184,8 @@ export const educationData: EducationData = {
     id: "Lulusan Baru",
   },
   summary: {
-    en: "Completed a Bachelor of Engineering in Computer Engineering with an academic focus on software engineering, full-stack web development, artificial intelligence, and machine learning.",
-    id: "Menyelesaikan pendidikan Sarjana Teknik pada program studi Teknik Komputer dengan fokus akademik pada software engineering, full-stack web development, artificial intelligence, dan machine learning.",
+    en: "Completed a Bachelor of Engineering in Computer Engineering with an academic focus on software engineering, full-stack web development, and machine learning.",
+    id: "Menyelesaikan pendidikan Sarjana Teknik pada program studi Teknik Komputer dengan fokus akademik pada software engineering, full-stack web development, dan machine learning.",
   },
   thesis: {
     label: {

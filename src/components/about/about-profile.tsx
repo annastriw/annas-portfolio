@@ -20,10 +20,7 @@ export function AboutProfile({ locale }: AboutProfileProps) {
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] xl:grid-cols-[360px_1fr] gap-8 lg:gap-12 xl:gap-16 items-start">
           {/* Identity Block: Tag, Name, Full Roles Headline, Lead (Mobile order: 1, Desktop: Col 2 Row 1) */}
           <div className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 flex flex-col gap-6">
-            <ScrollReveal
-              animationClass="animate-editorial-fade"
-              className="flex flex-col gap-5 sm:gap-6"
-            >
+            <ScrollReveal className="flex flex-col gap-5 sm:gap-6">
               {/* Section Tag & Subtag */}
               <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
                 <span className="font-semibold text-(--color-accent)">
@@ -56,7 +53,7 @@ export function AboutProfile({ locale }: AboutProfileProps) {
 
           {/* Portrait Figure Block (Mobile order: 2, Desktop: Col 1 Row 1-2) */}
           <div className="order-2 lg:order-none lg:col-start-1 lg:row-start-1 lg:row-span-2 w-full max-w-[320px] sm:max-w-[360px] mx-auto lg:mx-0">
-            <ScrollReveal animationClass="animate-editorial-fade" delayMs={50}>
+            <ScrollReveal delayMs={50}>
               <figure className="m-0 flex flex-col gap-2 w-full">
                 <div className="border border-(--color-border) p-1.5 bg-(--color-background) aspect-[3/4] relative overflow-hidden shadow-2xs">
                   <Image
@@ -82,7 +79,6 @@ export function AboutProfile({ locale }: AboutProfileProps) {
           {/* Narrative Paragraphs Block (Mobile order: 3, Desktop: Col 2 Row 2) */}
           <div className="order-3 lg:order-none lg:col-start-2 lg:row-start-2 flex flex-col gap-4 max-w-2xl pt-2 lg:pt-0">
             <ScrollReveal
-              animationClass="animate-editorial-fade"
               delayMs={100}
               className="flex flex-col gap-4"
             >

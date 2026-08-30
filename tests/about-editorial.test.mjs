@@ -31,11 +31,11 @@ test("About profile maintains verified factual information, exact bilingual narr
   // Approved Lead Copy
   assert.equal(
     profileData.lead.en,
-    "A Computer Engineering graduate with hands-on experience in software engineering, full-stack web development, and machine learning, focused on turning real problems into reliable and useful products.",
+    "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, focused on full-stack web development and machine learning.",
   );
   assert.equal(
     profileData.lead.id,
-    "Lulusan Teknik Komputer dengan pengalaman langsung dalam software engineering, full-stack web development, dan machine learning, dengan fokus mengubah permasalahan nyata menjadi produk yang andal dan bermanfaat.",
+    "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development dan machine learning.",
   );
 
   // Approved 2-Paragraph Narrative
@@ -43,19 +43,19 @@ test("About profile maintains verified factual information, exact bilingual narr
   assert.equal(profileData.paragraphs.id.length, 2);
   assert.equal(
     profileData.paragraphs.en[0],
-    "My background in Computer Engineering shaped the way I see software as a complete system rather than a collection of separate features. Through academic work, internships, and project experience, I developed practical experience across software engineering, full-stack web development, and machine learning.",
+    "I built my experience through academic work, internships, and projects, developing different parts of a product from interfaces and backend systems to data flows and machine learning model integration. These experiences shaped the way I see software as a complete system rather than a collection of separate features.",
   );
   assert.equal(
     profileData.paragraphs.en[1],
-    "I start by understanding the problem, then connect interfaces, backend systems, data flows, and machine learning models into a structured product. I care about the result as much as the implementation: software should work reliably, provide clear value, and remain easy to use.",
+    "When developing a product, I begin by understanding the problem, shaping the right solution, and implementing it in a structured way. I aim to build products that are reliable, useful, and easy to use, while continuing to learn, grow, and take on new challenges.",
   );
   assert.equal(
     profileData.paragraphs.id[0],
-    "Latar belakang Teknik Komputer membentuk cara saya melihat software sebagai satu sistem yang utuh, bukan sekadar kumpulan fitur yang berdiri sendiri. Melalui perkuliahan, pengalaman magang, dan berbagai project, saya membangun pengalaman praktis dalam software engineering, full-stack web development, dan machine learning.",
+    "Saya membangun pengalaman melalui perkuliahan, magang, dan project dengan mengembangkan berbagai bagian produk, mulai dari antarmuka dan backend hingga alur data dan integrasi model machine learning. Pengalaman tersebut membentuk cara saya melihat software sebagai sebuah sistem yang utuh, bukan sekadar kumpulan fitur.",
   );
   assert.equal(
     profileData.paragraphs.id[1],
-    "Saya memulai dengan memahami masalah, kemudian menghubungkan antarmuka, backend, alur data, dan model machine learning menjadi produk yang terstruktur. Bagi saya, hasil sama pentingnya dengan proses implementasi: software harus bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan.",
+    "Dalam mengembangkan produk, saya memulai dengan memahami masalah, menyusun solusi yang tepat, lalu mengimplementasikannya secara terstruktur. Saya ingin menghasilkan produk yang andal, bermanfaat, dan mudah digunakan, sekaligus terus membuka ruang untuk belajar, berkembang, dan menghadapi tantangan baru.",
   );
 
   // Portrait asset & caption
@@ -79,7 +79,7 @@ test("About education section references verified degree, exact period, thesis, 
     "../src/content/about/about-data.ts",
     import.meta.url,
   );
-  const { educationData } = await import(moduleUrl.href);
+  const { educationData, certificatesData, credentialSectionCopy } = await import(moduleUrl.href);
 
   // Degree and Institution
   assert.equal(
@@ -102,15 +102,29 @@ test("About education section references verified degree, exact period, thesis, 
   assert.equal(educationData.status.en, "Fresh Graduate");
   assert.equal(educationData.status.id, "Lulusan Baru");
 
-  // Education Summary
+  // Education Summary (artificial intelligence removed, core pillars present)
   assert.equal(
     educationData.summary.en,
-    "Completed a Bachelor of Engineering in Computer Engineering with an academic focus on software engineering, full-stack web development, artificial intelligence, and machine learning.",
+    "Completed a Bachelor of Engineering in Computer Engineering with an academic focus on software engineering, full-stack web development, and machine learning.",
   );
   assert.equal(
     educationData.summary.id,
-    "Menyelesaikan pendidikan Sarjana Teknik pada program studi Teknik Komputer dengan fokus akademik pada software engineering, full-stack web development, artificial intelligence, dan machine learning.",
+    "Menyelesaikan pendidikan Sarjana Teknik pada program studi Teknik Komputer dengan fokus akademik pada software engineering, full-stack web development, dan machine learning.",
   );
+
+  // Focus validations: contains SE, web dev, ML; does NOT contain AI in education summary
+  assert.doesNotMatch(educationData.summary.en, /artificial intelligence/i);
+  assert.doesNotMatch(educationData.summary.id, /artificial intelligence/i);
+  assert.match(educationData.summary.en, /software engineering/i);
+  assert.match(educationData.summary.en, /full-stack web development/i);
+  assert.match(educationData.summary.en, /machine learning/i);
+
+  // Verify HCIA-AI V3.5 and AI in Credentials section summary remain intact
+  const hcia = certificatesData.find((c) => c.id === "hcia-ai");
+  assert.ok(hcia, "HCIA-AI certificate must remain present");
+  assert.equal(hcia.title.en, "HCIA-AI V3.5");
+  assert.match(credentialSectionCopy.summary.en, /artificial intelligence/i);
+  assert.match(credentialSectionCopy.summary.id, /kecerdasan buatan/i);
 
   // Undergraduate Thesis
   assert.equal(educationData.thesis.label.en, "UNDERGRADUATE THESIS");
@@ -249,6 +263,24 @@ test("About data prevents legacy conflicting claims and unauthorized strings fro
   assert.doesNotMatch(aboutDataFile, /IJAZAH SARJANA TEKNIK/i);
   assert.doesNotMatch(aboutDataFile, /Surat Keterangan Lulus/i);
   assert.doesNotMatch(aboutDataFile, /Best Graduate/i);
+
+  // Absence of previous About lead and narrative copy
+  assert.doesNotMatch(
+    aboutDataFile,
+    /A Computer Engineering graduate with hands-on experience in software engineering/i,
+  );
+  assert.doesNotMatch(
+    aboutDataFile,
+    /Lulusan Teknik Komputer dengan pengalaman langsung dalam software engineering/i,
+  );
+  assert.doesNotMatch(
+    aboutDataFile,
+    /My background in Computer Engineering shaped the way I see software/i,
+  );
+  assert.doesNotMatch(
+    aboutDataFile,
+    /Latar belakang Teknik Komputer membentuk cara saya melihat software/i,
+  );
 });
 
 test("About page metadata and structure render core sections with approved locale titles", () => {
@@ -420,4 +452,58 @@ test("AboutCertificates component renders approved editorial archive grid, respo
   assert.doesNotMatch(certFile, /PL\/SQL/i);
   assert.doesNotMatch(certFile, /backdrop-blur/); // No glassmorphic badges on thumbnails
 });
+
+test("About sections reuse established Home ScrollReveal mechanism and respect reduced motion", () => {
+  const profileFile = readFileSync(
+    join(root, "src", "components", "about", "about-profile.tsx"),
+    "utf8",
+  );
+  const educationFile = readFileSync(
+    join(root, "src", "components", "about", "about-education.tsx"),
+    "utf8",
+  );
+  const certFile = readFileSync(
+    join(root, "src", "components", "about", "about-certificates.tsx"),
+    "utf8",
+  );
+  const scrollRevealFile = readFileSync(
+    join(root, "src", "components", "ui", "scroll-reveal.tsx"),
+    "utf8",
+  );
+  const globalsCss = readFileSync(
+    join(root, "src", "app", "globals.css"),
+    "utf8",
+  );
+
+  // All 3 sections import and use the shared ScrollReveal component
+  assert.match(profileFile, /from ["']@\/components\/ui\/scroll-reveal["']/);
+  assert.match(educationFile, /from ["']@\/components\/ui\/scroll-reveal["']/);
+  assert.match(certFile, /from ["']@\/components\/ui\/scroll-reveal["']/);
+
+  // Profile major blocks
+  assert.match(profileFile, /<ScrollReveal className="flex flex-col gap-5 sm:gap-6">/);
+  assert.match(profileFile, /<ScrollReveal delayMs=\{50\}>/);
+  assert.match(profileFile, /<ScrollReveal\s+delayMs=\{100\}/);
+
+  // Education major blocks
+  assert.match(educationFile, /<ScrollReveal className="flex flex-col gap-2 max-w-3xl">/);
+  assert.match(educationFile, /<ScrollReveal\s+delayMs=\{100\}/);
+  assert.match(educationFile, /<ScrollReveal\s+delayMs=\{150\}/);
+
+  // Certificates major blocks
+  assert.match(certFile, /<ScrollReveal className="flex flex-col gap-2 max-w-3xl">/);
+  assert.match(certFile, /<ScrollReveal delayMs=\{100\}>/);
+  assert.match(certFile, /<ScrollReveal delayMs=\{150\}>/);
+
+  // ScrollReveal component maintains SSR safe visible default to avoid blink/hydration flash
+  assert.match(scrollRevealFile, /data-reveal-state="visible"/);
+  assert.match(scrollRevealFile, /prefers-reduced-motion/);
+
+  // CSS Scroll Reveal System tokens and reduced-motion override
+  assert.match(globalsCss, /\.scroll-reveal-container/);
+  assert.match(globalsCss, /data-reveal-state="hidden"/);
+  assert.match(globalsCss, /data-reveal-state="visible"/);
+  assert.match(globalsCss, /transition:\s*none\s*!important/);
+});
+
 

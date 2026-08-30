@@ -20,8 +20,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
     name: "Annas Tri Widagdo",
     roleIntro: isId ? "Saya seorang" : "I'm a",
     personalBrand: isId
-      ? "Saya adalah Software Engineer yang berfokus pada full-stack web development dan machine learning. Saya mengubah permasalahan nyata menjadi sistem dan produk software dengan menghubungkan antarmuka, backend, data, dan model machine learning. Saya ingin setiap solusi yang saya kembangkan dapat bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan."
-      : "I am a Software Engineer focused on full-stack web development and machine learning. I turn real problems into software systems and products by connecting interfaces, backend systems, data, and machine learning models. I want every solution I build to work reliably, provide clear value, and be easy to use.",
+      ? "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development dan machine learning. Saya mengubah permasalahan menjadi software product yang dirancang berdasarkan kebutuhan pengguna. Saya ingin setiap solusi yang saya kembangkan bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan."
+      : "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, focused on full-stack web development and machine learning. I turn problems into software products designed around what users actually need. I want every solution I develop to work reliably, provide clear value, and be easy to use.",
     location: siteIdentity.location,
     statusText: isId ? "Terbuka untuk Kolaborasi" : "Open to Collaboration",
     primaryCta: isId ? "Jelajahi Arsip Proyek" : "Explore Project Archive",
