@@ -303,3 +303,62 @@ test("AboutProfile component renders approved editorial hierarchy and excludes l
   assert.doesNotMatch(profileFile, /Resume/i);
   assert.doesNotMatch(profileFile, /CV/i);
 });
+
+test("AboutEducation component renders exact academic records, full thesis titles, and accessible Bachelor Certificate dialog", () => {
+  const educationFile = readFileSync(
+    join(root, "src", "components", "about", "about-education.tsx"),
+    "utf8",
+  );
+
+  // Section tags & headings
+  assert.match(educationFile, /\[02 \/\/ EDUCATION\]/);
+  assert.match(educationFile, /\[02 \/\/ PENDIDIKAN\]/);
+  assert.match(educationFile, /data\.degree\[locale\]/);
+  assert.match(educationFile, /data\.institution\[locale\]/);
+
+  // Metadata row with thin rules
+  assert.match(educationFile, /data\.period\[locale\]/);
+  assert.match(educationFile, /data\.gpa/);
+  assert.match(educationFile, /data\.status\[locale\]/);
+  assert.match(educationFile, /border-y border-\(--color-border\)/);
+
+  // Approved Education Summary
+  assert.match(educationFile, /data\.summary\[locale\]/);
+
+  // Full Bilingual Thesis Record
+  assert.match(educationFile, /data\.thesis\.label\[locale\]/);
+  assert.match(educationFile, /data\.thesis\.title\[locale\]/);
+
+  // Bachelor Certificate Evidence Card
+  assert.match(educationFile, /data\.bachelorCertificate\.figureLabel/);
+  assert.match(educationFile, /data\.bachelorCertificate\.year/);
+  assert.match(educationFile, /data\.bachelorCertificate\.assetPath/);
+  assert.match(educationFile, /data\.bachelorCertificate\.alt\[locale\]/);
+  assert.match(educationFile, /data\.bachelorCertificate\.inspectLabel\[locale\]/);
+  assert.match(educationFile, /data\.bachelorCertificate\.caption\[locale\]/);
+
+  // Accessible Dialog Modal & Semantics
+  assert.match(educationFile, /role="dialog"/);
+  assert.match(educationFile, /aria-modal="true"/);
+  assert.match(educationFile, /aria-labelledby="bachelor-cert-dialog-heading"/);
+  assert.match(educationFile, /Bachelor Certificate/);
+  assert.match(educationFile, /data\.bachelorCertificate\.badge\[locale\]/);
+  assert.match(educationFile, /data\.bachelorCertificate\.closeLabel\[locale\]/);
+
+  // Keyboard accessibility and focus management
+  assert.match(educationFile, /key === "Escape"/);
+  assert.match(educationFile, /key === "Tab"/);
+  assert.match(educationFile, /triggerRef\.current\?\.focus\(\)/);
+  assert.match(educationFile, /closeBtnRef\.current\?\.focus\(\)/);
+  assert.match(educationFile, /document\.body\.style\.overflow\s*=\s*"hidden"/);
+
+  // Exclusions in component
+  assert.doesNotMatch(educationFile, /Semarang/i);
+  assert.doesNotMatch(educationFile, /Cum\s*Laude/i);
+  assert.doesNotMatch(educationFile, /download/i);
+  assert.doesNotMatch(educationFile, /ijazah/i);
+  assert.doesNotMatch(educationFile, /diploma/i);
+  assert.doesNotMatch(educationFile, /Surat Keterangan Lulus/i);
+  assert.doesNotMatch(educationFile, /Best Graduate/i);
+});
+

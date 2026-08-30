@@ -73,16 +73,10 @@ export function AboutEducation({ locale }: AboutEducationProps) {
     triggerRef.current?.focus();
   };
 
-  const copy = {
-    metaLine: isId
-      ? `IPK ${data.gpa} · ${data.positioning[locale]}`
-      : `GPA ${data.gpa} · ${data.positioning[locale]}`,
-  };
-
   return (
     <section
       className="about-education-section py-8 sm:py-12 md:py-14 border-b border-(--color-border)"
-      aria-label={data.title[locale]}
+      aria-label={isId ? "Pendidikan & Rekayasa Akademik" : "Education & Academic Record"}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
         {/* Section Header */}
@@ -104,16 +98,16 @@ export function AboutEducation({ locale }: AboutEducationProps) {
           </h2>
         </ScrollReveal>
 
-        {/* Education Spread: Degree Metadata (Left) + Bachelor Certificate Document (Right) */}
+        {/* Education Spread: Academic Record & Thesis (Left) + Bachelor Certificate (Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] xl:grid-cols-[1.4fr_1fr] gap-8 lg:gap-12 items-start">
-          {/* Left Column: Academic Credentials Record */}
+          {/* Left Column: Academic Credentials Record & Thesis */}
           <ScrollReveal
             animationClass="animate-editorial-fade"
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-5 sm:gap-6"
           >
-            {/* Degree & Field of Study */}
-            <div className="flex flex-col gap-1">
-              <h3 className="font-serif text-2xl sm:text-3xl text-(--color-foreground) font-normal m-0 tracking-tight">
+            {/* Degree & Institution */}
+            <div className="flex flex-col gap-1.5">
+              <h3 className="font-serif text-2xl sm:text-3xl text-(--color-foreground) font-normal m-0 tracking-tight leading-snug">
                 {data.degree[locale]}
               </h3>
               <p className="font-sans text-base sm:text-lg font-medium text-(--color-foreground) m-0">
@@ -121,21 +115,35 @@ export function AboutEducation({ locale }: AboutEducationProps) {
               </p>
             </div>
 
-            {/* Concise Meta Row */}
-            <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-(--color-muted)">
+            {/* Editorial Metadata Row with Thin Rules */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-xs text-(--color-muted) py-2 border-y border-(--color-border)">
               <span>{data.period[locale]}</span>
               <span className="text-(--color-border)" aria-hidden="true">
                 /
               </span>
+              <span>{isId ? `IPK ${data.gpa}` : `GPA ${data.gpa}`}</span>
+              <span className="text-(--color-border)" aria-hidden="true">
+                /
+              </span>
               <span className="text-(--color-accent) font-semibold">
-                {copy.metaLine}
+                {data.status[locale]}
               </span>
             </div>
 
-            {/* Summary Note */}
-            <p className="text-sm sm:text-base text-(--color-muted) leading-relaxed m-0 pt-1 max-w-xl">
+            {/* Approved Education Summary */}
+            <p className="text-sm sm:text-base text-(--color-muted) leading-relaxed m-0 max-w-xl">
               {data.summary[locale]}
             </p>
+
+            {/* Full Bilingual Undergraduate Thesis Record */}
+            <div className="flex flex-col gap-2 pt-4 sm:pt-5 border-t border-(--color-border) max-w-xl">
+              <span className="font-mono text-xs font-semibold text-(--color-accent) uppercase tracking-wider">
+                {data.thesis.label[locale]}
+              </span>
+              <h4 className="font-serif text-lg sm:text-xl text-(--color-foreground) font-normal m-0 tracking-tight leading-snug">
+                {data.thesis.title[locale]}
+              </h4>
+            </div>
           </ScrollReveal>
 
           {/* Right Column: Bachelor Certificate Document Evidence */}
@@ -143,56 +151,60 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             animationClass="animate-editorial-fade"
             className="flex flex-col gap-2"
           >
-            <div className="flex justify-between items-center font-mono text-[11px] text-(--color-muted) px-0.5">
-              <span className="font-semibold text-(--color-foreground)">
-                {data.figureLabel[locale]}
-              </span>
-              <span className="text-(--color-accent)">2026</span>
-            </div>
-
-            {/* Certificate Interactive Preview Card */}
-            <button
-              ref={triggerRef}
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="group relative border border-(--color-border) bg-(--color-background) aspect-[16/11] overflow-hidden cursor-pointer hover:border-(--color-accent) transition-all duration-300 text-left p-0 w-full rounded-[2px]"
-              aria-label={`${data.inspectLabel[locale]}: ${data.degree[locale]}`}
-            >
-              <Image
-                src={data.certificateAsset}
-                alt={`Bachelor Certificate · ${data.institution[locale]}`}
-                width={700}
-                height={480}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px"
-                className="object-contain w-full h-full p-2 transition-transform duration-300 group-hover:scale-[1.02]"
-                loading="lazy"
-              />
-
-              {/* Hover Inspection Overlay */}
-              <div className="absolute inset-0 bg-(--color-foreground)/75 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-1 text-(--color-background)">
-                <span className="text-xl leading-none" aria-hidden="true">
-                  ⊕
+            <figure className="m-0 flex flex-col gap-2 w-full">
+              <div className="flex justify-between items-center font-mono text-[11px] text-(--color-muted) px-0.5">
+                <span className="font-semibold text-(--color-foreground)">
+                  {data.bachelorCertificate.figureLabel}
                 </span>
-                <span className="font-mono text-xs font-semibold uppercase tracking-wider">
-                  {data.inspectLabel[locale]}
+                <span className="text-(--color-accent)">
+                  {data.bachelorCertificate.year}
                 </span>
               </div>
-            </button>
 
-            <figcaption className="font-mono text-[11px] text-(--color-muted) px-1">
-              {data.documentCaption[locale]}
-            </figcaption>
+              {/* Certificate Interactive Preview Card */}
+              <button
+                ref={triggerRef}
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className="group relative border border-(--color-border) bg-(--color-background) aspect-[16/11] overflow-hidden cursor-pointer hover:border-(--color-accent) transition-all duration-300 text-left p-0 w-full rounded-[2px]"
+                aria-label={`${data.bachelorCertificate.inspectLabel[locale]}: ${data.degree[locale]}`}
+              >
+                <Image
+                  src={data.bachelorCertificate.assetPath}
+                  alt={data.bachelorCertificate.alt[locale]}
+                  width={700}
+                  height={480}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px"
+                  className="object-contain w-full h-full p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+                  loading="lazy"
+                />
+
+                {/* Hover Inspection Overlay */}
+                <div className="absolute inset-0 bg-(--color-foreground)/75 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-1 text-(--color-background)">
+                  <span className="text-xl leading-none" aria-hidden="true">
+                    ⊕
+                  </span>
+                  <span className="font-mono text-xs font-semibold uppercase tracking-wider">
+                    {data.bachelorCertificate.inspectLabel[locale]}
+                  </span>
+                </div>
+              </button>
+
+              <figcaption className="font-mono text-[11px] text-(--color-muted) px-1">
+                {data.bachelorCertificate.caption[locale]}
+              </figcaption>
+            </figure>
           </ScrollReveal>
         </div>
       </div>
 
-      {/* Lightbox Modal for Bachelor Certificate */}
+      {/* Accessible Dialog Modal for Bachelor Certificate */}
       {isModalOpen && (
         <div
           className="cert-modal-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-label={typeof data.figureLabel[locale] === "string" ? data.figureLabel[locale] : "Certificate"}
+          aria-labelledby="bachelor-cert-dialog-heading"
           onClick={handleCloseModal}
         >
           <div
@@ -203,10 +215,13 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             <div className="cert-modal-header">
               <div className="cert-modal-title-group">
                 <span className="cert-modal-badge">
-                  {isId ? "DOKUMEN AKADEMIK" : "ACADEMIC RECORD"}
+                  {data.bachelorCertificate.badge[locale]}
                 </span>
-                <h3 className="cert-modal-heading">
-                  {data.degree[locale]}
+                <h3
+                  id="bachelor-cert-dialog-heading"
+                  className="cert-modal-heading"
+                >
+                  Bachelor Certificate
                 </h3>
                 <p className="cert-modal-issuer">
                   {data.institution[locale]} · {data.period[locale]}
@@ -218,7 +233,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                 type="button"
                 className="cert-modal-close"
                 onClick={handleCloseModal}
-                aria-label={isId ? "Tutup pratinjau Bachelor Certificate" : "Close Bachelor Certificate preview"}
+                aria-label={data.bachelorCertificate.closeLabel[locale]}
               >
                 ✕
               </button>
@@ -226,8 +241,8 @@ export function AboutEducation({ locale }: AboutEducationProps) {
 
             <div className="cert-modal-image-wrapper">
               <Image
-                src={data.certificateAsset}
-                alt={`Bachelor Certificate · ${data.institution[locale]}`}
+                src={data.bachelorCertificate.assetPath}
+                alt={data.bachelorCertificate.alt[locale]}
                 width={1600}
                 height={1100}
                 sizes="(max-width: 1200px) 100vw, 1200px"
@@ -241,4 +256,3 @@ export function AboutEducation({ locale }: AboutEducationProps) {
     </section>
   );
 }
-
