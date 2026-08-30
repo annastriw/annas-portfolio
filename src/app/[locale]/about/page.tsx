@@ -27,11 +27,11 @@ export async function generateMetadata({
 
   const isId = locale === "id";
   const title = isId
-    ? "Tentang & Profil Rekayasa - Annas Tri Widagdo"
-    : "About & Engineering Profile - Annas Tri Widagdo";
+    ? "Tentang Annas Tri Widagdo | Software Engineer"
+    : "About Annas Tri Widagdo | Software Engineer";
   const description = isId
-    ? "Profil rekayasa perangkat lunak, latar belakang teknik komputer Universitas Diponegoro (IPK 3.79), dan sertifikasi Cisco, Huawei & Oracle karya Annas Tri Widagdo."
-    : "Software engineering profile, Diponegoro University computer engineering foundation (GPA 3.79), and Cisco, Huawei & Oracle credentials of Annas Tri Widagdo.";
+    ? "Kenali Annas Tri Widagdo, lulusan Teknik Komputer dengan pengalaman dalam software engineering, full-stack web development, dan machine learning."
+    : "Learn about Annas Tri Widagdo, a Computer Engineering graduate with experience in software engineering, full-stack web development, and machine learning.";
 
   return createPageMetadata({
     locale,
@@ -45,8 +45,8 @@ export async function generateMetadata({
         width: 800,
         height: 1067,
         alt: isId
-          ? "Pas foto profil Annas Tri Widagdo"
-          : "Portrait photo of Annas Tri Widagdo",
+          ? "Foto profil Annas Tri Widagdo"
+          : "Portrait of Annas Tri Widagdo",
       },
     ],
   });
@@ -63,13 +63,13 @@ export default async function AboutPage({ params }: PageProps) {
     <div className="about-page">
       <JsonLd schema={generateProfilePageJsonLd(locale as Locale)} />
 
-      {/* 01. [02 // ABOUT] Personal Profile & Narrative */}
+      {/* 01. [01 // ABOUT] Personal Profile & Narrative */}
       <AboutProfile locale={locale as Locale} />
 
-      {/* 02. [01 // EDUCATION] Academic Foundation & Bachelor Certificate Evidence */}
+      {/* 02. [02 // EDUCATION] Academic Foundation & Bachelor Certificate Evidence */}
       <AboutEducation locale={locale as Locale} />
 
-      {/* 03. [02 // CREDENTIALS] Technical Certifications Archive (8 Verified Credentials) */}
+      {/* 03. [03 // CREDENTIALS] Technical Certifications Archive (8 Verified Credentials) */}
       <AboutCertificates locale={locale as Locale} />
     </div>
   );

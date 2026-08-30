@@ -92,7 +92,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
         >
           <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
             <span className="font-semibold text-(--color-accent)">
-              {isId ? "[01 // PENDIDIKAN]" : "[01 // EDUCATION]"}
+              {isId ? "[02 // PENDIDIKAN]" : "[02 // EDUCATION]"}
             </span>
             <span className="text-(--color-border)" aria-hidden="true">
               /
@@ -114,7 +114,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             {/* Degree & Field of Study */}
             <div className="flex flex-col gap-1">
               <h3 className="font-serif text-2xl sm:text-3xl text-(--color-foreground) font-normal m-0 tracking-tight">
-                {data.degree[locale]} · {data.fieldOfStudy[locale]}
+                {data.degree[locale]}
               </h3>
               <p className="font-sans text-base sm:text-lg font-medium text-(--color-foreground) m-0">
                 {data.institution[locale]}
@@ -130,12 +130,6 @@ export function AboutEducation({ locale }: AboutEducationProps) {
               <span className="text-(--color-accent) font-semibold">
                 {copy.metaLine}
               </span>
-            </div>
-
-            {/* Location Meta */}
-            <div className="flex items-center gap-2 font-mono text-xs text-(--color-muted)">
-              <span className="text-(--color-accent)" aria-hidden="true">📍</span>
-              <span>{data.location[locale]}</span>
             </div>
 
             {/* Summary Note */}
@@ -166,7 +160,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             >
               <Image
                 src={data.certificateAsset}
-                alt={`Ijazah ${data.degree[locale]} · ${data.institution[locale]}`}
+                alt={`Bachelor Certificate · ${data.institution[locale]}`}
                 width={700}
                 height={480}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px"
@@ -209,10 +203,10 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             <div className="cert-modal-header">
               <div className="cert-modal-title-group">
                 <span className="cert-modal-badge">
-                  {isId ? "BUKTI AKADEMIK TERVERIFIKASI" : "VERIFIED ACADEMIC EVIDENCE"}
+                  {isId ? "DOKUMEN AKADEMIK" : "ACADEMIC RECORD"}
                 </span>
                 <h3 className="cert-modal-heading">
-                  {data.degree[locale]} · {data.fieldOfStudy[locale]}
+                  {data.degree[locale]}
                 </h3>
                 <p className="cert-modal-issuer">
                   {data.institution[locale]} · {data.period[locale]}
@@ -224,7 +218,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                 type="button"
                 className="cert-modal-close"
                 onClick={handleCloseModal}
-                aria-label="Close certificate preview"
+                aria-label={isId ? "Tutup pratinjau Bachelor Certificate" : "Close Bachelor Certificate preview"}
               >
                 ✕
               </button>
@@ -233,7 +227,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             <div className="cert-modal-image-wrapper">
               <Image
                 src={data.certificateAsset}
-                alt={`Ijazah ${data.degree[locale]} · ${data.institution[locale]}`}
+                alt={`Bachelor Certificate · ${data.institution[locale]}`}
                 width={1600}
                 height={1100}
                 sizes="(max-width: 1200px) 100vw, 1200px"

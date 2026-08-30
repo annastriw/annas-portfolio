@@ -100,12 +100,12 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
   }, [activeCertificate]);
 
   const copy = {
-    tag: isId ? "[02 // SERTIFIKASI]" : "[02 // CREDENTIALS]",
+    tag: isId ? "[03 // SERTIFIKASI]" : "[03 // CREDENTIALS]",
     subtag: isId ? "SERTIFIKASI TEKNIS" : "TECHNICAL CERTIFICATIONS",
     title: isId ? "Sertifikasi Teknis" : "Technical Certifications",
     subtitle: isId
-      ? "Delapan sertifikasi teknis terverifikasi di bidang jaringan komputer, kecerdasan buatan, basis data, hardware, dan IoT."
-      : "Eight verified technical certifications covering computer networking, artificial intelligence, databases, hardware, and IoT.",
+      ? "Delapan sertifikasi teknis terverifikasi di bidang jaringan komputer, sistem, kecerdasan buatan, basis data, hardware, dan IoT."
+      : "Eight verified technical certifications covering computer networking, systems, artificial intelligence, databases, hardware, and IoT.",
     filterLabel: "[FILTER]:",
     inspectText: isId ? "Lihat Kredensial" : "Inspect Credential",
   };
@@ -142,7 +142,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
         <div
           className="flex flex-wrap items-center gap-3 font-mono text-xs"
           role="group"
-          aria-label="Filter certificates"
+          aria-label={isId ? "Filter sertifikasi" : "Filter credentials"}
         >
           <span className="text-(--color-muted)">{copy.filterLabel}</span>
           <div className="flex flex-wrap gap-2">
@@ -190,7 +190,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                     activeTriggerRef.current = e.currentTarget;
                     setActiveCertificate(cert);
                   }}
-                  aria-label={`View certificate ${cert.title[locale]}`}
+                  aria-label={isId ? `Lihat sertifikat ${cert.title[locale]}` : `View certificate ${cert.title[locale]}`}
                   className="flex flex-col w-full h-full text-left p-0 border-0 bg-transparent cursor-pointer group"
                 >
                   {/* Image Preview */}
@@ -273,7 +273,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                 type="button"
                 className="cert-modal-close"
                 onClick={handleCloseModal}
-                aria-label="Close certificate preview"
+                aria-label={isId ? "Tutup pratinjau sertifikat" : "Close certificate preview"}
               >
                 ✕
               </button>

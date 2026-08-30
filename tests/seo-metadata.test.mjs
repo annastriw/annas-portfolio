@@ -28,13 +28,17 @@ test("createPageMetadata generates valid bilingual canonical, hreflang, OpenGrap
   const enMeta = createPageMetadata({
     locale: "en",
     path: "about",
-    title: "About & Engineering Profile - Annas Tri Widagdo",
-    description: "Software engineering profile of Annas Tri Widagdo.",
+    title: "About Annas Tri Widagdo | Software Engineer",
+    description:
+      "Learn about Annas Tri Widagdo, a Computer Engineering graduate with experience in software engineering, full-stack web development, and machine learning.",
     type: "profile",
   });
 
-  assert.equal(enMeta.title, "About & Engineering Profile - Annas Tri Widagdo");
-  assert.equal(enMeta.description, "Software engineering profile of Annas Tri Widagdo.");
+  assert.equal(enMeta.title, "About Annas Tri Widagdo | Software Engineer");
+  assert.equal(
+    enMeta.description,
+    "Learn about Annas Tri Widagdo, a Computer Engineering graduate with experience in software engineering, full-stack web development, and machine learning.",
+  );
   assert.equal(enMeta.alternates?.canonical, "https://annastriwidagdo.me/en/about");
   assert.deepEqual(enMeta.alternates?.languages, {
     en: "https://annastriwidagdo.me/en/about",
@@ -52,8 +56,9 @@ test("createPageMetadata generates valid bilingual canonical, hreflang, OpenGrap
   const idMeta = createPageMetadata({
     locale: "id",
     path: "about",
-    title: "Tentang & Profil Rekayasa - Annas Tri Widagdo",
-    description: "Profil rekayasa perangkat lunak Annas Tri Widagdo.",
+    title: "Tentang Annas Tri Widagdo | Software Engineer",
+    description:
+      "Kenali Annas Tri Widagdo, lulusan Teknik Komputer dengan pengalaman dalam software engineering, full-stack web development, dan machine learning.",
     type: "profile",
   });
 
@@ -164,12 +169,19 @@ test("generateWebSiteJsonLd and generateProfilePageJsonLd produce valid structur
 
   const profileEn = generateProfilePageJsonLd("en");
   assert.equal(profileEn["@type"], "ProfilePage");
+  assert.equal(profileEn.name, "About Annas Tri Widagdo | Software Engineer");
   assert.equal(profileEn.url, "https://annastriwidagdo.me/en/about");
   assert.equal(profileEn.mainEntity["@type"], "Person");
+  assert.equal(profileEn.mainEntity.jobTitle, "Software Engineer");
+  assert.equal(profileEn.mainEntity.address?.addressLocality, "Jakarta");
 
   const profileId = generateProfilePageJsonLd("id");
   assert.equal(profileId["@type"], "ProfilePage");
+  assert.equal(profileId.name, "Tentang Annas Tri Widagdo | Software Engineer");
   assert.equal(profileId.url, "https://annastriwidagdo.me/id/about");
+  assert.equal(profileId.mainEntity["@type"], "Person");
+  assert.equal(profileId.mainEntity.jobTitle, "Software Engineer");
+  assert.equal(profileId.mainEntity.address?.addressLocality, "Jakarta");
 });
 
 test("generateContactPageJsonLd produces valid ContactPage schema", () => {

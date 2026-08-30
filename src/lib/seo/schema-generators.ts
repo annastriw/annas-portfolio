@@ -86,8 +86,8 @@ export function generateProfilePageJsonLd(locale: Locale): JsonLdProfilePage {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     name: isId
-      ? "Tentang & Profil Rekayasa - Annas Tri Widagdo"
-      : "About & Engineering Profile - Annas Tri Widagdo",
+      ? "Tentang Annas Tri Widagdo | Software Engineer"
+      : "About Annas Tri Widagdo | Software Engineer",
     url: `${SITE_URL}/${locale}/about`,
     inLanguage: isId ? "id" : "en",
     mainEntity: generatePersonJsonLd(),

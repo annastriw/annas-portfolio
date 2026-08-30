@@ -41,7 +41,7 @@ export function AboutProfile({ locale }: AboutProfileProps) {
                 <span className="font-semibold text-(--color-foreground)">
                   {data.portrait.figureLabel}
                 </span>
-                <span className="text-(--color-accent)">KLATEN, ID</span>
+                <span className="text-(--color-accent)">JAKARTA, ID</span>
               </figcaption>
             </figure>
 
@@ -104,7 +104,7 @@ export function AboutProfile({ locale }: AboutProfileProps) {
               className="flex items-center gap-3 font-mono text-xs text-(--color-muted)"
             >
               <span className="font-semibold text-(--color-accent)">
-                {isId ? "[02 // TENTANG]" : "[02 // ABOUT]"}
+                {isId ? "[01 // TENTANG]" : "[01 // ABOUT]"}
               </span>
               <span className="text-(--color-border)" aria-hidden="true">
                 /

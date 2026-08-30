@@ -24,6 +24,23 @@ export interface ProfileData {
   metadata: ProfileMetadata;
 }
 
+export interface ThesisData {
+  label: Record<Locale, string>;
+  title: Record<Locale, string>;
+}
+
+export interface BachelorCertificateData {
+  title: string;
+  assetPath: string;
+  year: string;
+  badge: Record<Locale, string>;
+  figureLabel: string;
+  caption: Record<Locale, string>;
+  alt: Record<Locale, string>;
+  inspectLabel: Record<Locale, string>;
+  closeLabel: Record<Locale, string>;
+}
+
 export interface EducationData {
   tag: string;
   subtag: Record<Locale, string>;
@@ -34,8 +51,11 @@ export interface EducationData {
   period: Record<Locale, string>;
   gpa: string;
   positioning: Record<Locale, string>;
-  location: Record<Locale, string>;
+  status: Record<Locale, string>;
   summary: Record<Locale, string>;
+  thesis: ThesisData;
+  bachelorCertificate: BachelorCertificateData;
+  // Compatibility fields for existing pre-redesign components
   certificateAsset: string;
   figureLabel: Record<Locale, string>;
   documentCaption: Record<Locale, string>;
@@ -51,51 +71,70 @@ export interface CertificateData {
   badge: string;
 }
 
+export interface CredentialFilter {
+  key: "all" | "cisco-systems" | "ai-databases";
+  label: Record<Locale, string>;
+  count: number;
+}
+
+export interface CredentialSectionCopy {
+  tag: string;
+  subtag: Record<Locale, string>;
+  title: Record<Locale, string>;
+  summary: Record<Locale, string>;
+  accessibility: {
+    filterLabel: Record<Locale, string>;
+    inspectLabel: Record<Locale, string>;
+    closeLabel: Record<Locale, string>;
+    closeBachelorLabel: Record<Locale, string>;
+  };
+}
+
 export const profileData: ProfileData = {
-  tag: "[02 // ABOUT]",
+  tag: "[01 // ABOUT]",
   subtag: {
     en: "TECHNICAL EDITORIAL ARCHIVE",
     id: "ARSIP TEKNIS & REKAYASA",
   },
   name: "Annas Tri Widagdo",
   headline: {
-    en: "Software Engineer · Full-Stack Developer · ML Engineer",
-    id: "Software Engineer · Full-Stack Developer · ML Engineer",
+    en: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    id: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
   },
   lead: {
-    en: "Computer Engineering graduate from Diponegoro University building robust full-stack web applications and applied machine learning systems.",
-    id: "Lulusan Teknik Komputer Universitas Diponegoro yang mengembangkan aplikasi web full-stack yang andal dan sistem machine learning terapan.",
+    en: "A Computer Engineering graduate with hands-on experience in software engineering, full-stack web development, and machine learning, focused on turning real problems into reliable and useful products.",
+    id: "Lulusan Teknik Komputer dengan pengalaman langsung dalam software engineering, full-stack web development, dan machine learning, dengan fokus mengubah permasalahan nyata menjadi produk yang andal dan bermanfaat.",
   },
   paragraphs: {
     en: [
-      "I am a Computer Engineering graduate from Diponegoro University (GPA 3.79 / 4.00) specializing in full-stack software development and applied machine learning. My engineering background focuses on building scalable web architectures, production-grade backend services, and practical ML pipelines that solve operational problems.",
-      "My approach emphasizes clean code structure, predictable system workflows, and thorough testing. From responsive user interfaces to backend API design and hardware printing integrations, I deliver dependable digital solutions engineered for long-term maintainability.",
+      "My background in Computer Engineering shaped the way I see software as a complete system rather than a collection of separate features. Through academic work, internships, and project experience, I developed practical experience across software engineering, full-stack web development, and machine learning.",
+      "I start by understanding the problem, then connect interfaces, backend systems, data flows, and machine learning models into a structured product. I care about the result as much as the implementation: software should work reliably, provide clear value, and remain easy to use.",
     ],
     id: [
-      "Saya lulusan Teknik Komputer dari Universitas Diponegoro (IPK 3.79 / 4.00) yang berfokus pada software engineering, full-stack web development, dan machine learning terapan. Latar belakang rekayasa saya berfokus pada pembangunan arsitektur web yang scalable, layanan backend yang tangguh, serta pipeline ML praktis untuk kebutuhan operasional nyata.",
-      "Pendekatan rekayasa saya mengutamakan struktur kode yang bersih, alur workflow yang jelas, serta pengujian sistem yang menyeluruh. Mulai dari antarmuka pengguna responsif, perancangan API backend, hingga integrasi hardware thermal printer, saya menghasilkan solusi digital yang andal dan mudah dirawat.",
+      "Latar belakang Teknik Komputer membentuk cara saya melihat software sebagai satu sistem yang utuh, bukan sekadar kumpulan fitur yang berdiri sendiri. Melalui perkuliahan, pengalaman magang, dan berbagai project, saya membangun pengalaman praktis dalam software engineering, full-stack web development, dan machine learning.",
+      "Saya memulai dengan memahami masalah, kemudian menghubungkan antarmuka, backend, alur data, dan model machine learning menjadi produk yang terstruktur. Bagi saya, hasil sama pentingnya dengan proses implementasi: software harus bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan.",
     ],
   },
   portrait: {
     assetPath: "/assets/profile/pas-foto.webp",
     alt: {
-      en: "Annas Tri Widagdo · Software Engineer, Full-Stack Developer & ML Engineer",
-      id: "Annas Tri Widagdo · Software Engineer, Full-Stack Developer & ML Engineer",
+      en: "Portrait of Annas Tri Widagdo",
+      id: "Foto profil Annas Tri Widagdo",
     },
     figureLabel: "FIG.01 // PORTRAIT RECORD",
     caption: {
-      en: "ANNAS TRI WIDAGDO, S.T. · KLATEN, ID",
-      id: "ANNAS TRI WIDAGDO, S.T. · KLATEN, ID",
+      en: "FIG.01 // PORTRAIT RECORD · JAKARTA, INDONESIA",
+      id: "FIG.01 // PORTRAIT RECORD · JAKARTA, INDONESIA",
     },
   },
   metadata: {
     role: {
-      en: "Software Engineer · Full-Stack Developer · ML Engineer",
-      id: "Software Engineer · Full-Stack Developer · ML Engineer",
+      en: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+      id: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
     },
     education: {
-      en: "Computer Engineering · Diponegoro University",
-      id: "Teknik Komputer · Universitas Diponegoro",
+      en: "Bachelor of Engineering in Computer Engineering · Diponegoro University",
+      id: "Sarjana Teknik (S.T.), Teknik Komputer · Universitas Diponegoro",
     },
     gpa: "3.79 / 4.00",
     status: {
@@ -103,17 +142,17 @@ export const profileData: ProfileData = {
       id: "Lulusan Baru",
     },
     location: {
-      en: "Klaten, Central Java, Indonesia",
-      id: "Klaten, Jawa Tengah, Indonesia",
+      en: "Jakarta, Indonesia",
+      id: "Jakarta, Indonesia",
     },
   },
 };
 
 export const educationData: EducationData = {
-  tag: "[01 // EDUCATION]",
+  tag: "[02 // EDUCATION]",
   subtag: {
-    en: "ACADEMIC FOUNDATION",
-    id: "LATAR BELAKANG AKADEMIK",
+    en: "ACADEMIC RECORD",
+    id: "DOKUMEN AKADEMIK",
   },
   title: {
     en: "Education",
@@ -124,42 +163,79 @@ export const educationData: EducationData = {
     id: "Universitas Diponegoro",
   },
   degree: {
-    en: "Bachelor of Engineering (S.T.)",
-    id: "Sarjana Teknik (S.T.)",
+    en: "Bachelor of Engineering in Computer Engineering",
+    id: "Sarjana Teknik (S.T.), Teknik Komputer",
   },
   fieldOfStudy: {
     en: "Computer Engineering",
     id: "Teknik Komputer",
   },
   period: {
-    en: "August 2022 - July 2026",
-    id: "Agustus 2022 - Juli 2026",
+    en: "August 2022–June 2026",
+    id: "Agustus 2022–Juni 2026",
   },
   gpa: "3.79 / 4.00",
   positioning: {
     en: "Fresh Graduate",
     id: "Lulusan Baru",
   },
-  location: {
-    en: "Semarang, Central Java, Indonesia",
-    id: "Semarang, Jawa Tengah, Indonesia",
+  status: {
+    en: "Fresh Graduate",
+    id: "Lulusan Baru",
   },
   summary: {
-    en: "Completed undergraduate degree in Computer Engineering with academic focus on software engineering, computer networks, distributed systems, and applied machine learning.",
-    id: "Menyelesaikan pendidikan Sarjana Teknik Komputer dengan fokus akademik pada rekayasa perangkat lunak, jaringan komputer, sistem terdistribusi, dan machine learning terapan.",
+    en: "Completed a Bachelor of Engineering in Computer Engineering with an academic focus on software engineering, full-stack web development, artificial intelligence, and machine learning.",
+    id: "Menyelesaikan pendidikan Sarjana Teknik pada program studi Teknik Komputer dengan fokus akademik pada software engineering, full-stack web development, artificial intelligence, dan machine learning.",
   },
-  certificateAsset: "/assets/certificates/bachelor-certificate.webp",
+  thesis: {
+    label: {
+      en: "UNDERGRADUATE THESIS",
+      id: "SKRIPSI",
+    },
+    title: {
+      en: "Comparative Analysis of Client-Side Rendering (CSR), Server-Side Rendering (SSR), and Static Site Generation (SSG) for Frontend Performance on the Next.js-Based iHealth Edu Website",
+      id: "Analisis Perbandingan Metode Client-Side Rendering (CSR), Server-Side Rendering (SSR), dan Static Site Generation (SSG) terhadap Performa Frontend pada Website iHealth Edu Berbasis Next.js",
+    },
+  },
+  bachelorCertificate: {
+    title: "BACHELOR CERTIFICATE",
+    assetPath: "/assets/certificates/bachelor_certificate.webp",
+    year: "2026",
+    badge: {
+      en: "ACADEMIC RECORD",
+      id: "DOKUMEN AKADEMIK",
+    },
+    figureLabel: "FIG.01 // BACHELOR CERTIFICATE",
+    caption: {
+      en: "Diponegoro University · Faculty of Engineering · Computer Engineering · 2026",
+      id: "Universitas Diponegoro · Fakultas Teknik · Teknik Komputer · 2026",
+    },
+    alt: {
+      en: "Bachelor Certificate · Diponegoro University",
+      id: "Bachelor Certificate · Universitas Diponegoro",
+    },
+    inspectLabel: {
+      en: "Inspect Bachelor Certificate",
+      id: "Lihat Bachelor Certificate",
+    },
+    closeLabel: {
+      en: "Close Bachelor Certificate preview",
+      id: "Tutup pratinjau Bachelor Certificate",
+    },
+  },
+  // Compatibility fields
+  certificateAsset: "/assets/certificates/bachelor_certificate.webp",
   figureLabel: {
     en: "FIG.01 // BACHELOR CERTIFICATE",
-    id: "FIG.01 // IJAZAH SARJANA TEKNIK",
+    id: "FIG.01 // BACHELOR CERTIFICATE",
   },
   documentCaption: {
     en: "Diponegoro University · Faculty of Engineering · Computer Engineering · 2026",
     id: "Universitas Diponegoro · Fakultas Teknik · Teknik Komputer · 2026",
   },
   inspectLabel: {
-    en: "Inspect Document",
-    id: "Lihat Dokumen",
+    en: "Inspect Bachelor Certificate",
+    id: "Lihat Bachelor Certificate",
   },
 };
 
@@ -173,7 +249,7 @@ export const certificatesData: CertificateData[] = [
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
     assetPath: "/assets/certificates/ccna-enterprise-networking-security-and-automation.webp",
-    badge: "CISCO VERIFIED",
+    badge: "Cisco Networking Academy",
   },
   {
     id: "ccnav7-switching-routing",
@@ -184,7 +260,7 @@ export const certificatesData: CertificateData[] = [
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
     assetPath: "/assets/certificates/ccnav7-switching-routing-and-wireless-essentials.webp",
-    badge: "CISCO VERIFIED",
+    badge: "Cisco Networking Academy",
   },
   {
     id: "ccnav7-intro-networks",
@@ -195,18 +271,18 @@ export const certificatesData: CertificateData[] = [
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
     assetPath: "/assets/certificates/ccnav7-introduction-to-networks.webp",
-    badge: "CISCO VERIFIED",
+    badge: "Cisco Networking Academy",
   },
   {
     id: "hcia-ai",
     title: {
-      en: "HCIA-AI V3.5 (Huawei Certified ICT Associate - Artificial Intelligence)",
-      id: "HCIA-AI V3.5 (Huawei Certified ICT Associate - Artificial Intelligence)",
+      en: "HCIA-AI V3.5",
+      id: "HCIA-AI V3.5",
     },
-    issuer: "Huawei Technologies Co., Ltd.",
+    issuer: "Huawei Technologies",
     category: "ai-databases",
     assetPath: "/assets/certificates/hcia-ai-v3-5.webp",
-    badge: "HUAWEI CERTIFIED",
+    badge: "Huawei Technologies",
   },
   {
     id: "database-design",
@@ -217,7 +293,7 @@ export const certificatesData: CertificateData[] = [
     issuer: "Oracle Academy",
     category: "ai-databases",
     assetPath: "/assets/certificates/database-design.webp",
-    badge: "ORACLE ACADEMY",
+    badge: "Oracle Academy",
   },
   {
     id: "database-foundations",
@@ -228,7 +304,7 @@ export const certificatesData: CertificateData[] = [
     issuer: "Oracle Academy",
     category: "ai-databases",
     assetPath: "/assets/certificates/database-foundations.webp",
-    badge: "ORACLE ACADEMY",
+    badge: "Oracle Academy",
   },
   {
     id: "it-essentials",
@@ -239,7 +315,7 @@ export const certificatesData: CertificateData[] = [
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
     assetPath: "/assets/certificates/it-essentials-pc-hardware-and-software.webp",
-    badge: "CISCO VERIFIED",
+    badge: "Cisco Networking Academy",
   },
   {
     id: "iot-digital-transformation",
@@ -250,6 +326,58 @@ export const certificatesData: CertificateData[] = [
     issuer: "Cisco Networking Academy",
     category: "cisco-systems",
     assetPath: "/assets/certificates/introduction-to-iot-and-digital-transformation.webp",
-    badge: "CISCO VERIFIED",
+    badge: "Cisco Networking Academy",
   },
 ];
+
+export const credentialFilters: CredentialFilter[] = [
+  {
+    key: "all",
+    label: { en: "All Credentials", id: "Semua Sertifikasi" },
+    count: 8,
+  },
+  {
+    key: "cisco-systems",
+    label: { en: "Cisco & Systems", id: "Cisco & Sistem" },
+    count: 5,
+  },
+  {
+    key: "ai-databases",
+    label: { en: "AI & Databases", id: "AI & Basis Data" },
+    count: 3,
+  },
+];
+
+export const credentialSectionCopy: CredentialSectionCopy = {
+  tag: "[03 // CREDENTIALS]",
+  subtag: {
+    en: "TECHNICAL CERTIFICATIONS",
+    id: "SERTIFIKASI TEKNIS",
+  },
+  title: {
+    en: "Technical Certifications",
+    id: "Sertifikasi Teknis",
+  },
+  summary: {
+    en: "Eight verified technical certifications covering computer networking, systems, artificial intelligence, databases, hardware, and IoT.",
+    id: "Delapan sertifikasi teknis terverifikasi di bidang jaringan komputer, sistem, kecerdasan buatan, basis data, hardware, dan IoT.",
+  },
+  accessibility: {
+    filterLabel: {
+      en: "Filter credentials",
+      id: "Filter sertifikasi",
+    },
+    inspectLabel: {
+      en: "Inspect certificate",
+      id: "Lihat sertifikat",
+    },
+    closeLabel: {
+      en: "Close certificate preview",
+      id: "Tutup pratinjau sertifikat",
+    },
+    closeBachelorLabel: {
+      en: "Close Bachelor Certificate preview",
+      id: "Tutup pratinjau Bachelor Certificate",
+    },
+  },
+};
