@@ -281,3 +281,25 @@ test("About page metadata and structure render core sections with approved local
   assert.doesNotMatch(pageFile, /AboutTechMatrix/);
   assert.doesNotMatch(pageFile, /AboutConnect/);
 });
+
+test("AboutProfile component renders approved editorial hierarchy and excludes legacy metadata table", () => {
+  const profileFile = readFileSync(
+    join(root, "src", "components", "about", "about-profile.tsx"),
+    "utf8",
+  );
+
+  // Structural hierarchy checks
+  assert.match(profileFile, /data\.portrait\.figureLabel/);
+  assert.match(profileFile, /JAKARTA, INDONESIA/);
+  assert.match(profileFile, /\[01 \/\/ ABOUT\]/);
+  assert.match(profileFile, /\[01 \/\/ TENTANG\]/);
+  assert.match(profileFile, /<h1/);
+
+  // Exclusions: No metadata table, no CTA, no skills/proficiency
+  assert.doesNotMatch(profileFile, /<dl/);
+  assert.doesNotMatch(profileFile, /<dt/);
+  assert.doesNotMatch(profileFile, /<dd/);
+  assert.doesNotMatch(profileFile, /Download/i);
+  assert.doesNotMatch(profileFile, /Resume/i);
+  assert.doesNotMatch(profileFile, /CV/i);
+});
