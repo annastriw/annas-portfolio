@@ -38,21 +38,38 @@ export const projectArchiveCategories: readonly {
   { key: "other", label: { en: "Other", id: "Lainnya" } },
 ];
 
+export const projectArchiveCopy = {
+  sectionIndex: { en: "[03 // PROJECTS]", id: "[03 // PROYEK]" },
+  title: { en: "Projects Archive", id: "Arsip Proyek" },
+  lead: {
+    en: "Explore my work across web applications, machine learning, mobile development, and interactive media.",
+    id: "Jelajahi project yang saya kerjakan dalam pengembangan aplikasi web, machine learning, mobile, dan media interaktif.",
+  },
+  projectCountLabel: { en: "Projects", id: "Proyek" },
+  disciplineCountLabel: { en: "Disciplines", id: "Bidang" },
+  filterHeading: { en: "Project Categories", id: "Kategori Proyek" },
+  cta: { en: "Explore Project", id: "Jelajahi Proyek" },
+} as const;
+
 export const projectArchive: readonly ProjectArchiveItem[] = [
   {
     index: "01",
     slug: "ukg-system",
     category: "web-app",
     title: { en: "UKG System", id: "UKG System" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
+    role: {
+      en: "Full-Stack Web Developer",
+      id: "Full-Stack Web Developer",
+    },
     summary: {
-      en: "Multi-branch ERP web application developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and Linux VPS production deployment.",
-      id: "Aplikasi ERP web multi-cabang yang dikembangkan end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment production pada VPS Linux.",
+      en: "A multi-branch ERP developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and production deployment.",
+      id: "ERP multi-cabang yang dikembangkan secara end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment ke production.",
     },
     primaryTechnologies: [
       "Next.js",
       "NestJS",
-      "REST API",
+      "TypeScript",
+      "MySQL",
       "Katalon Studio",
       "Linux Ubuntu",
     ],
@@ -62,37 +79,43 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Dashboard administrasi ERP multi-cabang UKG System",
     },
     coverPosition: "top",
-    status: { en: "Live Production", id: "Aktif di Production" },
-    liveUrl: "https://ukgsystem.com",
+    status: { en: "Live Production", id: "Live Production" },
+    liveUrl: "https://ukgsystem.site/",
   },
   {
     index: "02",
     slug: "ihealth-edu",
     category: "web-app",
     title: { en: "iHealth Edu", id: "iHealth Edu" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
-    summary: {
-      en: "Integrated digital health platform developed with Puskesmas Padangsari for health screening, education, ESP32 IoT telemetry, and ML risk-prediction decision support.",
-      id: "Platform kesehatan digital terintegrasi yang dikembangkan bersama Puskesmas Padangsari untuk screening, edukasi, telemetri IoT ESP32, dan pendukung keputusan prediksi risiko berbasis ML.",
+    role: {
+      en: "Full-Stack Web Developer",
+      id: "Full-Stack Web Developer",
     },
-    primaryTechnologies: ["Next.js", "Laravel", "MySQL", "Flask", "ESP32"],
+    summary: {
+      en: "A health education and screening platform developed with Puskesmas Padangsari, integrating patient data management, IoT telemetry, and machine learning decision support.",
+      id: "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan pengelolaan data pasien, telemetri IoT, dan dukungan pengambilan keputusan berbasis machine learning.",
+    },
+    primaryTechnologies: ["Next.js", "Laravel", "MySQL", "Flask", "Docker"],
     coverImage: "/assets/projects/ihealth-edu/cover.webp",
     coverAlt: {
       en: "iHealth Edu health education and screening interface",
       id: "Antarmuka edukasi dan screening kesehatan iHealth Edu",
     },
     coverPosition: "top",
-    status: { en: "Production Deployment", id: "Deploy ke Production" },
+    status: { en: "Live Production", id: "Live Production" },
   },
   {
     index: "03",
     slug: "dialisis-connect-edu",
     category: "web-app",
     title: { en: "Dialisis Connect Edu", id: "Dialisis Connect Edu" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
+    role: {
+      en: "Full-Stack Web Developer",
+      id: "Full-Stack Web Developer",
+    },
     summary: {
-      en: "Kidney health education and community platform developed with IPDI Central Java, featuring role-based resources, video guides, PDF booklets, and interactive discussion forums.",
-      id: "Platform edukasi dan komunitas kesehatan ginjal yang dikembangkan bersama IPDI Jawa Tengah, menyajikan materi edukasi berbasis peran, panduan video, booklet PDF, dan forum diskusi interaktif.",
+      en: "A kidney health education and community platform developed with IPDI Central Java, providing learning resources, video guides, digital booklets, and discussion forums.",
+      id: "Platform edukasi dan komunitas kesehatan ginjal yang dikembangkan bersama IPDI Jawa Tengah, menyediakan materi pembelajaran, panduan video, booklet digital, dan forum diskusi.",
     },
     primaryTechnologies: [
       "Next.js",
@@ -107,17 +130,20 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Halaman awal platform edukasi Dialisis Connect Edu",
     },
     coverPosition: "top",
-    status: { en: "Production Deployment", id: "Deploy ke Production" },
+    status: { en: "Live Production", id: "Live Production" },
   },
   {
     index: "04",
     slug: "nusa-dakwah",
     category: "web-app",
     title: { en: "Nusa Dakwah", id: "Nusa Dakwah" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
+    role: {
+      en: "Full-Stack Web Developer",
+      id: "Full-Stack Web Developer",
+    },
     summary: {
-      en: "Digital learning and dakwah platform with structured modular topics, indexed search, multimedia integration, and a moderated discussion forum with nested replies.",
-      id: "Platform pembelajaran dan dakwah digital dengan modul terstruktur, pencarian terindeks, integrasi multimedia, serta forum diskusi termoderasi dengan nested reply.",
+      en: "A digital learning and dakwah platform with structured learning modules, multimedia content, search, and moderated discussions.",
+      id: "Platform pembelajaran dan dakwah digital dengan modul pembelajaran terstruktur, konten multimedia, pencarian, dan diskusi yang dimoderasi.",
     },
     primaryTechnologies: [
       "Next.js",
@@ -132,7 +158,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Halaman awal platform konten digital Nusa Dakwah",
     },
     coverPosition: "top",
-    status: { en: "Production Deployment", id: "Deploy ke Production" },
+    status: { en: "Live Production", id: "Live Production" },
   },
   {
     index: "05",
@@ -142,10 +168,13 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       en: "SIMASTOK SHR Jaya Motor",
       id: "SIMASTOK SHR Jaya Motor",
     },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
+    role: {
+      en: "Full-Stack Web Developer",
+      id: "Full-Stack Web Developer",
+    },
     summary: {
-      en: "Centralized spare-parts inventory management system featuring role-based access, automatic stock reconciliation, transaction logging, date-range analytics, and PDF exports.",
-      id: "Sistem manajemen inventaris suku cadang terpusat dengan akses berbasis peran, rekonsiliasi stok otomatis, pencatatan transaksi, analitik berbasis tanggal, dan ekspor PDF.",
+      en: "A spare-parts inventory system that brings stock management, transaction records, and reporting into one application with role-based access.",
+      id: "Sistem inventory suku cadang yang menyatukan pengelolaan stok, pencatatan transaksi, dan laporan dalam satu aplikasi dengan akses berbasis role.",
     },
     primaryTechnologies: ["Laravel", "PHP", "MySQL", "Katalon Studio", "Docker"],
     coverImage: "/assets/projects/simastok/cover.webp",
@@ -154,7 +183,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Halaman masuk sistem inventaris SIMASTOK SHR Jaya Motor",
     },
     coverPosition: "center",
-    status: { en: "Production Deployment", id: "Deploy ke Production" },
+    status: { en: "Live Production", id: "Live Production" },
   },
   {
     index: "06",
@@ -165,24 +194,31 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Machine Learning Model for Heart Attack Risk Prediction",
     },
     role: {
-      en: "Machine Learning Developer",
-      id: "Machine Learning Developer",
+      en: "Machine Learning Engineer",
+      id: "Machine Learning Engineer",
     },
     summary: {
-      en: "Binary classification prototype evaluated across 158,355 clinical records; the selected Random Forest model achieved 71.93% accuracy and 0.8015 ROC-AUC, served via Flask REST API for decision-support risk prediction.",
-      id: "Purwarupa klasifikasi biner yang dievaluasi pada 158.355 data klinis; model Random Forest terpilih mencapai akurasi 71,93% dan ROC-AUC 0,8015, disajikan melalui REST API Flask sebagai pendukung keputusan prediksi risiko.",
+      en: "A machine learning prototype for exploring heart attack risk prediction, with model inference served through a Flask API. Built for experimentation, not medical diagnosis.",
+      id: "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inferensi model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
     },
-    primaryTechnologies: ["Python", "Scikit-learn", "SMOTE", "Flask", "Docker"],
+    primaryTechnologies: [
+      "Python",
+      "Scikit-learn",
+      "Pandas",
+      "SMOTE",
+      "Flask",
+      "Docker",
+    ],
     coverImage:
       "/assets/projects/ml-for-heart-attack-risk-prediction/cover.webp",
     coverAlt: {
       en: "Structured patient input used by the heart attack risk prediction prototype",
-      id: "Input pasien terstruktur untuk purwarupa prediksi risiko serangan jantung",
+      id: "Input pasien terstruktur untuk prototype prediksi risiko serangan jantung",
     },
     coverPosition: "top",
     status: {
-      en: "Prototype / Deployed API",
-      id: "Purwarupa / Deployed API",
+      en: "Completed Prototype",
+      id: "Completed Prototype",
     },
   },
   {
@@ -191,12 +227,12 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     category: "ml",
     title: { en: "Speech-to-Text System", id: "Speech-to-Text System" },
     role: {
-      en: "Machine Learning / AI Developer",
-      id: "Machine Learning / AI Developer",
+      en: "Machine Learning Engineer",
+      id: "Machine Learning Engineer",
     },
     summary: {
-      en: "End-to-end ASR pipeline that ingests audio/video, normalizes audio to 16 kHz mono chunks, performs Wav2Vec2 transcription, and exports structured TXT, CSV, JSON, and burned-in SRT video subtitles.",
-      id: "Pipeline ASR end-to-end yang memproses audio/video, menormalisasi audio ke chunk mono 16 kHz, melakukan transkripsi Wav2Vec2, serta mengekspor data terstruktur TXT, CSV, JSON, dan subtitle video SRT.",
+      en: "An audio and video transcription workflow using Wav2Vec2, covering audio preparation, speech recognition, and export to text files and video subtitles.",
+      id: "Workflow transkripsi audio dan video menggunakan Wav2Vec2, mencakup pengolahan audio, pengenalan ucapan, serta ekspor ke file teks dan subtitle video.",
     },
     primaryTechnologies: [
       "Python",
@@ -211,7 +247,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Perbandingan sebelum dan sesudah subtitle otomatis dari workflow speech-to-text",
     },
     coverPosition: "center",
-    status: { en: "Completed Workflow", id: "Workflow Selesai" },
+    status: { en: "Completed Workflow", id: "Completed Workflow" },
   },
   {
     index: "08",
@@ -223,8 +259,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     role: { en: "Android Developer", id: "Android Developer" },
     summary: {
-      en: "Native Kotlin Android PrintService plugin that converts system print documents into ESC/POS monochrome raster streams for 58 mm and 80 mm Bluetooth thermal printers with calibration and retry handling.",
-      id: "Plugin Android PrintService native berbasis Kotlin yang mengonversi dokumen cetak sistem menjadi raster monochrome ESC/POS untuk printer termal Bluetooth 58 mm dan 80 mm dengan kalibrasi dan retry handling.",
+      en: "A native Android printing service that connects the system print framework to Bluetooth thermal printers, with print calibration and retry handling.",
+      id: "Layanan printing Android native yang menghubungkan fitur cetak sistem dengan printer thermal Bluetooth, dilengkapi kalibrasi cetak dan penanganan percobaan ulang.",
     },
     primaryTechnologies: [
       "Kotlin",
@@ -239,7 +275,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Ikon aplikasi Android Thermal Printer Service",
     },
     coverPosition: "center",
-    status: { en: "Completed Application", id: "Aplikasi Selesai" },
+    status: { en: "Completed Application", id: "Completed Application" },
   },
   {
     index: "09",
@@ -248,8 +284,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     title: { en: "Footy Standings", id: "Footy Standings" },
     role: { en: "Flutter Developer", id: "Flutter Developer" },
     summary: {
-      en: "Cross-platform Flutter mobile application providing real-time standings, match fixtures, top scorers, and club profiles across 6 major football leagues via the Football Data REST API.",
-      id: "Aplikasi mobile Flutter cross-platform yang menyajikan data klasemen langsung, jadwal pertandingan, top scorer, dan profil klub untuk 6 liga sepak bola utama melalui Football Data REST API.",
+      en: "A Flutter application for following football league standings, match schedules, top scorers, and club profiles through a football data API.",
+      id: "Aplikasi Flutter untuk mengikuti klasemen liga sepak bola, jadwal pertandingan, top scorer, dan profil klub melalui API data sepak bola.",
     },
     primaryTechnologies: [
       "Flutter",
@@ -265,8 +301,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     coverPosition: "top",
     status: {
-      en: "Documented Build",
-      id: "Implementasi Terdokumentasi",
+      en: "Completed Application",
+      id: "Completed Application",
     },
   },
   {
@@ -279,19 +315,43 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     role: { en: "Junior Game Developer", id: "Junior Game Developer" },
     summary: {
-      en: "Interactive Unity 360-degree architectural exploration prototype built during internship at PT Duta Basis Dataprima, integrating 78 Lumion rendered panoramas with physics raycast hotspot navigation.",
-      id: "Purwarupa eksplorasi arsitektur interaktif 360 derajat berbasis Unity saat kerja praktik di PT Duta Basis Dataprima, mengintegrasikan 78 panorama render Lumion dengan navigasi hotspot physics raycast.",
+      en: "A Unity-based virtual tour developed during an internship at PT Duta Basis Dataprima, combining architectural panoramas with hotspot navigation.",
+      id: "Virtual tour berbasis Unity yang dikembangkan saat magang di PT Duta Basis Dataprima, menggabungkan panorama arsitektur dengan navigasi hotspot.",
     },
-    primaryTechnologies: ["Unity", "C#", "Lumion Pro", "Physics Raycast"],
+    primaryTechnologies: [
+      "Unity",
+      "C#",
+      "Lumion Pro",
+      "360° Panorama",
+      "Physics Raycast",
+      "Scene Management",
+    ],
     coverImage: "/assets/projects/panoramic-virtual-tour/cover.webp",
     coverAlt: {
       en: "Panoramic Virtual Tour Unity prototype opening scene",
       id: "Scene pembuka purwarupa Unity Panoramic Virtual Tour",
     },
     coverPosition: "center",
-    status: { en: "Completed Prototype", id: "Purwarupa Selesai" },
+    status: { en: "Completed Prototype", id: "Completed Prototype" },
   },
 ] as const;
+
+export const PROJECT_ARCHIVE_TOTAL_COUNT = projectArchive.length;
+export const PROJECT_ARCHIVE_DISCIPLINE_COUNT = projectArchiveCategories.filter(
+  (category) => category.key !== "all",
+).length;
+
+export function getProjectArchiveCategoryCounts(
+  projects: readonly ProjectArchiveItem[] = projectArchive,
+): Record<ProjectArchiveFilter, number> {
+  return {
+    all: projects.length,
+    "web-app": projects.filter((p) => p.category === "web-app").length,
+    ml: projects.filter((p) => p.category === "ml").length,
+    mobile: projects.filter((p) => p.category === "mobile").length,
+    other: projects.filter((p) => p.category === "other").length,
+  };
+}
 
 export function filterProjectArchive(
   projects: readonly ProjectArchiveItem[],

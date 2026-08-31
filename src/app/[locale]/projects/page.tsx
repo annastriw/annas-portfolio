@@ -26,11 +26,11 @@ export async function generateMetadata({
 
   const isId = locale === "id";
   const title = isId
-    ? "Arsip Proyek - Annas Tri Widagdo"
-    : "Projects Archive - Annas Tri Widagdo";
+    ? "Arsip Proyek | Annas Tri Widagdo"
+    : "Projects Archive | Annas Tri Widagdo";
   const description = isId
-    ? "Arsip 10 proyek rekayasa perangkat lunak terverifikasi Annas Tri Widagdo di bidang aplikasi web, machine learning, mobile, dan media interaktif."
-    : "An archive of 10 verified engineering projects by Annas Tri Widagdo across web applications, machine learning, mobile, and interactive media.";
+    ? "Jelajahi project Annas Tri Widagdo dalam web development, machine learning, aplikasi mobile, dan media interaktif, dilengkapi pembahasan setiap project."
+    : "Explore projects by Annas Tri Widagdo across web development, machine learning, mobile applications, and interactive media, with detailed case studies.";
 
   return createPageMetadata({
     locale,
@@ -59,10 +59,12 @@ export default async function ProjectsPage({ params }: PageProps) {
   }
 
   const isId = locale === "id";
-  const listName = isId ? "Arsip Proyek - Annas Tri Widagdo" : "Projects Archive - Annas Tri Widagdo";
+  const listName = isId
+    ? "Arsip Proyek | Annas Tri Widagdo"
+    : "Projects Archive | Annas Tri Widagdo";
   const listDescription = isId
-    ? "Arsip 10 proyek rekayasa perangkat lunak terverifikasi Annas Tri Widagdo di bidang aplikasi web, machine learning, mobile, dan media interaktif."
-    : "An archive of 10 verified engineering projects by Annas Tri Widagdo across web applications, machine learning, mobile, and interactive media.";
+    ? "Jelajahi project Annas Tri Widagdo dalam web development, machine learning, aplikasi mobile, dan media interaktif, dilengkapi pembahasan setiap project."
+    : "Explore projects by Annas Tri Widagdo across web development, machine learning, mobile applications, and interactive media, with detailed case studies.";
 
   const collectionSchema = generateCollectionPageJsonLd(
     projectArchive.map((project) => ({

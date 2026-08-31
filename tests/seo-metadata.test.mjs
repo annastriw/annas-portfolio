@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { projectArchive } from "../src/content/projects/project-archive.ts";
 import { projectCaseStudies } from "../src/content/projects/project-case-studies.ts";
 import { blogArticles } from "../src/content/blog/index.ts";
 import {
@@ -195,31 +196,128 @@ test("generateContactPageJsonLd produces valid ContactPage schema", () => {
   assert.equal(contactId.url, "https://annastriwidagdo.me/id/contact");
 });
 
-test("generateCollectionPageJsonLd and generateItemListJsonLd produce valid structured data", () => {
-  const items = [
-    { title: "UKG System", url: "https://annastriwidagdo.me/en/projects/ukg-system" },
-  ];
+test("generateCollectionPageJsonLd and generateItemListJsonLd produce valid structured data for Projects Hub", () => {
+  const items = projectArchive.map((project) => ({
+    title: project.title.en,
+    url: `${SITE_URL}/en/projects/${project.slug}`,
+  }));
+
+  const listNameEn = "Projects Archive | Annas Tri Widagdo";
+  const listDescEn =
+    "Explore projects by Annas Tri Widagdo across web development, machine learning, mobile applications, and interactive media, with detailed case studies.";
+
   const itemList = generateItemListJsonLd(
     items,
-    "Projects Archive",
-    "https://annastriwidagdo.me/en/projects",
+    listNameEn,
+    `${SITE_URL}/en/projects`,
   );
   assert.equal(itemList["@type"], "ItemList");
-  assert.equal(itemList.numberOfItems, 1);
+  assert.equal(itemList.numberOfItems, 10);
+  assert.equal(itemList.itemListElement.length, 10);
   assert.equal(itemList.itemListElement[0].name, "UKG System");
+  assert.equal(itemList.itemListElement[0].position, 1);
+  assert.equal(itemList.itemListElement[0].url, `${SITE_URL}/en/projects/ukg-system`);
+  assert.equal(itemList.itemListElement[9].name, "Panoramic Virtual Tour");
+  assert.equal(itemList.itemListElement[9].position, 10);
 
-  const collection = generateCollectionPageJsonLd(
+  const collectionEn = generateCollectionPageJsonLd(
     items,
-    "Projects Archive",
-    "https://annastriwidagdo.me/en/projects",
-    "Archive of verified projects",
+    listNameEn,
+    `${SITE_URL}/en/projects`,
+    listDescEn,
     "en",
   );
 
-  assert.equal(collection["@type"], "CollectionPage");
-  assert.equal(collection.mainEntity["@type"], "ItemList");
-  assert.equal(collection.mainEntity.numberOfItems, 1);
-  assert.equal(collection.mainEntity.itemListElement[0].name, "UKG System");
+  assert.equal(collectionEn["@type"], "CollectionPage");
+  assert.equal(collectionEn.name, listNameEn);
+  assert.equal(collectionEn.description, listDescEn);
+  assert.equal(collectionEn.inLanguage, "en");
+  assert.equal(collectionEn.mainEntity["@type"], "ItemList");
+  assert.equal(collectionEn.mainEntity.numberOfItems, 10);
+  assert.doesNotMatch(collectionEn.description, /verified/i);
+  assert.doesNotMatch(collectionEn.description, /100%/);
+
+  const itemsId = projectArchive.map((project) => ({
+    title: project.title.id,
+    url: `${SITE_URL}/id/projects/${project.slug}`,
+  }));
+
+  const listNameId = "Arsip Proyek | Annas Tri Widagdo";
+  const listDescId =
+    "Jelajahi project Annas Tri Widagdo dalam web development, machine learning, aplikasi mobile, dan media interaktif, dilengkapi pembahasan setiap project.";
+
+  const collectionId = generateCollectionPageJsonLd(
+    itemsId,
+    listNameId,
+    `${SITE_URL}/id/projects`,
+    listDescId,
+    "id",
+  );
+
+  assert.equal(collectionId["@type"], "CollectionPage");
+  assert.equal(collectionId.name, listNameId);
+  assert.equal(collectionId.inLanguage, "id");
+  assert.equal(collectionId.mainEntity.numberOfItems, 10);
+});
+
+test("Projects Hub metadata generates valid Section 10 metadata and OG cover", () => {
+  const metaEn = createPageMetadata({
+    locale: "en",
+    path: "projects",
+    title: "Projects Archive | Annas Tri Widagdo",
+    description:
+      "Explore projects by Annas Tri Widagdo across web development, machine learning, mobile applications, and interactive media, with detailed case studies.",
+    type: "website",
+    images: [
+      {
+        url: "/assets/projects/ukg-system/cover.webp",
+        width: 1200,
+        height: 900,
+        alt: "Engineering projects archive of Annas Tri Widagdo",
+      },
+    ],
+  });
+
+  assert.equal(metaEn.title, "Projects Archive | Annas Tri Widagdo");
+  assert.equal(
+    metaEn.description,
+    "Explore projects by Annas Tri Widagdo across web development, machine learning, mobile applications, and interactive media, with detailed case studies.",
+  );
+  assert.equal(metaEn.alternates?.canonical, "https://annastriwidagdo.me/en/projects");
+  assert.deepEqual(metaEn.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/projects",
+    id: "https://annastriwidagdo.me/id/projects",
+    "x-default": "https://annastriwidagdo.me/en/projects",
+  });
+  assert.ok(
+    metaEn.openGraph?.images?.[0]?.url.includes(
+      "/assets/projects/ukg-system/cover.webp",
+    ),
+  );
+
+  const metaId = createPageMetadata({
+    locale: "id",
+    path: "projects",
+    title: "Arsip Proyek | Annas Tri Widagdo",
+    description:
+      "Jelajahi project Annas Tri Widagdo dalam web development, machine learning, aplikasi mobile, dan media interaktif, dilengkapi pembahasan setiap project.",
+    type: "website",
+    images: [
+      {
+        url: "/assets/projects/ukg-system/cover.webp",
+        width: 1200,
+        height: 900,
+        alt: "Arsip proyek rekayasa Annas Tri Widagdo",
+      },
+    ],
+  });
+
+  assert.equal(metaId.title, "Arsip Proyek | Annas Tri Widagdo");
+  assert.equal(
+    metaId.description,
+    "Jelajahi project Annas Tri Widagdo dalam web development, machine learning, aplikasi mobile, dan media interaktif, dilengkapi pembahasan setiap project.",
+  );
+  assert.equal(metaId.alternates?.canonical, "https://annastriwidagdo.me/id/projects");
 });
 
 test("generateProjectJsonLd accurately represents project facts and live URLs", () => {
