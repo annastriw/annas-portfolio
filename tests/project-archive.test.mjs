@@ -326,3 +326,60 @@ test("supports repeated category filter transitions without index degradation", 
     }
   }
 });
+
+test("ProjectArchiveRow implements approved editorial hierarchy and internal navigation only", () => {
+  const rowSource = fs.readFileSync(
+    path.join(process.cwd(), "src/components/projects/project-archive-row.tsx"),
+    "utf8",
+  );
+
+  // Confirms no obsolete action labels or external link targets in Hub entries
+  assert.doesNotMatch(rowSource, /View Case Study/i);
+  assert.doesNotMatch(rowSource, /Lihat Studi Kasus/i);
+  assert.doesNotMatch(rowSource, /Live System/i);
+  assert.doesNotMatch(rowSource, /Sistem Live/i);
+  assert.doesNotMatch(rowSource, /project\.liveUrl/);
+  assert.doesNotMatch(rowSource, /target="_blank"/);
+
+  // Confirms use of approved CTA copy
+  assert.match(rowSource, /projectArchiveCopy\.cta/);
+  assert.match(rowSource, /detailHref/);
+
+  // Confirms 5-part row content structure: title, role & status, summary, stack, cta
+  assert.match(rowSource, /project\.title\[locale\]/);
+  assert.match(rowSource, /project\.role\[locale\]/);
+  assert.match(rowSource, /project\.status\[locale\]/);
+  assert.match(rowSource, /project\.summary\[locale\]/);
+  assert.match(rowSource, /project\.primaryTechnologies/);
+  assert.match(rowSource, /slice\(0,\s*6\)/);
+});
+
+test("project-archive.module.css defines responsive editorial grid and touch target requirements", () => {
+  const cssSource = fs.readFileSync(
+    path.join(
+      process.cwd(),
+      "src/components/projects/project-archive.module.css",
+    ),
+    "utf8",
+  );
+
+  // Desktop 3-column grid structure
+  assert.match(cssSource, /\.row\s*\{[^}]*grid-template-columns:/);
+
+  // Tablet side-by-side adaptation (640px to 1023px)
+  assert.match(cssSource, /@media\s*\(\s*min-width:\s*640px\s*\)\s*and\s*\(\s*max-width:\s*1023px\s*\)/);
+  assert.match(cssSource, /\.tabletIndex/);
+
+  // Mobile stacked adaptation (< 640px)
+  assert.match(cssSource, /@media\s*\(\s*max-width:\s*639px\s*\)/);
+  assert.match(cssSource, /\.mobileIndex/);
+
+  // 44px minimum touch target on actions and buttons
+  assert.match(cssSource, /min-block-size:\s*2\.75rem/);
+
+  // Neutral background and image containment
+  assert.match(cssSource, /object-fit:\s*contain/);
+
+  // Reduced motion support
+  assert.match(cssSource, /@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)/);
+});
