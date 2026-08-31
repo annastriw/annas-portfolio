@@ -11,11 +11,24 @@ export type LocalizedProjectList = Readonly<
 >;
 
 export interface ProjectEvidence {
-  readonly id: `FIG.0${1 | 2 | 3}`;
+  readonly id: string;
   readonly src: string;
   readonly format: ProjectEvidenceFormat;
   readonly alt: LocalizedProjectText;
   readonly caption: LocalizedProjectText;
+}
+
+export interface ProjectGallerySlide {
+  readonly slide: string;
+  readonly src: string;
+  readonly format: ProjectEvidenceFormat | "cover";
+  readonly alt: LocalizedProjectText;
+  readonly caption: LocalizedProjectText;
+}
+
+export interface ProjectTechnologyGroup {
+  readonly category: string;
+  readonly technologies: readonly string[];
 }
 
 export interface ProjectCaseStudy {
@@ -27,16 +40,25 @@ export interface ProjectCaseStudy {
   readonly role: LocalizedProjectText;
   readonly period?: LocalizedProjectText;
   readonly status: LocalizedProjectText;
+  readonly client?: LocalizedProjectText;
+  readonly lead?: LocalizedProjectText;
+  readonly repositoryNotice?: LocalizedProjectText;
   readonly overview: LocalizedProjectList;
   readonly contributions: LocalizedProjectList;
+  readonly contributionLearning?: LocalizedProjectText;
   readonly technicalNotes: LocalizedProjectList;
+  readonly modules?: readonly string[];
+  readonly workflow?: LocalizedProjectList;
+  readonly technologyGroups?: readonly ProjectTechnologyGroup[];
   readonly techStack: readonly string[];
   readonly cover: {
     readonly src: string;
     readonly alt: LocalizedProjectText;
     readonly position?: "center" | "top";
+    readonly caption?: LocalizedProjectText;
   };
   readonly evidence: readonly ProjectEvidence[];
+  readonly gallery?: readonly ProjectGallerySlide[];
   readonly claimBoundary?: LocalizedProjectText;
   readonly liveUrl?: string;
   readonly githubUrl?: string;
@@ -58,84 +80,350 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "01",
     slug: "ukg-system",
     category: "web-app",
-    categoryLabel: categoryLabels["web-app"],
+    categoryLabel: { en: "01 / WEB APPLICATION", id: "01 / WEB APPLICATION" },
     title: { en: "UKG System", id: "UKG System" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
-    period: { en: "January - March 2026", id: "Januari - Maret 2026" },
-    status: { en: "Live production", id: "Aktif di production" },
+    role: { en: "Full-Stack Web Developer", id: "Full-Stack Web Developer" },
+    period: { en: "January–April 2026", id: "Januari–April 2026" },
+    status: { en: "Live Production", id: "Live Production" },
+    client: {
+      en: "CV Universal Kharisma Globalindo",
+      id: "CV Universal Kharisma Globalindo",
+    },
+    lead: {
+      en: "A multi-branch ERP that brings inventory, sales, and daily operations into one system.",
+      id: "ERP multi-cabang yang menyatukan pengelolaan stok, penjualan, dan operasional harian dalam satu sistem.",
+    },
+    repositoryNotice: {
+      en: "Private Repository",
+      id: "Private Repository",
+    },
     overview: {
       en: [
-        "UKG System is a multi-branch ERP web application built for CV Universal Kharisma Globalindo to centralize operational workflows.",
-        "The delivered system covers access control, attendance, multi-branch inventory, stock ordering, point of sale, financial reporting, and management analytics.",
+        "Before UKG System, inventory, sales, and branch operations were recorded in notebooks, with data shared through WhatsApp and Excel. This made it difficult for the owner to monitor activities across branches.",
+        "UKG System brings these records together, allowing the owner to monitor inventory, sales, and operations remotely.",
       ],
       id: [
-        "UKG System adalah aplikasi ERP web multi-cabang yang dibangun untuk CV Universal Kharisma Globalindo guna memusatkan alur operasional bisnis.",
-        "Sistem yang dikirim mencakup kontrol akses, presensi, inventaris multi-cabang, order stok, operasional kasir, pelaporan keuangan, dan analitik manajemen.",
+        "Sebelum UKG System, pencatatan stok, penjualan, dan operasional cabang dilakukan melalui buku, sementara data dibagikan melalui WhatsApp dan Excel. Kondisi ini menyulitkan owner untuk memantau aktivitas lintas cabang.",
+        "UKG System menyatukan data tersebut dalam satu sistem, sehingga owner dapat memantau stok, penjualan, dan operasional tanpa harus berada di lokasi.",
       ],
     },
     contributions: {
       en: [
-        "Mapped operational workflows and designed responsive interface systems in Figma.",
-        "Built the Next.js and React frontend for owner and employee operational workflows.",
-        "Implemented NestJS business logic and REST endpoints across all eight core operational modules.",
-        "Validated critical journeys with manual and automated Katalon tests before deployment.",
-        "Configured the Linux Ubuntu VPS production environment and deployed the live system.",
+        "Gathered requirements through interviews with the owner and designed the UI/UX.",
+        "Independently developed the frontend, backend, and workflows connecting the system’s modules.",
+        "Tested and deployed the system for use in daily operations.",
       ],
       id: [
-        "Memetakan alur operasional dan merancang sistem antarmuka responsif di Figma.",
-        "Membangun frontend Next.js dan React untuk alur kerja owner dan karyawan.",
-        "Mengimplementasikan business logic NestJS dan endpoint REST pada delapan modul operasional utama.",
-        "Memvalidasi alur kritis melalui pengujian manual dan otomatis dengan Katalon sebelum rilis.",
-        "Mengonfigurasi environment VPS Linux Ubuntu dan melakukan deployment sistem ke production.",
+        "Menggali kebutuhan melalui wawancara dengan owner dan merancang UI/UX.",
+        "Mengembangkan frontend, backend, dan integrasi workflow antar modul secara mandiri.",
+        "Melakukan testing dan deployment hingga sistem digunakan di production.",
       ],
     },
+    contributionLearning: {
+      en: "This project strengthened my experience in taking a system from business requirements to everyday operational use.",
+      id: "Project ini memperkuat pengalaman saya dalam mengembangkan sistem dari kebutuhan bisnis hingga digunakan dalam operasional sehari-hari.",
+    },
+    modules: [
+      "User & Role Management",
+      "Branch & Attendance",
+      "Inventory & Stock",
+      "Stock Order",
+      "Store Operations",
+      "Cashier & Sales",
+      "Reports & Finance",
+      "Dashboard & Analytics",
+    ],
+    workflow: {
+      en: [
+        "Sale recorded → Stock decreases.",
+        "Sale cancelled → Stock restored.",
+      ],
+      id: [
+        "Transaksi penjualan → Stok berkurang.",
+        "Transaksi dibatalkan → Stok dikembalikan.",
+      ],
+    },
+    technologyGroups: [
+      {
+        category: "Design",
+        technologies: ["Figma"],
+      },
+      {
+        category: "Frontend",
+        technologies: ["Next.js", "React", "TypeScript"],
+      },
+      {
+        category: "Backend & Data",
+        technologies: ["NestJS", "REST API", "MySQL"],
+      },
+      {
+        category: "Testing",
+        technologies: ["Katalon Studio"],
+      },
+      {
+        category: "Deployment",
+        technologies: ["Linux Ubuntu", "VPS"],
+      },
+    ],
     technicalNotes: {
       en: [
-        "Role-based access control separates owner oversight from store employee capabilities across multiple branches.",
-        "Automated stock reconciliation deducts inventory upon sale and safely restores quantities on cancellation.",
-        "Stock-order workflows require owner approval before incoming shipments are allocated to store-level records.",
-        "Katalon Studio automated test suites validate multi-role permissions and critical checkout paths before release.",
+        "Eight integrated operational modules: User & Role Management, Branch & Attendance, Inventory & Stock, Stock Order, Store Operations, Cashier & Sales, Reports & Finance, and Dashboard & Analytics.",
+        "Operational inventory workflow connects sales to stock: Sale recorded → Stock decreases, while Sale cancelled → Stock restored.",
+        "Role-based multi-branch architecture separates owner oversight and remote monitoring from branch employee workflows.",
       ],
       id: [
-        "Kontrol akses berbasis peran memisahkan kapabilitas owner dan karyawan pada banyak cabang.",
-        "Rekonsiliasi inventaris otomatis memotong stok saat penjualan dan mengembalikan catatan stok saat transaksi dibatalkan.",
-        "Alur order stok mewajibkan persetujuan owner sebelum barang masuk dialokasikan ke catatan cabang.",
-        "Automated test suite Katalon Studio memvalidasi batas peran dan alur kasir kritis sebelum rilis.",
+        "Delapan modul operasional terintegrasi: User & Role Management, Branch & Attendance, Inventory & Stock, Stock Order, Store Operations, Cashier & Sales, Reports & Finance, dan Dashboard & Analytics.",
+        "Alur kerja inventaris operasional menghubungkan penjualan dengan stok: Transaksi penjualan → Stok berkurang, sedangkan Transaksi dibatalkan → Stok dikembalikan.",
+        "Arsitektur multi-cabang berbasis peran memisahkan pengawasan dan pemantauan jarak jauh owner dari alur kerja karyawan cabang.",
       ],
     },
-    techStack: ["Next.js", "React", "NestJS", "REST API", "Katalon Studio", "Ubuntu"],
+    techStack: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "NestJS",
+      "MySQL",
+      "Katalon Studio",
+      "Linux Ubuntu",
+    ],
     cover: {
       src: "/assets/projects/ukg-system/cover.webp",
       alt: {
         en: "UKG System multi-branch ERP administration dashboard with operational charts",
         id: "Dashboard administrasi ERP multi-cabang UKG System dengan grafik operasional",
       },
+      caption: {
+        en: "[UKG_CAPTION_01_EN] Add a short description of this screenshot.",
+        id: "[UKG_CAPTION_01_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+      },
       position: "top",
     },
     evidence: [
       {
         id: "FIG.01",
-        src: "/assets/projects/ukg-system/documentation/01.webp",
+        src: "/assets/projects/ukg-system/documentation/02.webp",
         format: "wide",
-        alt: { en: "UKG System interface documentation", id: "Dokumentasi antarmuka UKG System" },
-        caption: { en: "Multi-branch administrative overview and analytics dashboard.", id: "Dashboard ringkasan administrasi dan analitik multi-cabang." },
+        alt: {
+          en: "UKG System inventory management and stock allocation view",
+          id: "Tampilan manajemen inventaris dan alokasi stok UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_02_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_02_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
       },
       {
         id: "FIG.02",
-        src: "/assets/projects/ukg-system/documentation/02.webp",
+        src: "/assets/projects/ukg-system/documentation/03.webp",
         format: "wide",
-        alt: { en: "UKG System workflow documentation", id: "Dokumentasi alur kerja UKG System" },
-        caption: { en: "Inventory management and stock allocation view across store branches.", id: "Tampilan manajemen inventaris dan alokasi stok antar cabang toko." },
+        alt: {
+          en: "UKG System point of sale transaction and operational interface",
+          id: "Antarmuka transaksi kasir dan operasional UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_03_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_03_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
       },
       {
         id: "FIG.03",
-        src: "/assets/projects/ukg-system/documentation/03.webp",
+        src: "/assets/projects/ukg-system/documentation/04.webp",
         format: "wide",
-        alt: { en: "UKG System data management interface", id: "Antarmuka pengelolaan data UKG System" },
-        caption: { en: "Point of sale transaction and operational record management interface.", id: "Antarmuka transaksi kasir dan pengelolaan pencatatan operasional." },
+        alt: {
+          en: "UKG System store operations and cash management records",
+          id: "Pencatatan operasional toko dan manajemen kas UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_04_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_04_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        id: "FIG.04",
+        src: "/assets/projects/ukg-system/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System stock order request and branch transfer interface",
+          id: "Antarmuka pengajuan order stok dan transfer cabang UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_05_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_05_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        id: "FIG.05",
+        src: "/assets/projects/ukg-system/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System employee attendance and shift schedule table",
+          id: "Tabel presensi karyawan dan jadwal shift UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_06_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_06_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        id: "FIG.06",
+        src: "/assets/projects/ukg-system/documentation/07.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System financial and sales transaction report table",
+          id: "Tabel laporan keuangan dan transaksi penjualan UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_07_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_07_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        id: "FIG.07",
+        src: "/assets/projects/ukg-system/documentation/08.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System user permissions and role configuration interface",
+          id: "Antarmuka hak akses pengguna dan konfigurasi peran UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_08_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_08_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        id: "FIG.08",
+        src: "/assets/projects/ukg-system/documentation/09.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System multi-branch sales analytics and summary overview",
+          id: "Ringkasan analitik dan total penjualan multi-cabang UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_09_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_09_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
       },
     ],
-    liveUrl: "https://ukgsystem.com",
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/ukg-system/cover.webp",
+        format: "cover",
+        alt: {
+          en: "UKG System multi-branch ERP administration dashboard with operational charts",
+          id: "Dashboard administrasi ERP multi-cabang UKG System dengan grafik operasional",
+        },
+        caption: {
+          en: "[UKG_CAPTION_01_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_01_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/ukg-system/documentation/02.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System inventory management and stock allocation view",
+          id: "Tampilan manajemen inventaris dan alokasi stok UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_02_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_02_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/ukg-system/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System point of sale transaction and operational interface",
+          id: "Antarmuka transaksi kasir dan operasional UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_03_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_03_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        slide: "04",
+        src: "/assets/projects/ukg-system/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System store operations and cash management records",
+          id: "Pencatatan operasional toko dan manajemen kas UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_04_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_04_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        slide: "05",
+        src: "/assets/projects/ukg-system/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System stock order request and branch transfer interface",
+          id: "Antarmuka pengajuan order stok dan transfer cabang UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_05_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_05_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        slide: "06",
+        src: "/assets/projects/ukg-system/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System employee attendance and shift schedule table",
+          id: "Tabel presensi karyawan dan jadwal shift UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_06_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_06_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        slide: "07",
+        src: "/assets/projects/ukg-system/documentation/07.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System financial and sales transaction report table",
+          id: "Tabel laporan keuangan dan transaksi penjualan UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_07_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_07_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        slide: "08",
+        src: "/assets/projects/ukg-system/documentation/08.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System user permissions and role configuration interface",
+          id: "Antarmuka hak akses pengguna dan konfigurasi peran UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_08_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_08_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+      {
+        slide: "09",
+        src: "/assets/projects/ukg-system/documentation/09.webp",
+        format: "wide",
+        alt: {
+          en: "UKG System multi-branch sales analytics and summary overview",
+          id: "Ringkasan analitik dan total penjualan multi-cabang UKG System",
+        },
+        caption: {
+          en: "[UKG_CAPTION_09_EN] Add a short description of this screenshot.",
+          id: "[UKG_CAPTION_09_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+        },
+      },
+    ],
+    liveUrl: "https://ukgsystem.site/",
   },
   {
     index: "02",

@@ -328,7 +328,7 @@ test("generateProjectJsonLd accurately represents project facts and live URLs", 
   assert.equal(ukgSchema["@type"], "SoftwareSourceCode");
   assert.equal(ukgSchema.name, "UKG System");
   assert.equal(ukgSchema.url, "https://annastriwidagdo.me/en/projects/ukg-system");
-  assert.equal(ukgSchema.relatedLink, "https://ukgsystem.com");
+  assert.equal(ukgSchema.relatedLink, "https://ukgsystem.site/");
   assert.ok(ukgSchema.image?.includes("/assets/projects/ukg-system/cover.webp"));
 
   const ihealth = projectCaseStudies.find((p) => p.slug === "ihealth-edu");
