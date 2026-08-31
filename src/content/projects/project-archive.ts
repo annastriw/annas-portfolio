@@ -46,7 +46,8 @@ export const projectArchiveCopy = {
     id: "Jelajahi project yang saya kerjakan dalam pengembangan aplikasi web, machine learning, mobile, dan media interaktif.",
   },
   projectCountLabel: { en: "Projects", id: "Proyek" },
-  disciplineCountLabel: { en: "Disciplines", id: "Bidang" },
+  categoryCountLabel: { en: "Categories", id: "Kategori" },
+  disciplineCountLabel: { en: "Categories", id: "Kategori" },
   filterHeading: { en: "Project Categories", id: "Kategori Proyek" },
   cta: { en: "Explore Project", id: "Jelajahi Proyek" },
 } as const;
@@ -337,9 +338,10 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
 ] as const;
 
 export const PROJECT_ARCHIVE_TOTAL_COUNT = projectArchive.length;
-export const PROJECT_ARCHIVE_DISCIPLINE_COUNT = projectArchiveCategories.filter(
+export const PROJECT_ARCHIVE_CATEGORY_COUNT = projectArchiveCategories.filter(
   (category) => category.key !== "all",
 ).length;
+export const PROJECT_ARCHIVE_DISCIPLINE_COUNT = PROJECT_ARCHIVE_CATEGORY_COUNT;
 
 export function getProjectArchiveCategoryCounts(
   projects: readonly ProjectArchiveItem[] = projectArchive,

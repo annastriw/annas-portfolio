@@ -34,30 +34,51 @@ export function ScrollReveal({
     }
 
     const rect = element.getBoundingClientRect();
-    const isAlreadyInViewport =
-      rect.top < window.innerHeight && rect.bottom > 0;
+    const isAlreadyReached = rect.top < window.innerHeight;
 
-    if (isAlreadyInViewport) {
+    if (isAlreadyReached) {
       element.setAttribute("data-reveal-state", "visible");
       return;
     }
 
     element.setAttribute("data-reveal-state", "hidden");
 
-    const observer = new IntersectionObserver(
+    let observer: IntersectionObserver | null = null;
+
+    const cleanup = () => {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+      window.removeEventListener("scroll", checkVisibility);
+    };
+
+    const checkVisibility = () => {
+      const r = element.getBoundingClientRect();
+      if (r.top < window.innerHeight) {
+        element.setAttribute("data-reveal-state", "visible");
+        cleanup();
+      }
+    };
+
+    observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (
+          entry.isIntersecting ||
+          entry.boundingClientRect.top < window.innerHeight
+        ) {
           element.setAttribute("data-reveal-state", "visible");
-          observer.disconnect();
+          cleanup();
         }
       },
       { threshold, rootMargin: "0px 0px -40px 0px" }
     );
 
     observer.observe(element);
+    window.addEventListener("scroll", checkVisibility, { passive: true });
 
     return () => {
-      observer.disconnect();
+      cleanup();
     };
   }, [threshold]);
 

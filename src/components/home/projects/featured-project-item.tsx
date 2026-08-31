@@ -17,6 +17,8 @@ export function FeaturedProjectItem({
 }: FeaturedProjectItemProps) {
   const href = `/${locale}/projects/${project.slug}`;
   const delayMs = Number.parseInt(index, 10) * 80;
+  const isId = locale === "id";
+  const ctaText = isId ? "Jelajahi Proyek" : "Explore Project";
 
   return (
     <ScrollReveal delayMs={delayMs} animationClass="animate-editorial-fade">
@@ -45,7 +47,7 @@ export function FeaturedProjectItem({
             </div>
           </div>
 
-          {/* Middle Column: Title + Beside Metadata, Summary, and Inline Tech Stack */}
+          {/* Middle Column: Title + Beside Metadata, Summary, Inline Tech Stack, and Explore Cue */}
           <div className="flex-1 flex flex-col gap-1.5 min-w-0">
             {/* Title & Beside Metadata (Status & Role on Desktop) */}
             <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
@@ -77,6 +79,17 @@ export function FeaturedProjectItem({
               </span>
               <span className="text-(--color-foreground)">
                 {project.technologies.slice(0, 6).join(" · ")}
+              </span>
+            </div>
+
+            {/* Visible Editorial CTA Cue */}
+            <div className="pt-1.5 flex items-center gap-1.5 font-mono text-xs font-semibold text-(--color-accent)">
+              <span className="group-hover:underline">{ctaText}</span>
+              <span
+                className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"
+                aria-hidden="true"
+              >
+                →
               </span>
             </div>
           </div>

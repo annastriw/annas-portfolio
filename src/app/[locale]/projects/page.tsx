@@ -5,7 +5,7 @@ import {
   projectArchive,
   projectArchiveCopy,
   PROJECT_ARCHIVE_TOTAL_COUNT,
-  PROJECT_ARCHIVE_DISCIPLINE_COUNT,
+  PROJECT_ARCHIVE_CATEGORY_COUNT,
 } from "@/content/projects/project-archive";
 import { ProjectArchive } from "@/components/projects/project-archive";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -122,9 +122,9 @@ export default async function ProjectsPage({ params }: PageProps) {
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium text-(--color-foreground)">
-                  {PROJECT_ARCHIVE_DISCIPLINE_COUNT}
+                  {PROJECT_ARCHIVE_CATEGORY_COUNT}
                 </span>
-                <span>{projectArchiveCopy.disciplineCountLabel[locale]}</span>
+                <span>{projectArchiveCopy.categoryCountLabel[locale]}</span>
               </div>
             </div>
           </ScrollReveal>

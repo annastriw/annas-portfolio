@@ -9,6 +9,7 @@ import {
   projectArchive,
   projectArchiveCategories,
   projectArchiveCopy,
+  PROJECT_ARCHIVE_CATEGORY_COUNT,
   PROJECT_ARCHIVE_DISCIPLINE_COUNT,
   PROJECT_ARCHIVE_TOTAL_COUNT,
 } from "../src/content/projects/project-archive.ts";
@@ -111,6 +112,7 @@ const expectedSummaries = {
 test("publishes exactly the ten approved projects in their required order", () => {
   assert.equal(projectArchive.length, 10);
   assert.equal(PROJECT_ARCHIVE_TOTAL_COUNT, 10);
+  assert.equal(PROJECT_ARCHIVE_CATEGORY_COUNT, 4);
   assert.equal(PROJECT_ARCHIVE_DISCIPLINE_COUNT, 4);
   assert.deepEqual(
     projectArchive.map((project) => project.slug),
@@ -276,8 +278,10 @@ test("provides approved copy foundation for masthead and CTA", () => {
   assert.equal(projectArchiveCopy.cta.id, "Jelajahi Proyek");
   assert.equal(projectArchiveCopy.projectCountLabel.en, "Projects");
   assert.equal(projectArchiveCopy.projectCountLabel.id, "Proyek");
-  assert.equal(projectArchiveCopy.disciplineCountLabel.en, "Disciplines");
-  assert.equal(projectArchiveCopy.disciplineCountLabel.id, "Bidang");
+  assert.equal(projectArchiveCopy.categoryCountLabel.en, "Categories");
+  assert.equal(projectArchiveCopy.categoryCountLabel.id, "Kategori");
+  assert.equal(projectArchiveCopy.disciplineCountLabel.en, "Categories");
+  assert.equal(projectArchiveCopy.disciplineCountLabel.id, "Kategori");
 });
 
 test("supports repeated category filter transitions without index degradation", () => {
@@ -382,4 +386,21 @@ test("project-archive.module.css defines responsive editorial grid and touch tar
 
   // Reduced motion support
   assert.match(cssSource, /@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)/);
+});
+
+test("ProjectArchive and ProjectArchiveRow apply ScrollReveal to group headers and project rows", () => {
+  const archiveSource = fs.readFileSync(
+    path.join(process.cwd(), "src/components/projects/project-archive.tsx"),
+    "utf8",
+  );
+  const rowSource = fs.readFileSync(
+    path.join(process.cwd(), "src/components/projects/project-archive-row.tsx"),
+    "utf8",
+  );
+
+  // Group headers wrapped in ScrollReveal
+  assert.match(archiveSource, /<ScrollReveal[^>]*>\s*<header className={styles\.groupHeader}>/);
+
+  // Individual rows wrapped in ScrollReveal
+  assert.match(rowSource, /<ScrollReveal[^>]*>\s*<article className={styles\.row}/);
 });

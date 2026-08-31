@@ -152,27 +152,29 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
             className={styles.group}
             aria-labelledby={`archive-group-${group.key}`}
           >
-            <header className={styles.groupHeader}>
-              <div className={styles.groupTitleBlock}>
-                <span className={styles.groupCode} aria-hidden="true">
-                  [{group.key === "all" ? "ALL" : groupCodes[group.key]}]
+            <ScrollReveal threshold={0.04}>
+              <header className={styles.groupHeader}>
+                <div className={styles.groupTitleBlock}>
+                  <span className={styles.groupCode} aria-hidden="true">
+                    [{group.key === "all" ? "ALL" : groupCodes[group.key]}]
+                  </span>
+                  <h2
+                    id={`archive-group-${group.key}`}
+                    className={styles.groupTitle}
+                  >
+                    {group.label[locale]}
+                  </h2>
+                </div>
+                <span className={styles.groupCount}>
+                  {group.projects.length}{" "}
+                  {isId
+                    ? "proyek"
+                    : group.projects.length === 1
+                      ? "project"
+                      : "projects"}
                 </span>
-                <h2
-                  id={`archive-group-${group.key}`}
-                  className={styles.groupTitle}
-                >
-                  {group.label[locale]}
-                </h2>
-              </div>
-              <span className={styles.groupCount}>
-                {group.projects.length}{" "}
-                {isId
-                  ? "proyek"
-                  : group.projects.length === 1
-                    ? "project"
-                    : "projects"}
-              </span>
-            </header>
+              </header>
+            </ScrollReveal>
 
             <ol className={styles.list}>
               {group.projects.map((project) => (

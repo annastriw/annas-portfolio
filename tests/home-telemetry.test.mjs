@@ -94,7 +94,7 @@ test("Experience section renders connected timeline following exact approved hie
   assert.match(itemFile, /STACK \/\//);
 });
 
-test("Featured projects renders 4-row full-width editorial index with single archive CTA, no per-entry CTA, and exact synchronized facts", async () => {
+test("Featured projects renders 4-row full-width editorial index with visible Explore Project cue, section-level archive CTA, and exact synchronized facts", async () => {
   const moduleUrl = new URL(
     "../src/content/projects/featured-config.ts",
     import.meta.url,
@@ -217,15 +217,15 @@ test("Featured projects renders 4-row full-width editorial index with single arc
   assert.match(sectionFile, /Jelajahi Arsip Proyek/);
   assert.doesNotMatch(sectionFile, /10 projects|all 10/i);
 
-  // Per-entry layout: single accessible link, no separate visible CTA text
+  // Per-entry layout: single accessible link, visible Explore Project CTA cue
   assert.match(itemFile, /project-index-row/);
   assert.match(itemFile, /project-row-link/);
   assert.match(itemFile, /project-row-thumbnail/);
   assert.match(itemFile, /STACK \/\//);
   assert.doesNotMatch(itemFile, /View Case Study/);
   assert.doesNotMatch(itemFile, /Lihat Studi Kasus/);
-  assert.doesNotMatch(itemFile, /Explore Project/);
-  assert.doesNotMatch(itemFile, /Jelajahi Proyek/);
+  assert.match(itemFile, /Explore Project/);
+  assert.match(itemFile, /Jelajahi Proyek/);
   assert.doesNotMatch(itemFile, /line-clamp-2/);
 });
 
@@ -305,6 +305,9 @@ test("Technical Capabilities directory renders 6 stacked categories with Postman
   // Nginx asset preservation (must not be deleted)
   assert.ok(existsSync(join(root, "public", "assets", "technologies", "nginx", "logo.svg")));
 
+  // Postman replaceable placeholder asset existence
+  assert.ok(existsSync(join(root, "public", "assets", "technologies", "postman", "logo.svg")));
+
   const dirFile = readFileSync(
     join(root, "src", "components", "home", "tech-directory", "tech-directory.tsx"),
     "utf8",
@@ -317,6 +320,10 @@ test("Technical Capabilities directory renders 6 stacked categories with Postman
     join(root, "src", "components", "home", "tech-directory", "tech-item.tsx"),
     "utf8",
   );
+  const logoFile = readFileSync(
+    join(root, "src", "components", "home", "tech-directory", "tech-logo.tsx"),
+    "utf8",
+  );
 
   assert.match(dirFile, /tech-dialog-content/);
   assert.match(dirFile, /aria-modal="true"/);
@@ -325,6 +332,8 @@ test("Technical Capabilities directory renders 6 stacked categories with Postman
   assert.match(catFile, /tech-directory-category/);
   assert.match(itemFile, /tech-directory-row/);
   assert.match(itemFile, /aria-haspopup="dialog"/);
+  assert.doesNotMatch(logoFile, /slug !== "postman"/);
+  assert.match(logoFile, /\/assets\/technologies\/\$\{slug\}\/logo\.svg/);
 });
 
 test("Header and Navigation maintain 5 numbered routes, locale switcher, and theme toggle", () => {
