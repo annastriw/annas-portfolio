@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 import type {
   ProjectCaseStudy,
   ProjectCaseStudyLocale,
+  ProjectGallerySlide,
 } from "@/content/projects/project-case-studies";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
@@ -18,10 +19,16 @@ interface UkgCaseStudyViewProps {
 }
 
 export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
   const activeTriggerRef = useRef<HTMLElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
+
+  // Touch tracking refs to enable mobile swipe gestures without hijacking vertical scroll
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const isSwipingRef = useRef(false);
 
   const isId = locale === "id";
   const projectsHref = `/${locale}/projects`;
@@ -36,6 +43,17 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
     liveCta: isId ? "Buka Website" : "Live Website",
     repoNotice: isId ? "Private Repository" : "Private Repository",
     galleryTitle: isId ? "Galeri Proyek" : "Project Gallery",
+    carouselAria: isId
+      ? "Galeri tangkapan layar sistem UKG"
+      : "UKG System screenshot gallery carousel",
+    prevSlide: isId
+      ? "Slide sebelumnya (Panah Kiri)"
+      : "Previous slide (Left Arrow)",
+    nextSlide: isId
+      ? "Slide berikutnya (Panah Kanan)"
+      : "Next slide (Right Arrow)",
+    inspect: isId ? "Perbesar Bukti" : "Inspect Figure",
+    closeLightbox: isId ? "Tutup" : "Close",
     overviewTitle: isId ? "Ringkasan Project" : "Project Overview",
     contributionTitle: isId ? "Kontribusi Saya" : "My Contribution",
     scopeTitle: isId ? "Cakupan Sistem" : "System Scope",
@@ -44,26 +62,106 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
     techSubtag: isId ? "Kelompok Teknologi" : "Technology Groups",
     primaryFlowTag: isId ? "Alur Utama" : "Primary Flow",
     conditionalFlowTag: isId ? "Kondisional" : "Conditional",
-    inspect: isId ? "Perbesar Bukti" : "Inspect Figure",
-    closeLightbox: isId ? "Tutup" : "Close",
   };
 
-  // Primary gallery slide representation for Phase 03
-  const primarySlide = project.gallery?.[0] ?? {
-    slide: "01",
-    src: project.cover.src,
-    alt: project.cover.alt,
-    caption: project.cover.caption ?? {
-      en: "[UKG_CAPTION_01_EN] Add a short description of this screenshot.",
-      id: "[UKG_CAPTION_01_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
-    },
+  // Authoritative 9-slide gallery dataset from project content
+  const slides: readonly ProjectGallerySlide[] =
+    project.gallery && project.gallery.length > 0
+      ? project.gallery
+      : [
+          {
+            slide: "01",
+            src: project.cover.src,
+            format: "cover",
+            alt: project.cover.alt,
+            caption: {
+              en: "[UKG_CAPTION_01_EN] Add a short description of this screenshot.",
+              id: "[UKG_CAPTION_01_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+            },
+          },
+        ];
+
+  const currentSlide = slides[activeIndex] ?? slides[0];
+
+  // Carousel navigation handlers with seamless wrap-around edge behavior
+  const handlePrevSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : slides.length - 1));
+  }, [slides.length]);
+
+  const handleNextSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev < slides.length - 1 ? prev + 1 : 0));
+  }, [slides.length]);
+
+  // Touch handlers for mobile swipe navigation
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now(),
+    };
+    isSwipingRef.current = false;
   };
 
-  const handleCloseLightbox = () => {
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    if (Math.abs(deltaX) > 10) {
+      isSwipingRef.current = true;
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    const deltaY = touch.clientY - touchStartRef.current.y;
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+
+    // Only trigger horizontal slide navigation if horizontal swipe exceeds 40px and dominates vertical movement
+    if (absX > 40 && absX > absY) {
+      if (deltaX < 0) {
+        handleNextSlide();
+      } else {
+        handlePrevSlide();
+      }
+    }
+
+    // Reset swipe flag after a short delay so click event won't trigger inspection
+    setTimeout(() => {
+      isSwipingRef.current = false;
+      touchStartRef.current = null;
+    }, 60);
+  };
+
+  const handleFrameClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (isSwipingRef.current) return;
+    activeTriggerRef.current = e.currentTarget;
+    setIsLightboxOpen(true);
+  };
+
+  const handleCarouselKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      handlePrevSlide();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      handleNextSlide();
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      activeTriggerRef.current = e.currentTarget as HTMLElement;
+      setIsLightboxOpen(true);
+    }
+  };
+
+  const handleCloseLightbox = useCallback(() => {
     setIsLightboxOpen(false);
     activeTriggerRef.current?.focus();
-  };
+  }, []);
 
+  // Lightbox keyboard accessibility, focus trap, and background scroll handling
   useEffect(() => {
     if (!isLightboxOpen) return;
 
@@ -75,6 +173,18 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
       if (e.key === "Escape") {
         e.preventDefault();
         handleCloseLightbox();
+        return;
+      }
+
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrevSlide();
+        return;
+      }
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        handleNextSlide();
         return;
       }
 
@@ -108,7 +218,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isLightboxOpen]);
+  }, [isLightboxOpen, handleCloseLightbox, handleNextSlide, handlePrevSlide]);
 
   return (
     <article className={styles.page}>
@@ -201,29 +311,30 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
               </h2>
             </div>
             <div className={styles.sectionBody}>
-              <figure className={styles.galleryFigure}>
+              <figure
+                className={styles.galleryFigure}
+                role="region"
+                aria-roledescription="carousel"
+                aria-label={copy.carouselAria}
+              >
+                {/* Stable Responsive Display Frame */}
                 <div
                   className={styles.galleryFrame}
-                  onClick={(e) => {
-                    activeTriggerRef.current = e.currentTarget;
-                    setIsLightboxOpen(true);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      activeTriggerRef.current = e.currentTarget;
-                      setIsLightboxOpen(true);
-                    }
-                  }}
+                  onClick={handleFrameClick}
+                  onKeyDown={handleCarouselKeyDown}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
                   tabIndex={0}
                   role="button"
-                  aria-label={`${copy.inspect}: ${project.title[locale]} Slide 01`}
+                  aria-label={`${copy.inspect}: Slide ${currentSlide.slide} — ${currentSlide.alt[locale]}`}
+                  aria-roledescription="slide"
                 >
                   <Image
-                    src={primarySlide.src}
-                    alt={primarySlide.alt[locale]}
+                    src={currentSlide.src}
+                    alt={currentSlide.alt[locale]}
                     fill
-                    priority
+                    priority={activeIndex === 0}
                     sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
                     className={styles.galleryImage}
                   />
@@ -236,12 +347,47 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
                     </span>
                   </div>
                 </div>
-                <figcaption className={styles.galleryCaption}>
-                  <span className={styles.galleryCaptionId}>
-                    [{primarySlide.slide}]
-                  </span>
-                  <span>{primarySlide.caption[locale]}</span>
-                </figcaption>
+
+                {/* Caption on Left, Counter & Arrow Controls on Right (Stacked on Mobile) */}
+                <div className={styles.galleryBottomBar}>
+                  <figcaption className={styles.galleryCaption}>
+                    <span className={styles.galleryCaptionId}>
+                      [{currentSlide.slide}]
+                    </span>
+                    <span className={styles.galleryCaptionText}>
+                      {currentSlide.caption[locale]}
+                    </span>
+                  </figcaption>
+
+                  <div className={styles.galleryControls}>
+                    <span
+                      className={styles.galleryCounter}
+                      aria-live="polite"
+                      aria-atomic="true"
+                    >
+                      {String(activeIndex + 1).padStart(2, "0")} /{" "}
+                      {String(slides.length).padStart(2, "0")}
+                    </span>
+                    <div className={styles.galleryNav}>
+                      <button
+                        type="button"
+                        onClick={handlePrevSlide}
+                        className={styles.galleryNavBtn}
+                        aria-label={copy.prevSlide}
+                      >
+                        ←
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleNextSlide}
+                        className={styles.galleryNavBtn}
+                        aria-label={copy.nextSlide}
+                      >
+                        →
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </figure>
             </div>
           </section>
@@ -417,14 +563,14 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
         </ScrollReveal>
       </div>
 
-      {/* Accessible Lightbox Inspection Dialog */}
+      {/* Accessible Lightbox Inspection Dialog with Synchronized Navigation */}
       {isLightboxOpen ? (
         <div
           ref={lightboxRef}
           className={styles.lightboxOverlay}
           role="dialog"
           aria-modal="true"
-          aria-label={`${copy.inspect}: ${primarySlide.caption[locale]}`}
+          aria-label={`${copy.inspect}: [${currentSlide.slide}] ${currentSlide.caption[locale]}`}
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               handleCloseLightbox();
@@ -434,7 +580,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
           <div className={styles.lightboxHeader}>
             <div className="flex items-center gap-2">
               <span className={styles.lightboxBadge}>
-                [{primarySlide.slide}]
+                [{currentSlide.slide}]
               </span>
               <span className={styles.lightboxTitle}>
                 {project.title[locale]}
@@ -453,20 +599,42 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
           </div>
 
           <div className={styles.lightboxMain}>
+            <button
+              type="button"
+              onClick={handlePrevSlide}
+              className={styles.lightboxNavBtn}
+              aria-label={copy.prevSlide}
+            >
+              ←
+            </button>
+
             <div className={styles.lightboxMediaWrapper}>
               <Image
-                src={primarySlide.src}
-                alt={primarySlide.alt[locale]}
+                src={currentSlide.src}
+                alt={currentSlide.alt[locale]}
                 fill
                 priority
                 className={styles.lightboxImage}
                 sizes="90vw"
               />
             </div>
+
+            <button
+              type="button"
+              onClick={handleNextSlide}
+              className={styles.lightboxNavBtn}
+              aria-label={copy.nextSlide}
+            >
+              →
+            </button>
           </div>
 
           <div className={styles.lightboxFooter}>
-            <p className="m-0">{primarySlide.caption[locale]}</p>
+            <p className="m-0">{currentSlide.caption[locale]}</p>
+            <span className={styles.lightboxCounter}>
+              {String(activeIndex + 1).padStart(2, "0")} /{" "}
+              {String(slides.length).padStart(2, "0")}
+            </span>
           </div>
         </div>
       ) : null}

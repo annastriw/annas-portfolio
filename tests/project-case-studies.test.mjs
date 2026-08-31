@@ -187,8 +187,9 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     ["Design", "Frontend", "Backend & Data", "Testing", "Deployment"],
   );
 
-  // Gallery: 9 slides with searchable placeholders
+  // Gallery: exactly 9 slides with 18 unique searchable placeholders
   assert.equal(ukg.gallery?.length, 9);
+  assert.equal(ukg.gallery?.[0].src, "/assets/projects/ukg-system/cover.webp");
   for (let i = 1; i <= 9; i++) {
     const num = String(i).padStart(2, "0");
     const slide = ukg.gallery?.[i - 1];
@@ -197,7 +198,18 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     assert.ok(existsSync(join(root, "public", slide.src)));
     assert.match(slide.caption.en, new RegExp(`\\[UKG_CAPTION_${num}_EN\\]`));
     assert.match(slide.caption.id, new RegExp(`\\[UKG_CAPTION_${num}_ID\\]`));
+    assert.doesNotMatch(slide.alt.en, /UKG_CAPTION/);
+    assert.doesNotMatch(slide.alt.id, /UKG_CAPTION/);
   }
+
+  // Verify exactly 18 occurrences of UKG_CAPTION_ in project-case-studies.ts
+  const caseStudiesSource = readFileSync(
+    join(root, "src", "content", "projects", "project-case-studies.ts"),
+    "utf8",
+  );
+  const captionTokens = caseStudiesSource.match(/\[UKG_CAPTION_\d+_[A-Z]+\]/g) ?? [];
+  assert.equal(captionTokens.length, 18);
+  assert.equal(new Set(captionTokens).size, 18);
 
   // Claim boundaries and prohibited strings
   const stringified = JSON.stringify(ukg);
@@ -252,7 +264,7 @@ test("project public rendering has no project Markdown runtime import", () => {
   assert.doesNotMatch(route, /gray-matter|react-markdown|@\/lib\/projects/);
 });
 
-test("UkgCaseStudyView implements approved compact editorial layout and section hierarchy", () => {
+test("UkgCaseStudyView implements approved compact editorial layout and 9-slide carousel", () => {
   const ukgComponent = readFileSync(
     join(root, "src", "components", "projects", "ukg-case-study.tsx"),
     "utf8",
@@ -271,11 +283,30 @@ test("UkgCaseStudyView implements approved compact editorial layout and section 
   assert.match(ukgComponent, /styles\.liveCta/);
   assert.match(ukgComponent, /styles\.repoNotice/);
 
-  // 2. Section 01: Project Gallery / Galeri Proyek
+  // 2. Section 01: Top-of-page 9-Slide Gallery Carousel
   assert.match(ukgComponent, /\[01\]/);
   assert.match(ukgComponent, /ukg-section-01-title/);
   assert.match(ukgComponent, /copy\.galleryTitle/);
+  assert.match(ukgComponent, /role="region"/);
+  assert.match(ukgComponent, /aria-roledescription="carousel"/);
   assert.match(ukgComponent, /styles\.galleryFrame/);
+  assert.match(ukgComponent, /handlePrevSlide/);
+  assert.match(ukgComponent, /handleNextSlide/);
+  assert.match(ukgComponent, /handleTouchStart/);
+  assert.match(ukgComponent, /handleTouchMove/);
+  assert.match(ukgComponent, /handleTouchEnd/);
+  assert.match(ukgComponent, /handleCarouselKeyDown/);
+  assert.match(ukgComponent, /styles\.galleryBottomBar/);
+  assert.match(ukgComponent, /styles\.galleryCaption/);
+  assert.match(ukgComponent, /styles\.galleryControls/);
+  assert.match(ukgComponent, /styles\.galleryCounter/);
+  assert.match(ukgComponent, /styles\.galleryNavBtn/);
+
+  // Synchronized Lightbox Inspection Dialog
+  assert.match(ukgComponent, /styles\.lightboxOverlay/);
+  assert.match(ukgComponent, /styles\.lightboxNavBtn/);
+  assert.match(ukgComponent, /styles\.lightboxCounter/);
+  assert.match(ukgComponent, /handleCloseLightbox/);
 
   // 3. Section 02: Project Overview / Ringkasan Project
   assert.match(ukgComponent, /\[02\]/);
@@ -305,13 +336,22 @@ test("UkgCaseStudyView implements approved compact editorial layout and section 
   assert.doesNotMatch(ukgComponent, /videoEvidenceCard/);
 });
 
-test("ukg-case-study.module.css defines responsive grid, metadata, workflow, and reduced motion", () => {
+test("ukg-case-study.module.css defines responsive grid, carousel, metadata, workflow, and reduced motion", () => {
   const css = readFileSync(
     join(root, "src", "components", "projects", "ukg-case-study.module.css"),
     "utf8",
   );
 
-  // Check key responsive and layout rules
+  // Check key responsive, carousel, and layout rules
+  assert.match(css, /\.galleryFrame\s*\{[^}]*touch-action:\s*pan-y/);
+  assert.match(css, /\.galleryImage\s*\{[^}]*object-fit:\s*contain/);
+  assert.match(css, /\.galleryBottomBar/);
+  assert.match(css, /\.galleryCaption/);
+  assert.match(css, /\.galleryControls/);
+  assert.match(css, /\.galleryCounter/);
+  assert.match(css, /\.galleryNavBtn/);
+  assert.match(css, /\.lightboxNavBtn/);
+  assert.match(css, /\.lightboxCounter/);
   assert.match(css, /\.metaGrid\s*\{[^}]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /\.overviewGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /\.modulesGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);

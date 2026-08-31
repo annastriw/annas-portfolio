@@ -192,10 +192,6 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
         en: "UKG System multi-branch ERP administration dashboard with operational charts",
         id: "Dashboard administrasi ERP multi-cabang UKG System dengan grafik operasional",
       },
-      caption: {
-        en: "[UKG_CAPTION_01_EN] Add a short description of this screenshot.",
-        id: "[UKG_CAPTION_01_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
-      },
       position: "top",
     },
     evidence: [
@@ -208,8 +204,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tampilan manajemen inventaris dan alokasi stok UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_02_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_02_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "Inventory management and stock allocation view across branch locations.",
+          id: "Tampilan manajemen inventaris dan alokasi stok di berbagai cabang.",
         },
       },
       {
@@ -221,8 +217,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka transaksi kasir dan operasional UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_03_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_03_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "Point of sale transaction and operational interface for branch staff.",
+          id: "Antarmuka transaksi kasir dan operasional untuk staf cabang.",
         },
       },
       {
@@ -234,8 +230,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Pencatatan operasional toko dan manajemen kas UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_04_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_04_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "Store operations and cash management recording interface.",
+          id: "Pencatatan operasional toko dan antarmuka manajemen kas.",
         },
       },
       {
@@ -247,8 +243,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka pengajuan order stok dan transfer cabang UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_05_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_05_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "Stock order request and inter-branch transfer workflow interface.",
+          id: "Pengajuan order stok dan alur transfer antar-cabang.",
         },
       },
       {
@@ -260,8 +256,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tabel presensi karyawan dan jadwal shift UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_06_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_06_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "Employee attendance records and shift scheduling overview.",
+          id: "Catatan presensi karyawan dan jadwal kerja shift.",
         },
       },
       {
@@ -273,8 +269,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tabel laporan keuangan dan transaksi penjualan UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_07_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_07_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "Financial report table and summarized branch sales ledger.",
+          id: "Tabel laporan keuangan dan rekapitulasi buku besar penjualan cabang.",
         },
       },
       {
@@ -286,8 +282,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka hak akses pengguna dan konfigurasi peran UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_08_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_08_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "Role-based access control and system user permission settings.",
+          id: "Kontrol akses berbasis peran dan konfigurasi hak pengguna sistem.",
         },
       },
       {
@@ -299,8 +295,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Ringkasan analitik dan total penjualan multi-cabang UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_09_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_09_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "Multi-branch sales analytics charts and operational summary.",
+          id: "Grafik analitik penjualan multi-cabang dan ringkasan operasional.",
         },
       },
     ],
