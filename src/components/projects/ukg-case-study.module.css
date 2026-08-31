@@ -525,9 +525,14 @@ html.dark .galleryNavBtn:focus-visible {
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--foreground);
+  max-inline-size: 100%;
+  word-break: break-word;
 }
 
 .workflowArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -838,10 +843,21 @@ html.dark .galleryNavBtn:focus-visible {
     padding-block-start: 0.25rem;
   }
 
-  .lightboxNavBtn {
-    inline-size: 2.25rem;
-    block-size: 2.25rem;
+  .galleryNavBtn {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
     font-size: 1rem;
+  }
+
+  .lightboxCloseBtn {
+    min-block-size: 2.5rem;
+    padding: 0.5rem 0.85rem;
+  }
+
+  .lightboxNavBtn {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    font-size: 1.125rem;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

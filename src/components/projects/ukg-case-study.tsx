@@ -41,6 +41,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
     period: isId ? "Periode" : "Period",
     status: "Status",
     liveCta: isId ? "Buka Website" : "Live Website",
+    newTabCue: isId ? "buka di tab baru" : "opens in new tab",
     repoNotice: isId ? "Private Repository" : "Private Repository",
     galleryTitle: isId ? "Galeri Proyek" : "Project Gallery",
     carouselAria: isId
@@ -277,7 +278,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.liveCta}
-                  aria-label={`${copy.liveCta}: ${project.title[locale]} (external)`}
+                  aria-label={`${copy.liveCta}: ${project.title[locale]} (${copy.newTabCue})`}
                 >
                   <span>{copy.liveCta}</span>
                   <span className={styles.liveArrow} aria-hidden="true">
