@@ -1,14 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 
 import {
   filterProjectArchive,
   projectArchiveCategories,
+  projectArchiveCopy,
   type ProjectArchiveFilter,
   type ProjectArchiveItem,
   type ProjectArchiveLocale,
 } from "@/content/projects/project-archive";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 import styles from "./project-archive.module.css";
 import { ProjectArchiveRow } from "./project-archive-row";
@@ -28,6 +30,7 @@ const groupCodes: Record<Exclude<ProjectArchiveFilter, "all">, string> = {
 export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
   const [activeFilter, setActiveFilter] =
     useState<ProjectArchiveFilter>("all");
+  const filterGroupRef = useRef<HTMLDivElement>(null);
 
   const visibleProjects = useMemo(
     () => filterProjectArchive(projects, activeFilter),
@@ -50,63 +53,96 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
   }, [visibleProjects]);
 
   const isId = locale === "id";
-  const visibleProjectLabel =
-    locale === "id"
-      ? `${visibleProjects.length} dari ${projects.length} proyek ditampilkan`
-      : `Showing ${visibleProjects.length} of ${projects.length} archived builds`;
+  const visibleProjectLabel = isId
+    ? `${visibleProjects.length} dari ${projects.length} proyek ditampilkan`
+    : `Showing ${visibleProjects.length} of ${projects.length} projects`;
+
+  const ensureButtonVisible = (buttonElement: HTMLElement) => {
+    const container = filterGroupRef.current;
+    if (!container) return;
+
+    const buttonRect = buttonElement.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    if (buttonRect.left < containerRect.left) {
+      container.scrollLeft += buttonRect.left - containerRect.left - 12;
+    } else if (buttonRect.right > containerRect.right) {
+      container.scrollLeft += buttonRect.right - containerRect.right + 12;
+    }
+  };
+
+  const handleFilterSelect = (
+    categoryKey: ProjectArchiveFilter,
+    buttonElement: HTMLElement,
+  ) => {
+    setActiveFilter(categoryKey);
+    ensureButtonVisible(buttonElement);
+  };
 
   return (
     <section
       className={styles.archive}
-      aria-label={isId ? "Arsip proyek terverifikasi" : "Verified project archive"}
+      aria-label={projectArchiveCopy.title[locale]}
     >
       {/* Editorial Index Filter Bar */}
-      <div className={styles.filterBlock}>
-        <div className={styles.filterHeader}>
-          <div className={styles.filterHeaderTag}>
-            <span className={styles.filterHeaderDot}>●</span>
-            <span>{isId ? "Indeks Disiplin" : "Discipline Index"}</span>
+      <ScrollReveal delayMs={100} animationClass="animate-editorial-fade">
+        <div className={styles.filterBlock}>
+          <div className={styles.filterHeader}>
+            <div className={styles.filterHeaderTag}>
+              <span className={styles.filterHeaderDot}>●</span>
+              <span>{projectArchiveCopy.filterHeading[locale]}</span>
+            </div>
+            <span
+              className={styles.filterStatus}
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {visibleProjectLabel}
+            </span>
           </div>
-          <span className={styles.filterStatus} aria-live="polite">
-            {visibleProjectLabel}
-          </span>
-        </div>
 
-        <div
-          className={styles.filterGroup}
-          role="group"
-          aria-label={isId ? "Filter kategori proyek" : "Project category filters"}
-        >
-          {projectArchiveCategories.map((category, idx) => {
-            const count =
-              category.key === "all"
-                ? projects.length
-                : projects.filter(
-                    (project) => project.category === category.key,
-                  ).length;
-            const isActive = activeFilter === category.key;
-            const prefix = `0${idx + 1}`;
+          <div
+            ref={filterGroupRef}
+            className={styles.filterGroup}
+            role="group"
+            aria-label={projectArchiveCopy.filterHeading[locale]}
+          >
+            {projectArchiveCategories.map((category, idx) => {
+              const count =
+                category.key === "all"
+                  ? projects.length
+                  : projects.filter(
+                      (project) => project.category === category.key,
+                    ).length;
+              const isActive = activeFilter === category.key;
+              const prefix = `0${idx + 1}`;
 
-            return (
-              <button
-                key={category.key}
-                type="button"
-                className={`${styles.filterButton} ${
-                  isActive ? styles.filterButtonActive : ""
-                }`}
-                onClick={() => setActiveFilter(category.key)}
-                aria-pressed={isActive}
-              >
-                <span className={styles.filterButtonPrefix}>{prefix}</span>
-                <span className={styles.filterButtonLabel}>{category.label[locale]}</span>
-                <span className={styles.filterCount} aria-hidden="true">
-                  [{String(count).padStart(2, "0")}]
-                </span>
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={category.key}
+                  type="button"
+                  className={`${styles.filterButton} ${
+                    isActive ? styles.filterButtonActive : ""
+                  }`}
+                  onClick={(e) =>
+                    handleFilterSelect(category.key, e.currentTarget)
+                  }
+                  onFocus={(e) => ensureButtonVisible(e.currentTarget)}
+                  aria-pressed={isActive}
+                >
+                  <span className={styles.filterButtonPrefix}>{prefix}</span>
+                  <span className={styles.filterButtonLabel}>
+                    {category.label[locale]}
+                  </span>
+                  <span className={styles.filterCount} aria-hidden="true">
+                    [{String(count).padStart(2, "0")}]
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </ScrollReveal>
 
       {/* Categorized Archive Entries */}
       <div className={styles.groups}>
@@ -129,12 +165,12 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
                 </h2>
               </div>
               <span className={styles.groupCount}>
-                {String(group.projects.length).padStart(2, "0")}{" "}
+                {group.projects.length}{" "}
                 {isId
-                  ? "karya"
+                  ? "proyek"
                   : group.projects.length === 1
-                    ? "build"
-                    : "builds"}
+                    ? "project"
+                    : "projects"}
               </span>
             </header>
 

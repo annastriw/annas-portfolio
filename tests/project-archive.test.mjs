@@ -262,6 +262,14 @@ test("provides approved copy foundation for masthead and CTA", () => {
   assert.equal(projectArchiveCopy.sectionIndex.id, "[03 // PROYEK]");
   assert.equal(projectArchiveCopy.title.en, "Projects Archive");
   assert.equal(projectArchiveCopy.title.id, "Arsip Proyek");
+  assert.equal(
+    projectArchiveCopy.lead.en,
+    "Explore my work across web applications, machine learning, mobile development, and interactive media.",
+  );
+  assert.equal(
+    projectArchiveCopy.lead.id,
+    "Jelajahi project yang saya kerjakan dalam pengembangan aplikasi web, machine learning, mobile, dan media interaktif.",
+  );
   assert.equal(projectArchiveCopy.filterHeading.en, "Project Categories");
   assert.equal(projectArchiveCopy.filterHeading.id, "Kategori Proyek");
   assert.equal(projectArchiveCopy.cta.en, "Explore Project");
@@ -270,4 +278,51 @@ test("provides approved copy foundation for masthead and CTA", () => {
   assert.equal(projectArchiveCopy.projectCountLabel.id, "Proyek");
   assert.equal(projectArchiveCopy.disciplineCountLabel.en, "Disciplines");
   assert.equal(projectArchiveCopy.disciplineCountLabel.id, "Bidang");
+});
+
+test("supports repeated category filter transitions without index degradation", () => {
+  const sequence = [
+    "all",
+    "web-app",
+    "all",
+    "ml",
+    "mobile",
+    "other",
+    "all",
+  ];
+
+  for (const filterKey of sequence) {
+    const results = filterProjectArchive(projectArchive, filterKey);
+    if (filterKey === "all") {
+      assert.equal(results.length, 10);
+      assert.deepEqual(
+        results.map((p) => p.index),
+        ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"],
+      );
+    } else if (filterKey === "web-app") {
+      assert.equal(results.length, 5);
+      assert.deepEqual(
+        results.map((p) => p.index),
+        ["01", "02", "03", "04", "05"],
+      );
+    } else if (filterKey === "ml") {
+      assert.equal(results.length, 2);
+      assert.deepEqual(
+        results.map((p) => p.index),
+        ["06", "07"],
+      );
+    } else if (filterKey === "mobile") {
+      assert.equal(results.length, 2);
+      assert.deepEqual(
+        results.map((p) => p.index),
+        ["08", "09"],
+      );
+    } else if (filterKey === "other") {
+      assert.equal(results.length, 1);
+      assert.deepEqual(
+        results.map((p) => p.index),
+        ["10"],
+      );
+    }
+  }
 });
