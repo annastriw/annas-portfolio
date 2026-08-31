@@ -9,6 +9,7 @@ import type {
   ProjectCaseStudyLocale,
 } from "@/content/projects/project-case-studies";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { UkgCaseStudyView } from "./ukg-case-study";
 
 import styles from "./project-case-study.module.css";
 
@@ -42,7 +43,7 @@ function EditorialList({ items }: { items: readonly string[] }) {
   );
 }
 
-export function ProjectCaseStudyView({
+function StandardCaseStudyView({
   project,
   locale,
   previous,
@@ -621,6 +622,26 @@ export function ProjectCaseStudyView({
         </div>
       ) : null}
     </article>
+  );
+}
+
+export function ProjectCaseStudyView({
+  project,
+  locale,
+  previous,
+  next,
+}: ProjectCaseStudyViewProps) {
+  if (project.slug === "ukg-system") {
+    return <UkgCaseStudyView project={project} locale={locale} />;
+  }
+
+  return (
+    <StandardCaseStudyView
+      project={project}
+      locale={locale}
+      previous={previous}
+      next={next}
+    />
   );
 }
 

@@ -251,3 +251,75 @@ test("project public rendering has no project Markdown runtime import", () => {
 
   assert.doesNotMatch(route, /gray-matter|react-markdown|@\/lib\/projects/);
 });
+
+test("UkgCaseStudyView implements approved compact editorial layout and section hierarchy", () => {
+  const ukgComponent = readFileSync(
+    join(root, "src", "components", "projects", "ukg-case-study.tsx"),
+    "utf8",
+  );
+
+  // 1. Opening: Breadcrumb, H1, Lead, Metadata, Actions
+  assert.match(ukgComponent, /copy\.breadcrumbProjects/);
+  assert.match(ukgComponent, /project\.categoryLabel\[locale\]/);
+  assert.match(ukgComponent, /<h1 className=\{styles\.title\}>\{project\.title\[locale\]\}<\/h1>/);
+  assert.match(ukgComponent, /styles\.lead/);
+  assert.match(ukgComponent, /styles\.metaGrid/);
+  assert.match(ukgComponent, /project\.client/);
+  assert.match(ukgComponent, /project\.role/);
+  assert.match(ukgComponent, /project\.period/);
+  assert.match(ukgComponent, /project\.status/);
+  assert.match(ukgComponent, /styles\.liveCta/);
+  assert.match(ukgComponent, /styles\.repoNotice/);
+
+  // 2. Section 01: Project Gallery / Galeri Proyek
+  assert.match(ukgComponent, /\[01\]/);
+  assert.match(ukgComponent, /ukg-section-01-title/);
+  assert.match(ukgComponent, /copy\.galleryTitle/);
+  assert.match(ukgComponent, /styles\.galleryFrame/);
+
+  // 3. Section 02: Project Overview / Ringkasan Project
+  assert.match(ukgComponent, /\[02\]/);
+  assert.match(ukgComponent, /ukg-section-02-title/);
+  assert.match(ukgComponent, /copy\.overviewTitle/);
+  assert.match(ukgComponent, /styles\.overviewGrid/);
+
+  // 4. Section 03: My Contribution / Kontribusi Saya
+  assert.match(ukgComponent, /\[03\]/);
+  assert.match(ukgComponent, /ukg-section-03-title/);
+  assert.match(ukgComponent, /copy\.contributionTitle/);
+  assert.match(ukgComponent, /styles\.contributionList/);
+  assert.match(ukgComponent, /styles\.contributionLearning/);
+
+  // 5. Section 04: System Scope / Cakupan Sistem
+  assert.match(ukgComponent, /\[04\]/);
+  assert.match(ukgComponent, /ukg-section-04-title/);
+  assert.match(ukgComponent, /copy\.scopeTitle/);
+  assert.match(ukgComponent, /styles\.modulesGrid/);
+  assert.match(ukgComponent, /styles\.workflowContainer/);
+  assert.match(ukgComponent, /styles\.techGroupsList/);
+
+  // Exclusions for UKG: No bottom adjacent nav, no standalone hero cover, no extra long-form sections
+  assert.doesNotMatch(ukgComponent, /adjacentNav/);
+  assert.doesNotMatch(ukgComponent, /coverFigure/);
+  assert.doesNotMatch(ukgComponent, /claimBoundary/);
+  assert.doesNotMatch(ukgComponent, /videoEvidenceCard/);
+});
+
+test("ukg-case-study.module.css defines responsive grid, metadata, workflow, and reduced motion", () => {
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "ukg-case-study.module.css"),
+    "utf8",
+  );
+
+  // Check key responsive and layout rules
+  assert.match(css, /\.metaGrid\s*\{[^}]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(css, /\.overviewGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(css, /\.modulesGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(css, /\.workflowContainer/);
+  assert.match(css, /\.workflowArrow/);
+  assert.match(css, /\.techGroupsList/);
+  assert.match(css, /@media\s*\(max-width:\s*1023px\)/);
+  assert.match(css, /@media\s*\(max-width:\s*639px\)/);
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+});
+
