@@ -94,7 +94,7 @@ test("Experience section renders connected timeline following exact approved hie
   assert.match(itemFile, /STACK \/\//);
 });
 
-test("Featured projects renders 4-row full-width editorial index with single archive CTA and no project count", async () => {
+test("Featured projects renders 4-row full-width editorial index with single archive CTA, no per-entry CTA, and exact synchronized facts", async () => {
   const moduleUrl = new URL(
     "../src/content/projects/featured-config.ts",
     import.meta.url,
@@ -107,6 +107,100 @@ test("Featured projects renders 4-row full-width editorial index with single arc
   assert.equal(homeFeaturedConfig.slot4Slug, "panoramic-virtual-tour");
   assert.equal(homeSelectedProjects.length, 4);
 
+  // Exact 4 projects in order
+  assert.equal(homeSelectedProjects[0].slug, "ukg-system");
+  assert.equal(homeSelectedProjects[1].slug, "ihealth-edu");
+  assert.equal(homeSelectedProjects[2].slug, "ml-for-heart-attack-risk-prediction");
+  assert.equal(homeSelectedProjects[3].slug, "panoramic-virtual-tour");
+
+  // 01 UKG System synchronization
+  assert.equal(homeSelectedProjects[0].title.en, "UKG System");
+  assert.equal(homeSelectedProjects[0].role.en, "Full-Stack Web Developer");
+  assert.equal(homeSelectedProjects[0].status.en, "Live Production");
+  assert.equal(
+    homeSelectedProjects[0].summary.en,
+    "A multi-branch ERP developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and production deployment.",
+  );
+  assert.equal(
+    homeSelectedProjects[0].summary.id,
+    "ERP multi-cabang yang dikembangkan secara end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment ke production.",
+  );
+  assert.deepEqual(homeSelectedProjects[0].technologies, [
+    "Next.js",
+    "NestJS",
+    "TypeScript",
+    "MySQL",
+    "Katalon Studio",
+    "Linux Ubuntu",
+  ]);
+
+  // 02 iHealth Edu synchronization (5-item displayed stack, ESP32 omitted, IoT summary preserved)
+  assert.equal(homeSelectedProjects[1].title.en, "iHealth Edu");
+  assert.equal(homeSelectedProjects[1].role.en, "Full-Stack Web Developer");
+  assert.equal(homeSelectedProjects[1].status.en, "Live Production");
+  assert.equal(
+    homeSelectedProjects[1].summary.en,
+    "A health education and screening platform developed with Puskesmas Padangsari, integrating patient data management, IoT telemetry, and machine learning decision support.",
+  );
+  assert.equal(
+    homeSelectedProjects[1].summary.id,
+    "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan pengelolaan data pasien, telemetri IoT, dan dukungan pengambilan keputusan berbasis machine learning.",
+  );
+  assert.deepEqual(homeSelectedProjects[1].technologies, [
+    "Next.js",
+    "Laravel",
+    "MySQL",
+    "Flask",
+    "Docker",
+  ]);
+  assert.equal(homeSelectedProjects[1].technologies.length, 5);
+  assert.ok(!homeSelectedProjects[1].technologies.includes("ESP32"));
+  assert.match(homeSelectedProjects[1].summary.en, /IoT telemetry/);
+  assert.match(homeSelectedProjects[1].summary.id, /telemetri IoT/);
+
+  // 03 Heart Attack Risk Prediction synchronization (shorter home title, experimental prototype boundary)
+  assert.equal(homeSelectedProjects[2].title.en, "Heart Attack Risk Prediction");
+  assert.equal(homeSelectedProjects[2].role.en, "Machine Learning Engineer");
+  assert.equal(homeSelectedProjects[2].status.en, "Completed Prototype");
+  assert.equal(
+    homeSelectedProjects[2].summary.en,
+    "A machine learning prototype for exploring heart attack risk prediction, with model inference served through a Flask API. Built for experimentation, not medical diagnosis.",
+  );
+  assert.equal(
+    homeSelectedProjects[2].summary.id,
+    "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inferensi model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
+  );
+  assert.deepEqual(homeSelectedProjects[2].technologies, [
+    "Python",
+    "Scikit-learn",
+    "Pandas",
+    "SMOTE",
+    "Flask",
+    "Docker",
+  ]);
+  assert.doesNotMatch(homeSelectedProjects[2].summary.en, /158,355|71\.93%/);
+
+  // 04 Panoramic Virtual Tour synchronization
+  assert.equal(homeSelectedProjects[3].title.en, "Panoramic Virtual Tour");
+  assert.equal(homeSelectedProjects[3].role.en, "Junior Game Developer");
+  assert.equal(homeSelectedProjects[3].status.en, "Completed Prototype");
+  assert.equal(
+    homeSelectedProjects[3].summary.en,
+    "A Unity-based virtual tour developed during an internship at PT Duta Basis Dataprima, combining architectural panoramas with hotspot navigation.",
+  );
+  assert.equal(
+    homeSelectedProjects[3].summary.id,
+    "Virtual tour berbasis Unity yang dikembangkan saat magang di PT Duta Basis Dataprima, menggabungkan panorama arsitektur dengan navigasi hotspot.",
+  );
+  assert.deepEqual(homeSelectedProjects[3].technologies, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "360° Panorama",
+    "Physics Raycast",
+    "Scene Management",
+  ]);
+
   const sectionFile = readFileSync(
     join(root, "src", "components", "home", "selected-projects.tsx"),
     "utf8",
@@ -116,15 +210,23 @@ test("Featured projects renders 4-row full-width editorial index with single arc
     "utf8",
   );
 
+  // Section-level header and archive navigation preserved
   assert.match(sectionFile, /\[04 \/\/ SELECTED PROJECTS\]/);
   assert.match(sectionFile, /home-projects-index/);
   assert.match(sectionFile, /Explore Project Archive/);
+  assert.match(sectionFile, /Jelajahi Arsip Proyek/);
   assert.doesNotMatch(sectionFile, /10 projects|all 10/i);
 
+  // Per-entry layout: single accessible link, no separate visible CTA text
   assert.match(itemFile, /project-index-row/);
+  assert.match(itemFile, /project-row-link/);
   assert.match(itemFile, /project-row-thumbnail/);
   assert.match(itemFile, /STACK \/\//);
-  assert.match(itemFile, /View Case Study/);
+  assert.doesNotMatch(itemFile, /View Case Study/);
+  assert.doesNotMatch(itemFile, /Lihat Studi Kasus/);
+  assert.doesNotMatch(itemFile, /Explore Project/);
+  assert.doesNotMatch(itemFile, /Jelajahi Proyek/);
+  assert.doesNotMatch(itemFile, /line-clamp-2/);
 });
 
 test("GitHub telemetry module provides dynamic 2-year query, GraphQL contributionLevel, and server-only token handling", () => {
@@ -157,7 +259,7 @@ test("GitHub Signal component renders minimal editorial signal, 2-year selector,
   assert.match(componentFile, /GitHub activity is temporarily unavailable/);
 });
 
-test("Technical Capabilities directory renders 6 stacked categories with accessible modal dialog", async () => {
+test("Technical Capabilities directory renders 6 stacked categories with Postman replacing Nginx in 05.05", async () => {
   const moduleUrl = new URL(
     "../src/content/capabilities/capabilities-data.ts",
     import.meta.url,
@@ -171,6 +273,37 @@ test("Technical Capabilities directory renders 6 stacked categories with accessi
   assert.equal(capabilitiesCategories[3].title, "Machine Learning & Data Science");
   assert.equal(capabilitiesCategories[4].title, "Testing & Deployment");
   assert.equal(capabilitiesCategories[5].title, "Design & Other");
+
+  // Testing & Deployment category verification
+  const testingCategory = capabilitiesCategories[4];
+  assert.equal(testingCategory.items.length, 6);
+  assert.equal(testingCategory.items[0].slug, "katalon-studio");
+  assert.equal(testingCategory.items[1].slug, "playwright");
+  assert.equal(testingCategory.items[2].slug, "docker");
+  assert.equal(testingCategory.items[3].slug, "linux-ubuntu");
+  assert.equal(testingCategory.items[4].slug, "postman");
+  assert.equal(testingCategory.items[5].slug, "github");
+
+  // Postman item details
+  const postmanItem = testingCategory.items[4];
+  assert.equal(postmanItem.name, "Postman");
+  assert.equal(postmanItem.monogram, "PM");
+  assert.equal(postmanItem.index, "05.05");
+  assert.equal(
+    postmanItem.description.en,
+    "Used to send API requests, inspect responses, and test endpoints during development.",
+  );
+  assert.equal(
+    postmanItem.description.id,
+    "Digunakan untuk mengirim request API, memeriksa respons, dan menguji endpoint selama pengembangan.",
+  );
+
+  // Absence of Nginx in capability items
+  const allSlugs = capabilitiesCategories.flatMap((c) => c.items.map((i) => i.slug));
+  assert.ok(!allSlugs.includes("nginx"));
+
+  // Nginx asset preservation (must not be deleted)
+  assert.ok(existsSync(join(root, "public", "assets", "technologies", "nginx", "logo.svg")));
 
   const dirFile = readFileSync(
     join(root, "src", "components", "home", "tech-directory", "tech-directory.tsx"),

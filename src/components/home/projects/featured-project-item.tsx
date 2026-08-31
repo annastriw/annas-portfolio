@@ -15,10 +15,8 @@ export function FeaturedProjectItem({
   index,
   locale,
 }: FeaturedProjectItemProps) {
-  const isId = locale === "id";
   const href = `/${locale}/projects/${project.slug}`;
   const delayMs = Number.parseInt(index, 10) * 80;
-  const actionLabel = isId ? "Lihat Studi Kasus" : "View Case Study";
 
   return (
     <ScrollReveal delayMs={delayMs} animationClass="animate-editorial-fade">
@@ -28,7 +26,7 @@ export function FeaturedProjectItem({
       >
         <Link
           href={href}
-          className="project-row-link flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 lg:gap-8 py-5 sm:py-6 text-inherit no-underline focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 rounded-[2px]"
+          className="project-row-link flex flex-col md:flex-row md:items-center gap-4 md:gap-6 lg:gap-8 py-5 sm:py-6 text-inherit no-underline focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 rounded-[2px]"
         >
           {/* Left Column: Index & Landscape Thumbnail (moves above metadata on mobile) */}
           <div className="flex items-start md:items-center gap-3.5 sm:gap-4 shrink-0">
@@ -68,7 +66,7 @@ export function FeaturedProjectItem({
             </div>
 
             {/* Short Summary */}
-            <p className="text-xs sm:text-sm text-(--color-muted) leading-relaxed m-0 line-clamp-2">
+            <p className="text-xs sm:text-sm text-(--color-muted) leading-relaxed m-0">
               {project.summary[locale]}
             </p>
 
@@ -81,19 +79,6 @@ export function FeaturedProjectItem({
                 {project.technologies.slice(0, 6).join(" · ")}
               </span>
             </div>
-          </div>
-
-          {/* Right Column: Case-study Action */}
-          <div className="shrink-0 flex items-center md:self-center pt-2 md:pt-0">
-            <span className="font-mono text-xs font-semibold text-(--color-accent) group-hover:underline inline-flex items-center gap-1.5 whitespace-nowrap">
-              <span>{actionLabel}</span>
-              <span
-                className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"
-                aria-hidden="true"
-              >
-                →
-              </span>
-            </span>
           </div>
         </Link>
       </article>

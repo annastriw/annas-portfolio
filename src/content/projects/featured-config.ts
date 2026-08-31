@@ -29,8 +29,8 @@ export const homeSelectedProjects: readonly HomeSelectedProject[] = [
       id: "Live Production",
     },
     summary: {
-      en: "A multi-branch ERP developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and deployment to an Ubuntu VPS. The system remains in active use.",
-      id: "ERP multi-cabang yang dikembangkan secara end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment ke VPS Ubuntu. Sistem masih aktif digunakan hingga saat ini.",
+      en: "A multi-branch ERP developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and production deployment.",
+      id: "ERP multi-cabang yang dikembangkan secara end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment ke production.",
     },
     technologies: [
       "Next.js",
@@ -62,15 +62,14 @@ export const homeSelectedProjects: readonly HomeSelectedProject[] = [
       id: "Live Production",
     },
     summary: {
-      en: "A digital health platform developed with Puskesmas Padangsari for health screening, education, patient data management, ESP32 telemetry, and machine learning decision support.",
-      id: "Platform kesehatan digital yang dikembangkan bersama Puskesmas Padangsari untuk screening kesehatan, edukasi, pengelolaan data pasien, telemetri ESP32, dan decision support berbasis machine learning.",
+      en: "A health education and screening platform developed with Puskesmas Padangsari, integrating patient data management, IoT telemetry, and machine learning decision support.",
+      id: "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan pengelolaan data pasien, telemetri IoT, dan dukungan pengambilan keputusan berbasis machine learning.",
     },
     technologies: [
       "Next.js",
       "Laravel",
       "MySQL",
       "Flask",
-      "ESP32",
       "Docker",
     ],
     coverImage: "/assets/projects/ihealth-edu/cover.webp",
@@ -95,8 +94,8 @@ export const homeSelectedProjects: readonly HomeSelectedProject[] = [
       id: "Completed Prototype",
     },
     summary: {
-      en: "A binary classification prototype evaluated on 158,355 records. The selected Random Forest model achieved 71.93% accuracy and 0.8015 ROC-AUC, then served through a Flask REST API.",
-      id: "Prototype klasifikasi biner yang dievaluasi menggunakan 158.355 data. Model Random Forest terpilih mencapai accuracy 71,93% dan ROC-AUC 0,8015, kemudian disajikan melalui Flask REST API.",
+      en: "A machine learning prototype for exploring heart attack risk prediction, with model inference served through a Flask API. Built for experimentation, not medical diagnosis.",
+      id: "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inferensi model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
     },
     technologies: [
       "Python",
@@ -128,8 +127,8 @@ export const homeSelectedProjects: readonly HomeSelectedProject[] = [
       id: "Completed Prototype",
     },
     summary: {
-      en: "A Unity-based 360-degree virtual tour developed during an internship at PT Duta Basis Dataprima, combining 78 Lumion-rendered panoramas across 79 scenes with raycast-based hotspot navigation.",
-      id: "Virtual tour 360 derajat berbasis Unity yang dikembangkan saat internship di PT Duta Basis Dataprima, menggabungkan 78 panorama hasil render Lumion dalam 79 scene dengan navigasi hotspot berbasis raycast.",
+      en: "A Unity-based virtual tour developed during an internship at PT Duta Basis Dataprima, combining architectural panoramas with hotspot navigation.",
+      id: "Virtual tour berbasis Unity yang dikembangkan saat magang di PT Duta Basis Dataprima, menggabungkan panorama arsitektur dengan navigasi hotspot.",
     },
     technologies: [
       "Unity",

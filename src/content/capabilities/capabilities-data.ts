@@ -276,13 +276,13 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         },
       },
       {
-        slug: "nginx",
-        name: "Nginx",
-        monogram: "NG",
+        slug: "postman",
+        name: "Postman",
+        monogram: "PM",
         index: "05.05",
         description: {
-          en: "Used to route web traffic and serve applications in production environments.",
-          id: "Digunakan untuk mengatur traffic web dan menjalankan aplikasi pada environment production.",
+          en: "Used to send API requests, inspect responses, and test endpoints during development.",
+          id: "Digunakan untuk mengirim request API, memeriksa respons, dan menguji endpoint selama pengembangan.",
         },
       },
       {

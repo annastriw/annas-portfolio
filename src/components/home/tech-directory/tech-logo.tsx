@@ -19,7 +19,8 @@ export function TechLogo({
 }: TechLogoProps) {
   const [hasError, setHasError] = useState(false);
   const resolvedPath =
-    logoPath ?? (slug ? `/assets/technologies/${slug}/logo.svg` : null);
+    logoPath ??
+    (slug && slug !== "postman" ? `/assets/technologies/${slug}/logo.svg` : null);
 
   const isLarge = size === "large";
   const frameClass = isLarge
