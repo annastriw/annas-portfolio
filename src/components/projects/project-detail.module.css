@@ -912,6 +912,95 @@ html.dark .galleryNavBtn:focus-visible {
   color: var(--foreground);
 }
 
+/* Technical Notes Grid */
+.techNotesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.techNoteItem {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-block: 0.875rem;
+  border-block-end: 1px solid var(--border);
+  align-items: baseline;
+}
+
+.techNoteItem:first-child {
+  border-block-start: 1px solid var(--border);
+}
+
+.techNoteNum {
+  color: var(--accent);
+  font: 600 0.6875rem var(--font-mono);
+}
+
+.techNoteText {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--foreground);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Tech Stack Badges List */
+.techStackBadges {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Video Demonstration Card */
+.videoCard {
+  margin-block-start: 1.5rem;
+  border: 1px solid var(--border);
+  background-color: var(--muted-bg, rgba(0, 0, 0, 0.02));
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.videoHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 600 0.6875rem var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.videoTag {
+  color: var(--accent);
+}
+
+.videoPlayer {
+  width: 100%;
+  max-height: 28rem;
+  background-color: #000;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.videoCaption {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
 /* System Scope Groups (iHealth style) */
 .systemScopeGrid {
   display: grid;

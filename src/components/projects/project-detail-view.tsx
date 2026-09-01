@@ -19,7 +19,18 @@ export interface ProjectDetailViewProps {
   locale: ProjectCaseStudyLocale;
 }
 
-const SHARED_PROJECT_DETAIL_SLUGS = new Set(["ukg-system", "ihealth-edu"]);
+const SHARED_PROJECT_DETAIL_SLUGS = new Set([
+  "ukg-system",
+  "ihealth-edu",
+  "dialisis-connect-edu",
+  "nusa-dakwah",
+  "simastok",
+  "ml-for-heart-attack-risk-prediction",
+  "speech-to-text-system",
+  "thermal-printer-service",
+  "footy-standings",
+  "panoramic-virtual-tour",
+]);
 
 /**
  * Isolated compatibility boundary determining whether a project
@@ -27,6 +38,28 @@ const SHARED_PROJECT_DETAIL_SLUGS = new Set(["ukg-system", "ihealth-edu"]);
  */
 export function isSharedProjectDetail(project: ProjectCaseStudy): boolean {
   return SHARED_PROJECT_DETAIL_SLUGS.has(project.slug);
+}
+
+/**
+ * Resolves gallery slides for a project from explicit gallery definition
+ * or authentic visual evidence figures.
+ */
+export function getProjectGallerySlides(
+  project: ProjectCaseStudy,
+): readonly ProjectGallerySlide[] {
+  if (project.gallery && project.gallery.length > 0) {
+    return project.gallery;
+  }
+  if (project.evidence && project.evidence.length > 0) {
+    return project.evidence.map((item, index) => ({
+      slide: String(index + 1).padStart(2, "0"),
+      src: item.src,
+      format: item.format,
+      alt: item.alt,
+      caption: item.caption,
+    }));
+  }
+  return [];
 }
 
 interface MetaEntry {
@@ -180,12 +213,19 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     architectureNote: isId
       ? "Arsitektur mencakup integrasi IoT dan ML ke dalam antarmuka Next.js; pengembangan frontend dan integrasi UI merupakan lingkup kontribusi Annas."
       : "Architecture includes backend, IoT, and ML services integrated into the Next.js interface; Annas's direct contribution focuses on UI/UX, frontend engineering, and client-level integrations.",
+    techNotesSubtag: isId ? "Catatan Teknis Utama" : "Key Technical Notes",
+    techStackSubtag: isId ? "Stack Teknologi" : "Technology Stack",
+    videoDemo: isId ? "Rekaman Demonstrasi Video" : "Video Demonstration Record",
+    videoTag: "[04.V // VIDEO DEMO]",
+    videoDesc: isId
+      ? "Demonstrasi alur pencetakan Android PrintService menuju thermal printer Bluetooth ESC/POS."
+      : "Demonstration of the Android PrintService workflow output to a Bluetooth ESC/POS thermal printer.",
   };
 
   // Section presence detection & sequential dynamic numbering (0 gaps)
   let sectionCounter = 0;
 
-  const slides: readonly ProjectGallerySlide[] = project.gallery ?? [];
+  const slides: readonly ProjectGallerySlide[] = getProjectGallerySlides(project);
   const hasGallery = slides.length > 0;
   const galleryIndex = hasGallery
     ? String(++sectionCounter).padStart(2, "0")
@@ -208,7 +248,14 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
   const hasScope = Boolean(
     (project.modules && project.modules.length > 0) ||
       (project.technologyGroups && project.technologyGroups.length > 0) ||
-      project.systemScope,
+      project.systemScope ||
+      (project.technicalNotes?.[locale] &&
+        project.technicalNotes[locale].length > 0) ||
+      (project.techStack &&
+        project.techStack.length > 0 &&
+        !project.technologyGroups &&
+        !project.personalTechStack &&
+        project.slug !== "ihealth-edu"),
   );
   const scopeIndex = hasScope
     ? String(++sectionCounter).padStart(2, "0")
@@ -651,6 +698,26 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                       </div>
                     ) : null}
                   </div>
+
+                  {/* Optional Project Video Demonstration */}
+                  {project.videoSrc ? (
+                    <div className={styles.videoCard}>
+                      <div className={styles.videoHeader}>
+                        <span className={styles.videoTag}>{copy.videoTag}</span>
+                        <span>{copy.videoDemo}</span>
+                      </div>
+                      <video
+                        controls
+                        preload="metadata"
+                        poster={project.cover.src}
+                        className={styles.videoPlayer}
+                      >
+                        <source src={project.videoSrc} type="video/webm" />
+                        Your browser does not support HTML5 video playback.
+                      </video>
+                      <p className={styles.videoCaption}>{copy.videoDesc}</p>
+                    </div>
+                  ) : null}
                 </figure>
               </div>
             </section>
@@ -999,6 +1066,50 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                         </div>
                       </div>
                     ) : null}
+                  </div>
+                ) : null}
+
+                {/* 4. Key Technical Notes */}
+                {project.technicalNotes?.[locale] &&
+                project.technicalNotes[locale].length > 0 &&
+                !project.systemScope &&
+                !project.modules ? (
+                  <div className={styles.scopeSubBlock}>
+                    <div className={styles.subBlockHeader}>
+                      <span className={styles.subBlockHeaderTag}>■</span>
+                      <span>{copy.techNotesSubtag}</span>
+                    </div>
+                    <ol className={styles.techNotesGrid}>
+                      {project.technicalNotes[locale].map((note, index) => (
+                        <li key={index} className={styles.techNoteItem}>
+                          <span className={styles.techNoteNum} aria-hidden="true">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <p className={styles.techNoteText}>{note}</p>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                ) : null}
+
+                {/* 5. Tech Stack Directory */}
+                {project.techStack &&
+                project.techStack.length > 0 &&
+                !project.technologyGroups &&
+                !project.personalTechStack &&
+                project.slug !== "ihealth-edu" ? (
+                  <div className={styles.scopeSubBlock}>
+                    <div className={styles.subBlockHeader}>
+                      <span className={styles.subBlockHeaderTag}>■</span>
+                      <span>{copy.techStackSubtag}</span>
+                    </div>
+                    <ul className={styles.techStackBadges}>
+                      {project.techStack.map((tech) => (
+                        <li key={tech} className={styles.stackBadge}>
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ) : null}
               </div>

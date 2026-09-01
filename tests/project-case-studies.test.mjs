@@ -775,7 +775,7 @@ test("ProjectDetailView meets semantic heading hierarchy, dynamic section number
   assert.equal(scrollRevealMatches.length, 5, "ScrollReveal wraps opening + 4 primary sections only");
 });
 
-test("project detail router uses explicit compatibility boundary for reference and unmigrated projects", () => {
+test("project detail router routes all 10 active projects through shared ProjectDetailView template", () => {
   const caseStudyRouter = readFileSync(
     join(root, "src", "components", "projects", "project-case-study.tsx"),
     "utf8",
@@ -785,13 +785,99 @@ test("project detail router uses explicit compatibility boundary for reference a
     "utf8",
   );
 
-  // Compatibility function in detail view module
-  assert.match(detailComponent, /export function isSharedProjectDetail/);
-  assert.match(detailComponent, /"ukg-system"/);
-  assert.match(detailComponent, /"ihealth-edu"/);
+  // Compatibility function in detail view module accounts for all 10 active slugs
+  for (const slug of expectedSlugs) {
+    assert.match(detailComponent, new RegExp(`"${slug}"`));
+  }
 
-  // Router uses compatibility boundary rather than scattered slug checks
-  assert.match(caseStudyRouter, /if \(isSharedProjectDetail\(project\)\)/);
+  // Router directly invokes ProjectDetailView
   assert.match(caseStudyRouter, /return <ProjectDetailView project=\{project\} locale=\{locale\} \/>/);
-  assert.match(caseStudyRouter, /return \(\s*<StandardCaseStudyView/);
+  assert.doesNotMatch(caseStudyRouter, /StandardCaseStudyView/);
+
+  // Obsolete project-case-study.module.css is completely removed from codebase
+  assert.equal(
+    existsSync(join(root, "src", "components", "projects", "project-case-study.module.css")),
+    false,
+    "project-case-study.module.css must be deleted as an unreferenced legacy branch",
+  );
 });
+
+test("ProjectDetailView supports all project-specific technical groups, single-image evidence, and video records", () => {
+  const detailComponent = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
+    "utf8",
+  );
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "project-detail.module.css"),
+    "utf8",
+  );
+
+  // Key Technical Notes sub-block in System Scope
+  assert.match(detailComponent, /copy\.techNotesSubtag/);
+  assert.match(detailComponent, /styles\.techNotesGrid/);
+  assert.match(detailComponent, /styles\.techNoteItem/);
+  assert.match(detailComponent, /styles\.techNoteNum/);
+  assert.match(detailComponent, /styles\.techNoteText/);
+
+  // Tech Stack directory in System Scope
+  assert.match(detailComponent, /copy\.techStackSubtag/);
+  assert.match(detailComponent, /styles\.techStackBadges/);
+
+  // Video Demonstration Card in Gallery section
+  assert.match(detailComponent, /project\.videoSrc/);
+  assert.match(detailComponent, /styles\.videoCard/);
+  assert.match(detailComponent, /styles\.videoHeader/);
+  assert.match(detailComponent, /styles\.videoPlayer/);
+  assert.match(detailComponent, /styles\.videoCaption/);
+  assert.match(detailComponent, /copy\.videoTag/);
+  assert.match(detailComponent, /copy\.videoDemo/);
+  assert.match(detailComponent, /copy\.videoDesc/);
+
+  // CSS rules for technical notes, badges, and video
+  assert.match(css, /\.techNotesGrid/);
+  assert.match(css, /\.techNoteItem/);
+  assert.match(css, /\.techNoteNum/);
+  assert.match(css, /\.techNoteText/);
+  assert.match(css, /\.techStackBadges/);
+  assert.match(css, /\.videoCard/);
+  assert.match(css, /\.videoHeader/);
+  assert.match(css, /\.videoPlayer/);
+  assert.match(css, /\.videoCaption/);
+});
+
+test("physical asset files for all 10 projects exist at exact paths without mutation", () => {
+  for (const project of projectCaseStudies) {
+    // Cover asset
+    assert.ok(
+      existsSync(join(root, "public", project.cover.src)),
+      `Cover asset for ${project.slug} must exist at ${project.cover.src}`,
+    );
+
+    // Evidence assets
+    for (const fig of project.evidence) {
+      assert.ok(
+        existsSync(join(root, "public", fig.src)),
+        `Evidence asset for ${project.slug} must exist at ${fig.src}`,
+      );
+    }
+
+    // Gallery assets (if explicitly defined)
+    if (project.gallery) {
+      for (const slide of project.gallery) {
+        assert.ok(
+          existsSync(join(root, "public", slide.src)),
+          `Gallery asset for ${project.slug} must exist at ${slide.src}`,
+        );
+      }
+    }
+
+    // Video assets (if defined)
+    if (project.videoSrc) {
+      assert.ok(
+        existsSync(join(root, "public", project.videoSrc)),
+        `Video asset for ${project.slug} must exist at ${project.videoSrc}`,
+      );
+    }
+  }
+});
+
