@@ -10,6 +10,7 @@ import type {
 } from "@/content/projects/project-case-studies";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { UkgCaseStudyView } from "./ukg-case-study";
+import { IHealthCaseStudyView } from "./ihealth-case-study";
 
 import styles from "./project-case-study.module.css";
 
@@ -633,6 +634,10 @@ export function ProjectCaseStudyView({
 }: ProjectCaseStudyViewProps) {
   if (project.slug === "ukg-system") {
     return <UkgCaseStudyView project={project} locale={locale} />;
+  }
+
+  if (project.slug === "ihealth-edu") {
+    return <IHealthCaseStudyView project={project} locale={locale} />;
   }
 
   return (

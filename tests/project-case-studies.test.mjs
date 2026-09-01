@@ -520,3 +520,125 @@ test("ukg-case-study.module.css defines responsive grid, carousel, metadata, and
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
 });
 
+test("IHealthCaseStudyView implements approved compact editorial layout, 4-group system scope, and 8-slide gallery shell", () => {
+  const ihealthComponent = readFileSync(
+    join(root, "src", "components", "projects", "ihealth-case-study.tsx"),
+    "utf8",
+  );
+
+  // 1. Opening: Breadcrumb, Split Composition (Left Title/Meta, Right Lead/Actions)
+  assert.match(ihealthComponent, /copy\.breadcrumbProjects/);
+  assert.match(ihealthComponent, /project\.categoryLabel\[locale\]/);
+  assert.match(ihealthComponent, /<h1 className=\{styles\.title\}>\{project\.title\[locale\]\}<\/h1>/);
+  assert.match(ihealthComponent, /styles\.openingSplit/);
+  assert.match(ihealthComponent, /styles\.openingLeft/);
+  assert.match(ihealthComponent, /styles\.openingRight/);
+  assert.match(ihealthComponent, /styles\.lead/);
+  assert.match(ihealthComponent, /styles\.metaGrid/);
+  assert.match(ihealthComponent, /copy\.stakeholder/);
+  assert.match(ihealthComponent, /copy\.role/);
+  assert.match(ihealthComponent, /copy\.period/);
+  assert.match(ihealthComponent, /copy\.status/);
+
+  // Three Project Links with Safe External Target and Accessible New Tab Labels
+  assert.match(ihealthComponent, /styles\.liveCta/);
+  assert.match(ihealthComponent, /styles\.repoLink/);
+  assert.match(ihealthComponent, /copy\.liveCta/);
+  assert.match(ihealthComponent, /copy\.frontendRepo/);
+  assert.match(ihealthComponent, /copy\.backendRepo/);
+  assert.match(ihealthComponent, /copy\.newTabCue/);
+  assert.match(ihealthComponent, /project\.liveUrl/);
+  assert.match(ihealthComponent, /project\.frontendRepoUrl/);
+  assert.match(ihealthComponent, /project\.backendRepoUrl/);
+
+  // 2. Section 01: Top-of-page Gallery Shell
+  assert.match(ihealthComponent, /\[01\]/);
+  assert.match(ihealthComponent, /ihealth-section-01-title/);
+  assert.match(ihealthComponent, /copy\.galleryTitle/);
+  assert.match(ihealthComponent, /role="region"/);
+  assert.match(ihealthComponent, /aria-roledescription="carousel"/);
+  assert.match(ihealthComponent, /styles\.galleryFrame/);
+  assert.match(ihealthComponent, /handlePrevSlide/);
+  assert.match(ihealthComponent, /handleNextSlide/);
+  assert.match(ihealthComponent, /handleTouchStart/);
+  assert.match(ihealthComponent, /handleTouchMove/);
+  assert.match(ihealthComponent, /handleTouchEnd/);
+  assert.match(ihealthComponent, /handleCarouselKeyDown/);
+  assert.match(ihealthComponent, /styles\.galleryBottomBar/);
+  assert.match(ihealthComponent, /styles\.galleryCaption/);
+  assert.match(ihealthComponent, /styles\.galleryControls/);
+  assert.match(ihealthComponent, /styles\.galleryCounter/);
+  assert.match(ihealthComponent, /styles\.galleryNavBtn/);
+
+  // Synchronized Lightbox Inspection Dialog
+  assert.match(ihealthComponent, /styles\.lightboxOverlay/);
+  assert.match(ihealthComponent, /styles\.lightboxNavBtn/);
+  assert.match(ihealthComponent, /styles\.lightboxCounter/);
+  assert.match(ihealthComponent, /handleCloseLightbox/);
+
+  // 3. Section 02: Project Overview & Visible Medical Boundary
+  assert.match(ihealthComponent, /\[02\]/);
+  assert.match(ihealthComponent, /ihealth-section-02-title/);
+  assert.match(ihealthComponent, /copy\.overviewTitle/);
+  assert.match(ihealthComponent, /styles\.overviewGrid/);
+  assert.match(ihealthComponent, /styles\.claimBoundaryCard/);
+  assert.match(ihealthComponent, /copy\.claimBoundaryTag/);
+
+  // 4. Section 03: My Contribution & 6-Item Personal Stack
+  assert.match(ihealthComponent, /\[03\]/);
+  assert.match(ihealthComponent, /ihealth-section-03-title/);
+  assert.match(ihealthComponent, /copy\.contributionTitle/);
+  assert.match(ihealthComponent, /styles\.contributionList/);
+  assert.match(ihealthComponent, /styles\.personalStackBlock/);
+  assert.match(ihealthComponent, /copy\.personalStackTag/);
+  assert.match(ihealthComponent, /styles\.stackBadge/);
+
+  // 5. Section 04: System Scope (4 Scannable Groups)
+  assert.match(ihealthComponent, /\[04\]/);
+  assert.match(ihealthComponent, /ihealth-section-04-title/);
+  assert.match(ihealthComponent, /copy\.scopeTitle/);
+  assert.match(ihealthComponent, /styles\.systemScopeGrid/);
+  assert.match(ihealthComponent, /copy\.scopeRolesHeader/);
+  assert.match(ihealthComponent, /copy\.scopeScreeningHeader/);
+  assert.match(ihealthComponent, /copy\.scopePatientDataHeader/);
+  assert.match(ihealthComponent, /copy\.scopeIntegrationHeader/);
+  assert.match(ihealthComponent, /styles\.learningFlow/);
+  assert.match(ihealthComponent, /styles\.flowContainer/);
+  assert.match(ihealthComponent, /styles\.flowStep/);
+  assert.match(ihealthComponent, /copy\.architectureNote/);
+
+  // Exclusions for iHealth Edu: No bottom adjacent nav, no standalone hero cover, no workflow container
+  assert.doesNotMatch(ihealthComponent, /adjacentNav/);
+  assert.doesNotMatch(ihealthComponent, /coverFigure/);
+  assert.doesNotMatch(ihealthComponent, /videoEvidenceCard/);
+});
+
+test("ihealth-case-study.module.css defines responsive split opening, grid, carousel, metadata, and reduced motion", () => {
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "ihealth-case-study.module.css"),
+    "utf8",
+  );
+
+  // Check key responsive, opening split, carousel, and layout rules
+  assert.match(css, /\.openingSplit/);
+  assert.match(css, /\.openingLeft/);
+  assert.match(css, /\.openingRight/);
+  assert.match(css, /\.galleryFrame\s*\{[^}]*touch-action:\s*pan-y/);
+  assert.match(css, /\.galleryImage\s*\{[^}]*object-fit:\s*contain/);
+  assert.match(css, /\.galleryBottomBar/);
+  assert.match(css, /\.galleryCaption/);
+  assert.match(css, /\.galleryControls/);
+  assert.match(css, /\.galleryCounter/);
+  assert.match(css, /\.galleryNavBtn/);
+  assert.match(css, /\.lightboxNavBtn/);
+  assert.match(css, /\.lightboxCounter/);
+  assert.match(css, /\.liveCta/);
+  assert.match(css, /\.repoLink/);
+  assert.match(css, /\.claimBoundaryCard/);
+  assert.match(css, /\.personalStackBlock/);
+  assert.match(css, /\.systemScopeGrid/);
+  assert.match(css, /\.flowContainer/);
+  assert.match(css, /@media\s*\(min-width:\s*64rem\)/);
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+});
+
