@@ -55,6 +55,8 @@ export function useGalleryAutoplay({
   isLightboxOpen = false,
 }: UseGalleryAutoplayOptions) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [timerKey, setTimerKey] = useState(0);
@@ -79,26 +81,58 @@ export function useGalleryAutoplay({
   }, []);
 
   const goToNext = useCallback(() => {
-    setActiveIndex((prev) => (prev < slideCount - 1 ? prev + 1 : 0));
+    if (slideCount <= 1) return;
+    setIsTransitioning(true);
+    setTrackIndex((prev) => {
+      const currentBase = prev === slideCount + 1 ? 1 : prev === 0 ? slideCount : prev;
+      const next = currentBase + 1;
+      const computedActive = (next - 1 + slideCount) % slideCount;
+      setActiveIndex(computedActive);
+      return next;
+    });
     restartTimer();
   }, [slideCount, restartTimer]);
 
   const goToPrev = useCallback(() => {
-    setActiveIndex((prev) => (prev > 0 ? prev - 1 : slideCount - 1));
+    if (slideCount <= 1) return;
+    setIsTransitioning(true);
+    setTrackIndex((prev) => {
+      const currentBase = prev === 0 ? slideCount : prev === slideCount + 1 ? 1 : prev;
+      const next = currentBase - 1;
+      const computedActive = (next - 1 + slideCount) % slideCount;
+      setActiveIndex(computedActive);
+      return next;
+    });
     restartTimer();
   }, [slideCount, restartTimer]);
 
   const goToIndex = useCallback(
     (index: number) => {
       if (index >= 0 && index < slideCount) {
+        setIsTransitioning(true);
         setActiveIndex(index);
+        setTrackIndex(index + 1);
         restartTimer();
       }
     },
     [slideCount, restartTimer],
   );
 
-  // Autoplay timer effect: 4-second interval advancing slide with seamless wrap
+  // Handle transitionend to loop seamlessly without reverse jump
+  const handleTransitionEnd = useCallback(() => {
+    if (slideCount <= 1) return;
+    if (trackIndex === slideCount + 1) {
+      // Reached Clone_First (after last slide), silently jump to first real slide (trackIndex = 1)
+      setIsTransitioning(false);
+      setTrackIndex(1);
+    } else if (trackIndex === 0) {
+      // Reached Clone_Last (before first slide), silently jump to last real slide (trackIndex = slideCount)
+      setIsTransitioning(false);
+      setTrackIndex(slideCount);
+    }
+  }, [slideCount, trackIndex]);
+
+  // Autoplay timer effect: 4-second interval advancing slide with seamless horizontal wrap
   useEffect(() => {
     if (
       isReducedMotion ||
@@ -112,7 +146,14 @@ export function useGalleryAutoplay({
     }
 
     const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev < slideCount - 1 ? prev + 1 : 0));
+      setIsTransitioning(true);
+      setTrackIndex((prev) => {
+        const currentBase = prev === slideCount + 1 ? 1 : prev === 0 ? slideCount : prev;
+        const next = currentBase + 1;
+        const computedActive = (next - 1 + slideCount) % slideCount;
+        setActiveIndex(computedActive);
+        return next;
+      });
     }, intervalMs);
 
     return () => {
@@ -153,10 +194,13 @@ export function useGalleryAutoplay({
 
   return {
     activeIndex,
+    trackIndex,
+    isTransitioning: isReducedMotion ? false : isTransitioning,
     setActiveIndex,
     goToNext,
     goToPrev,
     goToIndex,
+    handleTransitionEnd,
     restartTimer,
     isHovered,
     isFocused,

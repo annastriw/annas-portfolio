@@ -82,7 +82,7 @@ export function ContinuousRoles({
 
   return (
     <div
-      className="hero-roles-module inline-flex max-w-full"
+      className="hero-role-rail w-full border-y border-(--color-border) py-2 my-1"
       role="region"
       aria-label={isId ? "Peran Profesional" : "Professional Roles"}
       onMouseEnter={() => setIsPaused(true)}
@@ -97,24 +97,27 @@ export function ContinuousRoles({
           : `${intro}: [${activeRole.id}] ${activeRole.title}. Available roles: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`}
       </span>
 
-      {/* Main Single Role Box with Integrated Three Dot Indicators */}
-      <div className="hero-role-display inline-flex items-center justify-between gap-2.5 sm:gap-3.5 px-3 sm:px-3.5 py-1.5 sm:py-2 min-h-[40px] sm:min-h-[44px] border border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) rounded-none max-w-full">
-        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0" aria-hidden="true">
-          <span className="font-mono text-xs font-bold text-(--color-accent) shrink-0">
-            [{activeRole.id}]
+      <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
+        {/* Left Area: Restrained Marker + I'M A + Active Role Name */}
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1" aria-hidden="true">
+          <span className="text-(--color-accent) font-mono text-xs font-bold shrink-0">
+            ■
           </span>
-          <span className="text-(--color-border) text-xs" aria-hidden="true">
+          <span className="font-mono text-xs text-(--color-muted) uppercase tracking-wider font-semibold shrink-0">
+            {intro}
+          </span>
+          <span className="text-(--color-border) font-mono text-xs shrink-0">
             /
           </span>
 
-          {/* Masked Vertical Reel for Active Role */}
-          <div className="hero-role-reel relative overflow-hidden h-6 sm:h-7 min-w-[165px] sm:min-w-[200px] md:min-w-[230px] flex items-center">
+          {/* Masked Active Role Reel */}
+          <div className="hero-role-reel relative overflow-hidden h-6 min-w-0 flex-1 flex items-center">
             {roles.map((role, idx) => {
               const isCurrent = idx === currentIndex;
               return (
                 <div
                   key={role.id}
-                  className={`absolute inset-0 flex items-center font-sans font-medium text-xs sm:text-sm md:text-base text-(--color-foreground) whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                  className={`absolute inset-0 flex items-center font-sans font-semibold text-xs sm:text-sm md:text-base text-(--color-foreground) truncate transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
                     isCurrent
                       ? "opacity-100 translate-y-0 pointer-events-auto"
                       : idx < currentIndex
@@ -122,16 +125,19 @@ export function ContinuousRoles({
                       : "opacity-0 translate-y-full pointer-events-none"
                   }`}
                 >
-                  {role.title}
+                  <span className="font-mono text-xs font-bold text-(--color-accent) mr-1.5 shrink-0">
+                    [{role.id}]
+                  </span>
+                  <span className="truncate">{role.title}</span>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Integrated Three Dot Indicators */}
+        {/* Right Area: Dedicated 3 Indicators with >= 44px touch targets */}
         <div
-          className="hero-role-dots flex items-center gap-0.5 shrink-0 pl-1.5 sm:pl-2 border-l border-(--color-border)/70"
+          className="hero-role-indicators flex items-center gap-0.5 shrink-0 pl-2 border-l border-(--color-border)/70"
           role="group"
           aria-label={isId ? "Pemilih peran" : "Role selector"}
         >
@@ -148,7 +154,7 @@ export function ContinuousRoles({
                 aria-pressed={isActive}
                 aria-label={label}
                 onClick={() => selectRole(idx)}
-                className="group relative flex items-center justify-center min-w-[44px] min-h-[44px] sm:min-w-[36px] sm:min-h-[36px] cursor-pointer rounded-none transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
+                className="group relative flex items-center justify-center w-7 sm:w-11 min-h-[44px] -my-2.5 cursor-pointer rounded-none transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
               >
                 <span
                   className={`block rounded-full transition-all duration-300 motion-reduce:transition-none ${

@@ -48,7 +48,6 @@ export function Footer({ locale }: FooterProps) {
                   <li key={role}>{role}</li>
                 ))}
               </ul>
-              <p className={styles.telemetry}>{siteIdentity.locationMetadata}</p>
             </div>
 
           <nav className={styles.linkGrid} aria-label={copy.footerNavigation}>

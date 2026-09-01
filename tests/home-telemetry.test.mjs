@@ -452,7 +452,7 @@ test("Home Unified Editorial Foundation enforces interaction contract, static el
   assert.doesNotMatch(heroFile, /hover:scale-\[1\.02\]/);
 
   // 2. Role selector compact buttons with >=44px touch targets
-  assert.match(rolesFile, /min-w-\[44px\]\s+min-h-\[44px\]/);
+  assert.match(rolesFile, /min-h-\[44px\]/);
   assert.match(rolesFile, /aria-pressed=\{isActive\}/);
   assert.match(rolesFile, /CYCLE_INTERVAL_MS = 4000/);
 

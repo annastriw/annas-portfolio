@@ -261,12 +261,15 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     ? String(++sectionCounter).padStart(2, "0")
     : null;
 
-  // Shared 4-second autoplay with crossfade, hover/focus/lightbox pause, and reduced motion safety
+  // Shared 4-second horizontal auto-swipe with hover/focus/lightbox pause, and reduced motion safety
   const {
     activeIndex,
+    trackIndex,
+    isTransitioning,
     goToNext,
     goToPrev,
     goToIndex,
+    handleTransitionEnd,
     containerRef,
     containerProps,
   } = useGalleryAutoplay({
@@ -276,6 +279,10 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
   });
 
   const currentSlide = slides[activeIndex] ?? slides[0];
+  const trackSlides =
+    slides.length > 1
+      ? [slides[slides.length - 1], ...slides, slides[0]]
+      : slides;
 
   // Touch handlers for mobile swipe navigation
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -552,7 +559,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   ref={containerRef}
                   {...(slides.length > 1 ? containerProps : {})}
                 >
-                  {/* Stable Responsive Display Frame with Subtle Crossfade Layers */}
+                  {/* Stable Responsive Display Frame with Horizontal Auto-Swipe Track */}
                   <div
                     className={styles.galleryFrame}
                     onClick={handleFrameClick}
@@ -575,29 +582,58 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                       slides.length > 1 ? "slide" : undefined
                     }
                   >
-                    {slides.map((slide, index) => {
-                      const isActive = index === activeIndex;
-                      return (
-                        <div
-                          key={slide.slide}
-                          className={`${styles.gallerySlideLayer} ${
-                            isActive
-                              ? styles.gallerySlideActive
-                              : styles.gallerySlideInactive
-                          }`}
-                          aria-hidden={!isActive}
-                        >
-                          <Image
-                            src={slide.src}
-                            alt={slide.alt[locale]}
-                            fill
-                            priority={index === 0}
-                            sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
-                            className={styles.galleryImage}
-                          />
-                        </div>
-                      );
-                    })}
+                    {slides.length > 1 ? (
+                      <div
+                        className={`${styles.galleryTrack} ${
+                          isTransitioning ? styles.galleryTrackSliding : ""
+                        }`}
+                        style={{
+                          transform: `translateX(-${trackIndex * 100}%)`,
+                        }}
+                        onTransitionEnd={handleTransitionEnd}
+                      >
+                        {trackSlides.map((slide, index) => {
+                          const isClone =
+                            index === 0 || index === trackSlides.length - 1;
+                          const realIndex =
+                            index === 0
+                              ? slides.length - 1
+                              : index === trackSlides.length - 1
+                              ? 0
+                              : index - 1;
+                          const isRealActive =
+                            realIndex === activeIndex && !isClone;
+
+                          return (
+                            <div
+                              key={`${slide.slide}-${index}`}
+                              className={styles.gallerySlideItem}
+                              aria-hidden={!isRealActive}
+                            >
+                              <Image
+                                src={slide.src}
+                                alt={slide.alt[locale]}
+                                fill
+                                priority={index === 1}
+                                sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
+                                className={styles.galleryImage}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className={styles.gallerySlideItem}>
+                        <Image
+                          src={slides[0].src}
+                          alt={slides[0].alt[locale]}
+                          fill
+                          priority
+                          sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
+                          className={styles.galleryImage}
+                        />
+                      </div>
+                    )}
                     <div
                       className={styles.galleryInspectOverlay}
                       aria-hidden="true"

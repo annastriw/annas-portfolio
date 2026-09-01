@@ -443,9 +443,9 @@ test("ProjectDetailView implements approved unified editorial layout for UKG Sys
   assert.match(detailComponent, /copy\.galleryTitle/);
   assert.match(detailComponent, /role=\{slides\.length > 1 \? "region" : undefined\}/);
   assert.match(detailComponent, /styles\.galleryFrame/);
-  assert.match(detailComponent, /styles\.gallerySlideLayer/);
-  assert.match(detailComponent, /styles\.gallerySlideActive/);
-  assert.match(detailComponent, /styles\.gallerySlideInactive/);
+  assert.match(detailComponent, /styles\.galleryTrack/);
+  assert.match(detailComponent, /styles\.gallerySlideItem/);
+  assert.match(detailComponent, /handleTransitionEnd/);
   assert.match(detailComponent, /goToPrev/);
   assert.match(detailComponent, /goToNext/);
   assert.match(detailComponent, /handleTouchStart/);
@@ -523,9 +523,9 @@ test("ProjectDetailView implements approved unified editorial layout for iHealth
   assert.match(detailComponent, /section-gallery-title/);
   assert.match(detailComponent, /copy\.galleryTitle/);
   assert.match(detailComponent, /styles\.galleryFrame/);
-  assert.match(detailComponent, /styles\.gallerySlideLayer/);
-  assert.match(detailComponent, /styles\.gallerySlideActive/);
-  assert.match(detailComponent, /styles\.gallerySlideInactive/);
+  assert.match(detailComponent, /styles\.galleryTrack/);
+  assert.match(detailComponent, /styles\.gallerySlideItem/);
+  assert.match(detailComponent, /handleTransitionEnd/);
   assert.match(detailComponent, /styles\.thumbnailRail/);
   assert.match(detailComponent, /styles\.thumbnailBtn/);
   assert.match(detailComponent, /styles\.thumbnailActive/);
@@ -589,9 +589,9 @@ test("project-detail.module.css defines responsive grid, carousel, thumbnail rai
   assert.match(css, /\.openingLeft/);
   assert.match(css, /\.openingRight/);
   assert.match(css, /\.galleryFrame\s*\{[^}]*touch-action:\s*pan-y/);
-  assert.match(css, /\.gallerySlideLayer/);
-  assert.match(css, /\.gallerySlideActive/);
-  assert.match(css, /\.gallerySlideInactive/);
+  assert.match(css, /\.galleryTrack/);
+  assert.match(css, /\.galleryTrackSliding/);
+  assert.match(css, /\.gallerySlideItem/);
   assert.match(css, /\.galleryImage\s*\{[^}]*object-fit:\s*contain/);
   assert.match(css, /\.thumbnailRail/);
   assert.match(css, /\.thumbnailBtn/);

@@ -57,7 +57,7 @@ export function Header({ locale }: HeaderProps) {
       }`}
       role="banner"
     >
-      <div className="site-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-4">
+      <div className="site-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-[3.625rem] flex items-center justify-between gap-4">
         {/* Brand / Typographic Masthead */}
         <div className="site-brand flex items-center shrink-0">
           <Link
@@ -72,10 +72,10 @@ export function Header({ locale }: HeaderProps) {
             >
               ■
             </span>
-            <span className="brand-wordmark font-mono text-sm sm:text-base font-semibold tracking-tight text-(--color-foreground) whitespace-nowrap relative">
+            <span className="brand-wordmark font-mono text-sm sm:text-base font-semibold tracking-tight text-(--color-foreground) whitespace-nowrap relative inline-flex items-center leading-none">
               annastriwidagdo.me
               <span
-                className="brand-underline absolute -bottom-0.5 left-0 right-0 h-[1px] bg-(--color-accent) opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200"
+                className="brand-underline absolute -bottom-1 left-0 right-0 h-[1px] bg-(--color-accent) opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200"
                 aria-hidden="true"
               />
             </span>

@@ -20,6 +20,7 @@ export function MobileNav({ locale }: MobileNavProps) {
   const [prevPathname, setPrevPathname] = useState(pathname);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
   const config = navigationConfig[locale];
   const isId = locale === "id";
 
@@ -43,41 +44,39 @@ export function MobileNav({ locale }: MobileNavProps) {
     if (siteFooter) siteFooter.setAttribute("aria-hidden", "true");
 
     const sheetEl = sheetRef.current;
-    const triggerEl = triggerRef.current;
 
-    // Helper to get all focusable elements within the modal dialog + trigger
+    // Helper to get all focusable elements within the modal dialog
     const getFocusables = (): HTMLElement[] => {
       if (!sheetEl) return [];
-      const sheetFocusables = Array.from(
+      return Array.from(
         sheetEl.querySelectorAll<HTMLElement>(
           'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
         ),
       );
-      return triggerEl ? [triggerEl, ...sheetFocusables] : sheetFocusables;
     };
 
-    // Initially focus the first navigation link inside the sheet
-    const navLinks = sheetEl?.querySelectorAll<HTMLElement>("nav a[href]");
-    if (navLinks && navLinks.length > 0) {
-      navLinks[0].focus();
-    } else {
-      triggerEl?.focus();
+    // Initially focus the close button or first navigation link inside the sheet
+    const focusables = getFocusables();
+    if (closeBtnRef.current) {
+      closeBtnRef.current.focus();
+    } else if (focusables.length > 0) {
+      focusables[0].focus();
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
         setIsOpen(false);
-        triggerEl?.focus();
+        triggerRef.current?.focus();
         return;
       }
 
       if (e.key === "Tab") {
-        const focusables = getFocusables();
-        if (focusables.length === 0) return;
+        const currentFocusables = getFocusables();
+        if (currentFocusables.length === 0) return;
 
-        const firstEl = focusables[0];
-        const lastEl = focusables[focusables.length - 1];
+        const firstEl = currentFocusables[0];
+        const lastEl = currentFocusables[currentFocusables.length - 1];
 
         if (e.shiftKey) {
           if (document.activeElement === firstEl) {
@@ -125,11 +124,11 @@ export function MobileNav({ locale }: MobileNavProps) {
 
   return (
     <div className="mobile-nav-container">
-      {/* Mobile Menu Toggle Button */}
+      {/* Mobile Menu Toggle Button in Header */}
       <button
         ref={triggerRef}
         type="button"
-        className="mobile-nav-toggle inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-(--header-border) bg-(--header-bg) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 transition-colors"
+        className="mobile-nav-toggle inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[44px] min-w-[44px] justify-center border border-(--header-border) bg-(--header-bg) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 transition-colors"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-sheet"
@@ -143,19 +142,49 @@ export function MobileNav({ locale }: MobileNavProps) {
         </span>
       </button>
 
-      {/* Editorial Table of Contents Full-Screen / Full-Width Sheet */}
+      {/* Editorial Fullscreen Dynamic Viewport Table of Contents Overlay */}
       {isOpen && (
         <div
           ref={sheetRef}
           id="mobile-nav-sheet"
-          className="mobile-nav-sheet p-5 sm:p-8 flex flex-col justify-between gap-8"
+          className="mobile-nav-sheet p-4 sm:p-6 flex flex-col justify-between"
           role="dialog"
           aria-modal="true"
           aria-label={isId ? "Daftar Isi Navigasi" : "Table of Contents Navigation"}
         >
-          {/* Top Section: Table of Contents */}
-          <div className="flex flex-col gap-6 max-w-md mx-auto w-full">
-            <div className="flex items-center justify-between border-b border-(--color-border) pb-2 font-mono text-xs text-(--color-muted)">
+          {/* Top Bar: Wordmark on Left, Close Button on Right */}
+          <div className="mobile-nav-topbar flex items-center justify-between border-b border-(--color-border) pb-3 max-w-md mx-auto w-full shrink-0">
+            <Link
+              href={`/${locale}`}
+              onClick={(e) => handleNavClick(e, pathname === `/${locale}` || pathname === `/${locale}/`)}
+              className="inline-flex items-center gap-2 text-(--color-foreground) font-mono text-sm font-semibold tracking-tight min-h-[44px] focus-visible:outline-2 focus-visible:outline-(--color-accent)"
+            >
+              <span className="text-(--color-accent) text-xs" aria-hidden="true">
+                ■
+              </span>
+              <span>annastriwidagdo.me</span>
+            </Link>
+
+            <button
+              ref={closeBtnRef}
+              type="button"
+              onClick={() => {
+                setIsOpen(false);
+                triggerRef.current?.focus();
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] min-w-[44px] justify-center border border-(--color-border) bg-(--color-surface-subtle,var(--background)) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) focus-visible:outline-2 focus-visible:outline-(--color-accent)"
+              aria-label={config.labels.closeMenu}
+            >
+              <span className="text-(--color-accent) text-xs" aria-hidden="true">
+                ✕
+              </span>
+              <span className="uppercase tracking-tight">CLOSE</span>
+            </button>
+          </div>
+
+          {/* Center Group: Table of Contents & Destinations */}
+          <div className="mobile-nav-center my-auto py-4 flex flex-col gap-4 max-w-md mx-auto w-full shrink-0">
+            <div className="flex items-center justify-between border-b border-(--color-border)/70 pb-2 font-mono text-xs text-(--color-muted)">
               <span className="font-semibold text-(--color-accent) uppercase tracking-wider">
                 [INDEX // 01]
               </span>
@@ -178,10 +207,10 @@ export function MobileNav({ locale }: MobileNavProps) {
                     key={item.key}
                     href={localizedHref}
                     onClick={(e) => handleNavClick(e, isActive)}
-                    className={`group flex items-center justify-between p-2.5 min-h-[2.75rem] border rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 ${
+                    className={`group flex items-center justify-between px-3.5 py-2.5 min-h-[44px] border rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 relative ${
                       isActive
-                        ? "border-(--color-accent) bg-(--color-background) font-semibold"
-                        : "border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) hover:border-(--color-accent)"
+                        ? "border-(--color-accent) bg-(--color-surface-subtle,var(--background)) font-semibold text-(--color-foreground)"
+                        : "border-(--color-border) bg-(--color-surface-subtle,var(--background)) text-(--color-muted) hover:text-(--color-foreground) hover:border-(--color-accent)"
                     }`}
                     aria-current={isActive ? "page" : undefined}
                   >
@@ -195,13 +224,22 @@ export function MobileNav({ locale }: MobileNavProps) {
                     </div>
 
                     {isActive ? (
-                      <span className="text-(--color-accent) text-xs font-mono font-semibold">
-                        ● ACTIVE
+                      <span className="flex items-center gap-1.5 text-(--color-accent) text-xs font-mono font-semibold">
+                        <span aria-hidden="true">■</span>
+                        <span>ACTIVE</span>
                       </span>
                     ) : (
                       <span className="text-(--color-muted) font-mono text-xs group-hover:text-(--color-accent) group-hover:translate-x-0.5 transition-all">
                         →
                       </span>
+                    )}
+
+                    {/* Active Underline Indicator */}
+                    {isActive && (
+                      <span
+                        className="absolute bottom-0 left-3 right-3 h-[2px] bg-(--color-accent)"
+                        aria-hidden="true"
+                      />
                     )}
                   </Link>
                 );
@@ -209,8 +247,8 @@ export function MobileNav({ locale }: MobileNavProps) {
             </nav>
           </div>
 
-          {/* Bottom Controls: Language & Theme Switcher */}
-          <div className="flex flex-col gap-4 max-w-md mx-auto w-full pt-4 border-t border-(--color-border)">
+          {/* Bottom System Controls & Metadata */}
+          <div className="mobile-nav-bottom flex flex-col gap-3 max-w-md mx-auto w-full pt-3 border-t border-(--color-border) shrink-0">
             <div className="flex items-center justify-between font-mono text-xs">
               <span className="text-(--color-muted) uppercase tracking-wider">
                 {isId ? "SISTEM //" : "SYSTEM //"}
@@ -221,7 +259,7 @@ export function MobileNav({ locale }: MobileNavProps) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between font-mono text-[11px] text-(--color-muted) pt-2">
+            <div className="flex items-center justify-between font-mono text-[11px] text-(--color-muted) pt-1">
               <span>{siteIdentity.locationMetadata}</span>
               <span>{siteIdentity.brand}</span>
             </div>

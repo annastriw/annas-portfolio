@@ -632,7 +632,7 @@ html.dark .route-loader-pill {
 
 .brand-link {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.5rem;
   color: var(--color-foreground);
   text-decoration: none;
@@ -827,14 +827,18 @@ html.dark .route-loader-pill {
 
 .mobile-nav-sheet {
   position: fixed;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
-  inset-block-end: 0;
-  inset-block-start: var(--header-height, 57px);
-  z-index: 50;
+  inset: 0;
+  z-index: 100;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100vh;
   background: var(--background);
-  border-block-start: 1px solid var(--header-border);
+  color: var(--foreground);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   overflow-y: auto;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
   animation: mobileNavReveal 0.22s var(--ease-editorial) forwards;
 }
 

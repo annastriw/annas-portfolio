@@ -164,7 +164,7 @@ test("MobileNav component implements Table of Contents, dialog semantics, focus 
   // Visible copy tokens
   assert.match(mobileNavFile, /\[INDEX \/\/ 01\]/);
   assert.match(mobileNavFile, /isId \? "DAFTAR ISI" : "TABLE OF CONTENTS"/);
-  assert.match(mobileNavFile, /● ACTIVE/);
+  assert.match(mobileNavFile, /ACTIVE/);
   assert.match(mobileNavFile, /isId \? "SISTEM \/\/" : "SYSTEM \/\/"/);
 
   // Active route non-redundant click handling

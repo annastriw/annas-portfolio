@@ -30,9 +30,9 @@ test("Footer component renders approved identity, 3 full roles, and dynamic colo
   ]);
   assert.match(footerFile, /siteIdentity\.roles\.map/);
 
-  // Telemetry metadata
-  assert.match(footerFile, /siteIdentity\.locationMetadata/);
-  assert.equal(siteIdentity.locationMetadata, "JAKARTA, INDONESIA · UTC+7");
+  // Footer location metadata removed per Unified Editorial System 08
+  assert.doesNotMatch(footerFile, /siteIdentity\.locationMetadata/);
+  assert.doesNotMatch(footerFile, /JAKARTA, INDONESIA · UTC\+7/);
 
   // Viewport entrance reveal
   assert.match(footerFile, /ScrollReveal/);
