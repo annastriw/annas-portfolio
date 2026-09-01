@@ -754,4 +754,83 @@ test("physical asset files for iHealth Edu (8 images) and UKG System (9 images) 
   }
 });
 
+test("IHealthCaseStudyView meets semantic heading hierarchy, focus management, touch targets, and non-color indicators", () => {
+  const ihealthComponent = readFileSync(
+    join(root, "src", "components", "projects", "ihealth-case-study.tsx"),
+    "utf8",
+  );
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "ihealth-case-study.module.css"),
+    "utf8",
+  );
+
+  // 1. One logical H1, sequential H2 section headers with aria-labelledby
+  assert.equal((ihealthComponent.match(/<h1\b/g) ?? []).length, 1);
+  assert.equal((ihealthComponent.match(/<h2\b/g) ?? []).length, 4);
+  assert.match(ihealthComponent, /aria-labelledby="ihealth-section-01-title"/);
+  assert.match(ihealthComponent, /aria-labelledby="ihealth-section-02-title"/);
+  assert.match(ihealthComponent, /aria-labelledby="ihealth-section-03-title"/);
+  assert.match(ihealthComponent, /aria-labelledby="ihealth-section-04-title"/);
+
+  // 2. Lightbox title does NOT introduce illegal extra H1/H2
+  assert.doesNotMatch(ihealthComponent, /<h[12][^>]*lightboxTitle/);
+
+  // 3. Breadcrumb navigation semantics
+  assert.match(ihealthComponent, /<nav\s+className=\{styles\.breadcrumb\}\s+aria-label=\{copy\.breadcrumbAria\}>/);
+  assert.match(ihealthComponent, /aria-current="page"/);
+
+  // 4. Non-color indicators for active thumbnail and claim boundary
+  assert.match(ihealthComponent, /thumbnailActiveIndicator/);
+  assert.match(ihealthComponent, /claimBoundaryTag/);
+  assert.match(css, /\.thumbnailActive\s*\{[^}]*outline:/);
+  assert.match(css, /\.thumbnailActive\s*\{[^}]*box-shadow:/);
+  assert.match(css, /\.claimBoundaryCard\s*\{[^}]*border-inline-start:\s*3px solid/);
+
+  // 5. Visible focus states across all interactive elements
+  assert.match(css, /\.breadcrumbLink:focus-visible/);
+  assert.match(css, /\.liveCta:focus-visible/);
+  assert.match(css, /\.repoLink:focus-visible/);
+  assert.match(css, /\.galleryFrame:focus-visible/);
+  assert.match(css, /\.thumbnailBtn:focus-visible/);
+  assert.match(css, /\.galleryNavBtn:focus-visible/);
+  assert.match(css, /\.lightboxCloseBtn:focus-visible/);
+  assert.match(css, /\.lightboxNavBtn:focus-visible/);
+
+  // 6. Adequate touch target sizes (min 2.75rem / 44px)
+  assert.match(css, /\.liveCta\s*\{[^}]*min-height:\s*2\.75rem/);
+  assert.match(css, /\.repoLink\s*\{[^}]*min-height:\s*2\.75rem/);
+  assert.match(css, /\.galleryNavBtn\s*\{[^}]*width:\s*2\.75rem/);
+  assert.match(css, /\.galleryNavBtn\s*\{[^}]*height:\s*2\.75rem/);
+  assert.match(css, /\.lightboxCloseBtn\s*\{[^}]*min-height:\s*2\.75rem/);
+
+  // 7. ScrollReveal applied at primary section block level
+  const scrollRevealMatches = ihealthComponent.match(/<ScrollReveal\b/g) ?? [];
+  assert.equal(scrollRevealMatches.length, 5, "ScrollReveal wraps opening + 4 primary sections only");
+});
+
+test("ihealth-case-study.module.css provides robust responsive rules from 320px small mobile to 1920px large desktop", () => {
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "ihealth-case-study.module.css"),
+    "utf8",
+  );
+
+  // Desktop & large desktop (>= 1024px / 64rem)
+  assert.match(css, /@media\s*\(min-width:\s*64rem\)/);
+
+  // Tablet & collapse under 1024px (<= 1023px)
+  assert.match(css, /@media\s*\(max-width:\s*1023px\)/);
+
+  // Mobile (<= 639px / < 40rem)
+  assert.match(css, /@media\s*\(min-width:\s*40rem\)/);
+  assert.match(css, /@media\s*\(max-width:\s*639px\)/);
+
+  // Small mobile (320px / <= 26.25rem)
+  assert.match(css, /@media\s*\(max-width:\s*26\.25rem\)/);
+
+  // Word-break / overflow-wrap safety
+  assert.match(css, /word-break:\s*break-word/);
+  assert.match(css, /overflow-wrap:\s*break-word/);
+});
+
+
 
