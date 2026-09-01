@@ -89,8 +89,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     category: "web-app",
     title: { en: "iHealth Edu", id: "iHealth Edu" },
     role: {
-      en: "Full-Stack Web Developer",
-      id: "Full-Stack Web Developer",
+      en: "Frontend Web Developer",
+      id: "Frontend Web Developer",
     },
     summary: {
       en: "A health education and screening platform developed with Puskesmas Padangsari, integrating patient data management, IoT telemetry, and machine learning decision support.",
@@ -111,8 +111,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     category: "web-app",
     title: { en: "Dialisis Connect Edu", id: "Dialisis Connect Edu" },
     role: {
-      en: "Full-Stack Web Developer",
-      id: "Full-Stack Web Developer",
+      en: "Frontend Web Developer",
+      id: "Frontend Web Developer",
     },
     summary: {
       en: "A kidney health education and community platform developed with IPDI Central Java, providing learning resources, video guides, digital booklets, and discussion forums.",

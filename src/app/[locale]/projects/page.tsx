@@ -84,29 +84,29 @@ export default async function ProjectsPage({ params }: PageProps) {
   );
 
   return (
-    <div className="py-8 sm:py-12 md:py-16">
+    <div className="py-6 sm:py-8 md:py-10 lg:py-12">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <JsonLd schema={collectionSchema} />
 
         {/* Technical Editorial Header / Masthead */}
-        <header className="mb-10 max-w-4xl sm:mb-12 md:mb-14">
+        <header className="mb-6 sm:mb-8 md:mb-10 max-w-4xl">
           <ScrollReveal animationClass="animate-editorial-fade">
-            <div className="mb-3 flex items-center gap-3 font-mono text-xs text-(--color-muted)">
+            <div className="mb-2.5 flex items-center gap-3 font-mono text-xs text-(--color-muted)">
               <span className="font-semibold text-(--color-accent)">
                 {projectArchiveCopy.sectionIndex[locale]}
               </span>
             </div>
 
-            <h1 className="m-0 font-serif text-[clamp(2.75rem,6vw,5.5rem)] font-normal leading-[0.96] tracking-[-0.04em] text-(--color-foreground)">
+            <h1 className="m-0 font-serif text-[clamp(2.5rem,5.5vw,5rem)] font-normal leading-[0.96] tracking-[-0.04em] text-(--color-foreground)">
               {projectArchiveCopy.title[locale]}
             </h1>
 
-            <p className="mb-0 mt-5 max-w-3xl text-base leading-relaxed text-(--color-muted) sm:text-lg">
+            <p className="mb-0 mt-3 sm:mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-(--color-muted)">
               {projectArchiveCopy.lead[locale]}
             </p>
 
             {/* Two-Item Editorial Archive Metadata Row */}
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-(--color-border) pt-4 font-mono text-xs text-(--color-muted) tracking-wider">
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-(--color-border) pt-3 font-mono text-xs text-(--color-muted) tracking-wider">
               <div className="flex items-center gap-2">
                 <span className="text-(--color-accent)">●</span>
                 <span className="font-medium text-(--color-foreground)">
@@ -130,7 +130,9 @@ export default async function ProjectsPage({ params }: PageProps) {
           </ScrollReveal>
         </header>
 
-        <ProjectArchive projects={projectArchive} locale={locale} />
+        <ScrollReveal animationClass="animate-editorial-fade" delayMs={60}>
+          <ProjectArchive projects={projectArchive} locale={locale} />
+        </ScrollReveal>
       </div>
     </div>
   );

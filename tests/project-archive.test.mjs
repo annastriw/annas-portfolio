@@ -42,8 +42,8 @@ const expectedTitles = [
 
 const expectedRoles = [
   "Full-Stack Web Developer",
-  "Full-Stack Web Developer",
-  "Full-Stack Web Developer",
+  "Frontend Web Developer",
+  "Frontend Web Developer",
   "Full-Stack Web Developer",
   "Full-Stack Web Developer",
   "Machine Learning Engineer",
@@ -345,9 +345,14 @@ test("ProjectArchiveRow implements approved editorial hierarchy and internal nav
   assert.doesNotMatch(rowSource, /project\.liveUrl/);
   assert.doesNotMatch(rowSource, /target="_blank"/);
 
-  // Confirms use of approved CTA copy
+  // Confirms title and thumbnail are not wrapped in Link tags (static information container)
+  assert.doesNotMatch(rowSource, /<Link[^>]*>\s*<div className=\{styles\.thumbnailFrame\}/);
+  assert.doesNotMatch(rowSource, /<Link[^>]*>\s*\{project\.title/);
+
+  // Confirms use of approved CTA copy and editorial action link
   assert.match(rowSource, /projectArchiveCopy\.cta/);
   assert.match(rowSource, /detailHref/);
+  assert.match(rowSource, /editorial-action-link/);
 
   // Confirms 5-part row content structure: title, role & status, summary, stack, cta
   assert.match(rowSource, /project\.title\[locale\]/);
@@ -358,7 +363,7 @@ test("ProjectArchiveRow implements approved editorial hierarchy and internal nav
   assert.match(rowSource, /slice\(0,\s*6\)/);
 });
 
-test("project-archive.module.css defines responsive editorial grid and touch target requirements", () => {
+test("project-archive.module.css defines responsive editorial grid, text tabs, and touch target requirements", () => {
   const cssSource = fs.readFileSync(
     path.join(
       process.cwd(),
@@ -367,28 +372,31 @@ test("project-archive.module.css defines responsive editorial grid and touch tar
     "utf8",
   );
 
-  // Desktop 3-column grid structure
+  // Desktop grid structure with aligned columns
   assert.match(cssSource, /\.row\s*\{[^}]*grid-template-columns:/);
 
   // Tablet side-by-side adaptation (640px to 1023px)
   assert.match(cssSource, /@media\s*\(\s*min-width:\s*640px\s*\)\s*and\s*\(\s*max-width:\s*1023px\s*\)/);
-  assert.match(cssSource, /\.tabletIndex/);
+  assert.match(cssSource, /\.mobileMeta/);
 
   // Mobile stacked adaptation (< 640px)
   assert.match(cssSource, /@media\s*\(\s*max-width:\s*639px\s*\)/);
-  assert.match(cssSource, /\.mobileIndex/);
 
-  // 44px minimum touch target on actions and buttons
+  // Text-based tabs with active underline
+  assert.match(cssSource, /\.activeUnderline/);
+
+  // 44px minimum touch target on filter buttons
   assert.match(cssSource, /min-block-size:\s*2\.75rem/);
-
-  // Neutral background and image containment
-  assert.match(cssSource, /object-fit:\s*contain/);
 
   // Reduced motion support
   assert.match(cssSource, /@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)/);
 });
 
-test("ProjectArchive and ProjectArchiveRow apply ScrollReveal to group headers and project rows", () => {
+test("Projects Hub applies once-only ScrollReveal to header and archive group without per-row animation", () => {
+  const pageSource = fs.readFileSync(
+    path.join(process.cwd(), "src/app/[locale]/projects/page.tsx"),
+    "utf8",
+  );
   const archiveSource = fs.readFileSync(
     path.join(process.cwd(), "src/components/projects/project-archive.tsx"),
     "utf8",
@@ -398,9 +406,16 @@ test("ProjectArchive and ProjectArchiveRow apply ScrollReveal to group headers a
     "utf8",
   );
 
-  // Group headers wrapped in ScrollReveal
-  assert.match(archiveSource, /<ScrollReveal[^>]*>\s*<header className={styles\.groupHeader}>/);
+  // Page wraps header and ProjectArchive in once-only ScrollReveal
+  assert.match(pageSource, /<ScrollReveal[^>]*>\s*<div className="mb-2\.5/);
+  assert.match(pageSource, /<ScrollReveal[^>]*>\s*<ProjectArchive/);
 
-  // Individual rows wrapped in ScrollReveal
-  assert.match(rowSource, /<ScrollReveal[^>]*>\s*<article className={styles\.row}/);
+  // No per-group or per-row ScrollReveal
+  assert.doesNotMatch(archiveSource, /<ScrollReveal/);
+  assert.doesNotMatch(rowSource, /<ScrollReveal/);
+
+  // Filter tabs have semantic role="tablist", role="tab", and aria-selected
+  assert.match(archiveSource, /role="tablist"/);
+  assert.match(archiveSource, /role="tab"/);
+  assert.match(archiveSource, /aria-selected=\{isActive\}/);
 });

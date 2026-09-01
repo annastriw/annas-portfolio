@@ -10,7 +10,6 @@ import {
   type ProjectArchiveItem,
   type ProjectArchiveLocale,
 } from "@/content/projects/project-archive";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 import styles from "./project-archive.module.css";
 import { ProjectArchiveRow } from "./project-archive-row";
@@ -84,67 +83,73 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
       className={styles.archive}
       aria-label={projectArchiveCopy.title[locale]}
     >
-      {/* Editorial Index Filter Bar */}
-      <ScrollReveal delayMs={100} animationClass="animate-editorial-fade">
-        <div className={styles.filterBlock}>
-          <div className={styles.filterHeader}>
-            <div className={styles.filterHeaderTag}>
-              <span className={styles.filterHeaderDot}>●</span>
-              <span>{projectArchiveCopy.filterHeading[locale]}</span>
-            </div>
-            <span
-              className={styles.filterStatus}
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {visibleProjectLabel}
-            </span>
+      {/* Editorial Index Filter Bar with Text-Based Tabs */}
+      <div className={styles.filterBlock}>
+        <div className={styles.filterHeader}>
+          <div className={styles.filterHeaderTag}>
+            <span className={styles.filterHeaderDot}>●</span>
+            <span>{projectArchiveCopy.filterHeading[locale]}</span>
           </div>
-
-          <div
-            ref={filterGroupRef}
-            className={styles.filterGroup}
-            role="group"
-            aria-label={projectArchiveCopy.filterHeading[locale]}
+          <span
+            className={styles.filterStatus}
+            aria-live="polite"
+            aria-atomic="true"
           >
-            {projectArchiveCategories.map((category, idx) => {
-              const count =
-                category.key === "all"
-                  ? projects.length
-                  : projects.filter(
-                      (project) => project.category === category.key,
-                    ).length;
-              const isActive = activeFilter === category.key;
-              const prefix = `0${idx + 1}`;
-
-              return (
-                <button
-                  key={category.key}
-                  type="button"
-                  className={`${styles.filterButton} ${
-                    isActive ? styles.filterButtonActive : ""
-                  }`}
-                  onClick={(e) =>
-                    handleFilterSelect(category.key, e.currentTarget)
-                  }
-                  onFocus={(e) => ensureButtonVisible(e.currentTarget)}
-                  aria-pressed={isActive}
-                >
-                  <span className={styles.filterButtonPrefix}>{prefix}</span>
-                  <span className={styles.filterButtonLabel}>
-                    {category.label[locale]}
-                  </span>
-                  <span className={styles.filterCount} aria-hidden="true">
-                    [{String(count).padStart(2, "0")}]
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+            {visibleProjectLabel}
+          </span>
         </div>
-      </ScrollReveal>
 
-      {/* Categorized Archive Entries */}
+        <div
+          ref={filterGroupRef}
+          className={styles.filterGroup}
+          role="tablist"
+          aria-label={projectArchiveCopy.filterHeading[locale]}
+        >
+          {projectArchiveCategories.map((category, idx) => {
+            const count =
+              category.key === "all"
+                ? projects.length
+                : projects.filter(
+                    (project) => project.category === category.key,
+                  ).length;
+            const isActive = activeFilter === category.key;
+            const prefix = `0${idx + 1}`;
+
+            return (
+              <button
+                key={category.key}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                tabIndex={0}
+                className={`${styles.filterButton} ${
+                  isActive ? styles.filterButtonActive : ""
+                }`}
+                onClick={(e) =>
+                  handleFilterSelect(category.key, e.currentTarget)
+                }
+                onFocus={(e) => ensureButtonVisible(e.currentTarget)}
+              >
+                <span className={styles.filterButtonPrefix}>{prefix}</span>
+                <span className={styles.filterButtonLabel}>
+                  {category.label[locale]}
+                </span>
+                <span className={styles.filterCount} aria-hidden="true">
+                  [{String(count).padStart(2, "0")}]
+                </span>
+                {isActive && (
+                  <span
+                    className={styles.activeUnderline}
+                    aria-hidden="true"
+                  />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Categorized Archive Entries (Transition as one controlled group) */}
       <div className={styles.groups}>
         {visibleGroups.map((group) => (
           <section
@@ -152,29 +157,27 @@ export function ProjectArchive({ projects, locale }: ProjectArchiveProps) {
             className={styles.group}
             aria-labelledby={`archive-group-${group.key}`}
           >
-            <ScrollReveal threshold={0.04}>
-              <header className={styles.groupHeader}>
-                <div className={styles.groupTitleBlock}>
-                  <span className={styles.groupCode} aria-hidden="true">
-                    [{group.key === "all" ? "ALL" : groupCodes[group.key]}]
-                  </span>
-                  <h2
-                    id={`archive-group-${group.key}`}
-                    className={styles.groupTitle}
-                  >
-                    {group.label[locale]}
-                  </h2>
-                </div>
-                <span className={styles.groupCount}>
-                  {group.projects.length}{" "}
-                  {isId
-                    ? "proyek"
-                    : group.projects.length === 1
-                      ? "project"
-                      : "projects"}
+            <header className={styles.groupHeader}>
+              <div className={styles.groupTitleBlock}>
+                <span className={styles.groupCode} aria-hidden="true">
+                  [{group.key === "all" ? "ALL" : groupCodes[group.key]}]
                 </span>
-              </header>
-            </ScrollReveal>
+                <h2
+                  id={`archive-group-${group.key}`}
+                  className={styles.groupTitle}
+                >
+                  {group.label[locale]}
+                </h2>
+              </div>
+              <span className={styles.groupCount}>
+                {group.projects.length}{" "}
+                {isId
+                  ? "proyek"
+                  : group.projects.length === 1
+                    ? "project"
+                    : "projects"}
+              </span>
+            </header>
 
             <ol className={styles.list}>
               {group.projects.map((project) => (
