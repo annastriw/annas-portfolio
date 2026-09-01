@@ -59,10 +59,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
     contributionTitle: isId ? "Kontribusi Saya" : "My Contribution",
     scopeTitle: isId ? "Cakupan Sistem" : "System Scope",
     modulesSubtag: isId ? "Modul Terintegrasi" : "Integrated Modules",
-    workflowSubtag: isId ? "Alur Operasional" : "Operational Workflow",
     techSubtag: isId ? "Kelompok Teknologi" : "Technology Groups",
-    primaryFlowTag: isId ? "Alur Utama" : "Primary Flow",
-    conditionalFlowTag: isId ? "Kondisional" : "Conditional",
   };
 
   // Authoritative 9-slide gallery dataset from project content
@@ -486,58 +483,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
                 </div>
               ) : null}
 
-              {/* Sub-block 2: Accessible Real-Text Workflow Relationships Diagram */}
-              {project.workflow ? (
-                <div className={styles.scopeSubBlock}>
-                  <div className={styles.subBlockHeader}>
-                    <span className={styles.subBlockHeaderTag}>■</span>
-                    <span>{copy.workflowSubtag}</span>
-                  </div>
-                  <div
-                    className={styles.workflowContainer}
-                    role="region"
-                    aria-label={copy.workflowSubtag}
-                  >
-                    {/* Primary Flow: Sale recorded -> Stock decreases */}
-                    <div className={styles.workflowRow}>
-                      <span
-                        className={`${styles.workflowTag} ${styles.workflowTagPrimary}`}
-                      >
-                        {copy.primaryFlowTag}
-                      </span>
-                      <div className={styles.workflowNode}>
-                        {isId ? "Transaksi penjualan" : "Sale recorded"}
-                      </div>
-                      <span className={styles.workflowArrow} aria-hidden="true">
-                        →
-                      </span>
-                      <div className={styles.workflowNode}>
-                        {isId ? "Stok berkurang" : "Stock decreases"}
-                      </div>
-                    </div>
-
-                    {/* Conditional Flow: Sale cancelled -> Stock restored */}
-                    <div className={styles.workflowRow}>
-                      <span
-                        className={`${styles.workflowTag} ${styles.workflowTagConditional}`}
-                      >
-                        {copy.conditionalFlowTag}
-                      </span>
-                      <div className={styles.workflowNode}>
-                        {isId ? "Transaksi dibatalkan" : "Sale cancelled"}
-                      </div>
-                      <span className={styles.workflowArrow} aria-hidden="true">
-                        →
-                      </span>
-                      <div className={styles.workflowNode}>
-                        {isId ? "Stok dikembalikan" : "Stock restored"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-
-              {/* Sub-block 3: Five Approved Technology Groups */}
+              {/* Sub-block 2: Five Approved Technology Groups */}
               {project.technologyGroups &&
               project.technologyGroups.length > 0 ? (
                 <div className={styles.scopeSubBlock}>

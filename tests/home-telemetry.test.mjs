@@ -259,61 +259,107 @@ test("GitHub Signal component renders minimal editorial signal, 2-year selector,
   assert.match(componentFile, /GitHub activity is temporarily unavailable/);
 });
 
-test("Technical Capabilities directory renders 6 stacked categories with Postman replacing Nginx in 05.05", async () => {
+test("Technical Capabilities directory renders 11 categories, 68 capabilities (51 interactive, 17 fundamentals), master-detail/accordion, and derived metadata", async () => {
   const moduleUrl = new URL(
     "../src/content/capabilities/capabilities-data.ts",
     import.meta.url,
   );
   const { capabilitiesCategories } = await import(moduleUrl.href);
 
-  assert.equal(capabilitiesCategories.length, 6);
-  assert.equal(capabilitiesCategories[0].title, "Frontend Engineering");
-  assert.equal(capabilitiesCategories[1].title, "Backend & Data");
-  assert.equal(capabilitiesCategories[2].title, "Mobile & Native Development");
-  assert.equal(capabilitiesCategories[3].title, "Machine Learning & Data Science");
-  assert.equal(capabilitiesCategories[4].title, "Testing & Deployment");
-  assert.equal(capabilitiesCategories[5].title, "Design & Other");
-
-  // Testing & Deployment category verification
-  const testingCategory = capabilitiesCategories[4];
-  assert.equal(testingCategory.items.length, 6);
-  assert.equal(testingCategory.items[0].slug, "katalon-studio");
-  assert.equal(testingCategory.items[1].slug, "playwright");
-  assert.equal(testingCategory.items[2].slug, "docker");
-  assert.equal(testingCategory.items[3].slug, "linux-ubuntu");
-  assert.equal(testingCategory.items[4].slug, "postman");
-  assert.equal(testingCategory.items[5].slug, "github");
-
-  // Postman item details
-  const postmanItem = testingCategory.items[4];
-  assert.equal(postmanItem.name, "Postman");
-  assert.equal(postmanItem.monogram, "PM");
-  assert.equal(postmanItem.index, "05.05");
-  assert.equal(
-    postmanItem.description.en,
-    "Used to send API requests, inspect responses, and test endpoints during development.",
+  // Exact 11 categories in order
+  assert.equal(capabilitiesCategories.length, 11);
+  const expectedCategoryTitles = [
+    "Frontend Engineering",
+    "Backend & API Engineering",
+    "Authentication & Application Security",
+    "Database & Cloud Services",
+    "Mobile Development",
+    "Machine Learning & Data",
+    "Machine Learning Fundamentals",
+    "Quality & Development Tools",
+    "Deployment & Infrastructure",
+    "Design & Interactive Development",
+    "Software Engineering Fundamentals",
+  ];
+  assert.deepEqual(
+    capabilitiesCategories.map((c) => c.title),
+    expectedCategoryTitles,
   );
-  assert.equal(
-    postmanItem.description.id,
-    "Digunakan untuk mengirim request API, memeriksa respons, dan menguji endpoint selama pengembangan.",
+  assert.deepEqual(
+    capabilitiesCategories.map((c) => c.index),
+    ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"],
   );
 
-  // Absence of Nginx in capability items
-  const allSlugs = capabilitiesCategories.flatMap((c) => c.items.map((i) => i.slug));
-  assert.ok(!allSlugs.includes("nginx"));
+  // Exact counts per category
+  const counts = capabilitiesCategories.map((c) => c.items.length);
+  assert.deepEqual(counts, [8, 9, 3, 6, 3, 10, 7, 4, 5, 3, 10]);
 
-  // Nginx asset preservation (must not be deleted)
-  assert.ok(existsSync(join(root, "public", "assets", "technologies", "nginx", "logo.svg")));
+  // Total count = 68, interactive = 51, fundamentals = 17
+  const totalItems = capabilitiesCategories.reduce((acc, c) => acc + c.items.length, 0);
+  assert.equal(totalItems, 68);
 
-  // Postman replaceable placeholder asset existence
-  assert.ok(existsSync(join(root, "public", "assets", "technologies", "postman", "logo.svg")));
+  const fundamentalCategories = capabilitiesCategories.filter((c) => c.isFundamental);
+  assert.equal(fundamentalCategories.length, 2);
+  assert.equal(fundamentalCategories[0].index, "07");
+  assert.equal(fundamentalCategories[1].index, "11");
+  const totalFundamentals = fundamentalCategories.reduce((acc, c) => acc + c.items.length, 0);
+  assert.equal(totalFundamentals, 17);
 
-  const dirFile = readFileSync(
-    join(root, "src", "components", "home", "tech-directory", "tech-directory.tsx"),
+  const interactiveCategories = capabilitiesCategories.filter((c) => !c.isFundamental);
+  const totalInteractive = interactiveCategories.reduce((acc, c) => acc + c.items.length, 0);
+  assert.equal(totalInteractive, 51);
+
+  // Validate duplicate Laravel in 01 and 02 with exact distinct functional copy
+  const cat01 = capabilitiesCategories[0];
+  const cat02 = capabilitiesCategories[1];
+  const laravel01 = cat01.items.find((i) => i.name === "Laravel");
+  const laravel02 = cat02.items.find((i) => i.name === "Laravel");
+  assert.ok(laravel01 && laravel02);
+  assert.equal(laravel01.index, "01.03");
+  assert.equal(laravel02.index, "02.02");
+  assert.equal(
+    laravel01.description?.en,
+    "A PHP framework for developing web applications, including server-rendered interfaces, routing, data handling, and backend integration.",
+  );
+  assert.equal(
+    laravel02.description?.en,
+    "A PHP framework for building backend services, application logic, database operations, and web APIs.",
+  );
+
+  // Validate all 51 interactive items have valid SVG files in public directory
+  for (const cat of interactiveCategories) {
+    for (const item of cat.items) {
+      assert.ok(item.slug, `Item ${item.name} (${item.index}) missing slug`);
+      assert.ok(item.monogram, `Item ${item.name} (${item.index}) missing monogram`);
+      assert.ok(item.description?.en, `Item ${item.name} missing EN description`);
+      assert.ok(item.description?.id, `Item ${item.name} missing ID description`);
+      const svgPath = join(root, "public", "assets", "technologies", item.slug, "logo.svg");
+      assert.ok(existsSync(svgPath), `SVG not found for ${item.slug}: ${svgPath}`);
+    }
+  }
+
+  // Validate fundamentals have no slug or dialog description
+  for (const cat of fundamentalCategories) {
+    for (const item of cat.items) {
+      assert.equal(item.slug, undefined);
+      assert.equal(item.description, undefined);
+      assert.ok(item.isFundamental);
+    }
+  }
+
+  // Section Header & Derived metadata
+  const sectionFile = readFileSync(
+    join(root, "src", "components", "home", "tech-stack-section.tsx"),
     "utf8",
   );
-  const catFile = readFileSync(
-    join(root, "src", "components", "home", "tech-directory", "tech-category.tsx"),
+  assert.match(sectionFile, /\[05 \/\/ CAPABILITIES\]/);
+  assert.match(sectionFile, /capabilitiesCategories\.length/);
+  assert.match(sectionFile, /Kapabilitas Teknis/);
+  assert.match(sectionFile, /Technical Capabilities/);
+
+  // Component structure checks
+  const dirFile = readFileSync(
+    join(root, "src", "components", "home", "tech-directory", "tech-directory.tsx"),
     "utf8",
   );
   const itemFile = readFileSync(
@@ -325,14 +371,20 @@ test("Technical Capabilities directory renders 6 stacked categories with Postman
     "utf8",
   );
 
+  // Responsive layouts
+  assert.match(dirFile, /annas-home-capability-category/); // LocalStorage key
+  assert.match(dirFile, /lg:grid lg:grid-cols-/); // Desktop master-detail
+  assert.match(dirFile, /hidden md:flex lg:hidden/); // Tablet horizontal navigator
+  assert.match(dirFile, /flex md:hidden flex-col/); // Mobile accordion
   assert.match(dirFile, /tech-dialog-content/);
   assert.match(dirFile, /aria-modal="true"/);
   assert.match(dirFile, /document\.body\.style\.overflow = "hidden"/);
   assert.match(dirFile, /Escape/);
-  assert.match(catFile, /tech-directory-category/);
+
+  // TechItem button & dialog trigger
   assert.match(itemFile, /tech-directory-row/);
   assert.match(itemFile, /aria-haspopup="dialog"/);
-  assert.doesNotMatch(logoFile, /slug !== "postman"/);
+  assert.match(itemFile, /item\.index/);
   assert.match(logoFile, /\/assets\/technologies\/\$\{slug\}\/logo\.svg/);
 });
 

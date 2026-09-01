@@ -1,16 +1,26 @@
 import type { Locale } from "@/lib/i18n/config";
 import { TechDirectory } from "./tech-directory/tech-directory";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { capabilitiesCategories } from "@/content/capabilities/capabilities-data";
 
 interface TechStackSectionProps {
   locale: Locale;
 }
 
 export function TechStackSection({ locale }: TechStackSectionProps) {
+  const isId = locale === "id";
+  const categoryCount = capabilitiesCategories.length;
+  const capabilityCount = capabilitiesCategories.reduce(
+    (acc, cat) => acc + cat.items.length,
+    0
+  );
+
   const copy = {
     tag: "[05 // CAPABILITIES]",
-    subtag: "FRAMEWORKS & TOOLS",
-    title: "Technical Capabilities",
+    subtag: isId
+      ? `${categoryCount} Kategori · ${capabilityCount} Kapabilitas`
+      : `${categoryCount} Categories · ${capabilityCount} Capabilities`,
+    title: isId ? "Kapabilitas Teknis" : "Technical Capabilities",
   };
 
   return (
@@ -42,3 +52,4 @@ export function TechStackSection({ locale }: TechStackSectionProps) {
     </section>
   );
 }
+

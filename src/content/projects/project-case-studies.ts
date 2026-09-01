@@ -133,16 +133,6 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       "Reports & Finance",
       "Dashboard & Analytics",
     ],
-    workflow: {
-      en: [
-        "Sale recorded → Stock decreases.",
-        "Sale cancelled → Stock restored.",
-      ],
-      id: [
-        "Transaksi penjualan → Stok berkurang.",
-        "Transaksi dibatalkan → Stok dikembalikan.",
-      ],
-    },
     technologyGroups: [
       {
         category: "Design",
@@ -168,12 +158,12 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     technicalNotes: {
       en: [
         "Eight integrated operational modules: User & Role Management, Branch & Attendance, Inventory & Stock, Stock Order, Store Operations, Cashier & Sales, Reports & Finance, and Dashboard & Analytics.",
-        "Operational inventory workflow connects sales to stock: Sale recorded → Stock decreases, while Sale cancelled → Stock restored.",
+        "Modular backend and relational database architecture centralizes branch operations and supports remote owner monitoring.",
         "Role-based multi-branch architecture separates owner oversight and remote monitoring from branch employee workflows.",
       ],
       id: [
         "Delapan modul operasional terintegrasi: User & Role Management, Branch & Attendance, Inventory & Stock, Stock Order, Store Operations, Cashier & Sales, Reports & Finance, dan Dashboard & Analytics.",
-        "Alur kerja inventaris operasional menghubungkan penjualan dengan stok: Transaksi penjualan → Stok berkurang, sedangkan Transaksi dibatalkan → Stok dikembalikan.",
+        "Arsitektur backend modular dan database relasional menyatukan operasional cabang serta mendukung pemantauan jarak jauh oleh owner.",
         "Arsitektur multi-cabang berbasis peran memisahkan pengawasan dan pemantauan jarak jauh owner dari alur kerja karyawan cabang.",
       ],
     },

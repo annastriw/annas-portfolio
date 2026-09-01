@@ -158,7 +158,7 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     "Project ini memperkuat pengalaman saya dalam mengembangkan sistem dari kebutuhan bisnis hingga digunakan dalam operasional sehari-hari.",
   );
 
-  // System scope: 8 ordered modules
+  // System scope: 8 ordered modules and no workflow diagram data
   assert.deepEqual(ukg.modules, [
     "User & Role Management",
     "Branch & Attendance",
@@ -169,16 +169,7 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     "Reports & Finance",
     "Dashboard & Analytics",
   ]);
-
-  // System scope: workflow diagram text
-  assert.deepEqual(ukg.workflow?.en, [
-    "Sale recorded → Stock decreases.",
-    "Sale cancelled → Stock restored.",
-  ]);
-  assert.deepEqual(ukg.workflow?.id, [
-    "Transaksi penjualan → Stok berkurang.",
-    "Transaksi dibatalkan → Stok dikembalikan.",
-  ]);
+  assert.equal(ukg.workflow, undefined);
 
   // System scope: 5 technology groups
   assert.equal(ukg.technologyGroups?.length, 5);
@@ -326,8 +317,9 @@ test("UkgCaseStudyView implements approved compact editorial layout and 9-slide 
   assert.match(ukgComponent, /ukg-section-04-title/);
   assert.match(ukgComponent, /copy\.scopeTitle/);
   assert.match(ukgComponent, /styles\.modulesGrid/);
-  assert.match(ukgComponent, /styles\.workflowContainer/);
   assert.match(ukgComponent, /styles\.techGroupsList/);
+  assert.doesNotMatch(ukgComponent, /workflowContainer/);
+  assert.doesNotMatch(ukgComponent, /workflowSubtag/);
 
   // Exclusions for UKG: No bottom adjacent nav, no standalone hero cover, no extra long-form sections
   assert.doesNotMatch(ukgComponent, /adjacentNav/);
@@ -336,7 +328,7 @@ test("UkgCaseStudyView implements approved compact editorial layout and 9-slide 
   assert.doesNotMatch(ukgComponent, /videoEvidenceCard/);
 });
 
-test("ukg-case-study.module.css defines responsive grid, carousel, metadata, workflow, and reduced motion", () => {
+test("ukg-case-study.module.css defines responsive grid, carousel, metadata, and reduced motion without workflow styles", () => {
   const css = readFileSync(
     join(root, "src", "components", "projects", "ukg-case-study.module.css"),
     "utf8",
@@ -355,9 +347,9 @@ test("ukg-case-study.module.css defines responsive grid, carousel, metadata, wor
   assert.match(css, /\.metaGrid\s*\{[^}]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /\.overviewGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /\.modulesGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(css, /\.workflowContainer/);
-  assert.match(css, /\.workflowArrow/);
   assert.match(css, /\.techGroupsList/);
+  assert.doesNotMatch(css, /\.workflowContainer/);
+  assert.doesNotMatch(css, /\.workflowArrow/);
   assert.match(css, /@media\s*\(max-width:\s*1023px\)/);
   assert.match(css, /@media\s*\(max-width:\s*639px\)/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
