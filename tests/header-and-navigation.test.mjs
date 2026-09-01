@@ -146,7 +146,7 @@ test("Desktop NavLinks component renders 5 numbered items with text-tracking act
   );
 });
 
-test("MobileNav component implements Table of Contents, dialog semantics, focus trap, static roles, colophon, and Menu/Close parity", () => {
+test("MobileNav component implements Table of Contents, dialog semantics, scrollable content region, sticky top bar, bottom identity block, colophon, and Menu/Close parity", () => {
   const mobileNavFile = readFileSync(
     join(root, "src", "components", "navigation", "mobile-nav.tsx"),
     "utf8",
@@ -164,24 +164,32 @@ test("MobileNav component implements Table of Contents, dialog semantics, focus 
   assert.match(mobileNavFile, /max-w-7xl/);
   assert.match(mobileNavFile, /aria-label={isId \? "Daftar Isi Navigasi" : "Table of Contents Navigation"}/);
 
-  // Visible copy tokens
+  // Scrollable container and sticky top bar structure
+  assert.match(mobileNavFile, /sticky top-0 z-10/);
+  assert.match(mobileNavFile, /overflow-y-auto/);
+  assert.match(mobileNavFile, /overscroll-y-contain/);
+  assert.match(mobileNavFile, /min-h-0/);
+  assert.match(mobileNavFile, /safe-area-inset-bottom/);
+
+  // Visible copy tokens & primary numbered nav
   assert.match(mobileNavFile, /\[INDEX \/\/ 01\]/);
   assert.match(mobileNavFile, /isId \? "DAFTAR ISI" : "TABLE OF CONTENTS"/);
   assert.match(mobileNavFile, /ACTIVE/);
   assert.match(mobileNavFile, /isId \? "SISTEM \/\/" : "SYSTEM \/\/"/);
 
-  // 3 Static professional roles rendered in mobile nav
-  assert.match(mobileNavFile, /siteIdentity\.roles\.map/);
+  // Bottom identity block with wordmark link and static colophon
+  assert.match(mobileNavFile, /brand-wordmark[^>]*>\s*annastriwidagdo\.me/);
+  assert.match(mobileNavFile, /Drafted in grids, shipped in code\./);
+
+  // Professional roles removed from mobile nav only
+  assert.doesNotMatch(mobileNavFile, /siteIdentity\.roles/);
   assert.deepEqual(Array.from(siteIdentity.roles), [
     "Software Engineer",
     "Full-Stack Web Developer",
     "Machine Learning Engineer",
   ]);
 
-  // Static colophon
-  assert.match(mobileNavFile, /Drafted in grids, shipped in code\./);
-
-  // Excluded contact and location metadata per Prompt 10
+  // Excluded contact and location metadata per Prompt 10/12
   assert.doesNotMatch(mobileNavFile, /siteIdentity\.locationMetadata/);
   assert.doesNotMatch(mobileNavFile, /siteContact/);
   assert.doesNotMatch(mobileNavFile, /BackToTop/);

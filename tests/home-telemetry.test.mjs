@@ -384,6 +384,9 @@ test("Technical Capabilities directory renders 11 categories, 68 capabilities (5
   assert.match(dirFile, /lg:grid lg:grid-cols-/); // Desktop master-detail
   assert.match(dirFile, /hidden md:flex lg:hidden/); // Tablet horizontal navigator
   assert.match(dirFile, /flex md:hidden flex-col/); // Mobile accordion
+  assert.match(dirFile, /createPortal/);
+  assert.match(dirFile, /document\.body/);
+  assert.match(dirFile, /tech-dialog-overlay fixed inset-0 z-60/);
   assert.match(dirFile, /tech-dialog-content/);
   assert.match(dirFile, /aria-modal="true"/);
   assert.match(dirFile, /document\.body\.style\.overflow = "hidden"/);

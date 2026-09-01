@@ -410,6 +410,11 @@ test("Projects Hub applies once-only ScrollReveal to header and archive group wi
   assert.match(pageSource, /<ScrollReveal[^>]*>\s*<div className="mb-2\.5/);
   assert.match(pageSource, /<ScrollReveal[^>]*>\s*<ProjectArchive/);
 
+  // Aggregate summary row removed from Projects Hub page per Prompt 12
+  assert.doesNotMatch(pageSource, /PROJECT_ARCHIVE_TOTAL_COUNT/);
+  assert.doesNotMatch(pageSource, /projectCountLabel/);
+  assert.doesNotMatch(pageSource, /categoryCountLabel/);
+
   // No per-group or per-row ScrollReveal
   assert.doesNotMatch(archiveSource, /<ScrollReveal/);
   assert.doesNotMatch(rowSource, /<ScrollReveal/);

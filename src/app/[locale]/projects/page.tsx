@@ -4,8 +4,6 @@ import { isLocale, supportedLocales } from "@/lib/i18n/config";
 import {
   projectArchive,
   projectArchiveCopy,
-  PROJECT_ARCHIVE_TOTAL_COUNT,
-  PROJECT_ARCHIVE_CATEGORY_COUNT,
 } from "@/content/projects/project-archive";
 import { ProjectArchive } from "@/components/projects/project-archive";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -104,29 +102,6 @@ export default async function ProjectsPage({ params }: PageProps) {
             <p className="mb-0 mt-3 sm:mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-(--color-muted)">
               {projectArchiveCopy.lead[locale]}
             </p>
-
-            {/* Two-Item Editorial Archive Metadata Row */}
-            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-(--color-border) pt-3 font-mono text-xs text-(--color-muted) tracking-wider">
-              <div className="flex items-center gap-2">
-                <span className="text-(--color-accent)">●</span>
-                <span className="font-medium text-(--color-foreground)">
-                  {PROJECT_ARCHIVE_TOTAL_COUNT}
-                </span>
-                <span>{projectArchiveCopy.projectCountLabel[locale]}</span>
-              </div>
-              <div
-                className="hidden text-(--color-border) sm:inline"
-                aria-hidden="true"
-              >
-                |
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-medium text-(--color-foreground)">
-                  {PROJECT_ARCHIVE_CATEGORY_COUNT}
-                </span>
-                <span>{projectArchiveCopy.categoryCountLabel[locale]}</span>
-              </div>
-            </div>
           </ScrollReveal>
         </header>
 

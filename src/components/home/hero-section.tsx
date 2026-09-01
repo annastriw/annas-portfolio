@@ -77,18 +77,18 @@ export function HeroSection({ locale }: HeroSectionProps) {
               </span>
             </div>
 
-            {/* 2. Primary Masthead Headline: Greeting & Dominant Name */}
-            <div className="hero-identity-block lg:col-span-2 flex flex-col gap-1">
-              <span className="font-mono text-xs sm:text-sm text-(--color-muted) uppercase tracking-wider font-medium">
-                {copy.greeting}
-              </span>
-              <h1 className="home-hero-name font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] font-normal tracking-tight text-(--color-foreground) leading-[1.0] m-0 break-words">
-                {copy.name}
-              </h1>
-            </div>
-
             {/* Left Column on Desktop (lg:col-start-1) / Sequential Flow on Mobile */}
             <div className="hero-left-col lg:col-start-1 flex flex-col gap-6 w-full min-w-0">
+              {/* 2. Primary Masthead Headline: Greeting & Dominant Name */}
+              <div className="hero-identity-block flex flex-col gap-1">
+                <span className="font-mono text-xs sm:text-sm text-(--color-muted) uppercase tracking-wider font-medium">
+                  {copy.greeting}
+                </span>
+                <h1 className="home-hero-name font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] font-normal tracking-tight text-(--color-foreground) leading-[1.0] m-0 break-words">
+                  {copy.name}
+                </h1>
+              </div>
+
               {/* 3. Slim Editorial Role Rail */}
               <div className="hero-role-block w-full">
                 <ContinuousRoles locale={locale} roleIntro={copy.roleIntro} />
@@ -154,7 +154,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
               </div>
             </div>
 
-            {/* Right Column on Desktop: Portrait Evidence Frame (Top aligns with role rail in left column) */}
+            {/* Right Column on Desktop: Portrait Evidence Frame (Top aligns with greeting in left column) */}
             <div className="hero-portrait-col hidden lg:flex lg:col-start-2 justify-end self-start">
               {portraitFigure}
             </div>

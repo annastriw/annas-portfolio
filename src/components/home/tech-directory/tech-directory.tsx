@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useId, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import type { Locale } from "@/lib/i18n/config";
 import {
   capabilitiesCategories,
@@ -73,6 +74,11 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
     item: CapabilityItem;
     category: CapabilityCategory;
   } | null>(null);
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   const triggerRef = useRef<HTMLElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -491,95 +497,99 @@ export function TechDirectory({ locale }: TechDirectoryProps) {
       </div>
 
       {/* =========================================================================
-          4. Accessible Technical Record Modal Dialog
+          4. Accessible Technical Record Modal Dialog (Portaled to document.body for viewport-level centering)
           ========================================================================= */}
-      {selectedRecord && (
-        <div
-          className="tech-dialog-overlay fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
-          onClick={handleClose}
-          aria-hidden="true"
-        >
+      {selectedRecord &&
+        isMounted &&
+        typeof document !== "undefined" &&
+        createPortal(
           <div
-            ref={dialogRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="tech-dialog-title"
-            aria-describedby="tech-dialog-desc"
-            onClick={(e) => e.stopPropagation()}
-            className="tech-dialog-content relative w-full max-w-[540px] max-h-[calc(100dvh-32px)] overflow-y-auto border border-(--color-border) bg-(--color-background) p-5 sm:p-7 rounded-[2px] shadow-2xl flex flex-col gap-4 animate-editorial-fade motion-reduce:animate-none"
+            className="tech-dialog-overlay fixed inset-0 z-60 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
+            onClick={handleClose}
+            aria-hidden="true"
           >
-            {/* Header: Category Metadata & Close Action */}
-            <div className="flex items-center justify-between gap-3 border-b border-(--color-border) pb-3.5">
-              <div className="flex items-center gap-2 font-mono text-xs text-(--color-muted) min-w-0">
-                <span className="text-(--color-accent) font-semibold shrink-0">
-                  [05 // CAPABILITIES]
-                </span>
-                <span className="text-(--color-border)" aria-hidden="true">
-                  /
-                </span>
-                <span className="uppercase tracking-wider font-semibold text-(--color-foreground) truncate">
-                  {selectedRecord.category.title}
-                </span>
-              </div>
+            <div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="tech-dialog-title"
+              aria-describedby="tech-dialog-desc"
+              onClick={(e) => e.stopPropagation()}
+              className="tech-dialog-content relative w-full max-w-[540px] max-h-[min(90vh,calc(100dvh-2rem))] overflow-y-auto border border-(--color-border) bg-(--color-background) p-5 sm:p-7 rounded-[2px] shadow-2xl flex flex-col gap-4 animate-editorial-fade motion-reduce:animate-none"
+            >
+              {/* Header: Category Metadata & Close Action */}
+              <div className="flex items-center justify-between gap-3 border-b border-(--color-border) pb-3.5">
+                <div className="flex items-center gap-2 font-mono text-xs text-(--color-muted) min-w-0">
+                  <span className="text-(--color-accent) font-semibold shrink-0">
+                    [05 // CAPABILITIES]
+                  </span>
+                  <span className="text-(--color-border)" aria-hidden="true">
+                    /
+                  </span>
+                  <span className="uppercase tracking-wider font-semibold text-(--color-foreground) truncate">
+                    {selectedRecord.category.title}
+                  </span>
+                </div>
 
-              <button
-                ref={closeButtonRef}
-                type="button"
-                onClick={handleClose}
-                aria-label={
-                  isId ? "Tutup detail teknis" : "Close technical record"
-                }
-                className="font-mono text-xs text-(--color-muted) hover:text-(--color-foreground) min-h-[44px] min-w-[44px] px-3 py-2 border border-(--color-border) hover:border-(--color-accent) rounded-[2px] cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 flex items-center justify-center shrink-0"
-              >
-                ✕ ESC
-              </button>
-            </div>
-
-            {/* Content: Technology Name, Monogram & Index */}
-            <div className="flex items-center gap-3.5 pt-1">
-              <TechLogo
-                slug={selectedRecord.item.slug}
-                name={selectedRecord.item.name}
-                monogram={selectedRecord.item.monogram ?? ""}
-                size="large"
-              />
-              <div className="flex flex-col min-w-0">
-                <span className="font-mono text-[11px] text-(--color-accent) font-semibold">
-                  RECORD // {selectedRecord.item.index}
-                </span>
-                <h3
-                  id="tech-dialog-title"
-                  className="font-serif text-2xl sm:text-3xl font-normal text-(--color-foreground) m-0 truncate"
+                <button
+                  ref={closeButtonRef}
+                  type="button"
+                  onClick={handleClose}
+                  aria-label={
+                    isId ? "Tutup detail teknis" : "Close technical record"
+                  }
+                  className="font-mono text-xs text-(--color-muted) hover:text-(--color-foreground) min-h-[44px] min-w-[44px] px-3 py-2 border border-(--color-border) hover:border-(--color-accent) rounded-[2px] cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 flex items-center justify-center shrink-0"
                 >
-                  {selectedRecord.item.name}
-                </h3>
+                  ✕ ESC
+                </button>
+              </div>
+
+              {/* Content: Technology Name, Monogram & Index */}
+              <div className="flex items-center gap-3.5 pt-1">
+                <TechLogo
+                  slug={selectedRecord.item.slug}
+                  name={selectedRecord.item.name}
+                  monogram={selectedRecord.item.monogram ?? ""}
+                  size="large"
+                />
+                <div className="flex flex-col min-w-0">
+                  <span className="font-mono text-[11px] text-(--color-accent) font-semibold">
+                    RECORD // {selectedRecord.item.index}
+                  </span>
+                  <h3
+                    id="tech-dialog-title"
+                    className="font-serif text-2xl sm:text-3xl font-normal text-(--color-foreground) m-0 truncate"
+                  >
+                    {selectedRecord.item.name}
+                  </h3>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="border-t border-(--color-border)/60 pt-3">
+                <p
+                  id="tech-dialog-desc"
+                  className="text-sm sm:text-base text-(--color-muted) leading-relaxed m-0"
+                >
+                  {selectedRecord.item.description?.[locale]}
+                </p>
+              </div>
+
+              {/* Dialog Footer Action */}
+              <div className="flex items-center justify-between pt-3 border-t border-(--color-border) font-mono text-xs text-(--color-muted)">
+                <span>{selectedRecord.category.code}</span>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="font-mono text-xs font-semibold text-(--color-accent) hover:underline cursor-pointer min-h-[44px] inline-flex items-center px-2 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 rounded-[2px]"
+                >
+                  {isId ? "Tutup Dialog" : "Close Record"}
+                </button>
               </div>
             </div>
-
-            {/* Description */}
-            <div className="border-t border-(--color-border)/60 pt-3">
-              <p
-                id="tech-dialog-desc"
-                className="text-sm sm:text-base text-(--color-muted) leading-relaxed m-0"
-              >
-                {selectedRecord.item.description?.[locale]}
-              </p>
-            </div>
-
-            {/* Dialog Footer Action */}
-            <div className="flex items-center justify-between pt-3 border-t border-(--color-border) font-mono text-xs text-(--color-muted)">
-              <span>{selectedRecord.category.code}</span>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="font-mono text-xs font-semibold text-(--color-accent) hover:underline cursor-pointer min-h-[44px] inline-flex items-center px-2 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1 rounded-[2px]"
-              >
-                {isId ? "Tutup Dialog" : "Close Record"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
