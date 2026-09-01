@@ -120,7 +120,7 @@ test("Header component maintains approved wordmark, sticky behavior, and accessi
   assert.match(headerFile, /min-h-\[2\.75rem\]/);
 });
 
-test("Desktop NavLinks component renders 5 numbered items with active indicators", () => {
+test("Desktop NavLinks component renders 5 numbered items with text-tracking active/hover underlines", () => {
   const navLinksFile = readFileSync(
     join(root, "src", "components", "navigation", "nav-links.tsx"),
     "utf8",
@@ -128,6 +128,8 @@ test("Desktop NavLinks component renders 5 numbered items with active indicators
 
   assert.match(navLinksFile, /isRouteActive/);
   assert.match(navLinksFile, /aria-current={isActive \? "page" : undefined}/);
+  assert.match(navLinksFile, /nav-link-underline/);
+  assert.match(navLinksFile, /nav-link-label/);
   assert.match(navLinksFile, /nav-active-dot/);
   assert.match(navLinksFile, /●/);
 
@@ -144,21 +146,22 @@ test("Desktop NavLinks component renders 5 numbered items with active indicators
   );
 });
 
-test("MobileNav component implements Table of Contents, dialog semantics, focus trap, and non-redundant active click", () => {
+test("MobileNav component implements Table of Contents, dialog semantics, focus trap, static roles, colophon, and Menu/Close parity", () => {
   const mobileNavFile = readFileSync(
     join(root, "src", "components", "navigation", "mobile-nav.tsx"),
     "utf8",
   );
 
-  // Toggle button tokens
+  // Toggle button tokens & parity
   assert.match(mobileNavFile, /isOpen \? "CLOSE" : "MENU"/);
   assert.match(mobileNavFile, /isOpen \? "✕" : "■"/);
   assert.match(mobileNavFile, /aria-expanded={isOpen}/);
   assert.match(mobileNavFile, /aria-controls="mobile-nav-sheet"/);
 
-  // Dialog semantics
+  // Dialog semantics & container alignment
   assert.match(mobileNavFile, /role="dialog"/);
   assert.match(mobileNavFile, /aria-modal="true"/);
+  assert.match(mobileNavFile, /max-w-7xl/);
   assert.match(mobileNavFile, /aria-label={isId \? "Daftar Isi Navigasi" : "Table of Contents Navigation"}/);
 
   // Visible copy tokens
@@ -166,6 +169,22 @@ test("MobileNav component implements Table of Contents, dialog semantics, focus 
   assert.match(mobileNavFile, /isId \? "DAFTAR ISI" : "TABLE OF CONTENTS"/);
   assert.match(mobileNavFile, /ACTIVE/);
   assert.match(mobileNavFile, /isId \? "SISTEM \/\/" : "SYSTEM \/\/"/);
+
+  // 3 Static professional roles rendered in mobile nav
+  assert.match(mobileNavFile, /siteIdentity\.roles\.map/);
+  assert.deepEqual(Array.from(siteIdentity.roles), [
+    "Software Engineer",
+    "Full-Stack Web Developer",
+    "Machine Learning Engineer",
+  ]);
+
+  // Static colophon
+  assert.match(mobileNavFile, /Drafted in grids, shipped in code\./);
+
+  // Excluded contact and location metadata per Prompt 10
+  assert.doesNotMatch(mobileNavFile, /siteIdentity\.locationMetadata/);
+  assert.doesNotMatch(mobileNavFile, /siteContact/);
+  assert.doesNotMatch(mobileNavFile, /BackToTop/);
 
   // Active route non-redundant click handling
   assert.match(mobileNavFile, /handleNavClick/);
@@ -175,12 +194,6 @@ test("MobileNav component implements Table of Contents, dialog semantics, focus 
   assert.match(mobileNavFile, /e\.key === "Escape"/);
   assert.match(mobileNavFile, /document\.body\.style\.overflow = "hidden"/);
   assert.match(mobileNavFile, /document\.body\.style\.overflow = originalOverflow/);
-
-  // System metadata integration
-  assert.match(mobileNavFile, /siteIdentity\.locationMetadata/);
-  assert.match(mobileNavFile, /siteIdentity\.brand/);
-  assert.equal(siteIdentity.locationMetadata, "JAKARTA, INDONESIA · UTC+7");
-  assert.equal(siteIdentity.brand, "annastriwidagdo.me");
 });
 
 test("LocaleSwitcher maintains LANG presentation and non-clickable active state", () => {

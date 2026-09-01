@@ -47,7 +47,6 @@ export function ContinuousRoles({
   const isId = locale === "id";
   const intro = roleIntro ?? (isId ? "Saya seorang" : "I'm a");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const prefersReducedMotion = useSyncExternalStore(
@@ -58,43 +57,52 @@ export function ContinuousRoles({
 
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
-    if (prefersReducedMotion || isPaused) return;
+    if (prefersReducedMotion) return;
 
     timerRef.current = setInterval(() => {
+      if (typeof document !== "undefined" && document.hidden) return;
       setCurrentIndex((prev) => (prev + 1) % roles.length);
     }, CYCLE_INTERVAL_MS);
-  }, [isPaused, prefersReducedMotion]);
-
-  const selectRole = (index: number) => {
-    setCurrentIndex(index);
-    if (timerRef.current) clearInterval(timerRef.current);
-    startTimer();
-  };
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+
     startTimer();
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (timerRef.current) clearInterval(timerRef.current);
+      } else {
+        startTimer();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [startTimer]);
+  }, [prefersReducedMotion, startTimer]);
 
-  const activeRole = roles[currentIndex];
+  const activeIndex = prefersReducedMotion ? 0 : currentIndex;
+  const activeRole = roles[activeIndex];
 
   return (
     <div
       className="hero-role-rail w-full border-y border-(--color-border) py-2 my-1"
       role="region"
       aria-label={isId ? "Peran Profesional" : "Professional Roles"}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocusCapture={() => setIsPaused(true)}
-      onBlurCapture={() => setIsPaused(false)}
     >
       {/* Screen Reader Static Label */}
       <span className="sr-only">
         {isId
-          ? `${intro}: [${activeRole.id}] ${activeRole.title}. Peran tersedia: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`
-          : `${intro}: [${activeRole.id}] ${activeRole.title}. Available roles: [01] Software Engineer, [02] Full-Stack Web Developer, [03] Machine Learning Engineer.`}
+          ? `${intro}: ${activeRole.title}. Peran profesional: Software Engineer, Full-Stack Web Developer, Machine Learning Engineer.`
+          : `${intro}: ${activeRole.title}. Professional roles: Software Engineer, Full-Stack Web Developer, Machine Learning Engineer.`}
       </span>
 
       <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
@@ -113,14 +121,14 @@ export function ContinuousRoles({
           {/* Masked Active Role Reel */}
           <div className="hero-role-reel relative overflow-hidden h-6 min-w-0 flex-1 flex items-center">
             {roles.map((role, idx) => {
-              const isCurrent = idx === currentIndex;
+              const isCurrent = idx === activeIndex;
               return (
                 <div
                   key={role.id}
                   className={`absolute inset-0 flex items-center font-sans font-semibold text-xs sm:text-sm md:text-base text-(--color-foreground) truncate transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
                     isCurrent
                       ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : idx < currentIndex
+                      : idx < activeIndex
                       ? "opacity-0 -translate-y-full pointer-events-none"
                       : "opacity-0 translate-y-full pointer-events-none"
                   }`}
@@ -135,36 +143,22 @@ export function ContinuousRoles({
           </div>
         </div>
 
-        {/* Right Area: Dedicated 3 Indicators with >= 44px touch targets */}
+        {/* Right Area: Compact Noninteractive Ellipsis (3 tight dots, aria-hidden) */}
         <div
-          className="hero-role-indicators flex items-center gap-0.5 shrink-0 pl-2 border-l border-(--color-border)/70"
-          role="group"
-          aria-label={isId ? "Pemilih peran" : "Role selector"}
+          className="hero-role-ellipsis flex items-center gap-1 shrink-0 select-none pointer-events-none"
+          aria-hidden="true"
         >
           {roles.map((role, idx) => {
-            const isActive = idx === currentIndex;
-            const label = isId
-              ? `Tampilkan peran ${role.title}`
-              : `Show ${role.title} role`;
-
+            const isActive = idx === activeIndex;
             return (
-              <button
+              <span
                 key={role.id}
-                type="button"
-                aria-pressed={isActive}
-                aria-label={label}
-                onClick={() => selectRole(idx)}
-                className="group relative flex items-center justify-center w-7 sm:w-11 min-h-[44px] -my-2.5 cursor-pointer rounded-none transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
-              >
-                <span
-                  className={`block rounded-full transition-all duration-300 motion-reduce:transition-none ${
-                    isActive
-                      ? "w-3 sm:w-3.5 h-1.5 bg-(--color-accent)"
-                      : "w-1.5 h-1.5 bg-(--color-border) group-hover:bg-(--color-muted)"
-                  }`}
-                  aria-hidden="true"
-                />
-              </button>
+                className={`block w-1.5 h-1.5 rounded-full transition-opacity duration-300 motion-reduce:transition-none ${
+                  isActive
+                    ? "bg-(--color-accent) opacity-100"
+                    : "bg-(--color-muted) opacity-35"
+                }`}
+              />
             );
           })}
         </div>

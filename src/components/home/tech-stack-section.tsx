@@ -46,8 +46,10 @@ export function TechStackSection({ locale }: TechStackSectionProps) {
           </h2>
         </ScrollReveal>
 
-        {/* Editorial Technical Directory */}
-        <TechDirectory locale={locale} />
+        {/* Editorial Technical Directory (Revealed as a single group) */}
+        <ScrollReveal delayMs={60}>
+          <TechDirectory locale={locale} />
+        </ScrollReveal>
       </div>
     </section>
   );

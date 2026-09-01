@@ -35,13 +35,16 @@ test("Authoritative shared location resolves to Jakarta, Indonesia with exact me
   assert.equal(person.address?.addressLocality, "Jakarta");
   assert.equal(person.address?.addressCountry, "Indonesia");
 
-  // Mobile nav consumes location metadata
+  // Site identity location metadata
+  assert.equal(siteIdentity.locationMetadata, "JAKARTA, INDONESIA · UTC+7");
+
+  // Mobile nav excludes location metadata per Prompt 10
   const mobileNavFile = readFileSync(
     join(root, "src", "components", "navigation", "mobile-nav.tsx"),
     "utf8",
   );
-  assert.match(mobileNavFile, /siteIdentity\.locationMetadata/);
   assert.doesNotMatch(mobileNavFile, /KLATEN, ID · UTC\+7/);
+  assert.doesNotMatch(mobileNavFile, /siteIdentity\.locationMetadata/);
 });
 
 test("Historical Klaten experience data remains intact and unchanged", () => {

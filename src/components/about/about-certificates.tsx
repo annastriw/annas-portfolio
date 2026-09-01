@@ -99,6 +99,34 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
     };
   }, [activeCertificate]);
 
+  const filterGroupRef = useRef<HTMLDivElement>(null);
+
+  const ensureButtonVisible = (buttonElement: HTMLElement) => {
+    const container = filterGroupRef.current;
+    if (!container) return;
+
+    const buttonRect = buttonElement.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    if (buttonRect.left < containerRect.left) {
+      container.scrollLeft += buttonRect.left - containerRect.left - 12;
+    } else if (buttonRect.right > containerRect.right) {
+      container.scrollLeft += buttonRect.right - containerRect.right + 12;
+    }
+  };
+
+  const handleFilterSelect = (
+    categoryKey: CertFilterCategory,
+    buttonElement: HTMLElement,
+  ) => {
+    setSelectedCategory(categoryKey);
+    ensureButtonVisible(buttonElement);
+  };
+
+  const visibleCertificateLabel = isId
+    ? `${filteredCertificates.length} dari ${certificatesData.length} sertifikasi ditampilkan`
+    : `Showing ${filteredCertificates.length} of ${certificatesData.length} certificates`;
+
   return (
     <section
       className="about-certificates-section py-6 sm:py-8 md:py-10 lg:py-12"
@@ -126,34 +154,63 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
           </p>
         </ScrollReveal>
 
-        {/* Category Filter Controls */}
+        {/* Category Filter Controls: Projects Hub Text Tab Pattern */}
         <ScrollReveal delayMs={100}>
-          <div
-            className="flex items-center gap-3 font-mono text-xs overflow-x-auto pb-1 max-w-full"
-            role="group"
-            aria-label={copy.accessibility.filterLabel[locale]}
-          >
-            <span className="text-(--color-muted) shrink-0 select-none">
-              [FILTER]:
-            </span>
-            <div className="flex flex-nowrap sm:flex-wrap gap-2 shrink-0">
-              {filterOptions.map((cat) => {
+          <div className="border-b border-(--color-border) pb-0 mb-2">
+            {/* Filter Header & Status */}
+            <div className="flex items-center justify-between gap-4 pb-2 font-mono text-xs text-(--color-muted) tracking-wider uppercase">
+              <div className="flex items-center gap-2 font-semibold text-(--color-foreground)">
+                <span className="text-(--color-accent) text-[10px]">●</span>
+                <span>{copy.accessibility.filterLabel[locale]}</span>
+              </div>
+              <span
+                className="text-[11px] text-(--color-muted)"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {visibleCertificateLabel}
+              </span>
+            </div>
+
+            {/* Horizontally Scrollable Text Tabs */}
+            <div
+              ref={filterGroupRef}
+              className="flex items-stretch gap-1 overflow-x-auto scrollbar-none -mx-1 px-1"
+              role="tablist"
+              aria-label={copy.accessibility.filterLabel[locale]}
+            >
+              {filterOptions.map((cat, idx) => {
                 const isSelected = selectedCategory === cat.key;
+                const prefix = `0${idx + 1}`;
 
                 return (
                   <button
                     key={cat.key}
                     type="button"
-                    onClick={() => setSelectedCategory(cat.key)}
-                    aria-pressed={isSelected}
-                    className={`inline-flex items-center gap-1.5 min-h-[44px] px-3.5 py-2 border font-mono text-xs rounded-[2px] transition-all duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 ${
+                    role="tab"
+                    aria-selected={isSelected}
+                    tabIndex={0}
+                    onClick={(e) => handleFilterSelect(cat.key, e.currentTarget)}
+                    onFocus={(e) => ensureButtonVisible(e.currentTarget)}
+                    className={`relative inline-flex items-center gap-2 px-3.5 py-2.5 min-h-[44px] border-0 bg-transparent font-mono text-xs transition-colors duration-150 cursor-pointer shrink-0 whitespace-nowrap focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-[-2px] active:scale-[0.98] ${
                       isSelected
-                        ? "border-(--color-foreground) bg-(--color-foreground) text-(--color-background) font-semibold"
-                        : "border-(--color-border) bg-(--color-background) text-(--color-muted) hover:text-(--color-foreground) hover:border-(--color-foreground)"
+                        ? "text-(--color-foreground) font-bold"
+                        : "text-(--color-muted) hover:text-(--color-foreground) font-medium"
                     }`}
                   >
-                    <span>{cat.label[locale]}</span>
-                    <span className="text-[11px] opacity-80">({cat.count})</span>
+                    <span className="text-(--color-accent) text-[11px] font-semibold">
+                      {prefix}
+                    </span>
+                    <span className="tracking-tight">{cat.label[locale]}</span>
+                    <span className="text-[11px] opacity-75" aria-hidden="true">
+                      [{String(cat.count).padStart(2, "0")}]
+                    </span>
+                    {isSelected && (
+                      <span
+                        className="absolute bottom-0 left-3 right-3 h-[2px] bg-(--color-accent)"
+                        aria-hidden="true"
+                      />
+                    )}
                   </button>
                 );
               })}
@@ -161,9 +218,12 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
           </div>
         </ScrollReveal>
 
-        {/* Technical Editorial Archive Grid */}
+        {/* Technical Editorial Archive Grid: Transition as one group */}
         <ScrollReveal delayMs={150}>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
+          <div
+            key={selectedCategory}
+            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 animate-editorial-fade motion-reduce:animate-none"
+          >
             {filteredCertificates.map((cert) => {
               const masterIndex = certificatesData.findIndex(
                 (c) => c.id === cert.id,

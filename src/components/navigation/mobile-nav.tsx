@@ -128,7 +128,7 @@ export function MobileNav({ locale }: MobileNavProps) {
       <button
         ref={triggerRef}
         type="button"
-        className="mobile-nav-toggle inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[44px] min-w-[44px] justify-center border border-(--header-border) bg-(--header-bg) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 transition-colors"
+        className="mobile-nav-toggle inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[44px] min-w-[44px] justify-center border border-(--header-border) bg-(--header-bg) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 transition-colors cursor-pointer"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-sheet"
@@ -147,121 +147,143 @@ export function MobileNav({ locale }: MobileNavProps) {
         <div
           ref={sheetRef}
           id="mobile-nav-sheet"
-          className="mobile-nav-sheet p-4 sm:p-6 flex flex-col justify-between"
+          className="mobile-nav-sheet fixed inset-0 z-50 bg-(--background) text-(--foreground) flex flex-col overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-label={isId ? "Daftar Isi Navigasi" : "Table of Contents Navigation"}
         >
-          {/* Top Bar: Wordmark on Left, Close Button on Right */}
-          <div className="mobile-nav-topbar flex items-center justify-between border-b border-(--color-border) pb-3 max-w-md mx-auto w-full shrink-0">
-            <Link
-              href={`/${locale}`}
-              onClick={(e) => handleNavClick(e, pathname === `/${locale}` || pathname === `/${locale}/`)}
-              className="inline-flex items-center gap-2 text-(--color-foreground) font-mono text-sm font-semibold tracking-tight min-h-[44px] focus-visible:outline-2 focus-visible:outline-(--color-accent)"
-            >
-              <span className="text-(--color-accent) text-xs" aria-hidden="true">
-                ■
-              </span>
-              <span>annastriwidagdo.me</span>
-            </Link>
+          {/* 1. Slim Top Bar: Sticky within overlay, matching closed Header geometry & gutter alignment */}
+          <div className="sticky top-0 z-10 bg-(--header-bg) border-b border-(--header-border) shrink-0">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-[3.625rem] flex items-center justify-between gap-4">
+              <Link
+                href={`/${locale}`}
+                onClick={(e) => handleNavClick(e, pathname === `/${locale}` || pathname === `/${locale}/`)}
+                className="brand-link inline-flex items-center gap-2 min-h-[2.75rem] text-(--color-foreground) rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-4 active:scale-[0.98] active:opacity-80"
+                aria-label={isId ? "annastriwidagdo.me - Beranda" : "annastriwidagdo.me - Home"}
+              >
+                <span className="brand-marker text-(--color-accent) text-xs leading-none" aria-hidden="true">
+                  ■
+                </span>
+                <span className="brand-wordmark font-mono text-sm sm:text-base font-semibold tracking-tight text-(--color-foreground) whitespace-nowrap">
+                  annastriwidagdo.me
+                </span>
+              </Link>
 
-            <button
-              ref={closeBtnRef}
-              type="button"
-              onClick={() => {
-                setIsOpen(false);
-                triggerRef.current?.focus();
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] min-w-[44px] justify-center border border-(--color-border) bg-(--color-surface-subtle,var(--background)) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) focus-visible:outline-2 focus-visible:outline-(--color-accent)"
-              aria-label={config.labels.closeMenu}
-            >
-              <span className="text-(--color-accent) text-xs" aria-hidden="true">
-                ✕
-              </span>
-              <span className="uppercase tracking-tight">CLOSE</span>
-            </button>
-          </div>
-
-          {/* Center Group: Table of Contents & Destinations */}
-          <div className="mobile-nav-center my-auto py-4 flex flex-col gap-4 max-w-md mx-auto w-full shrink-0">
-            <div className="flex items-center justify-between border-b border-(--color-border)/70 pb-2 font-mono text-xs text-(--color-muted)">
-              <span className="font-semibold text-(--color-accent) uppercase tracking-wider">
-                [INDEX // 01]
-              </span>
-              <span className="uppercase tracking-wider">
-                {isId ? "DAFTAR ISI" : "TABLE OF CONTENTS"}
-              </span>
+              <button
+                ref={closeBtnRef}
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  triggerRef.current?.focus();
+                }}
+                className="mobile-nav-toggle inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[44px] min-w-[44px] justify-center border border-(--header-border) bg-(--header-bg) text-(--color-foreground) font-mono text-xs font-semibold rounded-[2px] hover:border-(--color-accent) focus-visible:outline-2 focus-visible:outline-(--color-accent) transition-colors cursor-pointer"
+                aria-label={config.labels.closeMenu}
+              >
+                <span className="text-(--color-accent) text-xs" aria-hidden="true">
+                  ✕
+                </span>
+                <span className="uppercase tracking-tight">CLOSE</span>
+              </button>
             </div>
-
-            {/* Navigation List */}
-            <nav
-              className="flex flex-col gap-2"
-              aria-label={isId ? "Navigasi Utama Mobile" : "Mobile Main Navigation"}
-            >
-              {config.mainNav.map((item) => {
-                const localizedHref = getLocalizedHref(item.href, locale);
-                const isActive = isRouteActive(item.href, pathname, locale);
-
-                return (
-                  <Link
-                    key={item.key}
-                    href={localizedHref}
-                    onClick={(e) => handleNavClick(e, isActive)}
-                    className={`group flex items-center justify-between px-3.5 py-2.5 min-h-[44px] border rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 relative ${
-                      isActive
-                        ? "border-(--color-accent) bg-(--color-surface-subtle,var(--background)) font-semibold text-(--color-foreground)"
-                        : "border-(--color-border) bg-(--color-surface-subtle,var(--background)) text-(--color-muted) hover:text-(--color-foreground) hover:border-(--color-accent)"
-                    }`}
-                    aria-current={isActive ? "page" : undefined}
-                  >
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-mono text-xs font-bold text-(--color-accent)">
-                        [{item.index}]
-                      </span>
-                      <span className="font-serif text-lg sm:text-xl font-normal text-(--color-foreground) group-hover:text-(--color-accent) transition-colors">
-                        {item.label}
-                      </span>
-                    </div>
-
-                    {isActive ? (
-                      <span className="flex items-center gap-1.5 text-(--color-accent) text-xs font-mono font-semibold">
-                        <span aria-hidden="true">■</span>
-                        <span>ACTIVE</span>
-                      </span>
-                    ) : (
-                      <span className="text-(--color-muted) font-mono text-xs group-hover:text-(--color-accent) group-hover:translate-x-0.5 transition-all">
-                        →
-                      </span>
-                    )}
-
-                    {/* Active Underline Indicator */}
-                    {isActive && (
-                      <span
-                        className="absolute bottom-0 left-3 right-3 h-[2px] bg-(--color-accent)"
-                        aria-hidden="true"
-                      />
-                    )}
-                  </Link>
-                );
-              })}
-            </nav>
           </div>
 
-          {/* Bottom System Controls & Metadata */}
-          <div className="mobile-nav-bottom flex flex-col gap-3 max-w-md mx-auto w-full pt-3 border-t border-(--color-border) shrink-0">
-            <div className="flex items-center justify-between font-mono text-xs">
-              <span className="text-(--color-muted) uppercase tracking-wider">
-                {isId ? "SISTEM //" : "SYSTEM //"}
-              </span>
-              <div className="flex items-center gap-3">
-                <LocaleSwitcher locale={locale} onSelect={() => setIsOpen(false)} />
-                <ThemeToggle locale={locale} />
+          {/* Inner Content Area: Follows Header container max-w-7xl and horizontal gutters */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col justify-between py-4 sm:py-6 gap-4 sm:gap-6">
+            {/* 2. Primary Numbered Navigation */}
+            <div className="flex flex-col gap-3 w-full max-w-lg mx-auto">
+              <div className="flex items-center justify-between border-b border-(--color-border)/70 pb-2 font-mono text-xs text-(--color-muted)">
+                <span className="font-semibold text-(--color-accent) uppercase tracking-wider">
+                  [INDEX // 01]
+                </span>
+                <span className="uppercase tracking-wider">
+                  {isId ? "DAFTAR ISI" : "TABLE OF CONTENTS"}
+                </span>
               </div>
+
+              {/* Navigation List */}
+              <nav
+                className="flex flex-col gap-1.5 sm:gap-2"
+                aria-label={isId ? "Navigasi Utama Mobile" : "Mobile Main Navigation"}
+              >
+                {config.mainNav.map((item) => {
+                  const localizedHref = getLocalizedHref(item.href, locale);
+                  const isActive = isRouteActive(item.href, pathname, locale);
+
+                  return (
+                    <Link
+                      key={item.key}
+                      href={localizedHref}
+                      onClick={(e) => handleNavClick(e, isActive)}
+                      className={`group flex items-center justify-between px-3.5 py-2 min-h-[44px] border rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 relative ${
+                        isActive
+                          ? "border-(--color-accent) bg-(--color-surface-subtle,var(--background)) font-semibold text-(--color-foreground)"
+                          : "border-(--color-border) bg-(--color-surface-subtle,var(--background)) text-(--color-muted) hover:text-(--color-foreground) hover:border-(--color-accent)"
+                      }`}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      <div className="flex items-baseline gap-2.5 sm:gap-3">
+                        <span className="font-mono text-xs font-bold text-(--color-accent)">
+                          [{item.index}]
+                        </span>
+                        <span className="font-serif text-base sm:text-lg font-normal text-(--color-foreground) group-hover:text-(--color-accent) transition-colors">
+                          {item.label}
+                        </span>
+                      </div>
+
+                      {isActive ? (
+                        <span className="flex items-center gap-1.5 text-(--color-accent) text-xs font-mono font-semibold">
+                          <span aria-hidden="true">■</span>
+                          <span>ACTIVE</span>
+                        </span>
+                      ) : (
+                        <span className="text-(--color-muted) font-mono text-xs group-hover:text-(--color-accent) group-hover:translate-x-0.5 transition-all">
+                          →
+                        </span>
+                      )}
+
+                      {/* Active Underline Indicator */}
+                      {isActive && (
+                        <span
+                          className="absolute bottom-0 left-3 right-3 h-[2px] bg-(--color-accent)"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </Link>
+                  );
+                })}
+              </nav>
             </div>
 
-            <div className="flex items-center justify-between font-mono text-[11px] text-(--color-muted) pt-1">
-              <span>{siteIdentity.locationMetadata}</span>
-              <span>{siteIdentity.brand}</span>
+            {/* Bottom Group: 3. Language & Theme, 4. Three Static Professional Roles, 5. Colophon */}
+            <div className="flex flex-col gap-3 sm:gap-4 w-full max-w-lg mx-auto border-t border-(--color-border) pt-3 sm:pt-4 shrink-0">
+              {/* 3. Language & Theme Controls */}
+              <div className="flex items-center justify-between font-mono text-xs">
+                <span className="text-(--color-muted) uppercase tracking-wider">
+                  {isId ? "SISTEM //" : "SYSTEM //"}
+                </span>
+                <div className="flex items-center gap-3">
+                  <LocaleSwitcher locale={locale} onSelect={() => setIsOpen(false)} />
+                  <ThemeToggle locale={locale} />
+                </div>
+              </div>
+
+              {/* 4. Three Static Professional Roles (Noninteractive identity text) */}
+              <div
+                className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 font-mono text-[11px] text-(--color-muted) border-t border-(--color-border)/60 pt-2.5 select-none"
+                aria-label={isId ? "Peran profesional" : "Professional roles"}
+              >
+                {siteIdentity.roles.map((role) => (
+                  <span key={role} className="flex items-center gap-1 text-(--color-foreground)/80 font-medium">
+                    <span className="text-(--color-accent) text-[9px]">■</span>
+                    <span>{role}</span>
+                  </span>
+                ))}
+              </div>
+
+              {/* 5. Static Colophon */}
+              <div className="text-center font-mono text-[11px] text-(--color-muted) select-none pt-0.5">
+                Drafted in grids, shipped in code.
+              </div>
             </div>
           </div>
         </div>

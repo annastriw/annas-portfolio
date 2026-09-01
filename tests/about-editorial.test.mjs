@@ -407,12 +407,14 @@ test("AboutCertificates component renders approved editorial archive grid, respo
   assert.match(certFile, /copy\.title\[locale\]/);
   assert.match(certFile, /copy\.summary\[locale\]/);
 
-  // Filter Group & Accessible Controls
-  assert.match(certFile, /role="group"/);
+  // Filter Group & Accessible Controls: Projects Hub Text Tab Parity
+  assert.match(certFile, /role="tablist"/);
+  assert.match(certFile, /role="tab"/);
   assert.match(certFile, /copy\.accessibility\.filterLabel\[locale\]/);
-  assert.match(certFile, /aria-pressed=\{isSelected\}/);
+  assert.match(certFile, /aria-selected=\{isSelected\}/);
   assert.match(certFile, /min-h-\[44px\]/);
   assert.match(certFile, /focus-visible:outline-2/);
+  assert.match(certFile, /bg-\(--color-accent\)/);
 
   // Technical Editorial Archive Grid & Responsive Breakpoints
   assert.match(certFile, /grid-cols-1 md:grid-cols-2 xl:grid-cols-3/);

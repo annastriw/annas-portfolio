@@ -6,7 +6,7 @@ import test from "node:test";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-test("Hero section maintains factual 3-sentence bilingual bio, 3 full role controls, and key metadata", () => {
+test("Hero section maintains factual 3-sentence bilingual bio, noninteractive role ellipsis, desktop 2-column alignment, and key metadata", () => {
   const heroFile = readFileSync(
     join(root, "src", "components", "home", "hero-section.tsx"),
     "utf8",
@@ -21,12 +21,16 @@ test("Hero section maintains factual 3-sentence bilingual bio, 3 full role contr
   assert.match(rolesFile, /Full-Stack Web Developer/);
   assert.match(rolesFile, /Machine Learning Engineer/);
   assert.match(rolesFile, /CYCLE_INTERVAL_MS = 4000/);
-  assert.match(rolesFile, /onMouseEnter/);
-  assert.match(rolesFile, /onFocus/);
+  assert.match(rolesFile, /visibilitychange/);
   assert.match(rolesFile, /prefers-reduced-motion/);
+  assert.match(rolesFile, /hero-role-ellipsis/);
+  assert.doesNotMatch(rolesFile, /aria-pressed/);
+  assert.doesNotMatch(rolesFile, /<button/);
   assert.match(heroFile, /(Jakarta, Indonesia|siteIdentity\.location)/i);
   assert.match(heroFile, /SystemClock/);
   assert.match(heroFile, /ContinuousRoles/);
+  assert.match(heroFile, /hero-left-col/);
+  assert.match(heroFile, /hero-portrait-col/);
   assert.match(heroFile, /\/assets\/profile\/pas-foto\.webp/);
   assert.match(heroFile, /PORTRAIT \/\/ FIG\.01/);
   assert.match(heroFile, /Explore Project Archive/);
@@ -451,10 +455,12 @@ test("Home Unified Editorial Foundation enforces interaction contract, static el
   assert.doesNotMatch(heroFile, /hover:border-\(--color-accent\)/);
   assert.doesNotMatch(heroFile, /hover:scale-\[1\.02\]/);
 
-  // 2. Role selector compact buttons with >=44px touch targets
-  assert.match(rolesFile, /min-h-\[44px\]/);
-  assert.match(rolesFile, /aria-pressed=\{isActive\}/);
+  // 2. Role ticker noninteractive ellipsis without role buttons
+  assert.match(rolesFile, /hero-role-ellipsis/);
+  assert.match(rolesFile, /aria-hidden="true"/);
   assert.match(rolesFile, /CYCLE_INTERVAL_MS = 4000/);
+  assert.doesNotMatch(rolesFile, /<button/);
+  assert.doesNotMatch(rolesFile, /aria-pressed/);
 
   // 3. Selected Projects: static row container, only explicit Link is clickable
   assert.match(featuredItemFile, /<article[^>]*class(?:Name)?="[^"]*project-index-row/);

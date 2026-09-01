@@ -42,21 +42,23 @@ export function SelectedProjects({ locale }: SelectedProjectsProps) {
           </h2>
         </ScrollReveal>
 
-        {/* 4-Row Full-Width Editorial Project Index */}
-        <div
-          className="home-projects-index flex flex-col"
-          role="list"
-          aria-label={copy.title}
-        >
-          {homeSelectedProjects.map((project: HomeSelectedProject) => (
-            <FeaturedProjectItem
-              key={project.slug}
-              project={project}
-              index={project.index}
-              locale={locale}
-            />
-          ))}
-        </div>
+        {/* 4-Row Full-Width Editorial Project Index (Revealed as a single group) */}
+        <ScrollReveal delayMs={60}>
+          <div
+            className="home-projects-index flex flex-col"
+            role="list"
+            aria-label={copy.title}
+          >
+            {homeSelectedProjects.map((project: HomeSelectedProject) => (
+              <FeaturedProjectItem
+                key={project.slug}
+                project={project}
+                index={project.index}
+                locale={locale}
+              />
+            ))}
+          </div>
+        </ScrollReveal>
 
         {/* Single Archive Action at End of Section */}
         <ScrollReveal delayMs={150} animationClass="animate-editorial-fade">

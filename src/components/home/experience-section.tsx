@@ -36,8 +36,10 @@ export function ExperienceSection({ locale }: ExperienceSectionProps) {
           </h2>
         </ScrollReveal>
 
-        {/* Vertical Connected Timeline */}
-        <ExperienceTimeline experiences={experiencesData} locale={locale} />
+        {/* Vertical Connected Timeline (Revealed as a single group) */}
+        <ScrollReveal delayMs={60}>
+          <ExperienceTimeline experiences={experiencesData} locale={locale} />
+        </ScrollReveal>
       </div>
     </section>
   );

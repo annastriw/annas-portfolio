@@ -19,7 +19,7 @@ export function BlogArchive({ articles, locale }: BlogArchiveProps) {
       className="blog-archive"
       aria-labelledby="blog-archive-heading"
     >
-      <div className="blog-archive-heading-row animate-editorial-fade motion-reduce:animate-none">
+      <ScrollReveal className="blog-archive-heading-row">
         <h2 id="blog-archive-heading">
           {isId ? "Indeks Artikel Terpilih" : "Curated Article Index"}
         </h2>
@@ -28,12 +28,12 @@ export function BlogArchive({ articles, locale }: BlogArchiveProps) {
             ? "Ditulis dari catatan proyek dan implementasi sistem yang terdokumentasi."
             : "Written directly from verified project records and system implementations."}
         </p>
-      </div>
+      </ScrollReveal>
 
-      <ol className="blog-archive-list">
-        {articles.map((article, index) => (
-          <li key={article.slug}>
-            <ScrollReveal delayMs={index * 60}>
+      <ScrollReveal delayMs={60}>
+        <ol className="blog-archive-list">
+          {articles.map((article) => (
+            <li key={article.slug}>
               <article className="blog-archive-row">
                 <Link
                   href={`/${locale}/blog/${article.slug}`}
@@ -72,10 +72,10 @@ export function BlogArchive({ articles, locale }: BlogArchiveProps) {
                   </span>
                 </Link>
               </article>
-            </ScrollReveal>
-          </li>
-        ))}
-      </ol>
+            </li>
+          ))}
+        </ol>
+      </ScrollReveal>
     </section>
   );
 }

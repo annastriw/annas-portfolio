@@ -2,7 +2,6 @@ import type { ExperienceItem as ExperienceItemType } from "@/content/experience/
 import type { Locale } from "@/lib/i18n/config";
 import { getExperienceLogoPathIfPresent } from "@/lib/assets/logo-detector";
 import { ExperienceOrgLogo } from "./experience-org-logo";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface ExperienceItemProps {
   experience: ExperienceItemType;
@@ -20,14 +19,9 @@ export function ExperienceItem({
   const isId = locale === "id";
   const indexFormatted = String(index + 1).padStart(2, "0");
   const logoPath = getExperienceLogoPathIfPresent(experience.logoFolder);
-  const delayMs = index * 100;
 
   return (
-    <ScrollReveal
-      delayMs={delayMs}
-      animationClass="animate-editorial-fade"
-      className="experience-timeline-entry relative flex items-stretch gap-3 sm:gap-6 lg:gap-8"
-    >
+    <div className="experience-timeline-entry relative flex items-stretch gap-3 sm:gap-6 lg:gap-8">
       {/* Left Vertical Timeline Spine & Marker Node */}
       <div className="timeline-spine-col flex flex-col items-center shrink-0 w-7 sm:w-8">
         {/* Numbered Marker Node (Static record marker) */}
@@ -120,6 +114,6 @@ export function ExperienceItem({
           </span>
         </div>
       </article>
-    </ScrollReveal>
+    </div>
   );
 }
