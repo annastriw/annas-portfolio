@@ -171,11 +171,16 @@ test("MobileNav component implements Table of Contents, dialog semantics, scroll
   assert.match(mobileNavFile, /min-h-0/);
   assert.match(mobileNavFile, /safe-area-inset-bottom/);
 
-  // Visible copy tokens & primary numbered nav
+  // Visible copy tokens, restrained rule & primary numbered nav
   assert.match(mobileNavFile, /\[INDEX \/\/ 01\]/);
   assert.match(mobileNavFile, /isId \? "DAFTAR ISI" : "TABLE OF CONTENTS"/);
-  assert.match(mobileNavFile, /ACTIVE/);
+  assert.match(mobileNavFile, /<hr\s+className="border-t/);
   assert.match(mobileNavFile, /isId \? "SISTEM \/\/" : "SYSTEM \/\/"/);
+
+  // Active and inactive navigation markers and text-width underline
+  assert.match(mobileNavFile, /border-\(--color-accent\)/);
+  assert.match(mobileNavFile, /isActive\s*\?[\s\S]*■[\s\S]*:[\s\S]*→/);
+  assert.match(mobileNavFile, /bg-\(--color-accent\)/);
 
   // Bottom identity block with wordmark link and static colophon
   assert.match(mobileNavFile, /brand-wordmark[^>]*>\s*annastriwidagdo\.me/);

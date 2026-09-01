@@ -9,7 +9,12 @@ import {
   projectCaseStudies,
 } from "@/content/projects/project-case-studies";
 import { isLocale, supportedLocales } from "@/lib/i18n/config";
-import { generateProjectJsonLd, createPageMetadata } from "@/lib/seo";
+import {
+  generateProjectJsonLd,
+  generateBreadcrumbJsonLd,
+  createPageMetadata,
+  SITE_URL,
+} from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -61,9 +66,26 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
   const { previous, next } = getAdjacentProjectCaseStudies(slug);
 
+  const breadcrumbs = [
+    { name: locale === "id" ? "Beranda" : "Home", url: `${SITE_URL}/${locale}` },
+    {
+      name: locale === "id" ? "Proyek" : "Projects",
+      url: `${SITE_URL}/${locale}/projects`,
+    },
+    {
+      name: project.title[locale],
+      url: `${SITE_URL}/${locale}/projects/${slug}`,
+    },
+  ];
+
   return (
     <>
-      <JsonLd schema={generateProjectJsonLd(project, locale)} />
+      <JsonLd
+        schema={[
+          generateProjectJsonLd(project, locale),
+          generateBreadcrumbJsonLd(breadcrumbs),
+        ]}
+      />
       <ProjectCaseStudyView
         project={project}
         locale={locale}

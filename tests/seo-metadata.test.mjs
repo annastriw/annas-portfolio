@@ -15,6 +15,7 @@ import {
   generateItemListJsonLd,
   generateProjectJsonLd,
   generateBlogPostingJsonLd,
+  generateBreadcrumbJsonLd,
 } from "../src/lib/seo/index.ts";
 import sitemap from "../src/app/sitemap.ts";
 import robots from "../src/app/robots.ts";
@@ -356,3 +357,26 @@ test("generateBlogPostingJsonLd produces valid BlogPosting schema with related p
     assert.equal(schemaId.headline, article.title.id);
   }
 });
+
+test("generateBreadcrumbJsonLd produces valid BreadcrumbList schema", () => {
+  const breadcrumbs = [
+    { name: "Home", url: `${SITE_URL}/en` },
+    { name: "Projects", url: `${SITE_URL}/en/projects` },
+    { name: "UKG System", url: `${SITE_URL}/en/projects/ukg-system` },
+  ];
+
+  const schema = generateBreadcrumbJsonLd(breadcrumbs);
+  assert.equal(schema["@context"], "https://schema.org");
+  assert.equal(schema["@type"], "BreadcrumbList");
+  assert.equal(schema.itemListElement.length, 3);
+  assert.equal(schema.itemListElement[0].name, "Home");
+  assert.equal(schema.itemListElement[0].position, 1);
+  assert.equal(schema.itemListElement[0].item, "https://annastriwidagdo.me/en");
+  assert.equal(schema.itemListElement[1].name, "Projects");
+  assert.equal(schema.itemListElement[1].position, 2);
+  assert.equal(schema.itemListElement[1].item, "https://annastriwidagdo.me/en/projects");
+  assert.equal(schema.itemListElement[2].name, "UKG System");
+  assert.equal(schema.itemListElement[2].position, 3);
+  assert.equal(schema.itemListElement[2].item, "https://annastriwidagdo.me/en/projects/ukg-system");
+});
+

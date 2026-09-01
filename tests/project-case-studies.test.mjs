@@ -426,8 +426,10 @@ test("ProjectDetailView implements approved unified editorial layout for UKG Sys
     "utf8",
   );
 
-  // 1. Opening: Breadcrumb, H1, Lead, Metadata Grid, Actions
-  assert.match(detailComponent, /copy\.breadcrumbProjects/);
+  // 1. Opening: Back Link, H1, Lead, Metadata Grid, Actions
+  assert.match(detailComponent, /copy\.backToProjects/);
+  assert.match(detailComponent, /styles\.backNav/);
+  assert.match(detailComponent, /styles\.backLink/);
   assert.match(detailComponent, /project\.categoryLabel\[locale\]/);
   assert.match(detailComponent, /<h1 className=\{styles\.title\}>\{project\.title\[locale\]\}<\/h1>/);
   assert.match(detailComponent, /styles\.lead/);
@@ -495,8 +497,10 @@ test("ProjectDetailView implements approved unified editorial layout for iHealth
     "utf8",
   );
 
-  // 1. Opening: Breadcrumb, Split Composition (Left Title/Meta, Right Lead/Actions)
-  assert.match(detailComponent, /copy\.breadcrumbProjects/);
+  // 1. Opening: Back Link, Split Composition (Left Title/Meta, Right Lead/Actions)
+  assert.match(detailComponent, /copy\.backToProjects/);
+  assert.match(detailComponent, /styles\.backNav/);
+  assert.match(detailComponent, /styles\.backLink/);
   assert.match(detailComponent, /project\.categoryLabel\[locale\]/);
   assert.match(detailComponent, /<h1 className=\{styles\.title\}>\{project\.title\[locale\]\}<\/h1>/);
   assert.match(detailComponent, /styles\.openingSplit/);
@@ -739,9 +743,10 @@ test("ProjectDetailView meets semantic heading hierarchy, dynamic section number
   // 3. Lightbox title does NOT introduce illegal extra H1/H2
   assert.doesNotMatch(detailComponent, /<h[12][^>]*lightboxTitle/);
 
-  // 4. Breadcrumb navigation semantics
-  assert.match(detailComponent, /<nav\s+className=\{styles\.breadcrumb\}\s+aria-label=\{copy\.breadcrumbAria\}>/);
-  assert.match(detailComponent, /aria-current="page"/);
+  // 4. Back link navigation semantics
+  assert.match(detailComponent, /className=\{styles\.backNav\}/);
+  assert.match(detailComponent, /className=\{styles\.backLink\}/);
+  assert.doesNotMatch(detailComponent, /styles\.breadcrumb\b/);
 
   // 5. Non-color indicators for active thumbnail, claim boundary, and group headers
   assert.match(detailComponent, /thumbnailActiveIndicator/);
@@ -754,7 +759,7 @@ test("ProjectDetailView meets semantic heading hierarchy, dynamic section number
   assert.match(css, /\.claimBoundaryCard\s*\{[^}]*border-inline-start:\s*3px solid/);
 
   // 6. Visible focus states across all interactive elements
-  assert.match(css, /\.breadcrumbLink:focus-visible/);
+  assert.match(css, /\.backLink:focus-visible/);
   assert.match(css, /\.liveCta:focus-visible/);
   assert.match(css, /\.repoLink:focus-visible/);
   assert.match(css, /\.galleryFrame:focus-visible/);

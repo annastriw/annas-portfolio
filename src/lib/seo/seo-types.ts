@@ -122,3 +122,17 @@ export interface JsonLdBlogPosting {
     url: string;
   }>;
 }
+
+export interface JsonLdBreadcrumbItem {
+  "@type": "ListItem";
+  position: number;
+  name: string;
+  item: string;
+}
+
+export interface JsonLdBreadcrumbList {
+  "@context": "https://schema.org";
+  "@type": "BreadcrumbList";
+  itemListElement: JsonLdBreadcrumbItem[];
+}
+

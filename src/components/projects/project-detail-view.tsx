@@ -136,8 +136,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
   const projectsHref = `/${locale}/projects`;
 
   const copy = {
-    breadcrumbProjects: isId ? "Proyek" : "Projects",
-    breadcrumbAria: isId ? "Navigasi breadcrumb" : "Breadcrumb navigation",
+    backToProjects: isId ? "Kembali ke Proyek" : "Back to Projects",
     client: isId ? "Klien" : "Client",
     stakeholder: isId ? "Stakeholder" : "Stakeholder",
     role: isId ? "Peran" : "Role",
@@ -415,20 +414,23 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
   return (
     <article className={styles.page}>
       <div className={styles.container}>
-        {/* Breadcrumb Navigation */}
-        <nav className={styles.breadcrumb} aria-label={copy.breadcrumbAria}>
-          <Link href={projectsHref} className={styles.breadcrumbLink}>
-            {copy.breadcrumbProjects}
+        {/* Back Link Navigation */}
+        <div className={styles.backNav}>
+          <Link
+            href={projectsHref}
+            className={styles.backLink}
+            aria-label={isId ? "Kembali ke Proyek" : "Back to Projects"}
+          >
+            <span className={styles.backArrow} aria-hidden="true">
+              ←
+            </span>
+            <span className={styles.backLabel}>
+              {copy.backToProjects}
+            </span>
           </Link>
-          <span className={styles.breadcrumbSep} aria-hidden="true">
-            /
-          </span>
-          <span className={styles.breadcrumbCurrent} aria-current="page">
-            {project.title[locale]}
-          </span>
-        </nav>
+        </div>
 
-        {/* Standard Opening: breadcrumb -> category -> title -> metadata -> lead -> links */}
+        {/* Standard Opening: back link -> category -> title -> metadata -> lead -> links */}
         <ScrollReveal animationClass="animate-editorial-fade">
           <header className={styles.opening}>
             <div className={styles.openingSplit}>

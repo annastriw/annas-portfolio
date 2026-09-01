@@ -836,9 +836,8 @@ html.dark .route-loader-pill {
   color: var(--foreground);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  overflow-y: auto;
-  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  overflow: hidden;
+  padding: 0;
   animation: mobileNavReveal 0.22s var(--ease-editorial) forwards;
 }
 

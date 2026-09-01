@@ -189,15 +189,18 @@ export function MobileNav({ locale }: MobileNavProps) {
           {/* Scrollable Content Region */}
           <div className="flex-1 overflow-y-auto overscroll-y-contain min-h-0 w-full">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full min-h-full flex flex-col justify-between py-4 sm:py-6 pb-[max(2rem,calc(env(safe-area-inset-bottom)+1.5rem))] gap-6">
-              {/* 2. Primary Numbered Navigation */}
-              <div className="flex flex-col gap-3 w-full max-w-lg mx-auto">
-                <div className="flex items-center justify-between border-b border-(--color-border)/70 pb-2 font-mono text-xs text-(--color-muted)">
-                  <span className="font-semibold text-(--color-accent) uppercase tracking-wider">
-                    [INDEX // 01]
-                  </span>
-                  <span className="uppercase tracking-wider">
-                    {isId ? "DAFTAR ISI" : "TABLE OF CONTENTS"}
-                  </span>
+              {/* 1. [INDEX // 01] + 2. TABLE OF CONTENTS / DAFTAR ISI + 3. Restrained Editorial Rule + 4. Primary Numbered Navigation */}
+              <div className="flex flex-col gap-3.5 w-full max-w-lg mx-auto">
+                <div className="flex flex-col gap-2.5">
+                  <div className="flex items-center justify-between font-mono text-xs text-(--color-muted)">
+                    <span className="font-semibold text-(--color-accent) uppercase tracking-wider">
+                      [INDEX // 01]
+                    </span>
+                    <span className="uppercase tracking-wider font-medium">
+                      {isId ? "DAFTAR ISI" : "TABLE OF CONTENTS"}
+                    </span>
+                  </div>
+                  <hr className="border-t border-(--color-border)/80 w-full m-0" aria-hidden="true" />
                 </div>
 
                 {/* Navigation List */}
@@ -214,7 +217,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                         key={item.key}
                         href={localizedHref}
                         onClick={(e) => handleNavClick(e, isActive)}
-                        className={`group flex items-center justify-between px-3.5 py-2 min-h-[44px] border rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 relative ${
+                        className={`group flex items-center justify-between px-3.5 py-2.5 min-h-[44px] border rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.99] active:opacity-80 relative ${
                           isActive
                             ? "border-(--color-accent) bg-(--color-surface-subtle,var(--background)) font-semibold text-(--color-foreground)"
                             : "border-(--color-border) bg-(--color-surface-subtle,var(--background)) text-(--color-muted) hover:text-(--color-foreground) hover:border-(--color-accent)"
@@ -222,31 +225,31 @@ export function MobileNav({ locale }: MobileNavProps) {
                         aria-current={isActive ? "page" : undefined}
                       >
                         <div className="flex items-baseline gap-2.5 sm:gap-3">
-                          <span className="font-mono text-xs font-bold text-(--color-accent)">
+                          <span className={`font-mono text-xs font-bold ${isActive ? "text-(--color-accent)" : "text-(--color-muted) group-hover:text-(--color-foreground)"}`}>
                             [{item.index}]
                           </span>
-                          <span className="font-serif text-base sm:text-lg font-normal text-(--color-foreground) group-hover:text-(--color-accent) transition-colors">
-                            {item.label}
+                          <span className="relative inline-block">
+                            <span className={`font-serif text-base sm:text-lg font-normal ${isActive ? "text-(--color-foreground) font-semibold" : "text-(--color-foreground) group-hover:text-(--color-accent)"} transition-colors`}>
+                              {item.label}
+                            </span>
+                            {/* Active Underline Indicator - follows width of menu label */}
+                            {isActive && (
+                              <span
+                                className="absolute left-0 right-0 -bottom-0.5 h-[1.5px] bg-(--color-accent)"
+                                aria-hidden="true"
+                              />
+                            )}
                           </span>
                         </div>
 
                         {isActive ? (
-                          <span className="flex items-center gap-1.5 text-(--color-accent) text-xs font-mono font-semibold">
-                            <span aria-hidden="true">■</span>
-                            <span>ACTIVE</span>
+                          <span className="text-(--color-accent) text-xs font-bold leading-none" aria-hidden="true">
+                            ■
                           </span>
                         ) : (
-                          <span className="text-(--color-muted) font-mono text-xs group-hover:text-(--color-accent) group-hover:translate-x-0.5 transition-all">
+                          <span className="text-(--color-muted) font-mono text-xs group-hover:text-(--color-accent) group-hover:translate-x-0.5 transition-all" aria-hidden="true">
                             →
                           </span>
-                        )}
-
-                        {/* Active Underline Indicator */}
-                        {isActive && (
-                          <span
-                            className="absolute bottom-0 left-3 right-3 h-[2px] bg-(--color-accent)"
-                            aria-hidden="true"
-                          />
                         )}
                       </Link>
                     );
@@ -254,11 +257,11 @@ export function MobileNav({ locale }: MobileNavProps) {
                 </nav>
               </div>
 
-              {/* Bottom Group: 3. Language & Theme, 4. Bottom Identity Block, 5. Colophon */}
+              {/* 5. SYSTEM // or SISTEM //, 6. Language & Theme, 7. Bottom Identity Block, 8. Colophon */}
               <div className="flex flex-col gap-3.5 w-full max-w-lg mx-auto border-t border-(--color-border) pt-3 sm:pt-4 shrink-0">
-                {/* 3. Language & Theme Controls */}
+                {/* 5. SYSTEM // or SISTEM // & 6. Language & Theme Controls */}
                 <div className="flex items-center justify-between font-mono text-xs">
-                  <span className="text-(--color-muted) uppercase tracking-wider">
+                  <span className="text-(--color-muted) uppercase tracking-wider font-semibold">
                     {isId ? "SISTEM //" : "SYSTEM //"}
                   </span>
                   <div className="flex items-center gap-3">
@@ -267,7 +270,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                   </div>
                 </div>
 
-                {/* 4. Bottom Identity Block & 5. Colophon */}
+                {/* 7. Bottom Identity Block & 8. Colophon */}
                 <div className="flex flex-col items-center gap-1.5 pt-2 border-t border-(--color-border)/60 text-center">
                   <Link
                     href={`/${locale}`}
