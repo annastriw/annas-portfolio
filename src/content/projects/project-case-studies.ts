@@ -67,6 +67,21 @@ export interface IHealthSystemScopeData {
   readonly architectureNote?: LocalizedProjectText;
 }
 
+export interface ProjectMetadataRow {
+  readonly label: LocalizedProjectText;
+  readonly value: LocalizedProjectText;
+}
+
+export interface ProjectOptionalModule {
+  readonly id?: string;
+  readonly title: LocalizedProjectText;
+  readonly subtag?: LocalizedProjectText;
+  readonly paragraphs?: LocalizedProjectList;
+  readonly items?: LocalizedProjectList;
+  readonly notes?: LocalizedProjectList;
+  readonly groups?: readonly ProjectTechnologyGroup[];
+}
+
 export interface ProjectCaseStudy {
   readonly index: string;
   readonly slug: string;
@@ -80,6 +95,7 @@ export interface ProjectCaseStudy {
   readonly clientLabel?: LocalizedProjectText;
   readonly workingModel?: LocalizedProjectText;
   readonly lead?: LocalizedProjectText;
+  readonly metadataRows?: readonly ProjectMetadataRow[];
   readonly metaTitle?: LocalizedProjectText;
   readonly metaDescription?: LocalizedProjectText;
   readonly repositoryNotice?: LocalizedProjectText;
@@ -91,6 +107,7 @@ export interface ProjectCaseStudy {
   readonly workflow?: LocalizedProjectList;
   readonly technologyGroups?: readonly ProjectTechnologyGroup[];
   readonly systemScope?: IHealthSystemScopeData;
+  readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
   readonly personalTechStack?: readonly string[];
   readonly personalStackTag?: LocalizedProjectText;
@@ -100,6 +117,7 @@ export interface ProjectCaseStudy {
     readonly overview?: LocalizedProjectText;
     readonly contribution?: LocalizedProjectText;
     readonly scope?: LocalizedProjectText;
+    readonly optional?: LocalizedProjectText;
   };
   readonly cover: {
     readonly src: string;
@@ -1429,3 +1447,12 @@ export function getAdjacentProjectCaseStudies(slug: string): {
         : null,
   };
 }
+
+export function validatePersonalTechStack(project: ProjectCaseStudy): boolean {
+  if (project.personalTechStack && project.personalTechStack.length > 6) {
+    return false;
+  }
+  return true;
+}
+
+

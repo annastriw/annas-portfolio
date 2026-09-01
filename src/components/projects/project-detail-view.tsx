@@ -72,6 +72,14 @@ function getProjectMetaEntries(
   locale: ProjectCaseStudyLocale,
 ): readonly MetaEntry[] {
   const isId = locale === "id";
+
+  if (project.metadataRows && project.metadataRows.length > 0) {
+    return project.metadataRows.map((row) => ({
+      label: row.label[locale],
+      value: row.value[locale],
+    }));
+  }
+
   const entries: MetaEntry[] = [];
 
   // Client or Stakeholder
@@ -143,21 +151,14 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     period: isId ? "Periode" : "Period",
     workingModel: isId ? "Model Kerja" : "Working Model",
     status: "Status",
-    liveCta:
-      project.slug === "ihealth-edu"
-        ? isId
-          ? "Buka Website"
-          : "Visit Live Website"
-        : isId
-          ? "Buka Website"
-          : "Live Website",
+    liveCta: isId ? "Buka Website" : "Visit Live Website",
     frontendRepo: isId
-      ? "Lihat Repositori Frontend"
+      ? "Lihat Repository Frontend"
       : "View Frontend Repository",
     backendRepo: isId
-      ? "Lihat Repositori Backend"
+      ? "Lihat Repository Backend"
       : "View Backend Repository",
-    repo: isId ? "Lihat Repositori" : "View Repository",
+    repo: isId ? "Lihat Repository" : "View Repository",
     newTabCue: isId ? "buka di tab baru" : "opens in new tab",
     repoNotice: isId ? "Private Repository" : "Private Repository",
     galleryTitle: isId ? "Galeri Proyek" : "Project Gallery",
@@ -177,11 +178,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     closeLightbox: isId ? "Tutup" : "Close",
     overviewTitle:
       project.sectionTitles?.overview?.[locale] ??
-      (isId
-        ? project.slug === "ihealth-edu"
-          ? "Gambaran Proyek"
-          : "Ringkasan Project"
-        : "Project Overview"),
+      (isId ? "Gambaran Proyek" : "Project Overview"),
     claimBoundaryTag: isId
       ? "[BATAS KLAIM // DECISION SUPPORT MEDIS]"
       : "[CLAIM BOUNDARY // MEDICAL DECISION SUPPORT]",
@@ -257,6 +254,21 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         project.slug !== "ihealth-edu"),
   );
   const scopeIndex = hasScope
+    ? String(++sectionCounter).padStart(2, "0")
+    : null;
+
+  const hasOptionalModule = Boolean(
+    project.optionalModule &&
+      ((project.optionalModule.paragraphs?.[locale] &&
+        project.optionalModule.paragraphs[locale].length > 0) ||
+        (project.optionalModule.items?.[locale] &&
+          project.optionalModule.items[locale].length > 0) ||
+        (project.optionalModule.notes?.[locale] &&
+          project.optionalModule.notes[locale].length > 0) ||
+        (project.optionalModule.groups &&
+          project.optionalModule.groups.length > 0)),
+  );
+  const optionalModuleIndex = hasOptionalModule
     ? String(++sectionCounter).padStart(2, "0")
     : null;
 
@@ -434,27 +446,29 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         <ScrollReveal animationClass="animate-editorial-fade">
           <header className={styles.opening}>
             <div className={styles.openingSplit}>
-              {/* Left Column: Category, Title, Metadata Grid */}
+              {/* Left Column: Project Identity */}
               <div className={styles.openingLeft}>
                 <span className={styles.categoryLabel}>
                   {project.categoryLabel[locale]}
                 </span>
                 <h1 className={styles.title}>{project.title[locale]}</h1>
-
-                <dl className={styles.metaGrid}>
-                  {metaEntries.map((item) => (
-                    <div key={item.label} className={styles.metaItem}>
-                      <dt>{item.label}</dt>
-                      <dd>{item.value}</dd>
-                    </div>
-                  ))}
-                </dl>
               </div>
 
-              {/* Right Column: Lead Narrative & Explicit Actions */}
+              {/* Right Column: Lead Narrative, Metadata Grid, & Explicit Actions */}
               <div className={styles.openingRight}>
                 {project.lead ? (
                   <p className={styles.lead}>{project.lead[locale]}</p>
+                ) : null}
+
+                {metaEntries.length > 0 ? (
+                  <dl className={styles.metaGrid}>
+                    {metaEntries.map((item) => (
+                      <div key={item.label} className={styles.metaItem}>
+                        <dt>{item.label}</dt>
+                        <dd>{item.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
                 ) : null}
 
                 <div className={styles.openingActions}>
@@ -518,12 +532,29 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                     </a>
                   ) : null}
 
+                  {project.projectLinks?.map((link) => (
+                    <a
+                      key={link.url}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={
+                        link.type === "primary" || link.type === "solid"
+                          ? styles.liveCta
+                          : styles.repoLink
+                      }
+                      aria-label={`${link.label[locale]}: ${project.title[locale]} (${copy.newTabCue})`}
+                    >
+                      <span>{link.label[locale]}</span>
+                      <span className={styles.linkArrow} aria-hidden="true">
+                        ↗
+                      </span>
+                    </a>
+                  ))}
+
                   {project.repositoryNotice ? (
                     <span className={styles.repoNotice}>
-                      <span className={styles.repoDot} aria-hidden="true">
-                        ■
-                      </span>
-                      <span>{project.repositoryNotice[locale]}</span>
+                      {project.repositoryNotice[locale]}
                     </span>
                   ) : null}
                 </div>
@@ -1149,6 +1180,99 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                       ))}
                     </ul>
                   </div>
+                ) : null}
+              </div>
+            </section>
+          </ScrollReveal>
+        ) : null}
+
+        {/* Approved Optional Technical Module (when present) */}
+        {hasOptionalModule && project.optionalModule ? (
+          <ScrollReveal animationClass="animate-editorial-fade">
+            <section
+              className={styles.section}
+              aria-labelledby="section-optional-title"
+            >
+              <div className={styles.sectionHeader}>
+                <span className={styles.sectionIndex}>
+                  [{optionalModuleIndex}]
+                </span>
+                <h2
+                  id="section-optional-title"
+                  className={styles.sectionTitle}
+                >
+                  {project.optionalModule.title[locale]}
+                </h2>
+              </div>
+              <div className={styles.sectionBody}>
+                {project.optionalModule.subtag ? (
+                  <div className={styles.subBlockHeader}>
+                    <span className={styles.subBlockHeaderTag}>■</span>
+                    <span>{project.optionalModule.subtag[locale]}</span>
+                  </div>
+                ) : null}
+
+                {project.optionalModule.paragraphs?.[locale] ? (
+                  <div className={styles.overviewGrid}>
+                    {project.optionalModule.paragraphs[locale].map(
+                      (paragraph, index) => (
+                        <p key={index} className={styles.overviewParagraph}>
+                          {paragraph}
+                        </p>
+                      ),
+                    )}
+                  </div>
+                ) : null}
+
+                {project.optionalModule.items?.[locale] ? (
+                  <ul className={styles.contributionList}>
+                    {project.optionalModule.items[locale].map((item, index) => (
+                      <li key={index} className={styles.contributionItem}>
+                        <span
+                          className={styles.contributionIndex}
+                          aria-hidden="true"
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {project.optionalModule.groups &&
+                project.optionalModule.groups.length > 0 ? (
+                  <ul className={styles.techGroupsList}>
+                    {project.optionalModule.groups.map((group) => (
+                      <li
+                        key={group.category}
+                        className={styles.techGroupItem}
+                      >
+                        <span className={styles.techGroupCategory}>
+                          {group.category}
+                        </span>
+                        <span className={styles.techGroupValues}>
+                          {group.technologies.join(", ")}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {project.optionalModule.notes?.[locale] ? (
+                  <ol className={styles.techNotesGrid}>
+                    {project.optionalModule.notes[locale].map((note, index) => (
+                      <li key={index} className={styles.techNoteItem}>
+                        <span
+                          className={styles.techNoteNum}
+                          aria-hidden="true"
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <p className={styles.techNoteText}>{note}</p>
+                      </li>
+                    ))}
+                  </ol>
                 ) : null}
               </div>
             </section>

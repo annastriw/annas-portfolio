@@ -724,13 +724,14 @@ test("ProjectDetailView meets semantic heading hierarchy, dynamic section number
     "utf8",
   );
 
-  // 1. One logical H1, sequential H2 section headers with aria-labelledby
+  // 1. One logical H1, sequential H2 section headers with aria-labelledby (4 core + 1 optional module)
   assert.equal((detailComponent.match(/<h1\b/g) ?? []).length, 1);
-  assert.equal((detailComponent.match(/<h2\b/g) ?? []).length, 4);
+  assert.equal((detailComponent.match(/<h2\b/g) ?? []).length, 5);
   assert.match(detailComponent, /aria-labelledby="section-gallery-title"/);
   assert.match(detailComponent, /aria-labelledby="section-overview-title"/);
   assert.match(detailComponent, /aria-labelledby="section-contribution-title"/);
   assert.match(detailComponent, /aria-labelledby="section-scope-title"/);
+  assert.match(detailComponent, /aria-labelledby="section-optional-title"/);
 
   // 2. Dynamic section numbering without gaps
   assert.match(detailComponent, /let sectionCounter = 0;/);
@@ -739,11 +740,12 @@ test("ProjectDetailView meets semantic heading hierarchy, dynamic section number
   assert.match(detailComponent, /\[\{overviewIndex\}\]/);
   assert.match(detailComponent, /\[\{contributionIndex\}\]/);
   assert.match(detailComponent, /\[\{scopeIndex\}\]/);
+  assert.match(detailComponent, /\[\{optionalModuleIndex\}\]/);
 
   // 3. Lightbox title does NOT introduce illegal extra H1/H2
   assert.doesNotMatch(detailComponent, /<h[12][^>]*lightboxTitle/);
 
-  // 4. Back link navigation semantics
+  // 4. Back link navigation semantics and absence of visual breadcrumb
   assert.match(detailComponent, /className=\{styles\.backNav\}/);
   assert.match(detailComponent, /className=\{styles\.backLink\}/);
   assert.doesNotMatch(detailComponent, /styles\.breadcrumb\b/);
@@ -753,7 +755,6 @@ test("ProjectDetailView meets semantic heading hierarchy, dynamic section number
   assert.match(detailComponent, /claimBoundaryTag/);
   assert.match(detailComponent, /subBlockHeaderTag/);
   assert.match(detailComponent, /scopeGroupHeaderTag/);
-  assert.match(detailComponent, /repoDot/);
   assert.match(css, /\.thumbnailActive\s*\{[^}]*outline:/);
   assert.match(css, /\.thumbnailActive\s*\{[^}]*box-shadow:/);
   assert.match(css, /\.claimBoundaryCard\s*\{[^}]*border-inline-start:\s*3px solid/);
@@ -777,7 +778,100 @@ test("ProjectDetailView meets semantic heading hierarchy, dynamic section number
 
   // 8. ScrollReveal applied at primary section block level
   const scrollRevealMatches = detailComponent.match(/<ScrollReveal\b/g) ?? [];
-  assert.equal(scrollRevealMatches.length, 5, "ScrollReveal wraps opening + 4 primary sections only");
+  assert.equal(scrollRevealMatches.length, 6, "ScrollReveal wraps opening + 4 primary sections + optional module");
+});
+
+test("ProjectDetailView enforces exact core order, locale-aware back link, link types, and optional module contract", () => {
+  const detailComponent = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
+    "utf8",
+  );
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "project-detail.module.css"),
+    "utf8",
+  );
+
+  // Exact core section order in template
+  const backNavPos = detailComponent.indexOf("styles.backNav");
+  const openingPos = detailComponent.indexOf("styles.opening");
+  const galleryPos = detailComponent.indexOf("section-gallery-title");
+  const overviewPos = detailComponent.indexOf("section-overview-title");
+  const contributionPos = detailComponent.indexOf("section-contribution-title");
+  const scopePos = detailComponent.indexOf("section-scope-title");
+  const optionalPos = detailComponent.indexOf("section-optional-title");
+
+  assert.ok(backNavPos < openingPos, "Back link precedes Opening");
+  assert.ok(openingPos < galleryPos, "Opening precedes Gallery (01)");
+  assert.ok(galleryPos < overviewPos, "Gallery (01) precedes Overview (02)");
+  assert.ok(overviewPos < contributionPos, "Overview (02) precedes Contribution (03)");
+  assert.ok(contributionPos < scopePos, "Contribution (03) precedes Scope (04)");
+  assert.ok(scopePos < optionalPos, "Scope (04) precedes Optional Module");
+
+  // Personal stack is rendered within Contribution section
+  const personalStackPos = detailComponent.indexOf("styles.personalStackBlock");
+  assert.ok(
+    personalStackPos > contributionPos && personalStackPos < scopePos,
+    "Personal stack renders below Contribution and before Scope",
+  );
+
+  // Absence of visual breadcrumb and bottom adjacent navigation
+  assert.doesNotMatch(detailComponent, /styles\.breadcrumb/);
+  assert.doesNotMatch(detailComponent, /aria-label="Breadcrumb"/);
+  assert.doesNotMatch(detailComponent, /adjacentNav/);
+  assert.doesNotMatch(detailComponent, /previousProject|nextProject/);
+
+  // Link type requirements: solid live button, underlined repo links, static private repo
+  assert.match(css, /\.liveCta\s*\{[^}]*background:\s*var\(--accent\)/);
+  assert.match(css, /\.repoLink\s*\{[^}]*text-decoration:\s*underline/);
+  assert.match(css, /\.repoLink\s*\{[^}]*text-underline-offset:\s*4px/);
+  assert.match(css, /\.repoNotice\s*\{[^}]*min-block-size:\s*2\.75rem/);
+  assert.doesNotMatch(css, /\.repoNotice\s*\{[^}]*cursor:\s*pointer/);
+
+  // Private repo renders as plain static text without icon
+  assert.match(detailComponent, /<span className=\{styles\.repoNotice\}>\s*\{project\.repositoryNotice\[locale\]\}\s*<\/span>/);
+
+  // External link safe new-tab attributes and accessible arrow
+  assert.match(detailComponent, /target="_blank"/);
+  assert.match(detailComponent, /rel="noopener noreferrer"/);
+  assert.match(detailComponent, /styles\.linkArrow/);
+
+  // Optional module rendering contract
+  assert.match(detailComponent, /hasOptionalModule && project\.optionalModule/);
+  assert.match(detailComponent, /project\.optionalModule\.title\[locale\]/);
+});
+
+test("validates maximum-six personal tech stack rule and contract helpers", async () => {
+  const { validatePersonalTechStack } = await import(moduleUrl.href);
+
+  for (const project of projectCaseStudies) {
+    assert.equal(
+      validatePersonalTechStack(project),
+      true,
+      `Project ${project.slug} must satisfy validatePersonalTechStack`,
+    );
+  }
+
+  // iHealth personal stack has exactly 6 items
+  const ihealth = getProjectCaseStudy("ihealth-edu");
+  assert.ok(ihealth);
+  assert.equal(ihealth.techStack.length, 6);
+
+  // Synthetic validation check for > 6 items
+  assert.equal(
+    validatePersonalTechStack({
+      personalTechStack: ["Figma", "Next.js", "React", "TypeScript", "Tailwind", "REST API", "Extra"],
+    }),
+    false,
+    "validatePersonalTechStack must reject more than 6 items",
+  );
+
+  assert.equal(
+    validatePersonalTechStack({
+      personalTechStack: ["Figma", "Next.js", "React", "TypeScript", "Tailwind", "REST API"],
+    }),
+    true,
+    "validatePersonalTechStack must accept 6 items",
+  );
 });
 
 test("project detail router routes all 10 active projects through shared ProjectDetailView template", () => {
@@ -885,4 +979,5 @@ test("physical asset files for all 10 projects exist at exact paths without muta
     }
   }
 });
+
 
