@@ -30,8 +30,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const project = getProjectCaseStudy(slug);
   if (!project) return {};
 
-  const title = `${project.title[locale]} - Annas Tri Widagdo`;
-  const description = project.overview[locale].join(" ");
+  const title =
+    project.metaTitle?.[locale] ??
+    `${project.title[locale]} - Annas Tri Widagdo`;
+  const description =
+    project.metaDescription?.[locale] ??
+    project.overview[locale].join(" ");
 
   return createPageMetadata({
     locale,

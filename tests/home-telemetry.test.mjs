@@ -134,29 +134,33 @@ test("Featured projects renders 4-row full-width editorial index with visible Ex
     "Linux Ubuntu",
   ]);
 
-  // 02 iHealth Edu synchronization (5-item displayed stack, ESP32 omitted, IoT summary preserved)
+  // 02 iHealth Edu synchronization (approved Frontend Web Developer, 6-item stack, approved bilingual summary)
   assert.equal(homeSelectedProjects[1].title.en, "iHealth Edu");
-  assert.equal(homeSelectedProjects[1].role.en, "Full-Stack Web Developer");
+  assert.equal(homeSelectedProjects[1].role.en, "Frontend Web Developer");
+  assert.equal(homeSelectedProjects[1].role.id, "Frontend Web Developer");
   assert.equal(homeSelectedProjects[1].status.en, "Live Production");
+  assert.equal(homeSelectedProjects[1].status.id, "Live Production");
   assert.equal(
     homeSelectedProjects[1].summary.en,
-    "A health education and screening platform developed with Puskesmas Padangsari, integrating patient data management, IoT telemetry, and machine learning decision support.",
+    "A health education and screening platform developed with Puskesmas Padangsari, bringing patient records, IoT health data, and machine learning decision support into one system.",
   );
   assert.equal(
     homeSelectedProjects[1].summary.id,
-    "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan pengelolaan data pasien, telemetri IoT, dan dukungan pengambilan keputusan berbasis machine learning.",
+    "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan data pasien, data kesehatan dari IoT, dan machine learning decision support dalam satu sistem.",
   );
   assert.deepEqual(homeSelectedProjects[1].technologies, [
+    "Figma",
     "Next.js",
-    "Laravel",
-    "MySQL",
-    "Flask",
-    "Docker",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "REST API",
   ]);
-  assert.equal(homeSelectedProjects[1].technologies.length, 5);
+  assert.equal(homeSelectedProjects[1].technologies.length, 6);
   assert.ok(!homeSelectedProjects[1].technologies.includes("ESP32"));
-  assert.match(homeSelectedProjects[1].summary.en, /IoT telemetry/);
-  assert.match(homeSelectedProjects[1].summary.id, /telemetri IoT/);
+  assert.ok(!homeSelectedProjects[1].technologies.includes("Laravel"));
+  assert.match(homeSelectedProjects[1].summary.en, /IoT health data/);
+  assert.match(homeSelectedProjects[1].summary.id, /data kesehatan dari IoT/);
 
   // 03 Heart Attack Risk Prediction synchronization (shorter home title, experimental prototype boundary)
   assert.equal(homeSelectedProjects[2].title.en, "Heart Attack Risk Prediction");

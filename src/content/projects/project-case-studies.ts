@@ -31,6 +31,41 @@ export interface ProjectTechnologyGroup {
   readonly technologies: readonly string[];
 }
 
+export interface ProjectExternalLink {
+  readonly label: LocalizedProjectText;
+  readonly url: string;
+  readonly type?: "primary" | "secondary" | "solid" | "underline";
+}
+
+export interface SystemUserRole {
+  readonly name: LocalizedProjectText;
+  readonly description: LocalizedProjectText;
+}
+
+export interface SystemScreeningEducation {
+  readonly screeningModules: readonly string[];
+  readonly educationAreas: LocalizedProjectList;
+  readonly learningSequence: LocalizedProjectText;
+}
+
+export interface SystemPatientDataGroup {
+  readonly title: LocalizedProjectText;
+  readonly items: LocalizedProjectList;
+  readonly note?: LocalizedProjectText;
+}
+
+export interface SystemIntegrationFlow {
+  readonly label?: LocalizedProjectText;
+  readonly steps: readonly string[];
+}
+
+export interface IHealthSystemScopeData {
+  readonly userRoles: readonly SystemUserRole[];
+  readonly screeningEducation: SystemScreeningEducation;
+  readonly patientData: readonly SystemPatientDataGroup[];
+  readonly integrationFlows: readonly SystemIntegrationFlow[];
+}
+
 export interface ProjectCaseStudy {
   readonly index: string;
   readonly slug: string;
@@ -41,7 +76,10 @@ export interface ProjectCaseStudy {
   readonly period?: LocalizedProjectText;
   readonly status: LocalizedProjectText;
   readonly client?: LocalizedProjectText;
+  readonly workingModel?: LocalizedProjectText;
   readonly lead?: LocalizedProjectText;
+  readonly metaTitle?: LocalizedProjectText;
+  readonly metaDescription?: LocalizedProjectText;
   readonly repositoryNotice?: LocalizedProjectText;
   readonly overview: LocalizedProjectList;
   readonly contributions: LocalizedProjectList;
@@ -50,6 +88,7 @@ export interface ProjectCaseStudy {
   readonly modules?: readonly string[];
   readonly workflow?: LocalizedProjectList;
   readonly technologyGroups?: readonly ProjectTechnologyGroup[];
+  readonly systemScope?: IHealthSystemScopeData;
   readonly techStack: readonly string[];
   readonly cover: {
     readonly src: string;
@@ -62,6 +101,9 @@ export interface ProjectCaseStudy {
   readonly claimBoundary?: LocalizedProjectText;
   readonly liveUrl?: string;
   readonly githubUrl?: string;
+  readonly frontendRepoUrl?: string;
+  readonly backendRepoUrl?: string;
+  readonly projectLinks?: readonly ProjectExternalLink[];
   readonly videoSrc?: string;
 }
 
@@ -415,73 +457,357 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "02",
     slug: "ihealth-edu",
     category: "web-app",
-    categoryLabel: categoryLabels["web-app"],
+    categoryLabel: { en: "02 / WEB APPLICATION", id: "02 / WEB APPLICATION" },
     title: { en: "iHealth Edu", id: "iHealth Edu" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
-    status: { en: "Production deployment", id: "Deploy ke production" },
+    client: {
+      en: "Puskesmas Padangsari",
+      id: "Puskesmas Padangsari",
+    },
+    role: {
+      en: "Frontend Web Developer",
+      id: "Frontend Web Developer",
+    },
+    workingModel: {
+      en: "Team project",
+      id: "Proyek tim",
+    },
+    period: {
+      en: "June–August 2025",
+      id: "Juni–Agustus 2025",
+    },
+    status: {
+      en: "Live Production",
+      id: "Live Production",
+    },
+    lead: {
+      en: "A digital health platform that brings structured screening, health education, patient records, IoT health data, and machine learning decision support into one system.",
+      id: "Platform kesehatan digital yang menyatukan screening terstruktur, edukasi kesehatan, data pasien, data kesehatan dari IoT, dan machine learning decision support dalam satu sistem.",
+    },
+    metaTitle: {
+      en: "iHealth Edu — Frontend Web Development Case Study | Annas Tri Widagdo",
+      id: "iHealth Edu — Studi Kasus Frontend Web Development | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "Frontend web development case study for iHealth Edu with Puskesmas Padangsari, covering UI/UX design in Figma, role-based Next.js interfaces, IoT health data, and ML decision support.",
+      id: "Studi kasus frontend web development untuk iHealth Edu bersama Puskesmas Padangsari, mencakup desain UI/UX Figma, antarmuka Next.js berbasis role, data kesehatan IoT, dan decision support ML.",
+    },
+    liveUrl: "https://www.ihealthedu.site/",
+    frontendRepoUrl: "https://github.com/annastriw/frontend-ihealth.git",
+    backendRepoUrl: "https://github.com/annastriw/backend-ihealth.git",
+    projectLinks: [
+      {
+        label: { en: "Visit Live Website", id: "Buka Website" },
+        url: "https://www.ihealthedu.site/",
+        type: "primary",
+      },
+      {
+        label: { en: "View Frontend Repository", id: "Lihat Repositori Frontend" },
+        url: "https://github.com/annastriw/frontend-ihealth.git",
+        type: "secondary",
+      },
+      {
+        label: { en: "View Backend Repository", id: "Lihat Repositori Backend" },
+        url: "https://github.com/annastriw/backend-ihealth.git",
+        type: "secondary",
+      },
+    ],
     overview: {
       en: [
-        "iHealth Edu is an integrated health platform developed with Puskesmas Padangsari for patients, administrators, and health workers.",
-        "It combines screening, structured education, patient records, ESP32 health data, and an ML risk-prediction workflow in one system.",
+        "iHealth Edu was developed with Puskesmas Padangsari to bring health records, structured screening, and educational content into a digital platform designed around primary-care workflows.",
+        "The system centralizes patient information, makes health education easier to access, and helps health workers review patient histories. Machine learning results are presented only as decision support and do not provide a clinical diagnosis.",
       ],
       id: [
-        "iHealth Edu adalah platform kesehatan terintegrasi yang dikembangkan bersama Puskesmas Padangsari untuk pasien, administrator, dan tenaga kesehatan.",
-        "Platform ini menggabungkan screening, edukasi terstruktur, rekam pasien, data kesehatan ESP32, dan alur prediksi risiko berbasis ML dalam satu sistem.",
+        "iHealth Edu dikembangkan bersama Puskesmas Padangsari untuk menyatukan data kesehatan, screening terstruktur, dan konten edukasi dalam platform digital yang dirancang berdasarkan workflow layanan kesehatan primer.",
+        "Sistem ini memusatkan data pasien, memudahkan akses edukasi kesehatan, dan membantu tenaga kesehatan memantau riwayat pasien. Hasil machine learning hanya digunakan sebagai decision support dan bukan sebagai diagnosis klinis.",
       ],
     },
     contributions: {
       en: [
-        "Designed role-specific product flows and interface concepts in Figma.",
-        "Built the Next.js frontend and Laravel backend for screening, education, and patient-data workflows.",
-        "Connected the Random Forest inference service through Flask and integrated ESP32 data through Laravel.",
-        "Tested the application with Katalon Studio and deployed the containerized system on Ubuntu.",
+        "Gathered requirements through an interview with the head of Puskesmas Padangsari, regular discussions, and workflow observation, then translated them into the UI/UX design.",
+        "Developed role-specific frontend experiences for patients, administrators, and health workers using Next.js.",
+        "Integrated REST APIs and presented health measurements received from ESP32 devices in the frontend.",
+        "Integrated machine learning decision-support results into the health-worker interface.",
       ],
       id: [
-        "Merancang alur produk berbasis peran dan konsep antarmuka di Figma.",
-        "Membangun frontend Next.js dan backend Laravel untuk alur screening, edukasi, dan data pasien.",
-        "Menghubungkan layanan inferensi Random Forest melalui Flask serta mengintegrasikan data ESP32 melalui Laravel.",
-        "Menguji aplikasi dengan Katalon Studio dan melakukan deployment sistem berbasis container di Ubuntu.",
+        "Menggali kebutuhan melalui wawancara dengan kepala Puskesmas Padangsari, diskusi rutin, dan observasi workflow, kemudian menerjemahkannya ke dalam desain UI/UX.",
+        "Mengembangkan frontend berbasis role untuk pasien, admin, dan tenaga kesehatan menggunakan Next.js.",
+        "Mengintegrasikan REST API dan menampilkan data pemeriksaan kesehatan dari perangkat ESP32 pada frontend.",
+        "Mengintegrasikan hasil machine learning decision support ke dalam antarmuka tenaga kesehatan.",
+      ],
+    },
+    techStack: [
+      "Figma",
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "REST API",
+    ],
+    systemScope: {
+      userRoles: [
+        {
+          name: { en: "Patient", id: "Pasien" },
+          description: {
+            en: "Completes screening, accesses educational content, and views health history.",
+            id: "Mengikuti screening, mengakses konten edukasi, dan melihat riwayat kesehatan.",
+          },
+        },
+        {
+          name: { en: "Administrator", id: "Admin" },
+          description: {
+            en: "Manages accounts, content, and operational system data.",
+            id: "Mengelola akun, konten, dan data operasional sistem.",
+          },
+        },
+        {
+          name: { en: "Health Worker", id: "Tenaga Kesehatan" },
+          description: {
+            en: "Monitors patient data and reviews decision-support results.",
+            id: "Memantau data pasien dan meninjau hasil decision support.",
+          },
+        },
+      ],
+      screeningEducation: {
+        screeningModules: ["DSMQ", "HSMBQ", "DASS-21"],
+        educationAreas: {
+          en: ["Diabetes", "Hypertension", "Mental Health"],
+          id: ["Diabetes", "Hipertensi", "Kesehatan Mental"],
+        },
+        learningSequence: {
+          en: "Pre-Test → Education Module → Post-Test",
+          id: "Pre-Test → Modul Edukasi → Post-Test",
+        },
+      },
+      patientData: [
+        {
+          title: { en: "IoT Measurements", id: "Pengukuran IoT" },
+          items: {
+            en: ["Blood pressure", "Blood glucose", "Cholesterol"],
+            id: ["Tekanan darah", "Gula darah", "Kolesterol"],
+          },
+        },
+        {
+          title: { en: "Manually Entered Data", id: "Data Input Manual" },
+          items: {
+            en: [
+              "Height",
+              "Weight",
+              "Lifestyle information",
+              "Supporting patient information",
+            ],
+            id: [
+              "Tinggi badan",
+              "Berat badan",
+              "Informasi gaya hidup",
+              "Informasi pendukung pasien",
+            ],
+          },
+          note: {
+            en: "BMI is calculated from height and weight.",
+            id: "BMI dihitung dari tinggi dan berat badan.",
+          },
+        },
+        {
+          title: { en: "Patient History", id: "Riwayat Pasien" },
+          items: {
+            en: [
+              "Centralized records reviewed over time by appropriate user roles",
+            ],
+            id: [
+              "Catatan terpusat yang dapat dipantau dari waktu ke waktu oleh role terkait",
+            ],
+          },
+        },
+      ],
+      integrationFlows: [
+        {
+          label: {
+            en: "IoT & User Input Integration",
+            id: "Integrasi IoT & Input Pengguna",
+          },
+          steps: [
+            "ESP32 / User Input",
+            "Laravel API",
+            "MySQL",
+            "Next.js Interface",
+          ],
+        },
+        {
+          label: {
+            en: "ML Decision-Support Integration",
+            id: "Integrasi Decision Support ML",
+          },
+          steps: [
+            "Flask ML Service / Random Forest",
+            "Decision-Support Result",
+            "Health-Worker Interface",
+          ],
+        },
       ],
     },
     technicalNotes: {
       en: [
-        "Three roles separate patient, administrator, and health-worker responsibilities.",
-        "Screening workflows cover validated DSMQ, HSMBQ, and DASS-21 instruments.",
-        "Education paths for hypertension, diabetes, and mental health use pre-test, module, and post-test stages.",
-        "ESP32 measurements pass through Laravel before being stored in MySQL.",
+        "User Roles: Patient (completes screening, accesses educational content, views health history), Administrator (manages accounts, content, operational system data), and Health Worker (monitors patient data, reviews decision-support results).",
+        "Screening & Education: DSMQ, HSMBQ, and DASS-21 screening modules alongside diabetes, hypertension, and mental health education with a Pre-Test → Education Module → Post-Test sequence.",
+        "Patient Data: IoT measurements (blood pressure, blood glucose, cholesterol), manually entered website data (height, weight, lifestyle, BMI calculation), and centralized patient history.",
+        "System Integrations: ESP32 / User Input → Laravel API → MySQL → Next.js Interface and Flask ML Service / Random Forest → Decision-Support Result → Health-Worker Interface.",
       ],
       id: [
-        "Tiga peran memisahkan tanggung jawab pasien, administrator, dan tenaga kesehatan.",
-        "Alur screening mencakup instrumen kuesioner terstandar DSMQ, HSMBQ, dan DASS-21.",
-        "Jalur edukasi hipertensi, diabetes, dan kesehatan mental menggunakan tahap pre-test, modul, dan post-test.",
-        "Pengukuran ESP32 melewati Laravel sebelum disimpan di MySQL.",
+        "Role Pengguna: Pasien (mengikuti screening, mengakses modul edukasi, melihat riwayat kesehatan), Admin (mengelola akun, konten, data operasional sistem), dan Tenaga Kesehatan (memantau data pasien, meninjau hasil decision support).",
+        "Screening & Edukasi: Modul screening DSMQ, HSMBQ, dan DASS-21 serta edukasi diabetes, hipertensi, dan kesehatan mental dengan alur Pre-Test → Modul Edukasi → Post-Test.",
+        "Data Pasien: Pengukuran IoT (tekanan darah, gula darah, kolesterol), input manual website (tinggi, berat badan, gaya hidup, kalkulasi BMI), dan riwayat pasien terpusat.",
+        "Integrasi Sistem: ESP32 / User Input → Laravel API → MySQL → Next.js Interface dan Flask ML Service / Random Forest → Decision-Support Result → Antarmuka Tenaga Kesehatan.",
       ],
     },
-    techStack: ["Next.js", "Laravel", "MySQL", "Random Forest", "Flask", "ESP32", "Docker"],
     cover: {
       src: "/assets/projects/ihealth-edu/cover.webp",
-      alt: { en: "iHealth Edu health education interface", id: "Antarmuka edukasi kesehatan iHealth Edu" },
+      alt: {
+        en: "iHealth Edu health education and screening interface",
+        id: "Antarmuka edukasi dan screening kesehatan iHealth Edu",
+      },
       position: "top",
+      caption: {
+        en: "TODO_IHEALTH_CAPTION_01_EN",
+        id: "TODO_IHEALTH_CAPTION_01_ID",
+      },
     },
     evidence: [
       {
         id: "FIG.01",
         src: "/assets/projects/ihealth-edu/documentation/01.webp",
         format: "wide",
-        alt: { en: "iHealth Edu platform documentation", id: "Dokumentasi platform iHealth Edu" },
-        caption: { en: "Patient dashboard with health metrics, screening history, and educational modules.", id: "Dashboard pasien dengan metrik kesehatan, riwayat screening, dan modul edukasi." },
+        alt: {
+          en: "iHealth Edu platform documentation",
+          id: "Dokumentasi platform iHealth Edu",
+        },
+        caption: {
+          en: "Patient dashboard with health metrics, screening history, and educational modules.",
+          id: "Dashboard pasien dengan metrik kesehatan, riwayat screening, dan modul edukasi.",
+        },
       },
       {
         id: "FIG.02",
         src: "/assets/projects/ihealth-edu/documentation/02.webp",
         format: "wide",
-        alt: { en: "iHealth Edu education workflow", id: "Alur edukasi iHealth Edu" },
-        caption: { en: "Structured health screening and assessment workflow interface.", id: "Antarmuka alur screening dan asesmen kesehatan terstruktur." },
+        alt: {
+          en: "iHealth Edu education workflow",
+          id: "Alur edukasi iHealth Edu",
+        },
+        caption: {
+          en: "Structured health screening and assessment workflow interface.",
+          id: "Antarmuka alur screening dan asesmen kesehatan terstruktur.",
+        },
+      },
+    ],
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/ihealth-edu/cover.webp",
+        format: "cover",
+        alt: {
+          en: "iHealth Edu health education and screening interface",
+          id: "Antarmuka edukasi dan screening kesehatan iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_01_EN",
+          id: "TODO_IHEALTH_CAPTION_01_ID",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/ihealth-edu/documentation/02.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu patient dashboard and screening records",
+          id: "Dashboard pasien dan riwayat screening iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_02_EN",
+          id: "TODO_IHEALTH_CAPTION_02_ID",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/ihealth-edu/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu structured questionnaire assessment interface",
+          id: "Antarmuka asesmen kuesioner terstruktur iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_03_EN",
+          id: "TODO_IHEALTH_CAPTION_03_ID",
+        },
+      },
+      {
+        slide: "04",
+        src: "/assets/projects/ihealth-edu/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu educational module and learning path interface",
+          id: "Antarmuka modul edukasi dan alur pembelajaran iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_04_EN",
+          id: "TODO_IHEALTH_CAPTION_04_ID",
+        },
+      },
+      {
+        slide: "05",
+        src: "/assets/projects/ihealth-edu/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu patient biometric records and health data interface",
+          id: "Antarmuka data kesehatan dan rekam biometrik pasien iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_05_EN",
+          id: "TODO_IHEALTH_CAPTION_05_ID",
+        },
+      },
+      {
+        slide: "06",
+        src: "/assets/projects/ihealth-edu/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu health worker monitoring and decision support interface",
+          id: "Antarmuka pemantauan tenaga kesehatan dan decision support iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_06_EN",
+          id: "TODO_IHEALTH_CAPTION_06_ID",
+        },
+      },
+      {
+        slide: "07",
+        src: "/assets/projects/ihealth-edu/documentation/07.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu administrator content and user management console",
+          id: "Konsol pengelolaan pengguna dan konten administrator iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_07_EN",
+          id: "TODO_IHEALTH_CAPTION_07_ID",
+        },
+      },
+      {
+        slide: "08",
+        src: "/assets/projects/ihealth-edu/documentation/08.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu geographic patient distribution and reporting map",
+          id: "Peta persebaran geografis dan pelaporan pasien iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_08_EN",
+          id: "TODO_IHEALTH_CAPTION_08_ID",
+        },
       },
     ],
     claimBoundary: {
-      en: "The ML feature is a risk-prediction and decision-support prototype, not a clinical diagnosis.",
-      id: "Fitur ML merupakan purwarupa prediksi risiko dan pendukung keputusan, bukan diagnosis klinis.",
+      en: "Machine learning results are presented only as decision support for health workers and do not provide a clinical diagnosis or medical advice.",
+      id: "Hasil machine learning hanya digunakan sebagai decision support bagi tenaga kesehatan dan bukan sebagai diagnosis klinis atau saran medis.",
     },
   },
   {

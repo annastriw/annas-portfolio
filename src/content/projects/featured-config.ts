@@ -54,23 +54,24 @@ export const homeSelectedProjects: readonly HomeSelectedProject[] = [
       id: "iHealth Edu",
     },
     role: {
-      en: "Full-Stack Web Developer",
-      id: "Full-Stack Web Developer",
+      en: "Frontend Web Developer",
+      id: "Frontend Web Developer",
     },
     status: {
       en: "Live Production",
       id: "Live Production",
     },
     summary: {
-      en: "A health education and screening platform developed with Puskesmas Padangsari, integrating patient data management, IoT telemetry, and machine learning decision support.",
-      id: "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan pengelolaan data pasien, telemetri IoT, dan dukungan pengambilan keputusan berbasis machine learning.",
+      en: "A health education and screening platform developed with Puskesmas Padangsari, bringing patient records, IoT health data, and machine learning decision support into one system.",
+      id: "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan data pasien, data kesehatan dari IoT, dan machine learning decision support dalam satu sistem.",
     },
     technologies: [
+      "Figma",
       "Next.js",
-      "Laravel",
-      "MySQL",
-      "Flask",
-      "Docker",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "REST API",
     ],
     coverImage: "/assets/projects/ihealth-edu/cover.webp",
     coverAlt: {

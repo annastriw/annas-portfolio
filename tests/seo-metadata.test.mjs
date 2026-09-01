@@ -334,7 +334,11 @@ test("generateProjectJsonLd accurately represents project facts and live URLs", 
   const ihealth = projectCaseStudies.find((p) => p.slug === "ihealth-edu");
   assert.ok(ihealth);
   const ihealthSchema = generateProjectJsonLd(ihealth, "en");
-  assert.equal(ihealthSchema.relatedLink, undefined, "iHealth Edu must not have fabricated liveUrl");
+  assert.equal(ihealthSchema["@type"], "SoftwareSourceCode");
+  assert.equal(ihealthSchema.name, "iHealth Edu");
+  assert.equal(ihealthSchema.url, "https://annastriwidagdo.me/en/projects/ihealth-edu");
+  assert.equal(ihealthSchema.relatedLink, "https://www.ihealthedu.site/");
+  assert.ok(ihealthSchema.image?.includes("/assets/projects/ihealth-edu/cover.webp"));
 });
 
 test("generateBlogPostingJsonLd produces valid BlogPosting schema with related project references", () => {

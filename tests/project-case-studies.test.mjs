@@ -76,7 +76,10 @@ test("references only real local visual evidence and verified public links", () 
   const linked = projectCaseStudies.filter((project) => project.liveUrl);
   assert.deepEqual(
     linked.map((project) => [project.slug, project.liveUrl]),
-    [["ukg-system", "https://ukgsystem.site/"]],
+    [
+      ["ukg-system", "https://ukgsystem.site/"],
+      ["ihealth-edu", "https://www.ihealthedu.site/"],
+    ],
   );
   assert.equal(
     projectCaseStudies.some((project) => project.githubUrl),
@@ -212,10 +215,172 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
   assert.doesNotMatch(stringified, /\b\d{2,3}%\b/);
 });
 
+test("maintains approved iHealth Edu locked facts, bilingual copy, and content structures", () => {
+  const ihealth = getProjectCaseStudy("ihealth-edu");
+  assert.ok(ihealth);
+
+  // Locked facts & metadata
+  assert.equal(ihealth.client?.en, "Puskesmas Padangsari");
+  assert.equal(ihealth.client?.id, "Puskesmas Padangsari");
+  assert.equal(ihealth.role.en, "Frontend Web Developer");
+  assert.equal(ihealth.role.id, "Frontend Web Developer");
+  assert.equal(ihealth.workingModel?.en, "Team project");
+  assert.equal(ihealth.workingModel?.id, "Proyek tim");
+  assert.equal(ihealth.period?.en, "June–August 2025");
+  assert.equal(ihealth.period?.id, "Juni–Agustus 2025");
+  assert.equal(ihealth.status.en, "Live Production");
+  assert.equal(ihealth.status.id, "Live Production");
+  assert.equal(ihealth.liveUrl, "https://www.ihealthedu.site/");
+  assert.equal(ihealth.frontendRepoUrl, "https://github.com/annastriw/frontend-ihealth.git");
+  assert.equal(ihealth.backendRepoUrl, "https://github.com/annastriw/backend-ihealth.git");
+
+  // Category & Lead
+  assert.equal(ihealth.categoryLabel.en, "02 / WEB APPLICATION");
+  assert.equal(ihealth.categoryLabel.id, "02 / WEB APPLICATION");
+  assert.equal(
+    ihealth.lead?.en,
+    "A digital health platform that brings structured screening, health education, patient records, IoT health data, and machine learning decision support into one system.",
+  );
+  assert.equal(
+    ihealth.lead?.id,
+    "Platform kesehatan digital yang menyatukan screening terstruktur, edukasi kesehatan, data pasien, data kesehatan dari IoT, dan machine learning decision support dalam satu sistem.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    ihealth.metaTitle?.en,
+    "iHealth Edu — Frontend Web Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    ihealth.metaTitle?.id,
+    "iHealth Edu — Studi Kasus Frontend Web Development | Annas Tri Widagdo",
+  );
+  assert.match(ihealth.metaDescription?.en ?? "", /Frontend web development case study for iHealth Edu/);
+  assert.match(ihealth.metaDescription?.id ?? "", /Studi kasus frontend web development untuk iHealth Edu/);
+
+  // Overview (exact 2 paragraphs from Section 7)
+  assert.equal(ihealth.overview.en.length, 2);
+  assert.equal(ihealth.overview.id.length, 2);
+  assert.equal(
+    ihealth.overview.en[0],
+    "iHealth Edu was developed with Puskesmas Padangsari to bring health records, structured screening, and educational content into a digital platform designed around primary-care workflows.",
+  );
+  assert.equal(
+    ihealth.overview.en[1],
+    "The system centralizes patient information, makes health education easier to access, and helps health workers review patient histories. Machine learning results are presented only as decision support and do not provide a clinical diagnosis.",
+  );
+  assert.equal(
+    ihealth.overview.id[0],
+    "iHealth Edu dikembangkan bersama Puskesmas Padangsari untuk menyatukan data kesehatan, screening terstruktur, dan konten edukasi dalam platform digital yang dirancang berdasarkan workflow layanan kesehatan primer.",
+  );
+  assert.equal(
+    ihealth.overview.id[1],
+    "Sistem ini memusatkan data pasien, memudahkan akses edukasi kesehatan, dan membantu tenaga kesehatan memantau riwayat pasien. Hasil machine learning hanya digunakan sebagai decision support dan bukan sebagai diagnosis klinis.",
+  );
+
+  // Contributions (exact 4 items from Section 8)
+  assert.equal(ihealth.contributions.en.length, 4);
+  assert.equal(ihealth.contributions.id.length, 4);
+  assert.equal(
+    ihealth.contributions.en[0],
+    "Gathered requirements through an interview with the head of Puskesmas Padangsari, regular discussions, and workflow observation, then translated them into the UI/UX design.",
+  );
+  assert.equal(
+    ihealth.contributions.en[1],
+    "Developed role-specific frontend experiences for patients, administrators, and health workers using Next.js.",
+  );
+  assert.equal(
+    ihealth.contributions.en[2],
+    "Integrated REST APIs and presented health measurements received from ESP32 devices in the frontend.",
+  );
+  assert.equal(
+    ihealth.contributions.en[3],
+    "Integrated machine learning decision-support results into the health-worker interface.",
+  );
+  assert.equal(
+    ihealth.contributions.id[0],
+    "Menggali kebutuhan melalui wawancara dengan kepala Puskesmas Padangsari, diskusi rutin, dan observasi workflow, kemudian menerjemahkannya ke dalam desain UI/UX.",
+  );
+  assert.equal(
+    ihealth.contributions.id[1],
+    "Mengembangkan frontend berbasis role untuk pasien, admin, dan tenaga kesehatan menggunakan Next.js.",
+  );
+  assert.equal(
+    ihealth.contributions.id[2],
+    "Mengintegrasikan REST API dan menampilkan data pemeriksaan kesehatan dari perangkat ESP32 pada frontend.",
+  );
+  assert.equal(
+    ihealth.contributions.id[3],
+    "Mengintegrasikan hasil machine learning decision support ke dalam antarmuka tenaga kesehatan.",
+  );
+
+  // Personal tech stack: exactly the 6 approved items
+  assert.deepEqual(ihealth.techStack, [
+    "Figma",
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "REST API",
+  ]);
+
+  // System Scope: 4 groups
+  assert.ok(ihealth.systemScope);
+  assert.equal(ihealth.systemScope.userRoles.length, 3);
+  assert.deepEqual(
+    ihealth.systemScope.userRoles.map((r) => r.name.en),
+    ["Patient", "Administrator", "Health Worker"],
+  );
+  assert.deepEqual(
+    ihealth.systemScope.screeningEducation.screeningModules,
+    ["DSMQ", "HSMBQ", "DASS-21"],
+  );
+  assert.equal(
+    ihealth.systemScope.screeningEducation.learningSequence.en,
+    "Pre-Test → Education Module → Post-Test",
+  );
+  assert.equal(ihealth.systemScope.patientData.length, 3);
+  assert.equal(ihealth.systemScope.integrationFlows.length, 2);
+
+  // Gallery: exactly 8 slides with 16 unique searchable placeholders
+  assert.equal(ihealth.gallery?.length, 8);
+  assert.equal(ihealth.gallery?.[0].src, "/assets/projects/ihealth-edu/cover.webp");
+  for (let i = 1; i <= 8; i++) {
+    const num = String(i).padStart(2, "0");
+    const slide = ihealth.gallery?.[i - 1];
+    assert.ok(slide);
+    assert.equal(slide.slide, num);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.equal(slide.caption.en, `TODO_IHEALTH_CAPTION_${num}_EN`);
+    assert.equal(slide.caption.id, `TODO_IHEALTH_CAPTION_${num}_ID`);
+    assert.doesNotMatch(slide.alt.en, /TODO_IHEALTH/);
+    assert.doesNotMatch(slide.alt.id, /TODO_IHEALTH/);
+  }
+
+  // Verify exactly 16 occurrences of TODO_IHEALTH_CAPTION_ in project-case-studies.ts (plus 2 in cover caption)
+  const caseStudiesSource = readFileSync(
+    join(root, "src", "content", "projects", "project-case-studies.ts"),
+    "utf8",
+  );
+  const ihealthTokens = caseStudiesSource.match(/TODO_IHEALTH_CAPTION_\d+_[A-Z]+/g) ?? [];
+  assert.equal(new Set(ihealthTokens).size, 16);
+
+  // Claim boundaries and prohibited strings
+  const stringified = JSON.stringify(ihealth);
+  assert.match(stringified, /not provide a clinical diagnosis/i);
+  assert.match(stringified, /bukan sebagai diagnosis klinis/i);
+  assert.doesNotMatch(stringified, /developed the Laravel backend|membangun backend Laravel/i);
+  assert.doesNotMatch(stringified, /trained the machine learning|melatih model/i);
+  assert.doesNotMatch(stringified, /Katalon Studio/i);
+  assert.doesNotMatch(stringified, /Docker containerization|deployment pada Linux Ubuntu/i);
+  assert.doesNotMatch(stringified, /validated instrument|terstandar DSMQ/i);
+  assert.doesNotMatch(stringified, /158[,.]?355/);
+});
+
 test("keeps the project-specific factual boundaries explicit", () => {
   const stringify = (slug) => JSON.stringify(getProjectCaseStudy(slug));
 
-  assert.match(stringify("ihealth-edu"), /not a clinical diagnosis|bukan diagnosis klinis/i);
+  assert.match(stringify("ihealth-edu"), /not provide a clinical diagnosis|bukan sebagai diagnosis klinis/i);
   assert.match(
     stringify("ml-for-heart-attack-risk-prediction"),
     /71\.93%|71,93%/,
