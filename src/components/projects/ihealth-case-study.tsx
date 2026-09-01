@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -10,6 +10,7 @@ import type {
   ProjectGallerySlide,
 } from "@/content/projects/project-case-studies";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { useGalleryAutoplay } from "./use-gallery-autoplay";
 
 import styles from "./ihealth-case-study.module.css";
 
@@ -22,7 +23,6 @@ export function IHealthCaseStudyView({
   project,
   locale,
 }: IHealthCaseStudyViewProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const activeTriggerRef = useRef<HTMLElement | null>(null);
@@ -58,6 +58,9 @@ export function IHealthCaseStudyView({
     carouselAria: isId
       ? "Galeri antarmuka platform iHealth Edu"
       : "iHealth Edu platform interface gallery carousel",
+    thumbnailRailAria: isId
+      ? "Pilihan thumbnail galeri"
+      : "Gallery thumbnail selector",
     prevSlide: isId
       ? "Slide sebelumnya (Panah Kiri)"
       : "Previous slide (Left Arrow)",
@@ -116,16 +119,21 @@ export function IHealthCaseStudyView({
           },
         ];
 
+  // Shared 4-second autoplay with crossfade, hover/focus/lightbox pause, and reduced-motion compliance
+  const {
+    activeIndex,
+    goToNext,
+    goToPrev,
+    goToIndex,
+    containerRef,
+    containerProps,
+  } = useGalleryAutoplay({
+    slideCount: slides.length,
+    intervalMs: 4000,
+    isLightboxOpen,
+  });
+
   const currentSlide = slides[activeIndex] ?? slides[0];
-
-  // Carousel navigation handlers with seamless wrap-around edge behavior
-  const handlePrevSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev > 0 ? prev - 1 : slides.length - 1));
-  }, [slides.length]);
-
-  const handleNextSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev < slides.length - 1 ? prev + 1 : 0));
-  }, [slides.length]);
 
   // Touch handlers for mobile swipe navigation
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -157,9 +165,9 @@ export function IHealthCaseStudyView({
 
     if (absX > 40 && absX > absY) {
       if (deltaX < 0) {
-        handleNextSlide();
+        goToNext();
       } else {
-        handlePrevSlide();
+        goToPrev();
       }
     }
 
@@ -178,10 +186,10 @@ export function IHealthCaseStudyView({
   const handleCarouselKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") {
       e.preventDefault();
-      handlePrevSlide();
+      goToPrev();
     } else if (e.key === "ArrowRight") {
       e.preventDefault();
-      handleNextSlide();
+      goToNext();
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       activeTriggerRef.current = e.currentTarget as HTMLElement;
@@ -211,13 +219,13 @@ export function IHealthCaseStudyView({
 
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        handlePrevSlide();
+        goToPrev();
         return;
       }
 
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        handleNextSlide();
+        goToNext();
         return;
       }
 
@@ -251,7 +259,7 @@ export function IHealthCaseStudyView({
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isLightboxOpen, handleCloseLightbox, handleNextSlide, handlePrevSlide]);
+  }, [isLightboxOpen, handleCloseLightbox, goToNext, goToPrev]);
 
   return (
     <article className={styles.page}>
@@ -375,8 +383,10 @@ export function IHealthCaseStudyView({
                 role="region"
                 aria-roledescription="carousel"
                 aria-label={copy.carouselAria}
+                ref={containerRef}
+                {...containerProps}
               >
-                {/* Responsive Display Frame */}
+                {/* Responsive Display Frame with Subtle Crossfade Layers */}
                 <div
                   className={styles.galleryFrame}
                   onClick={handleFrameClick}
@@ -389,14 +399,29 @@ export function IHealthCaseStudyView({
                   aria-label={`${copy.inspect}: Slide ${currentSlide.slide} — ${currentSlide.alt[locale]}`}
                   aria-roledescription="slide"
                 >
-                  <Image
-                    src={currentSlide.src}
-                    alt={currentSlide.alt[locale]}
-                    fill
-                    priority={activeIndex === 0}
-                    sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
-                    className={styles.galleryImage}
-                  />
+                  {slides.map((slide, index) => {
+                    const isActive = index === activeIndex;
+                    return (
+                      <div
+                        key={slide.slide}
+                        className={`${styles.gallerySlideLayer} ${
+                          isActive
+                            ? styles.gallerySlideActive
+                            : styles.gallerySlideInactive
+                        }`}
+                        aria-hidden={!isActive}
+                      >
+                        <Image
+                          src={slide.src}
+                          alt={slide.alt[locale]}
+                          fill
+                          priority={index === 0}
+                          sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
+                          className={styles.galleryImage}
+                        />
+                      </div>
+                    );
+                  })}
                   <div
                     className={styles.galleryInspectOverlay}
                     aria-hidden="true"
@@ -405,6 +430,52 @@ export function IHealthCaseStudyView({
                       🔍 {copy.inspect}
                     </span>
                   </div>
+                </div>
+
+                {/* Horizontal Thumbnail Rail with Accessible Active Indicators */}
+                <div
+                  className={styles.thumbnailRail}
+                  role="tablist"
+                  aria-label={copy.thumbnailRailAria}
+                >
+                  {slides.map((slide, index) => {
+                    const isActive = index === activeIndex;
+                    return (
+                      <button
+                        key={slide.slide}
+                        type="button"
+                        role="tab"
+                        aria-selected={isActive}
+                        aria-current={isActive ? "true" : undefined}
+                        aria-label={`${isId ? "Lihat slide" : "View slide"} ${slide.slide} — ${slide.alt[locale]}`}
+                        onClick={() => goToIndex(index)}
+                        className={`${styles.thumbnailBtn} ${
+                          isActive ? styles.thumbnailActive : ""
+                        }`}
+                      >
+                        <div className={styles.thumbnailMediaWrapper}>
+                          <Image
+                            src={slide.src}
+                            alt=""
+                            fill
+                            sizes="(max-width: 767px) 80px, 140px"
+                            className={styles.thumbnailImage}
+                          />
+                          <span className={styles.thumbnailNumber}>
+                            {slide.slide}
+                          </span>
+                          {isActive ? (
+                            <span
+                              className={styles.thumbnailActiveIndicator}
+                              aria-hidden="true"
+                            >
+                              ■
+                            </span>
+                          ) : null}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Bottom Bar: Caption on Left, Counter & Nav Controls on Right */}
@@ -430,7 +501,7 @@ export function IHealthCaseStudyView({
                     <div className={styles.galleryNav}>
                       <button
                         type="button"
-                        onClick={handlePrevSlide}
+                        onClick={goToPrev}
                         className={styles.galleryNavBtn}
                         aria-label={copy.prevSlide}
                       >
@@ -438,7 +509,7 @@ export function IHealthCaseStudyView({
                       </button>
                       <button
                         type="button"
-                        onClick={handleNextSlide}
+                        onClick={goToNext}
                         className={styles.galleryNavBtn}
                         aria-label={copy.nextSlide}
                       >
@@ -748,7 +819,7 @@ export function IHealthCaseStudyView({
           <div className={styles.lightboxMain}>
             <button
               type="button"
-              onClick={handlePrevSlide}
+              onClick={goToPrev}
               className={styles.lightboxNavBtn}
               aria-label={copy.prevSlide}
             >
@@ -768,7 +839,7 @@ export function IHealthCaseStudyView({
 
             <button
               type="button"
-              onClick={handleNextSlide}
+              onClick={goToNext}
               className={styles.lightboxNavBtn}
               aria-label={copy.nextSlide}
             >

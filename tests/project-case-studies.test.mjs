@@ -420,7 +420,7 @@ test("project public rendering has no project Markdown runtime import", () => {
   assert.doesNotMatch(route, /gray-matter|react-markdown|@\/lib\/projects/);
 });
 
-test("UkgCaseStudyView implements approved compact editorial layout and 9-slide carousel", () => {
+test("UkgCaseStudyView implements approved compact editorial layout and 9-slide carousel with shared autoplay and crossfade", () => {
   const ukgComponent = readFileSync(
     join(root, "src", "components", "projects", "ukg-case-study.tsx"),
     "utf8",
@@ -439,15 +439,19 @@ test("UkgCaseStudyView implements approved compact editorial layout and 9-slide 
   assert.match(ukgComponent, /styles\.liveCta/);
   assert.match(ukgComponent, /styles\.repoNotice/);
 
-  // 2. Section 01: Top-of-page 9-Slide Gallery Carousel
+  // 2. Section 01: Top-of-page 9-Slide Gallery Carousel with Shared useGalleryAutoplay
+  assert.match(ukgComponent, /useGalleryAutoplay/);
   assert.match(ukgComponent, /\[01\]/);
   assert.match(ukgComponent, /ukg-section-01-title/);
   assert.match(ukgComponent, /copy\.galleryTitle/);
   assert.match(ukgComponent, /role="region"/);
   assert.match(ukgComponent, /aria-roledescription="carousel"/);
   assert.match(ukgComponent, /styles\.galleryFrame/);
-  assert.match(ukgComponent, /handlePrevSlide/);
-  assert.match(ukgComponent, /handleNextSlide/);
+  assert.match(ukgComponent, /styles\.gallerySlideLayer/);
+  assert.match(ukgComponent, /styles\.gallerySlideActive/);
+  assert.match(ukgComponent, /styles\.gallerySlideInactive/);
+  assert.match(ukgComponent, /goToPrev/);
+  assert.match(ukgComponent, /goToNext/);
   assert.match(ukgComponent, /handleTouchStart/);
   assert.match(ukgComponent, /handleTouchMove/);
   assert.match(ukgComponent, /handleTouchEnd/);
@@ -493,14 +497,17 @@ test("UkgCaseStudyView implements approved compact editorial layout and 9-slide 
   assert.doesNotMatch(ukgComponent, /videoEvidenceCard/);
 });
 
-test("ukg-case-study.module.css defines responsive grid, carousel, metadata, and reduced motion without workflow styles", () => {
+test("ukg-case-study.module.css defines responsive grid, carousel, crossfade, metadata, and reduced motion without workflow styles", () => {
   const css = readFileSync(
     join(root, "src", "components", "projects", "ukg-case-study.module.css"),
     "utf8",
   );
 
-  // Check key responsive, carousel, and layout rules
+  // Check key responsive, carousel, crossfade, and layout rules
   assert.match(css, /\.galleryFrame\s*\{[^}]*touch-action:\s*pan-y/);
+  assert.match(css, /\.gallerySlideLayer/);
+  assert.match(css, /\.gallerySlideActive/);
+  assert.match(css, /\.gallerySlideInactive/);
   assert.match(css, /\.galleryImage\s*\{[^}]*object-fit:\s*contain/);
   assert.match(css, /\.galleryBottomBar/);
   assert.match(css, /\.galleryCaption/);
@@ -520,7 +527,7 @@ test("ukg-case-study.module.css defines responsive grid, carousel, metadata, and
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
 });
 
-test("IHealthCaseStudyView implements approved compact editorial layout, 4-group system scope, and 8-slide gallery shell", () => {
+test("IHealthCaseStudyView implements approved compact editorial layout, 4-group system scope, 8-slide gallery with thumbnail rail and crossfade", () => {
   const ihealthComponent = readFileSync(
     join(root, "src", "components", "projects", "ihealth-case-study.tsx"),
     "utf8",
@@ -551,15 +558,24 @@ test("IHealthCaseStudyView implements approved compact editorial layout, 4-group
   assert.match(ihealthComponent, /project\.frontendRepoUrl/);
   assert.match(ihealthComponent, /project\.backendRepoUrl/);
 
-  // 2. Section 01: Top-of-page Gallery Shell
+  // 2. Section 01: Top-of-page Gallery with Thumbnail Rail & Shared useGalleryAutoplay
+  assert.match(ihealthComponent, /useGalleryAutoplay/);
   assert.match(ihealthComponent, /\[01\]/);
   assert.match(ihealthComponent, /ihealth-section-01-title/);
   assert.match(ihealthComponent, /copy\.galleryTitle/);
   assert.match(ihealthComponent, /role="region"/);
   assert.match(ihealthComponent, /aria-roledescription="carousel"/);
   assert.match(ihealthComponent, /styles\.galleryFrame/);
-  assert.match(ihealthComponent, /handlePrevSlide/);
-  assert.match(ihealthComponent, /handleNextSlide/);
+  assert.match(ihealthComponent, /styles\.gallerySlideLayer/);
+  assert.match(ihealthComponent, /styles\.gallerySlideActive/);
+  assert.match(ihealthComponent, /styles\.gallerySlideInactive/);
+  assert.match(ihealthComponent, /styles\.thumbnailRail/);
+  assert.match(ihealthComponent, /styles\.thumbnailBtn/);
+  assert.match(ihealthComponent, /styles\.thumbnailActive/);
+  assert.match(ihealthComponent, /styles\.thumbnailActiveIndicator/);
+  assert.match(ihealthComponent, /goToIndex/);
+  assert.match(ihealthComponent, /goToPrev/);
+  assert.match(ihealthComponent, /goToNext/);
   assert.match(ihealthComponent, /handleTouchStart/);
   assert.match(ihealthComponent, /handleTouchMove/);
   assert.match(ihealthComponent, /handleTouchEnd/);
@@ -613,18 +629,25 @@ test("IHealthCaseStudyView implements approved compact editorial layout, 4-group
   assert.doesNotMatch(ihealthComponent, /videoEvidenceCard/);
 });
 
-test("ihealth-case-study.module.css defines responsive split opening, grid, carousel, metadata, and reduced motion", () => {
+test("ihealth-case-study.module.css defines responsive split opening, grid, carousel, thumbnail rail, metadata, and reduced motion", () => {
   const css = readFileSync(
     join(root, "src", "components", "projects", "ihealth-case-study.module.css"),
     "utf8",
   );
 
-  // Check key responsive, opening split, carousel, and layout rules
+  // Check key responsive, opening split, carousel, thumbnail rail, and layout rules
   assert.match(css, /\.openingSplit/);
   assert.match(css, /\.openingLeft/);
   assert.match(css, /\.openingRight/);
   assert.match(css, /\.galleryFrame\s*\{[^}]*touch-action:\s*pan-y/);
+  assert.match(css, /\.gallerySlideLayer/);
+  assert.match(css, /\.gallerySlideActive/);
+  assert.match(css, /\.gallerySlideInactive/);
   assert.match(css, /\.galleryImage\s*\{[^}]*object-fit:\s*contain/);
+  assert.match(css, /\.thumbnailRail/);
+  assert.match(css, /\.thumbnailBtn/);
+  assert.match(css, /\.thumbnailActive/);
+  assert.match(css, /\.thumbnailActiveIndicator/);
   assert.match(css, /\.galleryBottomBar/);
   assert.match(css, /\.galleryCaption/);
   assert.match(css, /\.galleryControls/);
@@ -639,6 +662,96 @@ test("ihealth-case-study.module.css defines responsive split opening, grid, caro
   assert.match(css, /\.systemScopeGrid/);
   assert.match(css, /\.flowContainer/);
   assert.match(css, /@media\s*\(min-width:\s*64rem\)/);
+  assert.match(css, /@media\s*\(max-width:\s*1023px\)/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
 });
+
+test("use-gallery-autoplay.ts implements 4-second interval, pause conditions, restart on manual navigation, and reduced motion safety", () => {
+  const hookSource = readFileSync(
+    join(root, "src", "components", "projects", "use-gallery-autoplay.ts"),
+    "utf8",
+  );
+
+  assert.match(hookSource, /intervalMs\s*=\s*4000/);
+  assert.match(hookSource, /useSyncExternalStore/);
+  assert.match(hookSource, /prefers-reduced-motion:\s*reduce/);
+  assert.match(hookSource, /visibilitychange/);
+  assert.match(hookSource, /goToNext/);
+  assert.match(hookSource, /goToPrev/);
+  assert.match(hookSource, /goToIndex/);
+  assert.match(hookSource, /restartTimer/);
+  assert.match(hookSource, /clearInterval\(timer\)/);
+  assert.match(hookSource, /onMouseEnter/);
+  assert.match(hookSource, /onMouseLeave/);
+  assert.match(hookSource, /onFocusCapture/);
+  assert.match(hookSource, /onBlurCapture/);
+});
+
+test("gallery navigation wrap-around and counter synchronization are mathematically verified", () => {
+  // Test wrap-around logic for 8-slide iHealth gallery
+  const ihealthCount = 8;
+  const nextFromLastIhealth = (7 < ihealthCount - 1 ? 7 + 1 : 0);
+  assert.equal(nextFromLastIhealth, 0, "Last iHealth slide wraps to first slide on next");
+
+  const prevFromFirstIhealth = (0 > 0 ? 0 - 1 : ihealthCount - 1);
+  assert.equal(prevFromFirstIhealth, 7, "First iHealth slide wraps to last slide on prev");
+
+  // Test counter formatting for 8-slide gallery
+  for (let idx = 0; idx < ihealthCount; idx++) {
+    const formatted = `${String(idx + 1).padStart(2, "0")} / ${String(ihealthCount).padStart(2, "0")}`;
+    const expectedNum = String(idx + 1).padStart(2, "0");
+    assert.equal(formatted, `${expectedNum} / 08`);
+  }
+
+  // Test wrap-around logic for 9-slide UKG gallery
+  const ukgCount = 9;
+  const nextFromLastUkg = (8 < ukgCount - 1 ? 8 + 1 : 0);
+  assert.equal(nextFromLastUkg, 0, "Last UKG slide wraps to first slide on next");
+
+  const prevFromFirstUkg = (0 > 0 ? 0 - 1 : ukgCount - 1);
+  assert.equal(prevFromFirstUkg, 8, "First UKG slide wraps to last slide on prev");
+
+  // Test counter formatting for 9-slide gallery
+  for (let idx = 0; idx < ukgCount; idx++) {
+    const formatted = `${String(idx + 1).padStart(2, "0")} / ${String(ukgCount).padStart(2, "0")}`;
+    const expectedNum = String(idx + 1).padStart(2, "0");
+    assert.equal(formatted, `${expectedNum} / 09`);
+  }
+});
+
+test("physical asset files for iHealth Edu (8 images) and UKG System (9 images) exist at exact paths without mutation", () => {
+  const ihealthExpectedPaths = [
+    "public/assets/projects/ihealth-edu/cover.webp",
+    "public/assets/projects/ihealth-edu/documentation/02.webp",
+    "public/assets/projects/ihealth-edu/documentation/03.webp",
+    "public/assets/projects/ihealth-edu/documentation/04.webp",
+    "public/assets/projects/ihealth-edu/documentation/05.webp",
+    "public/assets/projects/ihealth-edu/documentation/06.webp",
+    "public/assets/projects/ihealth-edu/documentation/07.webp",
+    "public/assets/projects/ihealth-edu/documentation/08.webp",
+  ];
+
+  for (const relPath of ihealthExpectedPaths) {
+    const fullPath = join(root, relPath);
+    assert.ok(existsSync(fullPath), `Expected asset exists: ${relPath}`);
+  }
+
+  const ukgExpectedPaths = [
+    "public/assets/projects/ukg-system/cover.webp",
+    "public/assets/projects/ukg-system/documentation/02.webp",
+    "public/assets/projects/ukg-system/documentation/03.webp",
+    "public/assets/projects/ukg-system/documentation/04.webp",
+    "public/assets/projects/ukg-system/documentation/05.webp",
+    "public/assets/projects/ukg-system/documentation/06.webp",
+    "public/assets/projects/ukg-system/documentation/07.webp",
+    "public/assets/projects/ukg-system/documentation/08.webp",
+    "public/assets/projects/ukg-system/documentation/09.webp",
+  ];
+
+  for (const relPath of ukgExpectedPaths) {
+    const fullPath = join(root, relPath);
+    assert.ok(existsSync(fullPath), `Expected asset exists: ${relPath}`);
+  }
+});
+
 

@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    iHealth Edu — Editorial Case Study Layout
    ========================================================================== */
 
@@ -270,7 +270,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.875rem;
 }
 
 .galleryFrame {
@@ -283,10 +283,35 @@
   overflow: hidden;
   cursor: pointer;
   touch-action: pan-y;
+  user-select: none;
+}
+
+.gallerySlideLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gallerySlideActive {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.gallerySlideInactive {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .galleryImage {
   object-fit: contain;
+  filter: saturate(0.95);
   transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -297,13 +322,14 @@
 .galleryInspectOverlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: opacity 180ms ease;
   pointer-events: none;
+  z-index: 2;
 }
 
 .galleryFrame:hover .galleryInspectOverlay,
@@ -325,11 +351,116 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
+/* Thumbnail Rail */
+.thumbnailRail {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0.625rem;
+  width: 100%;
+  padding-block: 0.25rem;
+}
+
+@media (max-width: 1023px) {
+  .thumbnailRail {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+    padding-block-end: 0.5rem;
+    scrollbar-width: thin;
+  }
+}
+
+.thumbnailBtn {
+  position: relative;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 180ms ease, outline 180ms ease, opacity 180ms ease;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1023px) {
+  .thumbnailBtn {
+    scroll-snap-align: start;
+    width: clamp(5.5rem, 18vw, 8rem);
+  }
+}
+
+.thumbnailMediaWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--muted-bg, rgba(0, 0, 0, 0.04));
+}
+
+.thumbnailImage {
+  object-fit: cover;
+  opacity: 0.6;
+  filter: grayscale(20%);
+  transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease;
+}
+
+.thumbnailBtn:hover .thumbnailImage,
+.thumbnailBtn:focus-visible .thumbnailImage {
+  opacity: 0.85;
+  filter: none;
+}
+
+.thumbnailNumber {
+  position: absolute;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  padding: 0.1rem 0.3rem;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  font: 600 0.5625rem var(--font-mono);
+  letter-spacing: 0.04em;
+  border-radius: 1px;
+  z-index: 2;
+}
+
+.thumbnailActiveIndicator {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  color: var(--accent);
+  font-size: 0.5rem;
+  line-height: 1;
+  z-index: 2;
+}
+
+/* Active thumbnail state that does NOT rely on color alone */
+.thumbnailActive {
+  border: 2px solid var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.thumbnailActive .thumbnailImage {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.02);
+}
+
+.thumbnailActive .thumbnailNumber {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* Bottom Bar */
 .galleryBottomBar {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding-block-start: 0.5rem;
+  padding-block: 0.5rem;
+  border-block-end: 1px solid var(--border);
 }
 
 @media (min-width: 48rem) {
@@ -347,6 +478,8 @@
   font-size: 0.875rem;
   color: var(--muted);
   line-height: 1.5;
+  min-inline-size: 0;
+  flex: 1;
 }
 
 .galleryCaptionId {
@@ -357,6 +490,8 @@
 
 .galleryCaptionText {
   color: var(--foreground);
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .galleryControls {
@@ -370,6 +505,8 @@
   color: var(--muted);
   font: 500 0.75rem var(--font-mono);
   letter-spacing: 0.06em;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .galleryNav {
@@ -729,6 +866,7 @@
   display: flex;
   flex-direction: column;
   padding: clamp(1rem, 3vw, 2rem);
+  animation: lightboxFadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .lightboxHeader {
@@ -796,6 +934,7 @@
   line-height: 1;
   transition: all 150ms ease;
   flex-shrink: 0;
+  z-index: 2;
 }
 
 .lightboxNavBtn:hover,
@@ -829,15 +968,31 @@
   font: 500 0.75rem var(--font-mono);
 }
 
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .galleryImage,
+  .gallerySlideLayer,
   .galleryInspectOverlay,
+  .thumbnailImage,
+  .thumbnailBtn,
   .liveCta,
   .galleryNavBtn,
   .lightboxNavBtn,
-  .lightboxCloseBtn {
+  .lightboxCloseBtn,
+  .lightboxOverlay {
     transition: none !important;
     transform: none !important;
+    animation: none !important;
   }
 }

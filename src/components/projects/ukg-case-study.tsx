@@ -10,6 +10,7 @@ import type {
   ProjectGallerySlide,
 } from "@/content/projects/project-case-studies";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { useGalleryAutoplay } from "./use-gallery-autoplay";
 
 import styles from "./ukg-case-study.module.css";
 
@@ -19,7 +20,6 @@ interface UkgCaseStudyViewProps {
 }
 
 export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const activeTriggerRef = useRef<HTMLElement | null>(null);
@@ -79,16 +79,20 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
           },
         ];
 
+  // Shared 4-second autoplay with crossfade, hover/focus/lightbox pause, and reduced-motion compliance
+  const {
+    activeIndex,
+    goToNext,
+    goToPrev,
+    containerRef,
+    containerProps,
+  } = useGalleryAutoplay({
+    slideCount: slides.length,
+    intervalMs: 4000,
+    isLightboxOpen,
+  });
+
   const currentSlide = slides[activeIndex] ?? slides[0];
-
-  // Carousel navigation handlers with seamless wrap-around edge behavior
-  const handlePrevSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev > 0 ? prev - 1 : slides.length - 1));
-  }, [slides.length]);
-
-  const handleNextSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev < slides.length - 1 ? prev + 1 : 0));
-  }, [slides.length]);
 
   // Touch handlers for mobile swipe navigation
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -121,9 +125,9 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
     // Only trigger horizontal slide navigation if horizontal swipe exceeds 40px and dominates vertical movement
     if (absX > 40 && absX > absY) {
       if (deltaX < 0) {
-        handleNextSlide();
+        goToNext();
       } else {
-        handlePrevSlide();
+        goToPrev();
       }
     }
 
@@ -143,10 +147,10 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
   const handleCarouselKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") {
       e.preventDefault();
-      handlePrevSlide();
+      goToPrev();
     } else if (e.key === "ArrowRight") {
       e.preventDefault();
-      handleNextSlide();
+      goToNext();
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       activeTriggerRef.current = e.currentTarget as HTMLElement;
@@ -176,13 +180,13 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
 
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        handlePrevSlide();
+        goToPrev();
         return;
       }
 
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        handleNextSlide();
+        goToNext();
         return;
       }
 
@@ -216,7 +220,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isLightboxOpen, handleCloseLightbox, handleNextSlide, handlePrevSlide]);
+  }, [isLightboxOpen, handleCloseLightbox, goToNext, goToPrev]);
 
   return (
     <article className={styles.page}>
@@ -314,8 +318,10 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
                 role="region"
                 aria-roledescription="carousel"
                 aria-label={copy.carouselAria}
+                ref={containerRef}
+                {...containerProps}
               >
-                {/* Stable Responsive Display Frame */}
+                {/* Stable Responsive Display Frame with Subtle Crossfade Layers */}
                 <div
                   className={styles.galleryFrame}
                   onClick={handleFrameClick}
@@ -328,14 +334,29 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
                   aria-label={`${copy.inspect}: Slide ${currentSlide.slide} — ${currentSlide.alt[locale]}`}
                   aria-roledescription="slide"
                 >
-                  <Image
-                    src={currentSlide.src}
-                    alt={currentSlide.alt[locale]}
-                    fill
-                    priority={activeIndex === 0}
-                    sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
-                    className={styles.galleryImage}
-                  />
+                  {slides.map((slide, index) => {
+                    const isActive = index === activeIndex;
+                    return (
+                      <div
+                        key={slide.slide}
+                        className={`${styles.gallerySlideLayer} ${
+                          isActive
+                            ? styles.gallerySlideActive
+                            : styles.gallerySlideInactive
+                        }`}
+                        aria-hidden={!isActive}
+                      >
+                        <Image
+                          src={slide.src}
+                          alt={slide.alt[locale]}
+                          fill
+                          priority={index === 0}
+                          sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
+                          className={styles.galleryImage}
+                        />
+                      </div>
+                    );
+                  })}
                   <div
                     className={styles.galleryInspectOverlay}
                     aria-hidden="true"
@@ -369,7 +390,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
                     <div className={styles.galleryNav}>
                       <button
                         type="button"
-                        onClick={handlePrevSlide}
+                        onClick={goToPrev}
                         className={styles.galleryNavBtn}
                         aria-label={copy.prevSlide}
                       >
@@ -377,7 +398,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
                       </button>
                       <button
                         type="button"
-                        onClick={handleNextSlide}
+                        onClick={goToNext}
                         className={styles.galleryNavBtn}
                         aria-label={copy.nextSlide}
                       >
@@ -548,7 +569,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
           <div className={styles.lightboxMain}>
             <button
               type="button"
-              onClick={handlePrevSlide}
+              onClick={goToPrev}
               className={styles.lightboxNavBtn}
               aria-label={copy.prevSlide}
             >
@@ -568,7 +589,7 @@ export function UkgCaseStudyView({ project, locale }: UkgCaseStudyViewProps) {
 
             <button
               type="button"
-              onClick={handleNextSlide}
+              onClick={goToNext}
               className={styles.lightboxNavBtn}
               aria-label={copy.nextSlide}
             >
