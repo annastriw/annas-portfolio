@@ -420,218 +420,167 @@ test("project public rendering has no project Markdown runtime import", () => {
   assert.doesNotMatch(route, /gray-matter|react-markdown|@\/lib\/projects/);
 });
 
-test("UkgCaseStudyView implements approved compact editorial layout and 9-slide carousel with shared autoplay and crossfade", () => {
-  const ukgComponent = readFileSync(
-    join(root, "src", "components", "projects", "ukg-case-study.tsx"),
+test("ProjectDetailView implements approved unified editorial layout for UKG System reference case study", () => {
+  const detailComponent = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
     "utf8",
   );
 
-  // 1. Opening: Breadcrumb, H1, Lead, Metadata, Actions
-  assert.match(ukgComponent, /copy\.breadcrumbProjects/);
-  assert.match(ukgComponent, /project\.categoryLabel\[locale\]/);
-  assert.match(ukgComponent, /<h1 className=\{styles\.title\}>\{project\.title\[locale\]\}<\/h1>/);
-  assert.match(ukgComponent, /styles\.lead/);
-  assert.match(ukgComponent, /styles\.metaGrid/);
-  assert.match(ukgComponent, /project\.client/);
-  assert.match(ukgComponent, /project\.role/);
-  assert.match(ukgComponent, /project\.period/);
-  assert.match(ukgComponent, /project\.status/);
-  assert.match(ukgComponent, /styles\.liveCta/);
-  assert.match(ukgComponent, /styles\.repoNotice/);
+  // 1. Opening: Breadcrumb, H1, Lead, Metadata Grid, Actions
+  assert.match(detailComponent, /copy\.breadcrumbProjects/);
+  assert.match(detailComponent, /project\.categoryLabel\[locale\]/);
+  assert.match(detailComponent, /<h1 className=\{styles\.title\}>\{project\.title\[locale\]\}<\/h1>/);
+  assert.match(detailComponent, /styles\.lead/);
+  assert.match(detailComponent, /styles\.metaGrid/);
+  assert.match(detailComponent, /metaEntries/);
+  assert.match(detailComponent, /getProjectMetaEntries/);
+  assert.match(detailComponent, /styles\.liveCta/);
+  assert.match(detailComponent, /styles\.repoNotice/);
 
   // 2. Section 01: Top-of-page 9-Slide Gallery Carousel with Shared useGalleryAutoplay
-  assert.match(ukgComponent, /useGalleryAutoplay/);
-  assert.match(ukgComponent, /\[01\]/);
-  assert.match(ukgComponent, /ukg-section-01-title/);
-  assert.match(ukgComponent, /copy\.galleryTitle/);
-  assert.match(ukgComponent, /role="region"/);
-  assert.match(ukgComponent, /aria-roledescription="carousel"/);
-  assert.match(ukgComponent, /styles\.galleryFrame/);
-  assert.match(ukgComponent, /styles\.gallerySlideLayer/);
-  assert.match(ukgComponent, /styles\.gallerySlideActive/);
-  assert.match(ukgComponent, /styles\.gallerySlideInactive/);
-  assert.match(ukgComponent, /goToPrev/);
-  assert.match(ukgComponent, /goToNext/);
-  assert.match(ukgComponent, /handleTouchStart/);
-  assert.match(ukgComponent, /handleTouchMove/);
-  assert.match(ukgComponent, /handleTouchEnd/);
-  assert.match(ukgComponent, /handleCarouselKeyDown/);
-  assert.match(ukgComponent, /styles\.galleryBottomBar/);
-  assert.match(ukgComponent, /styles\.galleryCaption/);
-  assert.match(ukgComponent, /styles\.galleryControls/);
-  assert.match(ukgComponent, /styles\.galleryCounter/);
-  assert.match(ukgComponent, /styles\.galleryNavBtn/);
+  assert.match(detailComponent, /useGalleryAutoplay/);
+  assert.match(detailComponent, /section-gallery-title/);
+  assert.match(detailComponent, /copy\.galleryTitle/);
+  assert.match(detailComponent, /role=\{slides\.length > 1 \? "region" : undefined\}/);
+  assert.match(detailComponent, /styles\.galleryFrame/);
+  assert.match(detailComponent, /styles\.gallerySlideLayer/);
+  assert.match(detailComponent, /styles\.gallerySlideActive/);
+  assert.match(detailComponent, /styles\.gallerySlideInactive/);
+  assert.match(detailComponent, /goToPrev/);
+  assert.match(detailComponent, /goToNext/);
+  assert.match(detailComponent, /handleTouchStart/);
+  assert.match(detailComponent, /handleTouchMove/);
+  assert.match(detailComponent, /handleTouchEnd/);
+  assert.match(detailComponent, /handleCarouselKeyDown/);
+  assert.match(detailComponent, /styles\.galleryBottomBar/);
+  assert.match(detailComponent, /styles\.galleryCaption/);
+  assert.match(detailComponent, /styles\.galleryControls/);
+  assert.match(detailComponent, /styles\.galleryCounter/);
+  assert.match(detailComponent, /styles\.galleryNavBtn/);
 
   // Synchronized Lightbox Inspection Dialog
-  assert.match(ukgComponent, /styles\.lightboxOverlay/);
-  assert.match(ukgComponent, /styles\.lightboxNavBtn/);
-  assert.match(ukgComponent, /styles\.lightboxCounter/);
-  assert.match(ukgComponent, /handleCloseLightbox/);
+  assert.match(detailComponent, /styles\.lightboxOverlay/);
+  assert.match(detailComponent, /styles\.lightboxNavBtn/);
+  assert.match(detailComponent, /styles\.lightboxCounter/);
+  assert.match(detailComponent, /handleCloseLightbox/);
 
   // 3. Section 02: Project Overview / Ringkasan Project
-  assert.match(ukgComponent, /\[02\]/);
-  assert.match(ukgComponent, /ukg-section-02-title/);
-  assert.match(ukgComponent, /copy\.overviewTitle/);
-  assert.match(ukgComponent, /styles\.overviewGrid/);
+  assert.match(detailComponent, /section-overview-title/);
+  assert.match(detailComponent, /copy\.overviewTitle/);
+  assert.match(detailComponent, /styles\.overviewGrid/);
 
   // 4. Section 03: My Contribution / Kontribusi Saya
-  assert.match(ukgComponent, /\[03\]/);
-  assert.match(ukgComponent, /ukg-section-03-title/);
-  assert.match(ukgComponent, /copy\.contributionTitle/);
-  assert.match(ukgComponent, /styles\.contributionList/);
-  assert.match(ukgComponent, /styles\.contributionLearning/);
+  assert.match(detailComponent, /section-contribution-title/);
+  assert.match(detailComponent, /copy\.contributionTitle/);
+  assert.match(detailComponent, /styles\.contributionList/);
+  assert.match(detailComponent, /styles\.contributionLearning/);
 
   // 5. Section 04: System Scope / Cakupan Sistem
-  assert.match(ukgComponent, /\[04\]/);
-  assert.match(ukgComponent, /ukg-section-04-title/);
-  assert.match(ukgComponent, /copy\.scopeTitle/);
-  assert.match(ukgComponent, /styles\.modulesGrid/);
-  assert.match(ukgComponent, /styles\.techGroupsList/);
-  assert.doesNotMatch(ukgComponent, /workflowContainer/);
-  assert.doesNotMatch(ukgComponent, /workflowSubtag/);
+  assert.match(detailComponent, /section-scope-title/);
+  assert.match(detailComponent, /copy\.scopeTitle/);
+  assert.match(detailComponent, /styles\.modulesGrid/);
+  assert.match(detailComponent, /styles\.techGroupsList/);
+  assert.doesNotMatch(detailComponent, /workflowContainer/);
+  assert.doesNotMatch(detailComponent, /workflowSubtag/);
 
-  // Exclusions for UKG: No bottom adjacent nav, no standalone hero cover, no extra long-form sections
-  assert.doesNotMatch(ukgComponent, /adjacentNav/);
-  assert.doesNotMatch(ukgComponent, /coverFigure/);
-  assert.doesNotMatch(ukgComponent, /claimBoundary/);
-  assert.doesNotMatch(ukgComponent, /videoEvidenceCard/);
+  // Exclusions for shared detail view: No internal adjacent nav, no standalone hero cover
+  assert.doesNotMatch(detailComponent, /adjacentNav/);
+  assert.doesNotMatch(detailComponent, /coverFigure/);
+  assert.doesNotMatch(detailComponent, /videoEvidenceCard/);
 });
 
-test("ukg-case-study.module.css defines responsive grid, carousel, crossfade, metadata, and reduced motion without workflow styles", () => {
-  const css = readFileSync(
-    join(root, "src", "components", "projects", "ukg-case-study.module.css"),
-    "utf8",
-  );
-
-  // Check key responsive, carousel, crossfade, and layout rules
-  assert.match(css, /\.galleryFrame\s*\{[^}]*touch-action:\s*pan-y/);
-  assert.match(css, /\.gallerySlideLayer/);
-  assert.match(css, /\.gallerySlideActive/);
-  assert.match(css, /\.gallerySlideInactive/);
-  assert.match(css, /\.galleryImage\s*\{[^}]*object-fit:\s*contain/);
-  assert.match(css, /\.galleryBottomBar/);
-  assert.match(css, /\.galleryCaption/);
-  assert.match(css, /\.galleryControls/);
-  assert.match(css, /\.galleryCounter/);
-  assert.match(css, /\.galleryNavBtn/);
-  assert.match(css, /\.lightboxNavBtn/);
-  assert.match(css, /\.lightboxCounter/);
-  assert.match(css, /\.metaGrid\s*\{[^}]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(css, /\.overviewGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(css, /\.modulesGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(css, /\.techGroupsList/);
-  assert.doesNotMatch(css, /\.workflowContainer/);
-  assert.doesNotMatch(css, /\.workflowArrow/);
-  assert.match(css, /@media\s*\(max-width:\s*1023px\)/);
-  assert.match(css, /@media\s*\(max-width:\s*639px\)/);
-  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
-});
-
-test("IHealthCaseStudyView implements approved compact editorial layout, 4-group system scope, 8-slide gallery with thumbnail rail and crossfade", () => {
-  const ihealthComponent = readFileSync(
-    join(root, "src", "components", "projects", "ihealth-case-study.tsx"),
+test("ProjectDetailView implements approved unified editorial layout for iHealth Edu reference case study", () => {
+  const detailComponent = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
     "utf8",
   );
 
   // 1. Opening: Breadcrumb, Split Composition (Left Title/Meta, Right Lead/Actions)
-  assert.match(ihealthComponent, /copy\.breadcrumbProjects/);
-  assert.match(ihealthComponent, /project\.categoryLabel\[locale\]/);
-  assert.match(ihealthComponent, /<h1 className=\{styles\.title\}>\{project\.title\[locale\]\}<\/h1>/);
-  assert.match(ihealthComponent, /styles\.openingSplit/);
-  assert.match(ihealthComponent, /styles\.openingLeft/);
-  assert.match(ihealthComponent, /styles\.openingRight/);
-  assert.match(ihealthComponent, /styles\.lead/);
-  assert.match(ihealthComponent, /styles\.metaGrid/);
-  assert.match(ihealthComponent, /copy\.stakeholder/);
-  assert.match(ihealthComponent, /copy\.role/);
-  assert.match(ihealthComponent, /copy\.period/);
-  assert.match(ihealthComponent, /copy\.status/);
+  assert.match(detailComponent, /copy\.breadcrumbProjects/);
+  assert.match(detailComponent, /project\.categoryLabel\[locale\]/);
+  assert.match(detailComponent, /<h1 className=\{styles\.title\}>\{project\.title\[locale\]\}<\/h1>/);
+  assert.match(detailComponent, /styles\.openingSplit/);
+  assert.match(detailComponent, /styles\.openingLeft/);
+  assert.match(detailComponent, /styles\.openingRight/);
+  assert.match(detailComponent, /styles\.lead/);
+  assert.match(detailComponent, /styles\.metaGrid/);
+  assert.match(detailComponent, /metaEntries/);
+  assert.match(detailComponent, /getProjectMetaEntries/);
 
   // Three Project Links with Safe External Target and Accessible New Tab Labels
-  assert.match(ihealthComponent, /styles\.liveCta/);
-  assert.match(ihealthComponent, /styles\.repoLink/);
-  assert.match(ihealthComponent, /copy\.liveCta/);
-  assert.match(ihealthComponent, /copy\.frontendRepo/);
-  assert.match(ihealthComponent, /copy\.backendRepo/);
-  assert.match(ihealthComponent, /copy\.newTabCue/);
-  assert.match(ihealthComponent, /project\.liveUrl/);
-  assert.match(ihealthComponent, /project\.frontendRepoUrl/);
-  assert.match(ihealthComponent, /project\.backendRepoUrl/);
+  assert.match(detailComponent, /styles\.liveCta/);
+  assert.match(detailComponent, /styles\.repoLink/);
+  assert.match(detailComponent, /copy\.liveCta/);
+  assert.match(detailComponent, /copy\.frontendRepo/);
+  assert.match(detailComponent, /copy\.backendRepo/);
+  assert.match(detailComponent, /copy\.newTabCue/);
+  assert.match(detailComponent, /project\.liveUrl/);
+  assert.match(detailComponent, /project\.frontendRepoUrl/);
+  assert.match(detailComponent, /project\.backendRepoUrl/);
 
   // 2. Section 01: Top-of-page Gallery with Thumbnail Rail & Shared useGalleryAutoplay
-  assert.match(ihealthComponent, /useGalleryAutoplay/);
-  assert.match(ihealthComponent, /\[01\]/);
-  assert.match(ihealthComponent, /ihealth-section-01-title/);
-  assert.match(ihealthComponent, /copy\.galleryTitle/);
-  assert.match(ihealthComponent, /role="region"/);
-  assert.match(ihealthComponent, /aria-roledescription="carousel"/);
-  assert.match(ihealthComponent, /styles\.galleryFrame/);
-  assert.match(ihealthComponent, /styles\.gallerySlideLayer/);
-  assert.match(ihealthComponent, /styles\.gallerySlideActive/);
-  assert.match(ihealthComponent, /styles\.gallerySlideInactive/);
-  assert.match(ihealthComponent, /styles\.thumbnailRail/);
-  assert.match(ihealthComponent, /styles\.thumbnailBtn/);
-  assert.match(ihealthComponent, /styles\.thumbnailActive/);
-  assert.match(ihealthComponent, /styles\.thumbnailActiveIndicator/);
-  assert.match(ihealthComponent, /goToIndex/);
-  assert.match(ihealthComponent, /goToPrev/);
-  assert.match(ihealthComponent, /goToNext/);
-  assert.match(ihealthComponent, /handleTouchStart/);
-  assert.match(ihealthComponent, /handleTouchMove/);
-  assert.match(ihealthComponent, /handleTouchEnd/);
-  assert.match(ihealthComponent, /handleCarouselKeyDown/);
-  assert.match(ihealthComponent, /styles\.galleryBottomBar/);
-  assert.match(ihealthComponent, /styles\.galleryCaption/);
-  assert.match(ihealthComponent, /styles\.galleryControls/);
-  assert.match(ihealthComponent, /styles\.galleryCounter/);
-  assert.match(ihealthComponent, /styles\.galleryNavBtn/);
+  assert.match(detailComponent, /useGalleryAutoplay/);
+  assert.match(detailComponent, /section-gallery-title/);
+  assert.match(detailComponent, /copy\.galleryTitle/);
+  assert.match(detailComponent, /styles\.galleryFrame/);
+  assert.match(detailComponent, /styles\.gallerySlideLayer/);
+  assert.match(detailComponent, /styles\.gallerySlideActive/);
+  assert.match(detailComponent, /styles\.gallerySlideInactive/);
+  assert.match(detailComponent, /styles\.thumbnailRail/);
+  assert.match(detailComponent, /styles\.thumbnailBtn/);
+  assert.match(detailComponent, /styles\.thumbnailActive/);
+  assert.match(detailComponent, /styles\.thumbnailActiveIndicator/);
+  assert.match(detailComponent, /goToIndex/);
+  assert.match(detailComponent, /goToPrev/);
+  assert.match(detailComponent, /goToNext/);
+  assert.match(detailComponent, /handleTouchStart/);
+  assert.match(detailComponent, /handleTouchMove/);
+  assert.match(detailComponent, /handleTouchEnd/);
+  assert.match(detailComponent, /handleCarouselKeyDown/);
+  assert.match(detailComponent, /styles\.galleryBottomBar/);
+  assert.match(detailComponent, /styles\.galleryCaption/);
+  assert.match(detailComponent, /styles\.galleryControls/);
+  assert.match(detailComponent, /styles\.galleryCounter/);
+  assert.match(detailComponent, /styles\.galleryNavBtn/);
 
   // Synchronized Lightbox Inspection Dialog
-  assert.match(ihealthComponent, /styles\.lightboxOverlay/);
-  assert.match(ihealthComponent, /styles\.lightboxNavBtn/);
-  assert.match(ihealthComponent, /styles\.lightboxCounter/);
-  assert.match(ihealthComponent, /handleCloseLightbox/);
+  assert.match(detailComponent, /styles\.lightboxOverlay/);
+  assert.match(detailComponent, /styles\.lightboxNavBtn/);
+  assert.match(detailComponent, /styles\.lightboxCounter/);
+  assert.match(detailComponent, /handleCloseLightbox/);
 
   // 3. Section 02: Project Overview & Visible Medical Boundary
-  assert.match(ihealthComponent, /\[02\]/);
-  assert.match(ihealthComponent, /ihealth-section-02-title/);
-  assert.match(ihealthComponent, /copy\.overviewTitle/);
-  assert.match(ihealthComponent, /styles\.overviewGrid/);
-  assert.match(ihealthComponent, /styles\.claimBoundaryCard/);
-  assert.match(ihealthComponent, /copy\.claimBoundaryTag/);
+  assert.match(detailComponent, /section-overview-title/);
+  assert.match(detailComponent, /copy\.overviewTitle/);
+  assert.match(detailComponent, /styles\.overviewGrid/);
+  assert.match(detailComponent, /styles\.claimBoundaryCard/);
+  assert.match(detailComponent, /copy\.claimBoundaryTag/);
 
   // 4. Section 03: My Contribution & 6-Item Personal Stack
-  assert.match(ihealthComponent, /\[03\]/);
-  assert.match(ihealthComponent, /ihealth-section-03-title/);
-  assert.match(ihealthComponent, /copy\.contributionTitle/);
-  assert.match(ihealthComponent, /styles\.contributionList/);
-  assert.match(ihealthComponent, /styles\.personalStackBlock/);
-  assert.match(ihealthComponent, /copy\.personalStackTag/);
-  assert.match(ihealthComponent, /styles\.stackBadge/);
+  assert.match(detailComponent, /section-contribution-title/);
+  assert.match(detailComponent, /copy\.contributionTitle/);
+  assert.match(detailComponent, /styles\.contributionList/);
+  assert.match(detailComponent, /styles\.personalStackBlock/);
+  assert.match(detailComponent, /copy\.personalStackTag/);
+  assert.match(detailComponent, /styles\.stackBadge/);
 
   // 5. Section 04: System Scope (4 Scannable Groups)
-  assert.match(ihealthComponent, /\[04\]/);
-  assert.match(ihealthComponent, /ihealth-section-04-title/);
-  assert.match(ihealthComponent, /copy\.scopeTitle/);
-  assert.match(ihealthComponent, /styles\.systemScopeGrid/);
-  assert.match(ihealthComponent, /copy\.scopeRolesHeader/);
-  assert.match(ihealthComponent, /copy\.scopeScreeningHeader/);
-  assert.match(ihealthComponent, /copy\.scopePatientDataHeader/);
-  assert.match(ihealthComponent, /copy\.scopeIntegrationHeader/);
-  assert.match(ihealthComponent, /styles\.learningFlow/);
-  assert.match(ihealthComponent, /styles\.flowContainer/);
-  assert.match(ihealthComponent, /styles\.flowStep/);
-  assert.match(ihealthComponent, /copy\.architectureNote/);
-
-  // Exclusions for iHealth Edu: No bottom adjacent nav, no standalone hero cover, no workflow container
-  assert.doesNotMatch(ihealthComponent, /adjacentNav/);
-  assert.doesNotMatch(ihealthComponent, /coverFigure/);
-  assert.doesNotMatch(ihealthComponent, /videoEvidenceCard/);
+  assert.match(detailComponent, /section-scope-title/);
+  assert.match(detailComponent, /copy\.scopeTitle/);
+  assert.match(detailComponent, /styles\.systemScopeGrid/);
+  assert.match(detailComponent, /copy\.scopeRolesHeader/);
+  assert.match(detailComponent, /copy\.scopeScreeningHeader/);
+  assert.match(detailComponent, /copy\.scopePatientDataHeader/);
+  assert.match(detailComponent, /copy\.scopeIntegrationHeader/);
+  assert.match(detailComponent, /styles\.learningFlow/);
+  assert.match(detailComponent, /styles\.flowContainer/);
+  assert.match(detailComponent, /styles\.flowStep/);
+  assert.match(detailComponent, /copy\.architectureNote/);
 });
 
-test("ihealth-case-study.module.css defines responsive split opening, grid, carousel, thumbnail rail, metadata, and reduced motion", () => {
+test("project-detail.module.css defines responsive grid, carousel, thumbnail rail, crossfade, metadata, and reduced motion", () => {
   const css = readFileSync(
-    join(root, "src", "components", "projects", "ihealth-case-study.module.css"),
+    join(root, "src", "components", "projects", "project-detail.module.css"),
     "utf8",
   );
 
@@ -659,11 +608,18 @@ test("ihealth-case-study.module.css defines responsive split opening, grid, caro
   assert.match(css, /\.repoLink/);
   assert.match(css, /\.claimBoundaryCard/);
   assert.match(css, /\.personalStackBlock/);
+  assert.match(css, /\.modulesGrid/);
+  assert.match(css, /\.techGroupsList/);
   assert.match(css, /\.systemScopeGrid/);
   assert.match(css, /\.flowContainer/);
   assert.match(css, /@media\s*\(min-width:\s*64rem\)/);
-  assert.match(css, /@media\s*\(max-width:\s*1023px\)/);
+  assert.match(css, /@media\s*\(min-width:\s*48rem\)/);
+  assert.match(css, /@media\s*\(max-width:\s*63\.9375rem\)/);
+  assert.match(css, /@media\s*\(max-width:\s*39\.9375rem\)/);
+  assert.match(css, /@media\s*\(max-width:\s*26\.25rem\)/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+  assert.match(css, /word-break:\s*break-word/);
+  assert.match(css, /overflow-wrap:\s*break-word/);
 });
 
 test("use-gallery-autoplay.ts implements 4-second interval, pause conditions, restart on manual navigation, and reduced motion safety", () => {
@@ -754,39 +710,50 @@ test("physical asset files for iHealth Edu (8 images) and UKG System (9 images) 
   }
 });
 
-test("IHealthCaseStudyView meets semantic heading hierarchy, focus management, touch targets, and non-color indicators", () => {
-  const ihealthComponent = readFileSync(
-    join(root, "src", "components", "projects", "ihealth-case-study.tsx"),
+test("ProjectDetailView meets semantic heading hierarchy, dynamic section numbering, focus management, touch targets, and non-color indicators", () => {
+  const detailComponent = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
     "utf8",
   );
   const css = readFileSync(
-    join(root, "src", "components", "projects", "ihealth-case-study.module.css"),
+    join(root, "src", "components", "projects", "project-detail.module.css"),
     "utf8",
   );
 
   // 1. One logical H1, sequential H2 section headers with aria-labelledby
-  assert.equal((ihealthComponent.match(/<h1\b/g) ?? []).length, 1);
-  assert.equal((ihealthComponent.match(/<h2\b/g) ?? []).length, 4);
-  assert.match(ihealthComponent, /aria-labelledby="ihealth-section-01-title"/);
-  assert.match(ihealthComponent, /aria-labelledby="ihealth-section-02-title"/);
-  assert.match(ihealthComponent, /aria-labelledby="ihealth-section-03-title"/);
-  assert.match(ihealthComponent, /aria-labelledby="ihealth-section-04-title"/);
+  assert.equal((detailComponent.match(/<h1\b/g) ?? []).length, 1);
+  assert.equal((detailComponent.match(/<h2\b/g) ?? []).length, 4);
+  assert.match(detailComponent, /aria-labelledby="section-gallery-title"/);
+  assert.match(detailComponent, /aria-labelledby="section-overview-title"/);
+  assert.match(detailComponent, /aria-labelledby="section-contribution-title"/);
+  assert.match(detailComponent, /aria-labelledby="section-scope-title"/);
 
-  // 2. Lightbox title does NOT introduce illegal extra H1/H2
-  assert.doesNotMatch(ihealthComponent, /<h[12][^>]*lightboxTitle/);
+  // 2. Dynamic section numbering without gaps
+  assert.match(detailComponent, /let sectionCounter = 0;/);
+  assert.match(detailComponent, /String\(\+\+sectionCounter\)\.padStart\(2, "0"\)/);
+  assert.match(detailComponent, /\[\{galleryIndex\}\]/);
+  assert.match(detailComponent, /\[\{overviewIndex\}\]/);
+  assert.match(detailComponent, /\[\{contributionIndex\}\]/);
+  assert.match(detailComponent, /\[\{scopeIndex\}\]/);
 
-  // 3. Breadcrumb navigation semantics
-  assert.match(ihealthComponent, /<nav\s+className=\{styles\.breadcrumb\}\s+aria-label=\{copy\.breadcrumbAria\}>/);
-  assert.match(ihealthComponent, /aria-current="page"/);
+  // 3. Lightbox title does NOT introduce illegal extra H1/H2
+  assert.doesNotMatch(detailComponent, /<h[12][^>]*lightboxTitle/);
 
-  // 4. Non-color indicators for active thumbnail and claim boundary
-  assert.match(ihealthComponent, /thumbnailActiveIndicator/);
-  assert.match(ihealthComponent, /claimBoundaryTag/);
+  // 4. Breadcrumb navigation semantics
+  assert.match(detailComponent, /<nav\s+className=\{styles\.breadcrumb\}\s+aria-label=\{copy\.breadcrumbAria\}>/);
+  assert.match(detailComponent, /aria-current="page"/);
+
+  // 5. Non-color indicators for active thumbnail, claim boundary, and group headers
+  assert.match(detailComponent, /thumbnailActiveIndicator/);
+  assert.match(detailComponent, /claimBoundaryTag/);
+  assert.match(detailComponent, /subBlockHeaderTag/);
+  assert.match(detailComponent, /scopeGroupHeaderTag/);
+  assert.match(detailComponent, /repoDot/);
   assert.match(css, /\.thumbnailActive\s*\{[^}]*outline:/);
   assert.match(css, /\.thumbnailActive\s*\{[^}]*box-shadow:/);
   assert.match(css, /\.claimBoundaryCard\s*\{[^}]*border-inline-start:\s*3px solid/);
 
-  // 5. Visible focus states across all interactive elements
+  // 6. Visible focus states across all interactive elements
   assert.match(css, /\.breadcrumbLink:focus-visible/);
   assert.match(css, /\.liveCta:focus-visible/);
   assert.match(css, /\.repoLink:focus-visible/);
@@ -796,41 +763,35 @@ test("IHealthCaseStudyView meets semantic heading hierarchy, focus management, t
   assert.match(css, /\.lightboxCloseBtn:focus-visible/);
   assert.match(css, /\.lightboxNavBtn:focus-visible/);
 
-  // 6. Adequate touch target sizes (min 2.75rem / 44px)
-  assert.match(css, /\.liveCta\s*\{[^}]*min-height:\s*2\.75rem/);
-  assert.match(css, /\.repoLink\s*\{[^}]*min-height:\s*2\.75rem/);
+  // 7. Adequate touch target sizes (min 2.75rem / 44px)
+  assert.match(css, /\.liveCta\s*\{[^}]*min-block-size:\s*2\.75rem/);
+  assert.match(css, /\.repoLink\s*\{[^}]*min-block-size:\s*2\.75rem/);
   assert.match(css, /\.galleryNavBtn\s*\{[^}]*width:\s*2\.75rem/);
   assert.match(css, /\.galleryNavBtn\s*\{[^}]*height:\s*2\.75rem/);
   assert.match(css, /\.lightboxCloseBtn\s*\{[^}]*min-height:\s*2\.75rem/);
 
-  // 7. ScrollReveal applied at primary section block level
-  const scrollRevealMatches = ihealthComponent.match(/<ScrollReveal\b/g) ?? [];
+  // 8. ScrollReveal applied at primary section block level
+  const scrollRevealMatches = detailComponent.match(/<ScrollReveal\b/g) ?? [];
   assert.equal(scrollRevealMatches.length, 5, "ScrollReveal wraps opening + 4 primary sections only");
 });
 
-test("ihealth-case-study.module.css provides robust responsive rules from 320px small mobile to 1920px large desktop", () => {
-  const css = readFileSync(
-    join(root, "src", "components", "projects", "ihealth-case-study.module.css"),
+test("project detail router uses explicit compatibility boundary for reference and unmigrated projects", () => {
+  const caseStudyRouter = readFileSync(
+    join(root, "src", "components", "projects", "project-case-study.tsx"),
+    "utf8",
+  );
+  const detailComponent = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
     "utf8",
   );
 
-  // Desktop & large desktop (>= 1024px / 64rem)
-  assert.match(css, /@media\s*\(min-width:\s*64rem\)/);
+  // Compatibility function in detail view module
+  assert.match(detailComponent, /export function isSharedProjectDetail/);
+  assert.match(detailComponent, /"ukg-system"/);
+  assert.match(detailComponent, /"ihealth-edu"/);
 
-  // Tablet & collapse under 1024px (<= 1023px)
-  assert.match(css, /@media\s*\(max-width:\s*1023px\)/);
-
-  // Mobile (<= 639px / < 40rem)
-  assert.match(css, /@media\s*\(min-width:\s*40rem\)/);
-  assert.match(css, /@media\s*\(max-width:\s*639px\)/);
-
-  // Small mobile (320px / <= 26.25rem)
-  assert.match(css, /@media\s*\(max-width:\s*26\.25rem\)/);
-
-  // Word-break / overflow-wrap safety
-  assert.match(css, /word-break:\s*break-word/);
-  assert.match(css, /overflow-wrap:\s*break-word/);
+  // Router uses compatibility boundary rather than scattered slug checks
+  assert.match(caseStudyRouter, /if \(isSharedProjectDetail\(project\)\)/);
+  assert.match(caseStudyRouter, /return <ProjectDetailView project=\{project\} locale=\{locale\} \/>/);
+  assert.match(caseStudyRouter, /return \(\s*<StandardCaseStudyView/);
 });
-
-
-

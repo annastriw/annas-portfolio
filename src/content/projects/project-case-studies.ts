@@ -64,6 +64,7 @@ export interface IHealthSystemScopeData {
   readonly screeningEducation: SystemScreeningEducation;
   readonly patientData: readonly SystemPatientDataGroup[];
   readonly integrationFlows: readonly SystemIntegrationFlow[];
+  readonly architectureNote?: LocalizedProjectText;
 }
 
 export interface ProjectCaseStudy {
@@ -76,6 +77,7 @@ export interface ProjectCaseStudy {
   readonly period?: LocalizedProjectText;
   readonly status: LocalizedProjectText;
   readonly client?: LocalizedProjectText;
+  readonly clientLabel?: LocalizedProjectText;
   readonly workingModel?: LocalizedProjectText;
   readonly lead?: LocalizedProjectText;
   readonly metaTitle?: LocalizedProjectText;
@@ -90,6 +92,15 @@ export interface ProjectCaseStudy {
   readonly technologyGroups?: readonly ProjectTechnologyGroup[];
   readonly systemScope?: IHealthSystemScopeData;
   readonly techStack: readonly string[];
+  readonly personalTechStack?: readonly string[];
+  readonly personalStackTag?: LocalizedProjectText;
+  readonly claimBoundaryTag?: LocalizedProjectText;
+  readonly sectionTitles?: {
+    readonly gallery?: LocalizedProjectText;
+    readonly overview?: LocalizedProjectText;
+    readonly contribution?: LocalizedProjectText;
+    readonly scope?: LocalizedProjectText;
+  };
   readonly cover: {
     readonly src: string;
     readonly alt: LocalizedProjectText;
@@ -98,6 +109,7 @@ export interface ProjectCaseStudy {
   };
   readonly evidence: readonly ProjectEvidence[];
   readonly gallery?: readonly ProjectGallerySlide[];
+  readonly galleryThumbnails?: boolean;
   readonly claimBoundary?: LocalizedProjectText;
   readonly liveUrl?: string;
   readonly githubUrl?: string;
@@ -463,6 +475,10 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       en: "Puskesmas Padangsari",
       id: "Puskesmas Padangsari",
     },
+    clientLabel: {
+      en: "Stakeholder",
+      id: "Stakeholder",
+    },
     role: {
       en: "Frontend Web Developer",
       id: "Frontend Web Developer",
@@ -805,6 +821,7 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
         },
       },
     ],
+    galleryThumbnails: true,
     claimBoundary: {
       en: "Machine learning results are presented only as decision support for health workers and do not provide a clinical diagnosis or medical advice.",
       id: "Hasil machine learning hanya digunakan sebagai decision support bagi tenaga kesehatan dan bukan sebagai diagnosis klinis atau saran medis.",
