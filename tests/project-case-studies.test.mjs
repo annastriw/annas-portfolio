@@ -980,4 +980,79 @@ test("physical asset files for all 10 projects exist at exact paths without muta
   }
 });
 
+test("Phase 03 — Shared Gallery, Autoplay, Lightbox, and single-image fallback contract", () => {
+  const detailComponent = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
+    "utf8",
+  );
+  const hookSource = readFileSync(
+    join(root, "src", "components", "projects", "use-gallery-autoplay.ts"),
+    "utf8",
+  );
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "project-detail.module.css"),
+    "utf8",
+  );
+
+  // 1. Four-second autoplay contract
+  assert.match(hookSource, /intervalMs\s*=\s*4000/, "Autoplay default interval is 4 seconds");
+  assert.match(hookSource, /timerKey/, "Timer key triggers clean interval reset on manual navigation");
+  assert.match(hookSource, /restartTimer/, "Manual actions invoke restartTimer");
+  assert.match(hookSource, /clearInterval\(timer\)/, "Autoplay cleans up timer on unmount/update");
+
+  // 2. Pause conditions
+  assert.match(hookSource, /isReducedMotion\s*\|\|\s*isLightboxOpen\s*\|\|\s*isHovered\s*\|\|\s*isFocused/, "Autoplay pauses on reduced motion, lightbox open, hover, and focus");
+  assert.match(hookSource, /onMouseEnter/, "Container captures pointer hover");
+  assert.match(hookSource, /onMouseLeave/, "Container releases pointer hover");
+  assert.match(hookSource, /onFocusCapture/, "Container tracks keyboard focus");
+  assert.match(hookSource, /onBlurCapture/, "Container tracks keyboard blur");
+
+  // 3. Lightbox dialog contract
+  assert.match(detailComponent, /role="dialog"/, "Lightbox is semantic modal dialog");
+  assert.match(detailComponent, /aria-modal="true"/, "Lightbox is modal");
+  assert.match(detailComponent, /e\.key === "Escape"/, "Lightbox closes on Escape");
+  assert.match(detailComponent, /e\.key === "ArrowLeft"/, "Lightbox navigates prev with ArrowLeft");
+  assert.match(detailComponent, /e\.key === "ArrowRight"/, "Lightbox navigates next with ArrowRight");
+  assert.match(detailComponent, /e\.key === "Tab"/, "Lightbox traps focus with Tab and Shift+Tab");
+  assert.match(detailComponent, /activeTriggerRef\.current\?\.focus\(\)/, "Lightbox restores focus on close");
+  assert.match(detailComponent, /document\.body\.style\.overflow = "hidden"/, "Lightbox locks background body scroll");
+  assert.match(detailComponent, /document\.body\.style\.overflow = originalOverflow/, "Lightbox restores body scroll on cleanup");
+
+  // 4. Touch swipe navigation on both main frame and lightbox
+  assert.match(detailComponent, /onTouchStart=\{slides\.length > 1 \? handleTouchStart : undefined\}/, "Main frame handles touch swipe");
+  assert.match(detailComponent, /className=\{styles\.lightboxMediaWrapper\}[^>]*onTouchStart=\{slides\.length > 1 \? handleTouchStart : undefined\}/, "Lightbox handles touch swipe");
+
+  // 5. Single-image fallback
+  assert.match(detailComponent, /\{slides\.length > 1 \? \(/, "Multi-slide track branches on slide count");
+  assert.match(detailComponent, /\{slides\.length > 1 \? \(\s*<div\s+className=\{styles\.thumbnailRail\}/, "Thumbnails only render when multi-image");
+  assert.match(detailComponent, /\{slides\.length > 1 \? \(\s*<div className=\{styles\.galleryControls\}>/, "Controls only render when multi-image");
+
+  // 6. Responsive sizing and reduced motion in CSS
+  assert.match(css, /\.lightboxMediaWrapper\s*\{[^}]*max-height:\s*calc\(100dvh - 8rem\)/, "Lightbox accounts for dynamic viewport heights");
+  assert.match(css, /\.lightboxMediaWrapper\s*\{[^}]*touch-action:\s*pan-y/, "Lightbox permits vertical pan while capturing horizontal swipe");
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[^}]*\.galleryTrack/, "Reduced motion removes gallery animations");
+
+  // 7. Non-placeholder alt text validation across all 10 projects
+  for (const project of projectCaseStudies) {
+    assert.ok(project.cover.alt.en.length > 5, `Cover alt text for ${project.slug} must be meaningful in EN`);
+    assert.ok(project.cover.alt.id.length > 5, `Cover alt text for ${project.slug} must be meaningful in ID`);
+    assert.doesNotMatch(project.cover.alt.en, /^TODO_|^\[UKG_|^\[IHEALTH_/, `Cover alt text for ${project.slug} must not be a placeholder token`);
+
+    for (const fig of project.evidence) {
+      assert.ok(fig.alt.en.length > 5, `Evidence alt text for ${project.slug} must be meaningful in EN`);
+      assert.ok(fig.alt.id.length > 5, `Evidence alt text for ${project.slug} must be meaningful in ID`);
+      assert.doesNotMatch(fig.alt.en, /^TODO_|^\[UKG_|^\[IHEALTH_/, `Evidence alt text for ${project.slug} must not be a placeholder token`);
+    }
+
+    if (project.gallery) {
+      for (const slide of project.gallery) {
+        assert.ok(slide.alt.en.length > 5, `Gallery slide alt text for ${project.slug} must be meaningful in EN`);
+        assert.ok(slide.alt.id.length > 5, `Gallery slide alt text for ${project.slug} must be meaningful in ID`);
+        assert.doesNotMatch(slide.alt.en, /^TODO_|^\[UKG_|^\[IHEALTH_/, `Gallery slide alt text for ${project.slug} must not be a placeholder token`);
+      }
+    }
+  }
+});
+
+
 

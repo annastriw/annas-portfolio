@@ -677,8 +677,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                     </div>
                   </div>
 
-                  {/* Horizontal Thumbnail Rail (when project enables thumbnail navigation) */}
-                  {project.galleryThumbnails && slides.length > 1 ? (
+                  {/* Horizontal Thumbnail Rail for multi-image gallery */}
+                  {slides.length > 1 ? (
                     <div
                       className={styles.thumbnailRail}
                       role="tablist"
@@ -1327,7 +1327,12 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
               </button>
             ) : null}
 
-            <div className={styles.lightboxMediaWrapper}>
+            <div
+              className={styles.lightboxMediaWrapper}
+              onTouchStart={slides.length > 1 ? handleTouchStart : undefined}
+              onTouchMove={slides.length > 1 ? handleTouchMove : undefined}
+              onTouchEnd={slides.length > 1 ? handleTouchEnd : undefined}
+            >
               <Image
                 src={currentSlide.src}
                 alt={currentSlide.alt[locale]}
