@@ -131,7 +131,7 @@ export function ContinuousRoles({
 
         {/* Integrated Three Dot Indicators */}
         <div
-          className="hero-role-dots flex items-center gap-1 sm:gap-1.5 shrink-0 pl-2 sm:pl-2.5 border-l border-(--color-border)/70"
+          className="hero-role-dots flex items-center gap-0.5 shrink-0 pl-1.5 sm:pl-2 border-l border-(--color-border)/70"
           role="group"
           aria-label={isId ? "Pemilih peran" : "Role selector"}
         >
@@ -148,7 +148,7 @@ export function ContinuousRoles({
                 aria-pressed={isActive}
                 aria-label={label}
                 onClick={() => selectRole(idx)}
-                className="group relative flex items-center justify-center p-1 min-w-[22px] min-h-[26px] sm:min-w-[26px] sm:min-h-[30px] cursor-pointer rounded-none transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
+                className="group relative flex items-center justify-center min-w-[44px] min-h-[44px] sm:min-w-[36px] sm:min-h-[36px] cursor-pointer rounded-none transition-colors focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-1"
               >
                 <span
                   className={`block rounded-full transition-all duration-300 motion-reduce:transition-none ${

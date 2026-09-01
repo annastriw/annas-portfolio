@@ -414,3 +414,67 @@ test("Header and Navigation maintain 5 numbered routes, locale switcher, and the
   assert.match(navFile, /04/);
   assert.match(navFile, /05/);
 });
+
+test("Home Unified Editorial Foundation enforces interaction contract, static elements, touch targets, and reduced motion", () => {
+  const heroFile = readFileSync(
+    join(root, "src", "components", "home", "hero-section.tsx"),
+    "utf8",
+  );
+  const rolesFile = readFileSync(
+    join(root, "src", "components", "home", "hero", "continuous-roles.tsx"),
+    "utf8",
+  );
+  const selectedProjFile = readFileSync(
+    join(root, "src", "components", "home", "selected-projects.tsx"),
+    "utf8",
+  );
+  const featuredItemFile = readFileSync(
+    join(root, "src", "components", "home", "projects", "featured-project-item.tsx"),
+    "utf8",
+  );
+  const expItemFile = readFileSync(
+    join(root, "src", "components", "home", "experience", "experience-item.tsx"),
+    "utf8",
+  );
+  const ghFile = readFileSync(
+    join(root, "src", "components", "home", "github-signal.tsx"),
+    "utf8",
+  );
+  const globalsCss = readFileSync(
+    join(root, "src", "app", "globals.css"),
+    "utf8",
+  );
+
+  // 1. Hero interaction semantics and static portrait
+  assert.match(heroFile, /btn-editorial-primary/);
+  assert.match(heroFile, /btn-editorial-secondary/);
+  assert.doesNotMatch(heroFile, /hover:border-\(--color-accent\)/);
+  assert.doesNotMatch(heroFile, /hover:scale-\[1\.02\]/);
+
+  // 2. Role selector compact buttons with >=44px touch targets
+  assert.match(rolesFile, /min-w-\[44px\]\s+min-h-\[44px\]/);
+  assert.match(rolesFile, /aria-pressed=\{isActive\}/);
+  assert.match(rolesFile, /CYCLE_INTERVAL_MS = 4000/);
+
+  // 3. Selected Projects: static row container, only explicit Link is clickable
+  assert.match(featuredItemFile, /<article[^>]*class(?:Name)?="[^"]*project-index-row/);
+  assert.match(featuredItemFile, /editorial-action-link/);
+  assert.doesNotMatch(featuredItemFile, /hover:bg-\(--color-surface-subtle/);
+  assert.doesNotMatch(featuredItemFile, /group-hover:scale-\[1\.03\]/);
+  assert.doesNotMatch(selectedProjFile, /hover:border-\(--color-accent\)/);
+
+  // 4. Experience timeline: static marker node and spine line without hover classes
+  assert.doesNotMatch(expItemFile, /group-hover:border-\(--color-accent\)/);
+  assert.doesNotMatch(expItemFile, /group-hover:bg-\(--color-accent\)/);
+
+  // 5. GitHub Activity: static day cells have no hover ring
+  assert.doesNotMatch(ghFile, /hover:ring-1/);
+
+  // 6. Global CSS Editorial Tokens and Primitives
+  assert.match(globalsCss, /\.btn-editorial-primary/);
+  assert.match(globalsCss, /\.btn-editorial-secondary/);
+  assert.match(globalsCss, /\.editorial-action-link/);
+  assert.match(globalsCss, /@media\s*\(hover:\s*hover\)\s*and\s*\(pointer:\s*fine\)/);
+  assert.match(globalsCss, /transition-duration:\s*150ms/);
+  assert.match(globalsCss, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+});

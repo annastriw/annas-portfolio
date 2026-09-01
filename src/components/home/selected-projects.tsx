@@ -23,14 +23,14 @@ export function SelectedProjects({ locale }: SelectedProjectsProps) {
 
   return (
     <section
-      className="home-selected-section py-12 sm:py-16 md:py-20 border-b border-(--color-border)"
+      className="home-selected-section py-8 sm:py-10 md:py-12 lg:py-16 border-b border-(--color-border)"
       aria-label={copy.title}
     >
-      <div className="home-selected-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
+      <div className="home-selected-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-5 sm:gap-6">
         {/* Section Header with Scroll Reveal */}
         <ScrollReveal
           animationClass="animate-editorial-fade"
-          className="home-section-header flex flex-col gap-2 max-w-2xl"
+          className="home-section-header flex flex-col gap-1.5 max-w-2xl"
         >
           <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
             <span className="font-semibold text-(--color-accent)">
@@ -58,18 +58,15 @@ export function SelectedProjects({ locale }: SelectedProjectsProps) {
           ))}
         </div>
 
-        {/* Single Archive Action at End of Section (No Project Count) */}
-        <ScrollReveal delayMs={200} animationClass="animate-editorial-fade">
-          <div className="home-selected-bottom-bar flex items-center justify-end border border-(--color-border) bg-(--color-background) p-3.5 sm:p-4 rounded-[2px] hover:border-(--color-accent) transition-colors duration-300">
+        {/* Single Archive Action at End of Section */}
+        <ScrollReveal delayMs={150} animationClass="animate-editorial-fade">
+          <div className="home-selected-bottom-bar flex items-center justify-end border border-(--color-border) bg-(--color-background) p-3 sm:p-3.5 rounded-[2px]">
             <Link
               href={`/${locale}/projects`}
-              className="bottom-bar-cta group inline-flex items-center gap-2 min-h-[44px] px-3 py-2 font-mono text-xs sm:text-sm font-semibold text-(--color-accent) hover:underline focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 rounded-[2px]"
+              className="bottom-bar-cta editorial-action-link"
             >
-              <span>{copy.archiveCta}</span>
-              <span
-                className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"
-                aria-hidden="true"
-              >
+              <span className="action-link-label">{copy.archiveCta}</span>
+              <span className="action-link-arrow" aria-hidden="true">
                 →
               </span>
             </Link>

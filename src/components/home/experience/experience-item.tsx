@@ -26,12 +26,12 @@ export function ExperienceItem({
     <ScrollReveal
       delayMs={delayMs}
       animationClass="animate-editorial-fade"
-      className="experience-timeline-entry group relative flex items-stretch gap-3 sm:gap-6 lg:gap-8"
+      className="experience-timeline-entry relative flex items-stretch gap-3 sm:gap-6 lg:gap-8"
     >
       {/* Left Vertical Timeline Spine & Marker Node */}
       <div className="timeline-spine-col flex flex-col items-center shrink-0 w-7 sm:w-8">
-        {/* Numbered Marker Node */}
-        <div className="timeline-spine-node flex items-center justify-center w-7 h-7 rounded-full border border-(--color-border) bg-(--color-background) group-hover:border-(--color-accent) transition-all duration-300 z-10 shrink-0">
+        {/* Numbered Marker Node (Static record marker) */}
+        <div className="timeline-spine-node flex items-center justify-center w-7 h-7 rounded-full border border-(--color-border) bg-(--color-background) z-10 shrink-0">
           <span className="font-mono text-[10px] sm:text-[11px] font-bold text-(--color-accent)">
             {indexFormatted}
           </span>
@@ -40,7 +40,7 @@ export function ExperienceItem({
         {/* Continuous Connecting Line to Next Entry */}
         {!isLast && (
           <div
-            className="timeline-spine-line w-[1px] flex-1 bg-(--color-border) my-1 transition-colors duration-300 group-hover:bg-(--color-accent)/60"
+            className="timeline-spine-line w-[1px] flex-1 bg-(--color-border) my-1"
             aria-hidden="true"
           />
         )}
@@ -48,7 +48,7 @@ export function ExperienceItem({
 
       {/* Main Experience Item: Follows exact hierarchy: 1. Role, 2. Org, 3. Period, 4. Location, 5. Contributions, 6. Stack */}
       <article
-        className="experience-record-item flex-1 pb-8 sm:pb-10 flex flex-col gap-3"
+        className="experience-record-item flex-1 pb-6 sm:pb-8 flex flex-col gap-2.5"
         aria-label={experience.role[locale]}
       >
         {/* 1. Role (Prominent) */}
@@ -60,7 +60,7 @@ export function ExperienceItem({
                 placeholder={experience.logoPlaceholder}
                 orgName={experience.organization[locale]}
               />
-              <h3 className="font-serif text-xl sm:text-2xl font-normal text-(--color-foreground) m-0 group-hover:text-(--color-accent) transition-colors duration-200">
+              <h3 className="font-serif text-xl sm:text-2xl font-normal text-(--color-foreground) m-0">
                 {experience.role[locale]}
               </h3>
             </div>
@@ -91,13 +91,13 @@ export function ExperienceItem({
 
         {/* 5. Three Concise Contribution Points */}
         <ul
-          className="experience-highlights flex flex-col gap-2 list-none m-0 p-0 pl-0 sm:pl-16 md:pl-18 pt-1"
+          className="experience-highlights flex flex-col gap-1.5 list-none m-0 p-0 pl-0 sm:pl-16 md:pl-18 pt-0.5"
           role="list"
         >
           {experience.highlights[locale].map((highlight, idx) => (
             <li
               key={idx}
-              className="flex items-baseline gap-2 text-xs sm:text-sm text-(--color-muted) leading-relaxed"
+              className="flex items-baseline gap-2 text-xs sm:text-sm text-(--color-muted) leading-relaxed max-w-[68ch]"
             >
               <span
                 className="text-(--color-accent) font-mono text-xs shrink-0 select-none"
@@ -111,7 +111,7 @@ export function ExperienceItem({
         </ul>
 
         {/* 6. Stack Metadata */}
-        <div className="experience-stack font-mono text-xs text-(--color-muted) pl-0 sm:pl-16 md:pl-18 pt-2">
+        <div className="experience-stack font-mono text-xs text-(--color-muted) pl-0 sm:pl-16 md:pl-18 pt-1.5">
           <span className="text-[11px] font-semibold uppercase tracking-wider text-(--color-muted)">
             {isId ? "STACK // " : "STACK // "}
           </span>
