@@ -75,10 +75,10 @@ export function AboutEducation({ locale }: AboutEducationProps) {
 
   return (
     <section
-      className="about-education-section py-8 sm:py-12 md:py-14 border-b border-(--color-border)"
+      className="about-education-section py-6 sm:py-8 md:py-10 lg:py-12 border-b border-(--color-border)"
       aria-label={isId ? "Pendidikan & Rekayasa Akademik" : "Education & Academic Record"}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-5 sm:gap-6">
         {/* Section Header */}
         <ScrollReveal className="flex flex-col gap-2 max-w-3xl">
           <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
@@ -96,11 +96,11 @@ export function AboutEducation({ locale }: AboutEducationProps) {
         </ScrollReveal>
 
         {/* Education Spread: Academic Record & Thesis (Left) + Bachelor Certificate (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] xl:grid-cols-[1.4fr_1fr] gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] xl:grid-cols-[1.4fr_1fr] gap-6 lg:gap-10 items-start">
           {/* Left Column: Academic Credentials Record & Thesis */}
           <ScrollReveal
             delayMs={100}
-            className="flex flex-col gap-5 sm:gap-6"
+            className="flex flex-col gap-4 sm:gap-5"
           >
             {/* Degree & Institution */}
             <div className="flex flex-col gap-1.5">
@@ -128,12 +128,12 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             </div>
 
             {/* Approved Education Summary */}
-            <p className="text-sm sm:text-base text-(--color-muted) leading-relaxed m-0 max-w-xl">
+            <p className="text-sm sm:text-base text-(--color-muted) leading-relaxed m-0 max-w-[65ch]">
               {data.summary[locale]}
             </p>
 
             {/* Full Bilingual Undergraduate Thesis Record */}
-            <div className="flex flex-col gap-2 pt-4 sm:pt-5 border-t border-(--color-border) max-w-xl">
+            <div className="flex flex-col gap-2 pt-4 sm:pt-5 border-t border-(--color-border) max-w-[65ch]">
               <span className="font-mono text-xs font-semibold text-(--color-accent) uppercase tracking-wider">
                 {data.thesis.label[locale]}
               </span>
@@ -163,7 +163,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                 ref={triggerRef}
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="group relative border border-(--color-border) bg-(--color-background) aspect-[16/11] overflow-hidden cursor-pointer hover:border-(--color-accent) transition-all duration-300 text-left p-0 w-full rounded-[2px]"
+                className="group relative border border-(--color-border) bg-(--color-background) aspect-[16/11] overflow-hidden cursor-pointer hover:border-(--color-accent) active:scale-[0.99] active:opacity-85 transition-all duration-150 text-left p-0 w-full rounded-[2px]"
                 aria-label={`${data.bachelorCertificate.inspectLabel[locale]}: ${data.degree[locale]}`}
               >
                 <Image
@@ -172,12 +172,12 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                   width={700}
                   height={480}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px"
-                  className="object-contain w-full h-full p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+                  className="object-contain w-full h-full p-2 transition-transform duration-200 group-hover:scale-[1.01]"
                   loading="lazy"
                 />
 
                 {/* Hover Inspection Overlay */}
-                <div className="absolute inset-0 bg-(--color-foreground)/75 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-1 text-(--color-background)">
+                <div className="absolute inset-0 bg-(--color-foreground)/75 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-150 flex flex-col items-center justify-center gap-1 text-(--color-background)">
                   <span className="text-xl leading-none" aria-hidden="true">
                     ⊕
                   </span>

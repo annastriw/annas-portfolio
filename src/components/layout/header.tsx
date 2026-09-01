@@ -1,4 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
 import { NavLinks } from "@/components/navigation/nav-links";
 import { LocaleSwitcher } from "@/components/navigation/locale-switcher";
@@ -10,18 +14,56 @@ interface HeaderProps {
 }
 
 export function Header({ locale }: HeaderProps) {
+  const pathname = usePathname();
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  const [navKey, setNavKey] = useState(0);
+
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setNavKey((k) => k + 1);
+  }
+
+  // Check if initial splash is active to coordinate header entrance
+  const [isSplashActive, setIsSplashActive] = useState(() => {
+    if (typeof document !== "undefined") {
+      return document.documentElement.classList.contains("splash-active");
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const checkSplash = () => {
+      setIsSplashActive(
+        document.documentElement.classList.contains("splash-active"),
+      );
+    };
+    checkSplash();
+    const observer = new MutationObserver(checkSplash);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const shouldAnimate = !isSplashActive && navKey > 0;
+
   return (
     <header
-      className="site-header sticky top-0 z-40 bg-(--header-bg) border-b border-(--header-border) transition-colors duration-200"
+      key={shouldAnimate ? `header-nav-${navKey}` : undefined}
+      className={`site-header sticky top-0 z-40 bg-(--header-bg) border-b border-(--header-border) transition-colors duration-200 ${
+        shouldAnimate ? "header-nav-entrance" : ""
+      }`}
       role="banner"
     >
-      <div className="site-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+      <div className="site-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-4">
         {/* Brand / Typographic Masthead */}
         <div className="site-brand flex items-center shrink-0">
           <Link
             href={`/${locale}`}
             id="site-header-brand"
-            className="brand-link group inline-flex items-baseline gap-2 text-(--color-foreground) rounded-[2px] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-4"
+            className="brand-link group inline-flex items-center gap-2 min-h-[2.75rem] text-(--color-foreground) rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-4 active:scale-[0.98] active:opacity-80"
             aria-label={locale === "id" ? "annastriwidagdo.me - Beranda" : "annastriwidagdo.me - Home"}
           >
             <span

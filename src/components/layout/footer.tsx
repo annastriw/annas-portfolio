@@ -27,29 +27,29 @@ export function Footer({ locale }: FooterProps) {
 
   return (
     <footer className={styles.footer} role="contentinfo">
-      <div className={styles.container}>
-        <ScrollReveal animationClass="animate-editorial-rule-x">
+      <ScrollReveal className={styles.footerRevealWrapper}>
+        <div className={styles.container}>
           <div className={styles.entryRule} aria-hidden="true" />
-        </ScrollReveal>
 
-        <div className={styles.mainGrid}>
-          <div className={styles.brandBlock}>
-            <Link
-              className={styles.wordmark}
-              href={`/${locale}`}
-              aria-label={isId ? "annastriwidagdo.me - Beranda" : "annastriwidagdo.me - Home"}
-            >
-              <span className={styles.wordmarkMarker} aria-hidden="true">
-                {"\u25A0"}
-              </span>
-              <span className={styles.wordmarkText}>annastriwidagdo.me</span>
-            </Link>
-            <ul className={styles.roleList} aria-label={copy.rolesLabel}>
-              {siteIdentity.roles.map((role) => (
-                <li key={role}>{role}</li>
-              ))}
-            </ul>
-          </div>
+          <div className={styles.mainGrid}>
+            <div className={styles.brandBlock}>
+              <Link
+                className={styles.wordmark}
+                href={`/${locale}`}
+                aria-label={isId ? "annastriwidagdo.me - Beranda" : "annastriwidagdo.me - Home"}
+              >
+                <span className={styles.wordmarkMarker} aria-hidden="true">
+                  {"\u25A0"}
+                </span>
+                <span className={styles.wordmarkText}>annastriwidagdo.me</span>
+              </Link>
+              <ul className={styles.roleList} aria-label={copy.rolesLabel}>
+                {siteIdentity.roles.map((role) => (
+                  <li key={role}>{role}</li>
+                ))}
+              </ul>
+              <p className={styles.telemetry}>{siteIdentity.locationMetadata}</p>
+            </div>
 
           <nav className={styles.linkGrid} aria-label={copy.footerNavigation}>
             <a
@@ -120,6 +120,7 @@ export function Footer({ locale }: FooterProps) {
           <p className={styles.signature}>{signature}</p>
         </div>
       </div>
-    </footer>
-  );
+    </ScrollReveal>
+  </footer>
+);
 }

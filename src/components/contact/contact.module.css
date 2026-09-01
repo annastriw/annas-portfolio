@@ -14,8 +14,8 @@
 .contactLayout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(3rem, 6vw, 5.5rem);
-  padding-block: clamp(2rem, 5vw, 4.5rem);
+  gap: clamp(2.25rem, 4.5vw, 4.25rem);
+  padding-block: clamp(1.75rem, 3.5vw, 3.5rem);
 }
 
 .leftColumn,
@@ -27,7 +27,7 @@
 .leftColumn {
   display: flex;
   flex-direction: column;
-  gap: clamp(2.5rem, 5vw, 4rem);
+  gap: clamp(2rem, 4vw, 3rem);
 }
 
 /* Masthead / Intro Header */
@@ -81,7 +81,7 @@
 }
 
 .lead {
-  max-width: 36rem;
+  max-width: 60ch;
   margin: 0.25rem 0 0;
   color: var(--muted);
   font-size: clamp(0.9375rem, 1.4vw, 1.05rem);
@@ -90,7 +90,7 @@
 
 /* Direct Channels Section */
 .sectionTitle {
-  margin: 0 0 1rem;
+  margin: 0 0 0.875rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 600;
@@ -134,17 +134,17 @@
   display: grid;
   grid-template-columns: 2.25rem minmax(0, 1fr) auto;
   gap: 1rem;
-  min-height: 4.75rem;
-  padding: 1.125rem 0;
+  min-height: 3.5rem;
+  padding: 0.875rem 0;
   align-items: center;
   color: var(--foreground);
   text-decoration: none;
-  transition: color 200ms ease;
+  transition: color 150ms ease, opacity 150ms ease, transform 150ms ease;
 }
 
-.channelLink:hover,
-.channelLink:focus-visible {
-  color: var(--accent);
+.channelLink:active {
+  opacity: 0.75;
+  transform: scale(0.99);
 }
 
 .channelIndex {
@@ -152,12 +152,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--accent);
-  transition: transform 200ms var(--ease-editorial);
-}
-
-.channelLink:hover .channelIndex,
-.channelLink:focus-visible .channelIndex {
-  transform: translateX(3px);
+  transition: transform 150ms var(--ease-editorial);
 }
 
 .channelIdentity {
@@ -174,12 +169,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
-  transition: color 200ms ease;
-}
-
-.channelLink:hover .channelLabel,
-.channelLink:focus-visible .channelLabel {
-  color: var(--accent);
+  transition: color 150ms ease;
 }
 
 .channelValue {
@@ -194,12 +184,29 @@
   font-family: var(--font-mono);
   font-size: 1rem;
   color: var(--accent);
-  transition: transform 200ms var(--ease-editorial);
+  transition: transform 150ms var(--ease-editorial);
 }
 
-.channelLink:hover .channelArrow,
-.channelLink:focus-visible .channelArrow {
-  transform: translate(3px, -3px);
+@media (hover: hover) and (pointer: fine) {
+  .channelLink:hover,
+  .channelLink:focus-visible {
+    color: var(--accent);
+  }
+
+  .channelLink:hover .channelIndex,
+  .channelLink:focus-visible .channelIndex {
+    transform: translateX(3px);
+  }
+
+  .channelLink:hover .channelLabel,
+  .channelLink:focus-visible .channelLabel {
+    color: var(--accent);
+  }
+
+  .channelLink:hover .channelArrow,
+  .channelLink:focus-visible .channelArrow {
+    transform: translate(3px, -3px);
+  }
 }
 
 /* Email Draft Composer Column */
@@ -212,7 +219,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
 }
 
 .composerTitle {
@@ -227,7 +234,7 @@
 
 .composerIntro {
   margin: 0;
-  max-width: 36rem;
+  max-width: 60ch;
   color: var(--muted);
   font-size: 0.9375rem;
   line-height: 1.6;
@@ -291,12 +298,17 @@
   display: grid;
   grid-template-columns: 2rem minmax(0, 1fr) auto;
   gap: 0.75rem;
-  min-height: 3.5rem;
-  padding: 0.75rem 0.625rem;
+  min-height: 3rem;
+  padding: 0.625rem 0.625rem;
   align-items: center;
   cursor: pointer;
   border-left: 2px solid transparent;
-  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, transform 150ms ease, opacity 150ms ease;
+}
+
+.templateLabel:active {
+  opacity: 0.8;
+  transform: scale(0.99);
 }
 
 .templateLabel:hover {
@@ -340,8 +352,8 @@
 .fieldGroup {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
-  padding-block: 1.25rem;
+  gap: 0.5rem;
+  padding-block: 1rem;
   border-top: 1px solid var(--border);
 }
 
@@ -355,17 +367,17 @@
   font-family: var(--font-sans);
   font-size: 0.9375rem;
   line-height: 1.6;
-  transition: border-color 180ms ease, background-color 180ms ease;
+  transition: border-color 150ms ease, background-color 150ms ease;
 }
 
 .textInput {
-  min-height: 3.25rem;
-  padding: 0.75rem 0.875rem;
+  min-height: 3rem;
+  padding: 0.625rem 0.875rem;
 }
 
 .textarea {
-  min-height: 13.5rem;
-  padding: 0.875rem;
+  min-height: 10.5rem;
+  padding: 0.75rem 0.875rem;
   resize: vertical;
 }
 
@@ -400,11 +412,11 @@
 .primaryAction,
 .secondaryAction {
   display: inline-flex;
-  min-height: 3.25rem;
+  min-height: 3rem;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.75rem 1.125rem;
+  padding: 0.6875rem 1.125rem;
   border-radius: 0;
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -414,7 +426,7 @@
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
-  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, transform 150ms ease;
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, transform 150ms ease, opacity 150ms ease;
 }
 
 .primaryAction {
@@ -431,7 +443,7 @@
   color: inherit;
   font-family: var(--font-mono);
   font-size: 0.9375rem;
-  transition: transform 200ms var(--ease-editorial);
+  transition: transform 150ms var(--ease-editorial);
 }
 
 .secondaryAction {
@@ -444,44 +456,51 @@
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: 0.9375rem;
-  transition: transform 200ms var(--ease-editorial);
+  transition: transform 150ms var(--ease-editorial);
 }
 
-.primaryAction:hover,
-.primaryAction:focus-visible {
-  background: color-mix(in srgb, var(--accent) 85%, #000000);
-  border-color: color-mix(in srgb, var(--accent) 85%, #000000);
-}
+@media (hover: hover) and (pointer: fine) {
+  .primaryAction:hover,
+  .primaryAction:focus-visible {
+    background: color-mix(in srgb, var(--accent) 85%, #000000);
+    border-color: color-mix(in srgb, var(--accent) 85%, #000000);
+  }
 
-:global(.dark) .primaryAction:hover,
-:global(.dark) .primaryAction:focus-visible {
-  background: color-mix(in srgb, var(--accent) 85%, #ffffff);
-  border-color: color-mix(in srgb, var(--accent) 85%, #ffffff);
-}
+  :global(.dark) .primaryAction:hover,
+  :global(.dark) .primaryAction:focus-visible {
+    background: color-mix(in srgb, var(--accent) 85%, #ffffff);
+    border-color: color-mix(in srgb, var(--accent) 85%, #ffffff);
+  }
 
-.secondaryAction:hover,
-.secondaryAction:focus-visible {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-  color: var(--foreground);
-}
+  .secondaryAction:hover,
+  .secondaryAction:focus-visible {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+    color: var(--foreground);
+  }
 
-.primaryAction:hover .actionArrow,
-.primaryAction:focus-visible .actionArrow,
-.secondaryAction:hover .actionArrow,
-.secondaryAction:focus-visible .actionArrow {
-  transform: translate(3px, -3px);
+  .primaryAction:hover .actionArrow,
+  .primaryAction:focus-visible .actionArrow,
+  .secondaryAction:hover .actionArrow,
+  .secondaryAction:focus-visible .actionArrow {
+    transform: translate(3px, -3px);
+  }
 }
 
 .primaryAction:active,
-.secondaryAction:active,
+.secondaryAction:active {
+  opacity: 0.75;
+  transform: scale(0.98);
+}
+
 .clearAction:active {
-  transform: translateY(1px);
+  opacity: 0.75;
+  transform: scale(0.98);
 }
 
 .helperText {
   margin: 0;
-  padding-top: 0.875rem;
+  padding-top: 0.75rem;
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   color: var(--muted);
@@ -489,9 +508,9 @@
 }
 
 .clearAction {
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   width: fit-content;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   padding: 0;
   border: 0;
   border-bottom: 1px dashed var(--border);
@@ -503,7 +522,7 @@
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.03em;
-  transition: border-color 180ms ease, color 180ms ease;
+  transition: border-color 150ms ease, color 150ms ease, transform 150ms ease, opacity 150ms ease;
 }
 
 .clearAction:hover,

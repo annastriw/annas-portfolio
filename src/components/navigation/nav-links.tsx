@@ -32,7 +32,7 @@ export function NavLinks({
           <li key={item.key} className="nav-link-item inline-flex">
             <Link
               href={localizedHref}
-              className={`header-nav-link group relative inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs font-medium uppercase tracking-tight transition-all duration-200 rounded-[2px] focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 ${
+              className={`header-nav-link group relative inline-flex items-center gap-1.5 px-3 py-2 min-h-[2.75rem] font-mono text-xs font-medium uppercase tracking-tight transition-all duration-150 rounded-[2px] focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 ${
                 isActive
                   ? "text-(--color-foreground) font-semibold"
                   : "text-(--color-muted) hover:text-(--color-foreground)"
@@ -51,7 +51,7 @@ export function NavLinks({
               )}
               {/* Bottom hover rule */}
               <span
-                className={`absolute bottom-0 left-3 right-3 h-[2px] transition-all duration-200 ${
+                className={`absolute bottom-0 left-3 right-3 h-[2px] transition-all duration-150 ${
                   isActive
                     ? "bg-(--color-accent)"
                     : "bg-transparent group-hover:bg-(--color-border)"

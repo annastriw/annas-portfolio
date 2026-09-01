@@ -178,7 +178,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                     key={item.key}
                     href={localizedHref}
                     onClick={(e) => handleNavClick(e, isActive)}
-                    className={`group flex items-center justify-between p-2.5 border rounded-[2px] transition-all focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 ${
+                    className={`group flex items-center justify-between p-2.5 min-h-[2.75rem] border rounded-[2px] transition-all duration-150 focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 ${
                       isActive
                         ? "border-(--color-accent) bg-(--color-background) font-semibold"
                         : "border-(--color-border) bg-(--color-surface-subtle,var(--color-background)) hover:border-(--color-accent)"

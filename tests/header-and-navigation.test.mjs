@@ -112,6 +112,12 @@ test("Header component maintains approved wordmark, sticky behavior, and accessi
 
   // Desktop navigation accessibility labels
   assert.match(headerFile, /aria-label={locale === "id" \? "Navigasi Utama" : "Main Navigation"}/);
+
+  // Route navigation entrance and initial splash coordination
+  assert.match(headerFile, /usePathname/);
+  assert.match(headerFile, /header-nav-entrance/);
+  assert.match(headerFile, /splash-active/);
+  assert.match(headerFile, /min-h-\[2\.75rem\]/);
 });
 
 test("Desktop NavLinks component renders 5 numbered items with active indicators", () => {

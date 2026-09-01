@@ -101,10 +101,10 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
 
   return (
     <section
-      className="about-certificates-section py-8 sm:py-12 md:py-16"
+      className="about-certificates-section py-6 sm:py-8 md:py-10 lg:py-12"
       aria-label={copy.title[locale]}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-5 sm:gap-6">
         {/* Section Header */}
         <ScrollReveal className="flex flex-col gap-2 max-w-3xl">
           <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
@@ -121,7 +121,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
             {copy.title[locale]}
           </h2>
 
-          <p className="section-subtitle text-sm sm:text-base text-(--color-muted) leading-relaxed m-0">
+          <p className="section-subtitle text-sm sm:text-base text-(--color-muted) leading-relaxed m-0 max-w-[65ch]">
             {copy.summary[locale]}
           </p>
         </ScrollReveal>
@@ -146,7 +146,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                     type="button"
                     onClick={() => setSelectedCategory(cat.key)}
                     aria-pressed={isSelected}
-                    className={`inline-flex items-center gap-1.5 min-h-[44px] px-3.5 py-2 border font-mono text-xs rounded-[2px] transition-colors duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 ${
+                    className={`inline-flex items-center gap-1.5 min-h-[44px] px-3.5 py-2 border font-mono text-xs rounded-[2px] transition-all duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.98] active:opacity-80 ${
                       isSelected
                         ? "border-(--color-foreground) bg-(--color-foreground) text-(--color-background) font-semibold"
                         : "border-(--color-border) bg-(--color-background) text-(--color-muted) hover:text-(--color-foreground) hover:border-(--color-foreground)"
@@ -188,7 +188,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                         ? `Lihat sertifikat ${cert.title[locale]}`
                         : `Inspect certificate: ${cert.title[locale]}`
                     }
-                    className="flex flex-col w-full h-full text-left p-0 border-0 bg-transparent cursor-pointer group focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2"
+                    className="flex flex-col w-full h-full text-left p-0 border-0 bg-transparent cursor-pointer group focus-visible:outline-2 focus-visible:outline-(--color-accent) focus-visible:outline-offset-2 active:scale-[0.99] active:opacity-85 transition-all duration-150"
                   >
                     {/* Document Evidence Thumbnail */}
                     <div className="relative w-full aspect-[16/11] bg-(--color-surface-subtle) border-b border-(--color-border) overflow-hidden flex items-center justify-center">
@@ -202,12 +202,12 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                         width={600}
                         height={420}
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-contain w-full h-full p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+                        className="object-contain w-full h-full p-2 transition-transform duration-200 group-hover:scale-[1.02]"
                         loading="lazy"
                       />
 
                       {/* Subtle Hover Inspection Overlay */}
-                      <div className="absolute inset-0 bg-(--color-foreground)/75 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-1.5 text-(--color-background)">
+                      <div className="absolute inset-0 bg-(--color-foreground)/75 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-150 flex flex-col items-center justify-center gap-1.5 text-(--color-background)">
                         <span className="text-xl leading-none" aria-hidden="true">
                           ⊕
                         </span>

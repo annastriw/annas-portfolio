@@ -108,7 +108,7 @@ export function EmailComposer({ locale }: EmailComposerProps) {
           name="message"
           onChange={(event) => setMessage(event.target.value)}
           placeholder={copy.messagePlaceholder}
-          rows={9}
+          rows={7}
           value={message}
         />
       </div>
