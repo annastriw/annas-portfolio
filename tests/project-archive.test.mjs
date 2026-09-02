@@ -64,7 +64,7 @@ const expectedStatuses = [
   "Live Production",
   "Live Production",
   "Completed Prototype",
-  "Completed Workflow",
+  "Completed Prototype",
   "Completed Application",
   "Completed Application",
   "Completed Prototype",
@@ -96,8 +96,8 @@ const expectedSummaries = {
     id: "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inference model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
   },
   "speech-to-text-system": {
-    en: "An audio and video transcription workflow using Wav2Vec2, covering audio preparation, speech recognition, and export to text files and video subtitles.",
-    id: "Workflow transkripsi audio dan video menggunakan Wav2Vec2, mencakup pengolahan audio, pengenalan ucapan, serta ekspor ke file teks dan subtitle video.",
+    en: "An English speech-to-text prototype that processes audio and video with pretrained Wav2Vec2, then exports transcripts, SRT subtitles, and video with burned-in captions.",
+    id: "Prototype speech-to-text bahasa Inggris yang memproses audio dan video menggunakan pretrained Wav2Vec2, lalu menghasilkan transkrip, subtitle SRT, dan video dengan subtitle tertanam.",
   },
   "thermal-printer-service": {
     en: "A native Android printing service that connects the system print framework to Bluetooth thermal printers, with print calibration and retry handling.",
@@ -186,7 +186,7 @@ test("preserves original project indexes when categories are filtered", () => {
   );
 });
 
-test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, and Heart ML", () => {
+test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, Heart ML, and Speech-to-Text", () => {
   for (const project of projectArchive) {
     assert.ok(
       project.primaryTechnologies.length <= 6,
@@ -263,6 +263,17 @@ test("enforces max 6 displayed technologies and exact approved stacks for UKG, i
     "SMOTE",
     "Flask",
     "Docker",
+  ]);
+
+  const stt = projectArchive.find((p) => p.slug === "speech-to-text-system");
+  assert.ok(stt);
+  assert.deepEqual(stt.primaryTechnologies, [
+    "Python",
+    "Wav2Vec2",
+    "Hugging Face Transformers",
+    "Librosa",
+    "FFmpeg",
+    "Google Colab",
   ]);
 });
 
@@ -810,6 +821,107 @@ test("synchronizes Heart ML Hub entry with exact facts, 6-item stack, medical bo
   assert.equal(homeSelectedProjects[0].slug, "ukg-system");
   assert.equal(homeSelectedProjects[1].slug, "ihealth-edu");
   assert.equal(homeSelectedProjects[3].slug, "panoramic-virtual-tour");
+});
+
+test("synchronizes Speech-to-Text System Hub entry with exact facts, 6-item stack, and absence from Home", () => {
+  const stt = projectArchive.find((p) => p.slug === "speech-to-text-system");
+  assert.ok(stt);
+
+  assert.equal(stt.index, "07");
+  assert.equal(stt.category, "ml");
+  assert.equal(stt.title.en, "Speech-to-Text System");
+  assert.equal(stt.title.id, "Speech-to-Text System");
+  assert.equal(stt.role.en, "Machine Learning Engineer");
+  assert.equal(stt.role.id, "Machine Learning Engineer");
+  assert.equal(stt.status.en, "Completed Prototype");
+  assert.equal(stt.status.id, "Completed Prototype");
+  assert.equal(
+    stt.coverImage,
+    "/assets/projects/speech-to-text-system/cover.webp",
+  );
+  assert.equal(
+    stt.coverAlt.en,
+    "Side-by-side comparison showing the video sample before subtitles and the final video with burned-in English subtitles",
+  );
+  assert.equal(
+    stt.coverAlt.id,
+    "Perbandingan berdampingan menampilkan sampel video sebelum subtitle dan video akhir dengan subtitle bahasa Inggris tertanam",
+  );
+  assert.equal(stt.coverPosition, "center");
+
+  assert.deepEqual(stt.primaryTechnologies, [
+    "Python",
+    "Wav2Vec2",
+    "Hugging Face Transformers",
+    "Librosa",
+    "FFmpeg",
+    "Google Colab",
+  ]);
+
+  assert.equal(
+    stt.summary.en,
+    "An English speech-to-text prototype that processes audio and video with pretrained Wav2Vec2, then exports transcripts, SRT subtitles, and video with burned-in captions.",
+  );
+  assert.equal(
+    stt.summary.id,
+    "Prototype speech-to-text bahasa Inggris yang memproses audio dan video menggunakan pretrained Wav2Vec2, lalu menghasilkan transkrip, subtitle SRT, dan video dengan subtitle tertanam.",
+  );
+
+  // Factual boundaries and absence of metrics or external links
+  assert.doesNotMatch(
+    stt.summary.en,
+    /fine-tuned|custom-trained|WER|CER|accuracy|benchmark|multilingual/i,
+  );
+  assert.doesNotMatch(
+    stt.summary.id,
+    /fine-tuning|custom-trained|WER|CER|akurasi|benchmark|multilingual/i,
+  );
+  assert.doesNotMatch(JSON.stringify(stt), /github\.com/i);
+
+  // All 10 Hub records and order preserved
+  assert.equal(projectArchive.length, 10);
+  assert.deepEqual(
+    projectArchive.map((p) => p.slug),
+    expectedSlugs,
+  );
+
+  // All category filters preserved
+  const counts = getProjectArchiveCategoryCounts(projectArchive);
+  assert.deepEqual(counts, {
+    all: 10,
+    "web-app": 5,
+    ml: 2,
+    mobile: 2,
+    other: 1,
+  });
+
+  // Home Selected Projects synchronization and order: Speech-to-Text must NOT be in Home Selected Projects
+  assert.equal(homeSelectedProjects.length, 4);
+  assert.deepEqual(
+    homeSelectedProjects.map((p) => p.slug),
+    [
+      "ukg-system",
+      "ihealth-edu",
+      "ml-for-heart-attack-risk-prediction",
+      "panoramic-virtual-tour",
+    ],
+  );
+  assert.equal(
+    homeSelectedProjects.some((p) => p.slug === "speech-to-text-system"),
+    false,
+  );
+
+  // Confirm other 9 Hub records remain intact and unchanged
+  const otherNineSlugs = expectedSlugs.filter(
+    (s) => s !== "speech-to-text-system",
+  );
+  assert.equal(otherNineSlugs.length, 9);
+  for (const slug of otherNineSlugs) {
+    const p = projectArchive.find((proj) => proj.slug === slug);
+    assert.ok(p, `Project ${slug} must exist in archive`);
+    assert.equal(p.summary.en, expectedSummaries[slug].en);
+    assert.equal(p.summary.id, expectedSummaries[slug].id);
+  }
 });
 
 
