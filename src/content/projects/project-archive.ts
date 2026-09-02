@@ -149,10 +149,11 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Full-Stack Web Developer",
     },
     summary: {
-      en: "A digital learning and dakwah platform with structured learning modules, multimedia content, search, and moderated discussions.",
-      id: "Platform pembelajaran dan dakwah digital dengan modul pembelajaran terstruktur, konten multimedia, pencarian, dan diskusi yang dimoderasi.",
+      en: "A digital Islamic learning platform with structured modules, articles, YouTube videos, and moderated community discussions.",
+      id: "Platform pembelajaran dan dakwah digital dengan modul terstruktur, artikel, video YouTube, dan diskusi komunitas yang dimoderasi.",
     },
     primaryTechnologies: [
+      "Figma",
       "Next.js",
       "Laravel",
       "MySQL",

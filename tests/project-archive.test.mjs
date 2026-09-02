@@ -13,6 +13,10 @@ import {
   PROJECT_ARCHIVE_DISCIPLINE_COUNT,
   PROJECT_ARCHIVE_TOTAL_COUNT,
 } from "../src/content/projects/project-archive.ts";
+import {
+  homeFeaturedConfig,
+  homeSelectedProjects,
+} from "../src/content/projects/featured-config.ts";
 
 const expectedSlugs = [
   "ukg-system",
@@ -80,8 +84,8 @@ const expectedSummaries = {
     id: "Platform edukasi dan komunitas kesehatan ginjal yang dikembangkan bersama IPDI Jawa Tengah, menyediakan materi pembelajaran, panduan video, booklet digital, dan forum diskusi.",
   },
   "nusa-dakwah": {
-    en: "A digital learning and dakwah platform with structured learning modules, multimedia content, search, and moderated discussions.",
-    id: "Platform pembelajaran dan dakwah digital dengan modul pembelajaran terstruktur, konten multimedia, pencarian, dan diskusi yang dimoderasi.",
+    en: "A digital Islamic learning platform with structured modules, articles, YouTube videos, and moderated community discussions.",
+    id: "Platform pembelajaran dan dakwah digital dengan modul terstruktur, artikel, video YouTube, dan diskusi komunitas yang dimoderasi.",
   },
   simastok: {
     en: "A spare-parts inventory system that brings stock management, transaction records, and reporting into one application with role-based access.",
@@ -182,7 +186,7 @@ test("preserves original project indexes when categories are filtered", () => {
   );
 });
 
-test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, and Dialisis", () => {
+test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, and Nusa Dakwah", () => {
   for (const project of projectArchive) {
     assert.ok(
       project.primaryTechnologies.length <= 6,
@@ -223,6 +227,17 @@ test("enforces max 6 displayed technologies and exact approved stacks for UKG, i
     "Next.js",
     "React",
     "REST API",
+    "Katalon Studio",
+    "Docker",
+  ]);
+
+  const nusa = projectArchive.find((p) => p.slug === "nusa-dakwah");
+  assert.ok(nusa);
+  assert.deepEqual(nusa.primaryTechnologies, [
+    "Figma",
+    "Next.js",
+    "Laravel",
+    "MySQL",
     "Katalon Studio",
     "Docker",
   ]);
@@ -440,3 +455,76 @@ test("Projects Hub applies once-only ScrollReveal to header and archive group wi
   assert.match(archiveSource, /role="tab"/);
   assert.match(archiveSource, /aria-selected=\{isActive\}/);
 });
+
+test("synchronizes Nusa Dakwah Hub entry with exact facts, 6-item stack, no search claims, and absence from Home", () => {
+  const nusa = projectArchive.find((p) => p.slug === "nusa-dakwah");
+  assert.ok(nusa, "Nusa Dakwah must exist in projectArchive");
+
+  // Exact fields
+  assert.equal(nusa.index, "04");
+  assert.equal(nusa.category, "web-app");
+  assert.equal(nusa.title.en, "Nusa Dakwah");
+  assert.equal(nusa.title.id, "Nusa Dakwah");
+  assert.equal(nusa.role.en, "Full-Stack Web Developer");
+  assert.equal(nusa.role.id, "Full-Stack Web Developer");
+  assert.equal(nusa.status.en, "Live Production");
+  assert.equal(nusa.status.id, "Live Production");
+  assert.equal(nusa.coverImage, "/assets/projects/nusa-dakwah/cover.webp");
+  assert.equal(nusa.coverPosition, "top");
+  assert.equal(
+    nusa.coverAlt.en,
+    "Nusa Dakwah digital content platform landing page",
+  );
+  assert.equal(
+    nusa.coverAlt.id,
+    "Halaman awal platform konten digital Nusa Dakwah",
+  );
+  assert.equal(
+    nusa.summary.en,
+    "A digital Islamic learning platform with structured modules, articles, YouTube videos, and moderated community discussions.",
+  );
+  assert.equal(
+    nusa.summary.id,
+    "Platform pembelajaran dan dakwah digital dengan modul terstruktur, artikel, video YouTube, dan diskusi komunitas yang dimoderasi.",
+  );
+  assert.deepEqual(nusa.primaryTechnologies, [
+    "Figma",
+    "Next.js",
+    "Laravel",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
+
+  // Prohibited search claims in Hub surface
+  assert.doesNotMatch(nusa.summary.en, /search/i);
+  assert.doesNotMatch(nusa.summary.id, /pencarian/i);
+  assert.doesNotMatch(nusa.coverAlt.en, /search/i);
+  assert.doesNotMatch(nusa.coverAlt.id, /pencarian/i);
+  assert.doesNotMatch(JSON.stringify(nusa), /search|pencarian/i);
+
+  // No external links in Hub record
+  assert.equal("liveUrl" in nusa, false);
+  assert.equal("githubUrl" in nusa, false);
+
+  // Absence from Home Selected Projects
+  assert.ok(
+    !homeSelectedProjects.some((p) => p.slug === "nusa-dakwah"),
+    "Nusa Dakwah must remain absent from Home selected projects",
+  );
+  assert.ok(
+    !Object.values(homeFeaturedConfig).includes("nusa-dakwah"),
+    "Nusa Dakwah must not be in homeFeaturedConfig",
+  );
+  assert.equal(homeSelectedProjects.length, 4);
+  assert.deepEqual(
+    homeSelectedProjects.map((p) => p.slug),
+    [
+      "ukg-system",
+      "ihealth-edu",
+      "ml-for-heart-attack-risk-prediction",
+      "panoramic-virtual-tour",
+    ],
+  );
+});
+
