@@ -98,6 +98,10 @@ test("references only real local visual evidence and verified public links", () 
         "speech-to-text-system",
         "https://github.com/annastriw/speech-to-text-system.git",
       ],
+      [
+        "thermal-printer-service",
+        "https://github.com/annastriw/ThermalPrinterService.git",
+      ],
     ],
   );
 });
@@ -1782,6 +1786,309 @@ test("maintains approved Speech-to-Text System locked facts, bilingual copy, mod
   assert.doesNotMatch(stringified, /Private Repository/i);
   assert.doesNotMatch(stringified, /custom-trained|custom training|fine-tuned model/i);
   assert.doesNotMatch(stringified, /production-grade|multilingual|forced alignment/i);
+});
+
+test("maintains approved Thermal Printer Service locked facts, bilingual copy, compact scope, metadata, media, and factual boundaries", () => {
+  const tps = getProjectCaseStudy("thermal-printer-service");
+  assert.ok(tps);
+
+  // Locked facts & metadata
+  assert.equal(tps.index, "08");
+  assert.equal(tps.slug, "thermal-printer-service");
+  assert.equal(tps.category, "mobile");
+  assert.equal(tps.categoryLabel.en, "08 // MOBILE APPLICATION");
+  assert.equal(tps.categoryLabel.id, "08 // MOBILE APPLICATION");
+  assert.equal(tps.role.en, "Android Developer");
+  assert.equal(tps.role.id, "Android Developer");
+  assert.equal(tps.period?.en, "January–February 2026");
+  assert.equal(tps.period?.id, "Januari–Februari 2026");
+  assert.equal(tps.status.en, "Completed Application");
+  assert.equal(tps.status.id, "Completed Application");
+  assert.equal(tps.liveUrl, undefined);
+  assert.equal(
+    tps.githubUrl,
+    "https://github.com/annastriw/ThermalPrinterService.git",
+  );
+  assert.equal(tps.repositoryNotice, undefined);
+  assert.equal(tps.client, undefined);
+  assert.equal(tps.workingModel, undefined);
+
+  // MetadataRows display only Role, Period, Status, Platform
+  assert.ok(tps.metadataRows);
+  assert.equal(tps.metadataRows.length, 4);
+  assert.deepEqual(
+    tps.metadataRows.map((r) => r.label.en),
+    ["Role", "Period", "Status", "Platform"],
+  );
+  assert.deepEqual(
+    tps.metadataRows.map((r) => r.label.id),
+    ["Peran", "Periode", "Status", "Platform"],
+  );
+  assert.deepEqual(
+    tps.metadataRows.map((r) => r.value.en),
+    [
+      "Android Developer",
+      "January–February 2026",
+      "Completed Application",
+      "Android",
+    ],
+  );
+  assert.deepEqual(
+    tps.metadataRows.map((r) => r.value.id),
+    [
+      "Android Developer",
+      "Januari–Februari 2026",
+      "Completed Application",
+      "Android",
+    ],
+  );
+
+  // Title and Lead
+  assert.equal(tps.title.en, "Thermal Printer Service");
+  assert.equal(tps.title.id, "Thermal Printer Service");
+  assert.equal(
+    tps.lead?.en,
+    "A native Android print service that connects browser-based workflows to Bluetooth thermal printers and converts Android print jobs into monochrome output for configured ESC/POS devices.",
+  );
+  assert.equal(
+    tps.lead?.id,
+    "Aplikasi print service native Android yang menghubungkan workflow berbasis browser dengan thermal printer Bluetooth serta memproses print job Android menjadi output monokrom untuk perangkat ESC/POS yang telah dikonfigurasi.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    tps.metaTitle?.en,
+    "Thermal Printer Service — Android Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    tps.metaTitle?.id,
+    "Thermal Printer Service — Studi Kasus Android Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    tps.metaDescription?.en,
+    "A native Kotlin Android PrintService case study covering Android print-job processing, monochrome ESC/POS conversion, Bluetooth delivery, and configurable 58 mm and 80 mm thermal printers.",
+  );
+  assert.equal(
+    tps.metaDescription?.id,
+    "Studi kasus Android PrintService native berbasis Kotlin yang mencakup pemrosesan print job, konversi ESC/POS monokrom, pengiriman Bluetooth, serta konfigurasi thermal printer 58 mm dan 80 mm.",
+  );
+
+  // Keywords
+  assert.deepEqual(tps.keywords?.en, [
+    "Android",
+    "Kotlin",
+    "Android Print Framework",
+    "PrintService",
+    "Bluetooth RFCOMM",
+    "ESC/POS",
+    "Thermal Printer",
+    "Android Developer",
+  ]);
+  assert.deepEqual(tps.keywords?.id, [
+    "Android",
+    "Kotlin",
+    "Android Print Framework",
+    "PrintService",
+    "Bluetooth RFCOMM",
+    "ESC/POS",
+    "Thermal Printer",
+    "Android Developer",
+  ]);
+
+  // Overview (exact 2 paragraphs)
+  assert.equal(tps.overview.en.length, 2);
+  assert.equal(tps.overview.id.length, 2);
+  assert.equal(
+    tps.overview.en[0],
+    "I developed Thermal Printer Service as a companion application for UKG System, enabling users to print from Chrome through Android’s standard printing workflow to a configured Bluetooth thermal printer.",
+  );
+  assert.equal(
+    tps.overview.en[1],
+    "The application converts print documents into monochrome ESC/POS output, manages background print jobs, and supports persistent profiles, calibration, retry, and error handling for 58 mm and 80 mm printers.",
+  );
+  assert.equal(
+    tps.overview.id[0],
+    "Saya mengembangkan Thermal Printer Service sebagai aplikasi pendamping UKG System agar pengguna dapat mencetak dari Chrome melalui workflow pencetakan standar Android ke thermal printer Bluetooth yang telah dikonfigurasi.",
+  );
+  assert.equal(
+    tps.overview.id[1],
+    "Aplikasi memproses dokumen menjadi output ESC/POS monokrom, menangani print job di background, serta menyediakan printer profile, calibration, retry, dan error handling untuk printer 58 mm dan 80 mm.",
+  );
+
+  // Contributions (exact 4 items + closing learning statement)
+  assert.equal(tps.contributions.en.length, 4);
+  assert.equal(tps.contributions.id.length, 4);
+  assert.equal(
+    tps.contributions.en[0],
+    "Built a custom Android PrintService that receives print jobs through Android’s standard printing workflow.",
+  );
+  assert.equal(
+    tps.contributions.en[1],
+    "Implemented the PDF-to-bitmap and monochrome ESC/POS processing pipeline for 58 mm and 80 mm printers.",
+  );
+  assert.equal(
+    tps.contributions.en[2],
+    "Managed background job processing, chunked Bluetooth transfer, retry, cancellation, and error states.",
+  );
+  assert.equal(
+    tps.contributions.en[3],
+    "Developed persistent printer profiles and calibration controls for different printer configurations.",
+  );
+  assert.equal(
+    tps.contributions.id[0],
+    "Membangun custom Android PrintService yang menerima print job melalui workflow pencetakan standar Android.",
+  );
+  assert.equal(
+    tps.contributions.id[1],
+    "Mengimplementasikan pipeline PDF-to-bitmap dan pemrosesan ESC/POS monokrom untuk printer 58 mm dan 80 mm.",
+  );
+  assert.equal(
+    tps.contributions.id[2],
+    "Menangani print job di background, pengiriman data Bluetooth secara bertahap, retry, cancellation, dan error state.",
+  );
+  assert.equal(
+    tps.contributions.id[3],
+    "Mengembangkan printer profile yang tersimpan serta pengaturan calibration untuk berbagai konfigurasi printer.",
+  );
+  assert.equal(
+    tps.contributionLearning?.en,
+    "This project strengthened my experience in connecting web workflows with native Android services and printing hardware.",
+  );
+  assert.equal(
+    tps.contributionLearning?.id,
+    "Project ini memperkuat pengalaman saya dalam menghubungkan workflow web dengan native Android service dan perangkat printer.",
+  );
+
+  // Personal Tech Stack (exact 6 items in approved order)
+  assert.deepEqual(tps.personalTechStack, [
+    "Kotlin",
+    "Android SDK",
+    "Android Print Framework",
+    "Bluetooth",
+    "ESC/POS",
+    "Gradle",
+  ]);
+  assert.deepEqual(tps.techStack, [
+    "Kotlin",
+    "Android SDK",
+    "Android Print Framework",
+    "Bluetooth",
+    "ESC/POS",
+    "Gradle",
+  ]);
+
+  // System Scope: exactly 3 groups with at most 4 items each
+  assert.ok(tps.thermalPrinterScope);
+  assert.equal(tps.thermalPrinterScope.groups.length, 3);
+
+  const [group1, group2, group3] = tps.thermalPrinterScope.groups;
+  assert.equal(group1.title.en, "System Print Integration");
+  assert.equal(group1.title.id, "Integrasi Sistem Pencetakan");
+  assert.deepEqual(group1.items.en, [
+    "Printing initiated from the website in Chrome",
+    "Android Print Framework",
+    "Custom PrintService",
+    "Sequential background print-job processing",
+  ]);
+  assert.deepEqual(group1.items.id, [
+    "Pencetakan dimulai dari website di Chrome",
+    "Android Print Framework",
+    "Custom PrintService",
+    "Pemrosesan print job di background secara sekuensial",
+  ]);
+
+  assert.equal(group2.title.en, "Document Processing");
+  assert.equal(group2.title.id, "Pemrosesan Dokumen");
+  assert.deepEqual(group2.items.en, [
+    "Temporary PDF and PdfRenderer",
+    "Bitmap scaling and alignment",
+    "Monochrome ESC/POS conversion",
+    "58 mm and 80 mm output configurations",
+  ]);
+  assert.deepEqual(group2.items.id, [
+    "File PDF sementara dan PdfRenderer",
+    "Penyesuaian skala dan perataan bitmap",
+    "Konversi ESC/POS monokrom",
+    "Konfigurasi output 58 mm dan 80 mm",
+  ]);
+
+  assert.equal(group3.title.en, "Bluetooth Printing & Printer Setup");
+  assert.equal(group3.title.id, "Pencetakan Bluetooth & Setup Printer");
+  assert.deepEqual(group3.items.en, [
+    "Bluetooth RFCOMM/SPP connection",
+    "Chunked data transfer with retry",
+    "Persistent profiles using SharedPreferences and JSON",
+    "Calibration and error handling",
+  ]);
+  assert.deepEqual(group3.items.id, [
+    "Koneksi Bluetooth RFCOMM/SPP",
+    "Pengiriman data bertahap dengan mekanisme retry",
+    "Profil tersimpan menggunakan SharedPreferences dan JSON",
+    "Kalibrasi dan penanganan error",
+  ]);
+
+  // Technical Metadata: exactly 4 static values
+  assert.ok(tps.technicalMetadata);
+  assert.equal(tps.technicalMetadata.length, 4);
+  assert.deepEqual(
+    tps.technicalMetadata.map((m) => m.value),
+    ["58 / 80 MM", "203 DPI", "1,024 BYTES", "04 ATTEMPTS"],
+  );
+  assert.deepEqual(
+    tps.technicalMetadata.map((m) => m.label.en),
+    [
+      "Paper Configuration",
+      "Resolution Configuration",
+      "Max Transfer Chunk",
+      "Connection Retry Sequence",
+    ],
+  );
+  assert.deepEqual(
+    tps.technicalMetadata.map((m) => m.label.id),
+    [
+      "Konfigurasi Kertas",
+      "Resolusi Konfigurasi",
+      "Maksimum Chunk Transfer",
+      "Urutan Retry Koneksi",
+    ],
+  );
+
+  // Gallery: exactly 4 slides in cover-first order
+  assert.equal(tps.gallery?.length, 4);
+  assert.deepEqual(
+    tps.gallery?.map((s) => s.src),
+    [
+      "/assets/projects/thermal-printer-service/cover.webp",
+      "/assets/projects/thermal-printer-service/documentation/01.webp",
+      "/assets/projects/thermal-printer-service/documentation/02.webp",
+      "/assets/projects/thermal-printer-service/documentation/03.webp",
+    ],
+  );
+  for (let i = 0; i < 4; i++) {
+    const slide = tps.gallery?.[i];
+    assert.ok(slide);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.doesNotMatch(slide.caption.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.caption.id, /^TODO_|^\[/);
+    assert.ok(slide.caption.en.length > 10);
+    assert.ok(slide.caption.id.length > 10);
+    assert.doesNotMatch(slide.alt.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.alt.id, /^TODO_|^\[/);
+    assert.ok(slide.alt.en.length > 10);
+    assert.ok(slide.alt.id.length > 10);
+  }
+
+  // Video demo at approved path
+  assert.equal(tps.videoSrc, "/assets/projects/thermal-printer-service/demo.webm");
+  assert.ok(existsSync(join(root, "public", tps.videoSrc)));
+
+  // Prohibited claims & factual boundaries
+  const stringifiedTPS = JSON.stringify(tps);
+  assert.doesNotMatch(stringifiedTPS, /queue persistence|print queue persistent|surviving application closure/i);
+  assert.doesNotMatch(stringifiedTPS, /universal printer|universal compatibility|all thermal printers/i);
+  assert.doesNotMatch(stringifiedTPS, /speed improvement|benchmark|success rate|\b\d+%\s*speed/i);
+  assert.doesNotMatch(stringifiedTPS, /Wi-Fi|USB printing|cloud printing/i);
+  assert.doesNotMatch(stringifiedTPS, /Private Repository/i);
 });
 
 test("keeps the project-specific factual boundaries explicit", () => {

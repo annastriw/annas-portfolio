@@ -159,6 +159,20 @@ export interface SpeechToTextSystemScopeData {
   };
 }
 
+export interface ThermalPrinterScopeGroup {
+  readonly title: LocalizedProjectText;
+  readonly items: LocalizedProjectList;
+}
+
+export interface ThermalPrinterSystemScopeData {
+  readonly groups: readonly ThermalPrinterScopeGroup[];
+}
+
+export interface ProjectTechnicalMetadataItem {
+  readonly value: string;
+  readonly label: LocalizedProjectText;
+}
+
 export interface ProjectMetadataRow {
   readonly label: LocalizedProjectText;
   readonly value: LocalizedProjectText;
@@ -206,6 +220,8 @@ export interface ProjectCaseStudy {
   readonly simastokScope?: SimastokSystemScopeData;
   readonly heartMlScope?: HeartMlSystemScopeData;
   readonly speechToTextScope?: SpeechToTextSystemScopeData;
+  readonly thermalPrinterScope?: ThermalPrinterSystemScopeData;
+  readonly technicalMetadata?: readonly ProjectTechnicalMetadataItem[];
   readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
   readonly personalTechStack?: readonly string[];
@@ -2554,78 +2570,311 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "08",
     slug: "thermal-printer-service",
     category: "mobile",
-    categoryLabel: categoryLabels.mobile,
+    categoryLabel: { en: "08 // MOBILE APPLICATION", id: "08 // MOBILE APPLICATION" },
     title: { en: "Thermal Printer Service", id: "Thermal Printer Service" },
     role: { en: "Android Developer", id: "Android Developer" },
-    status: { en: "Completed Android service", id: "Layanan Android selesai" },
-    overview: {
+    period: { en: "January–February 2026", id: "Januari–Februari 2026" },
+    status: { en: "Completed Application", id: "Completed Application" },
+    lead: {
+      en: "A native Android print service that connects browser-based workflows to Bluetooth thermal printers and converts Android print jobs into monochrome output for configured ESC/POS devices.",
+      id: "Aplikasi print service native Android yang menghubungkan workflow berbasis browser dengan thermal printer Bluetooth serta memproses print job Android menjadi output monokrom untuk perangkat ESC/POS yang telah dikonfigurasi.",
+    },
+    metadataRows: [
+      {
+        label: { en: "Role", id: "Peran" },
+        value: { en: "Android Developer", id: "Android Developer" },
+      },
+      {
+        label: { en: "Period", id: "Periode" },
+        value: { en: "January–February 2026", id: "Januari–Februari 2026" },
+      },
+      {
+        label: { en: "Status", id: "Status" },
+        value: { en: "Completed Application", id: "Completed Application" },
+      },
+      {
+        label: { en: "Platform", id: "Platform" },
+        value: { en: "Android", id: "Android" },
+      },
+    ],
+    metaTitle: {
+      en: "Thermal Printer Service — Android Development Case Study | Annas Tri Widagdo",
+      id: "Thermal Printer Service — Studi Kasus Android Development | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "A native Kotlin Android PrintService case study covering Android print-job processing, monochrome ESC/POS conversion, Bluetooth delivery, and configurable 58 mm and 80 mm thermal printers.",
+      id: "Studi kasus Android PrintService native berbasis Kotlin yang mencakup pemrosesan print job, konversi ESC/POS monokrom, pengiriman Bluetooth, serta konfigurasi thermal printer 58 mm dan 80 mm.",
+    },
+    keywords: {
       en: [
-        "Thermal Printer Service is a native Kotlin Android PrintService for selected 58 mm and 80 mm Bluetooth thermal-printer workflows.",
-        "It converts Android PDF print jobs into monochrome ESC/POS raster data and sends them over an RFCOMM/SPP connection.",
+        "Android",
+        "Kotlin",
+        "Android Print Framework",
+        "PrintService",
+        "Bluetooth RFCOMM",
+        "ESC/POS",
+        "Thermal Printer",
+        "Android Developer",
       ],
       id: [
-        "Thermal Printer Service adalah Android PrintService native berbasis Kotlin untuk alur printer termal Bluetooth 58 mm dan 80 mm yang dipilih.",
-        "Layanan ini mengubah print job PDF Android menjadi data raster ESC/POS monokrom dan mengirimkannya melalui koneksi RFCOMM/SPP.",
+        "Android",
+        "Kotlin",
+        "Android Print Framework",
+        "PrintService",
+        "Bluetooth RFCOMM",
+        "ESC/POS",
+        "Thermal Printer",
+        "Android Developer",
+      ],
+    },
+    githubUrl: "https://github.com/annastriw/ThermalPrinterService.git",
+    overview: {
+      en: [
+        "I developed Thermal Printer Service as a companion application for UKG System, enabling users to print from Chrome through Android’s standard printing workflow to a configured Bluetooth thermal printer.",
+        "The application converts print documents into monochrome ESC/POS output, manages background print jobs, and supports persistent profiles, calibration, retry, and error handling for 58 mm and 80 mm printers.",
+      ],
+      id: [
+        "Saya mengembangkan Thermal Printer Service sebagai aplikasi pendamping UKG System agar pengguna dapat mencetak dari Chrome melalui workflow pencetakan standar Android ke thermal printer Bluetooth yang telah dikonfigurasi.",
+        "Aplikasi memproses dokumen menjadi output ESC/POS monokrom, menangani print job di background, serta menyediakan printer profile, calibration, retry, dan error handling untuk printer 58 mm dan 80 mm.",
       ],
     },
     contributions: {
       en: [
-        "Implemented Android PrintService discovery and print-job handling in Kotlin.",
-        "Built the PDF-to-bitmap and monochrome ESC/POS raster conversion pipeline.",
-        "Added Bluetooth permissions, background execution, cancellation, chunked writes, and retry handling.",
-        "Created reusable printer profiles, calibration controls, and error states for 58 mm and 80 mm configurations.",
+        "Built a custom Android PrintService that receives print jobs through Android’s standard printing workflow.",
+        "Implemented the PDF-to-bitmap and monochrome ESC/POS processing pipeline for 58 mm and 80 mm printers.",
+        "Managed background job processing, chunked Bluetooth transfer, retry, cancellation, and error states.",
+        "Developed persistent printer profiles and calibration controls for different printer configurations.",
       ],
       id: [
-        "Mengimplementasikan discovery Android PrintService dan penanganan print job dengan Kotlin.",
-        "Membangun pipeline konversi PDF ke bitmap dan raster ESC/POS monokrom.",
-        "Menambahkan izin Bluetooth, eksekusi background, pembatalan, penulisan per chunk, dan penanganan retry.",
-        "Membuat profil printer reusable, kontrol kalibrasi, dan status error untuk konfigurasi 58 mm dan 80 mm.",
+        "Membangun custom Android PrintService yang menerima print job melalui workflow pencetakan standar Android.",
+        "Mengimplementasikan pipeline PDF-to-bitmap dan pemrosesan ESC/POS monokrom untuk printer 58 mm dan 80 mm.",
+        "Menangani print job di background, pengiriman data Bluetooth secara bertahap, retry, cancellation, dan error state.",
+        "Mengembangkan printer profile yang tersimpan serta pengaturan calibration untuk berbagai konfigurasi printer.",
       ],
     },
-    technicalNotes: {
-      en: [
-        "PdfRenderer rasterizes pages before 24-dot double-density ESC/POS encoding.",
-        "Configured widths are 432 dots for 58 mm and 576 dots for 80 mm at 203 dpi.",
-        "Bluetooth writes use chunks up to 1,024 bytes with four attempts at 0, 200, 500, and 1,000 ms delays.",
-        "Printer profiles persist eight configuration attributes as JSON in SharedPreferences.",
-      ],
-      id: [
-        "PdfRenderer meraster halaman sebelum encoding ESC/POS double-density 24-dot.",
-        "Lebar yang dikonfigurasi adalah 432 dot untuk 58 mm dan 576 dot untuk 80 mm pada 203 dpi.",
-        "Penulisan Bluetooth menggunakan chunk hingga 1.024 byte dengan empat percobaan pada jeda 0, 200, 500, dan 1.000 ms.",
-        "Profil printer menyimpan delapan atribut konfigurasi sebagai JSON di SharedPreferences.",
+    contributionLearning: {
+      en: "This project strengthened my experience in connecting web workflows with native Android services and printing hardware.",
+      id: "Project ini memperkuat pengalaman saya dalam menghubungkan workflow web dengan native Android service dan perangkat printer.",
+    },
+    personalTechStack: [
+      "Kotlin",
+      "Android SDK",
+      "Android Print Framework",
+      "Bluetooth",
+      "ESC/POS",
+      "Gradle",
+    ],
+    techStack: [
+      "Kotlin",
+      "Android SDK",
+      "Android Print Framework",
+      "Bluetooth",
+      "ESC/POS",
+      "Gradle",
+    ],
+    thermalPrinterScope: {
+      groups: [
+        {
+          title: {
+            en: "System Print Integration",
+            id: "Integrasi Sistem Pencetakan",
+          },
+          items: {
+            en: [
+              "Printing initiated from the website in Chrome",
+              "Android Print Framework",
+              "Custom PrintService",
+              "Sequential background print-job processing",
+            ],
+            id: [
+              "Pencetakan dimulai dari website di Chrome",
+              "Android Print Framework",
+              "Custom PrintService",
+              "Pemrosesan print job di background secara sekuensial",
+            ],
+          },
+        },
+        {
+          title: {
+            en: "Document Processing",
+            id: "Pemrosesan Dokumen",
+          },
+          items: {
+            en: [
+              "Temporary PDF and PdfRenderer",
+              "Bitmap scaling and alignment",
+              "Monochrome ESC/POS conversion",
+              "58 mm and 80 mm output configurations",
+            ],
+            id: [
+              "File PDF sementara dan PdfRenderer",
+              "Penyesuaian skala dan perataan bitmap",
+              "Konversi ESC/POS monokrom",
+              "Konfigurasi output 58 mm dan 80 mm",
+            ],
+          },
+        },
+        {
+          title: {
+            en: "Bluetooth Printing & Printer Setup",
+            id: "Pencetakan Bluetooth & Setup Printer",
+          },
+          items: {
+            en: [
+              "Bluetooth RFCOMM/SPP connection",
+              "Chunked data transfer with retry",
+              "Persistent profiles using SharedPreferences and JSON",
+              "Calibration and error handling",
+            ],
+            id: [
+              "Koneksi Bluetooth RFCOMM/SPP",
+              "Pengiriman data bertahap dengan mekanisme retry",
+              "Profil tersimpan menggunakan SharedPreferences dan JSON",
+              "Kalibrasi dan penanganan error",
+            ],
+          },
+        },
       ],
     },
-    techStack: ["Kotlin", "Android SDK", "Print Framework", "PdfRenderer", "Bluetooth RFCOMM/SPP", "ESC/POS"],
+    technicalMetadata: [
+      {
+        value: "58 / 80 MM",
+        label: {
+          en: "Paper Configuration",
+          id: "Konfigurasi Kertas",
+        },
+      },
+      {
+        value: "203 DPI",
+        label: {
+          en: "Resolution Configuration",
+          id: "Resolusi Konfigurasi",
+        },
+      },
+      {
+        value: "1,024 BYTES",
+        label: {
+          en: "Max Transfer Chunk",
+          id: "Maksimum Chunk Transfer",
+        },
+      },
+      {
+        value: "04 ATTEMPTS",
+        label: {
+          en: "Connection Retry Sequence",
+          id: "Urutan Retry Koneksi",
+        },
+      },
+    ],
     cover: {
       src: "/assets/projects/thermal-printer-service/cover.webp",
-      alt: { en: "Thermal Printer Service Android application identity", id: "Identitas aplikasi Android Thermal Printer Service" },
+      alt: {
+        en: "Thermal Printer Service Android application icon featuring a thermal receipt printer and Bluetooth badge",
+        id: "Ikon aplikasi Android Thermal Printer Service dengan ilustrasi printer struk termal dan lencana Bluetooth",
+      },
       position: "center",
+      caption: {
+        en: "Application launcher icon showing the thermal printer and Bluetooth connectivity identity.",
+        id: "Ikon peluncur aplikasi yang menampilkan identitas printer termal dan konektivitas Bluetooth.",
+      },
     },
-    videoSrc: "/assets/projects/thermal-printer-service/demo.webm",
     evidence: [
       {
         id: "FIG.01",
         src: "/assets/projects/thermal-printer-service/documentation/01.webp",
         format: "mobile",
-        alt: { en: "Thermal Printer Service mobile interface", id: "Antarmuka mobile Thermal Printer Service" },
-        caption: { en: "Thermal Printer Service main configuration interface on Android.", id: "Antarmuka konfigurasi utama Thermal Printer Service di Android." },
+        alt: {
+          en: "High-resolution Thermal Printer Service application icon on a clean background",
+          id: "Ikon aplikasi Thermal Printer Service resolusi tinggi dengan latar belakang bersih",
+        },
+        caption: {
+          en: "High-resolution application icon asset used across system settings and launcher views.",
+          id: "Aset ikon aplikasi resolusi tinggi yang digunakan pada menu pengaturan sistem dan launcher.",
+        },
       },
       {
         id: "FIG.02",
         src: "/assets/projects/thermal-printer-service/documentation/02.webp",
         format: "mobile",
-        alt: { en: "Thermal printer profile configuration", id: "Konfigurasi profil printer termal" },
-        caption: { en: "Documented printer-profile configuration and Bluetooth setup flow.", id: "Alur konfigurasi profil printer dan setup koneksi Bluetooth." },
+        alt: {
+          en: "Thermal Printer Service main screen with buttons to open printing settings, manage profiles, and perform test print",
+          id: "Layar utama Thermal Printer Service dengan tombol untuk membuka pengaturan pencetakan, kelola profil, dan uji cetak",
+        },
+        caption: {
+          en: "Main service interface displaying printing settings access, selected printer profile status, and test print action.",
+          id: "Antarmuka utama layanan yang menampilkan akses pengaturan cetak, status profil printer terpilih, dan aksi uji cetak.",
+        },
       },
       {
         id: "FIG.03",
         src: "/assets/projects/thermal-printer-service/documentation/03.webp",
         format: "mobile",
-        alt: { en: "Thermal Printer Service calibration interface", id: "Antarmuka kalibrasi Thermal Printer Service" },
-        caption: { en: "Mobile print calibration testing and hardware service-state evidence.", id: "Uji kalibrasi pencetakan dan bukti status layanan hardware pada mobile." },
+        alt: {
+          en: "Configured 58 mm thermal printer profile card with MAC address, scaling, offset, auto-cut settings, and action buttons",
+          id: "Kartu profil printer termal 58 mm terkonfigurasi dengan alamat MAC, skala, offset, pengaturan auto-cut, dan tombol aksi",
+        },
+        caption: {
+          en: "Saved printer profile interface with configuration details including Bluetooth MAC address, paper width, offsets, and active toggle.",
+          id: "Antarmuka profil printer tersimpan dengan detail konfigurasi mencakup alamat MAC Bluetooth, lebar kertas, offset, dan status aktif.",
+        },
       },
     ],
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/thermal-printer-service/cover.webp",
+        format: "cover",
+        alt: {
+          en: "Thermal Printer Service Android application icon featuring a thermal receipt printer and Bluetooth badge",
+          id: "Ikon aplikasi Android Thermal Printer Service dengan ilustrasi printer struk termal dan lencana Bluetooth",
+        },
+        caption: {
+          en: "Application launcher icon showing the thermal printer and Bluetooth connectivity identity.",
+          id: "Ikon peluncur aplikasi yang menampilkan identitas printer termal dan konektivitas Bluetooth.",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/thermal-printer-service/documentation/01.webp",
+        format: "mobile",
+        alt: {
+          en: "High-resolution Thermal Printer Service application icon on a clean background",
+          id: "Ikon aplikasi Thermal Printer Service resolusi tinggi dengan latar belakang bersih",
+        },
+        caption: {
+          en: "High-resolution application icon asset used across system settings and launcher views.",
+          id: "Aset ikon aplikasi resolusi tinggi yang digunakan pada menu pengaturan sistem dan launcher.",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/thermal-printer-service/documentation/02.webp",
+        format: "mobile",
+        alt: {
+          en: "Thermal Printer Service main screen with buttons to open printing settings, manage profiles, and perform test print",
+          id: "Layar utama Thermal Printer Service dengan tombol untuk membuka pengaturan pencetakan, kelola profil, dan uji cetak",
+        },
+        caption: {
+          en: "Main service interface displaying printing settings access, selected printer profile status, and test print action.",
+          id: "Antarmuka utama layanan yang menampilkan akses pengaturan cetak, status profil printer terpilih, dan aksi uji cetak.",
+        },
+      },
+      {
+        slide: "04",
+        src: "/assets/projects/thermal-printer-service/documentation/03.webp",
+        format: "mobile",
+        alt: {
+          en: "Configured 58 mm thermal printer profile card with MAC address, scaling, offset, auto-cut settings, and action buttons",
+          id: "Kartu profil printer termal 58 mm terkonfigurasi dengan alamat MAC, skala, offset, pengaturan auto-cut, dan tombol aksi",
+        },
+        caption: {
+          en: "Saved printer profile interface with configuration details including Bluetooth MAC address, paper width, offsets, and active toggle.",
+          id: "Antarmuka profil printer tersimpan dengan detail konfigurasi mencakup alamat MAC Bluetooth, lebar kertas, offset, dan status aktif.",
+        },
+      },
+    ],
+    galleryThumbnails: true,
+    videoSrc: "/assets/projects/thermal-printer-service/demo.webm",
   },
   {
     index: "09",

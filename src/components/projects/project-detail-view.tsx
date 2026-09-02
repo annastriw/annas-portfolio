@@ -211,12 +211,12 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       : "Architecture includes backend, IoT, and ML services integrated into the Next.js interface; Annas's direct contribution focuses on UI/UX, frontend engineering, and client-level integrations.",
     techNotesSubtag: isId ? "Catatan Teknis Utama" : "Key Technical Notes",
     techStackSubtag: isId ? "Stack Teknologi" : "Technology Stack",
-    videoDemo: isId ? "Rekaman Demonstrasi Video" : "Video Demonstration Record",
-    videoTag: "[04.V // VIDEO DEMO]",
+    videoDemo: isId ? "Demo Workflow Pencetakan" : "Print Workflow Demo",
+    videoTag: "[01.V // VIDEO DEMO]",
     videoDesc: isId
       ? "Demonstrasi alur pencetakan Android PrintService menuju thermal printer Bluetooth ESC/POS."
       : "Demonstration of the Android PrintService workflow output to a Bluetooth ESC/POS thermal printer.",
-    githubRepo: "View GitHub Repository",
+    githubRepo: isId ? "Lihat Repository GitHub" : "View GitHub Repository",
   };
 
   // Section presence detection & sequential dynamic numbering (0 gaps)
@@ -251,6 +251,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       project.simastokScope ||
       project.heartMlScope ||
       project.speechToTextScope ||
+      project.thermalPrinterScope ||
+      (project.technicalMetadata && project.technicalMetadata.length > 0) ||
       (project.technicalNotes?.[locale] &&
         project.technicalNotes[locale].length > 0) ||
       (project.techStack &&
@@ -262,7 +264,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         project.slug !== "nusa-dakwah" &&
         project.slug !== "simastok" &&
         project.slug !== "ml-for-heart-attack-risk-prediction" &&
-        project.slug !== "speech-to-text-system"),
+        project.slug !== "speech-to-text-system" &&
+        project.slug !== "thermal-printer-service"),
   );
   const scopeIndex = hasScope
     ? String(++sectionCounter).padStart(2, "0")
@@ -1622,6 +1625,63 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   </div>
                 ) : null}
 
+                {/* Thermal Printer Service 3-Group System Scope */}
+                {project.thermalPrinterScope ? (
+                  <div className={styles.systemScopeGrid3Col}>
+                    {project.thermalPrinterScope.groups.map((group, gIdx) => (
+                      <div key={group.title.en} className={styles.scopeGroup}>
+                        <div className={styles.scopeGroupHeader}>
+                          <span className={styles.scopeGroupHeaderTag}>■</span>
+                          <span>{`${String(gIdx + 1).padStart(2, "0")} // ${group.title[locale]}`}</span>
+                        </div>
+                        <div className={styles.scopeGroupBody}>
+                          <ul
+                            className={styles.contributionList}
+                            style={{ margin: 0 }}
+                          >
+                            {group.items[locale].map((item, itemIdx) => (
+                              <li
+                                key={itemIdx}
+                                className={styles.contributionItem}
+                              >
+                                <span
+                                  className={styles.contributionIndex}
+                                  aria-hidden="true"
+                                >
+                                  {String(itemIdx + 1).padStart(2, "0")}
+                                </span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
+                {/* Compact Technical Metadata */}
+                {project.technicalMetadata &&
+                project.technicalMetadata.length > 0 ? (
+                  <div className={styles.techMetadataBlock}>
+                    <dl className={styles.techMetadataGrid}>
+                      {project.technicalMetadata.map((item) => (
+                        <div
+                          key={item.label.en}
+                          className={styles.techMetadataItem}
+                        >
+                          <dt className={styles.techMetadataLabel}>
+                            {item.label[locale]}
+                          </dt>
+                          <dd className={styles.techMetadataValue}>
+                            {item.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                ) : null}
+
                 {/* 4. Key Technical Notes */}
                 {project.technicalNotes?.[locale] &&
                 project.technicalNotes[locale].length > 0 &&
@@ -1631,6 +1691,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 !project.simastokScope &&
                 !project.heartMlScope &&
                 !project.speechToTextScope &&
+                !project.thermalPrinterScope &&
                 !project.modules ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>

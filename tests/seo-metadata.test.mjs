@@ -503,6 +503,122 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
     sttJsonString,
     /fine-tuned model|custom ASR|custom-trained|transcription accuracy|multilingual|production-grade|API|web application|deployment/i,
   );
+
+  const tps = projectCaseStudies.find((p) => p.slug === "thermal-printer-service");
+  assert.ok(tps);
+  const tpsSchemaEn = generateProjectJsonLd(tps, "en");
+  assert.equal(tpsSchemaEn["@type"], "SoftwareSourceCode");
+  assert.equal(tpsSchemaEn.name, "Thermal Printer Service");
+  assert.equal(
+    tpsSchemaEn.url,
+    "https://annastriwidagdo.me/en/projects/thermal-printer-service",
+  );
+  assert.equal(
+    tpsSchemaEn.codeRepository,
+    "https://github.com/annastriw/ThermalPrinterService.git",
+  );
+  assert.equal(tpsSchemaEn.relatedLink, undefined);
+  assert.ok(
+    tpsSchemaEn.image?.includes("/assets/projects/thermal-printer-service/cover.webp"),
+  );
+  assert.deepEqual(tpsSchemaEn.keywords, [
+    "Android",
+    "Kotlin",
+    "Android Print Framework",
+    "PrintService",
+    "Bluetooth RFCOMM",
+    "ESC/POS",
+    "Thermal Printer",
+    "Android Developer",
+  ]);
+
+  const tpsSchemaId = generateProjectJsonLd(tps, "id");
+  assert.equal(tpsSchemaId["@type"], "SoftwareSourceCode");
+  assert.equal(tpsSchemaId.name, "Thermal Printer Service");
+  assert.equal(
+    tpsSchemaId.url,
+    "https://annastriwidagdo.me/id/projects/thermal-printer-service",
+  );
+  assert.equal(
+    tpsSchemaId.codeRepository,
+    "https://github.com/annastriw/ThermalPrinterService.git",
+  );
+  assert.equal(tpsSchemaId.relatedLink, undefined);
+  assert.deepEqual(tpsSchemaId.keywords, [
+    "Android",
+    "Kotlin",
+    "Android Print Framework",
+    "PrintService",
+    "Bluetooth RFCOMM",
+    "ESC/POS",
+    "Thermal Printer",
+    "Android Developer",
+  ]);
+
+  const tpsJsonString = JSON.stringify(tpsSchemaEn);
+  assert.doesNotMatch(
+    tpsJsonString,
+    /universal printer|universal compatibility|benchmark|speed improvement|success rate|queue persistence|Wi-Fi|USB/i,
+  );
+});
+
+test("Thermal Printer Service generates valid bilingual page metadata matching approved decision", () => {
+  const tps = projectCaseStudies.find((p) => p.slug === "thermal-printer-service");
+  assert.ok(tps);
+
+  const enMeta = createPageMetadata({
+    locale: "en",
+    path: `projects/${tps.slug}`,
+    title: tps.metaTitle.en,
+    description: tps.metaDescription.en,
+    type: "article",
+    images: [{ url: tps.cover.src, alt: tps.cover.alt.en }],
+  });
+
+  assert.equal(
+    enMeta.title,
+    "Thermal Printer Service — Android Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    enMeta.description,
+    "A native Kotlin Android PrintService case study covering Android print-job processing, monochrome ESC/POS conversion, Bluetooth delivery, and configurable 58 mm and 80 mm thermal printers.",
+  );
+  assert.equal(
+    enMeta.alternates?.canonical,
+    "https://annastriwidagdo.me/en/projects/thermal-printer-service",
+  );
+  assert.deepEqual(enMeta.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/projects/thermal-printer-service",
+    id: "https://annastriwidagdo.me/id/projects/thermal-printer-service",
+    "x-default": "https://annastriwidagdo.me/en/projects/thermal-printer-service",
+  });
+
+  const idMeta = createPageMetadata({
+    locale: "id",
+    path: `projects/${tps.slug}`,
+    title: tps.metaTitle.id,
+    description: tps.metaDescription.id,
+    type: "article",
+    images: [{ url: tps.cover.src, alt: tps.cover.alt.id }],
+  });
+
+  assert.equal(
+    idMeta.title,
+    "Thermal Printer Service — Studi Kasus Android Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    idMeta.description,
+    "Studi kasus Android PrintService native berbasis Kotlin yang mencakup pemrosesan print job, konversi ESC/POS monokrom, pengiriman Bluetooth, serta konfigurasi thermal printer 58 mm dan 80 mm.",
+  );
+  assert.equal(
+    idMeta.alternates?.canonical,
+    "https://annastriwidagdo.me/id/projects/thermal-printer-service",
+  );
+  assert.deepEqual(idMeta.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/projects/thermal-printer-service",
+    id: "https://annastriwidagdo.me/id/projects/thermal-printer-service",
+    "x-default": "https://annastriwidagdo.me/en/projects/thermal-printer-service",
+  });
 });
 
 test("generateBlogPostingJsonLd produces valid BlogPosting schema with related project references", () => {
