@@ -93,6 +93,7 @@ export interface JsonLdSoftwareSourceCode {
   };
   programmingLanguage?: string;
   keywords?: string[];
+  codeRepository?: string;
   relatedLink?: string;
 }
 

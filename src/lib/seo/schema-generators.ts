@@ -168,11 +168,14 @@ export function generateProjectJsonLd(
 ): JsonLdSoftwareSourceCode {
   const techList = project.personalTechStack ?? project.techStack;
   const language = techList[0] || undefined;
-  const keywords = [
-    project.category,
-    project.role[locale],
-    ...techList.slice(0, 6),
-  ].filter((k): k is string => Boolean(k) && k !== "-");
+  const rawKeywords: readonly string[] = project.keywords
+    ? Array.isArray(project.keywords)
+      ? project.keywords
+      : (project.keywords as Record<Locale, readonly string[]>)[locale]
+    : [project.category, project.role[locale], ...techList.slice(0, 6)];
+  const keywords = rawKeywords.filter(
+    (k: string): k is string => Boolean(k) && k !== "-",
+  );
 
   return {
     "@context": "https://schema.org",
@@ -188,6 +191,7 @@ export function generateProjectJsonLd(
     },
     ...(language ? { programmingLanguage: language } : {}),
     ...(keywords.length > 0 ? { keywords } : {}),
+    ...(project.githubUrl ? { codeRepository: project.githubUrl } : {}),
     ...(project.liveUrl ? { relatedLink: project.liveUrl } : {}),
   };
 }

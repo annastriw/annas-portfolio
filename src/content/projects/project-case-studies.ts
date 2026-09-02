@@ -107,6 +107,42 @@ export interface SimastokSystemScopeData {
   readonly groups: readonly SimastokSystemScopeGroup[];
 }
 
+export interface ProjectDatasetSource {
+  readonly label: LocalizedProjectText;
+  readonly textPrefix: string;
+  readonly datasetTitle: string;
+  readonly textSuffix: string;
+  readonly url: string;
+}
+
+export interface HeartMlModelMetric {
+  readonly model: string;
+  readonly accuracy?: LocalizedProjectText;
+  readonly precision?: LocalizedProjectText;
+  readonly recall?: LocalizedProjectText;
+  readonly f1?: LocalizedProjectText;
+  readonly rocAuc?: LocalizedProjectText;
+  readonly isSelected?: boolean;
+  readonly summaryNote?: LocalizedProjectText;
+}
+
+export interface HeartMlSystemScopeData {
+  readonly dataPreparation: {
+    readonly title: LocalizedProjectText;
+    readonly items: LocalizedProjectList;
+  };
+  readonly modelEvaluation: {
+    readonly title: LocalizedProjectText;
+    readonly models: readonly HeartMlModelMetric[];
+    readonly selectionRationale: LocalizedProjectText;
+  };
+  readonly medicalNote: LocalizedProjectText;
+  readonly inferenceIntegration: {
+    readonly title: LocalizedProjectText;
+    readonly items: LocalizedProjectList;
+  };
+}
+
 export interface ProjectMetadataRow {
   readonly label: LocalizedProjectText;
   readonly value: LocalizedProjectText;
@@ -138,8 +174,10 @@ export interface ProjectCaseStudy {
   readonly metadataRows?: readonly ProjectMetadataRow[];
   readonly metaTitle?: LocalizedProjectText;
   readonly metaDescription?: LocalizedProjectText;
+  readonly keywords?: LocalizedProjectList | readonly string[];
   readonly repositoryNotice?: LocalizedProjectText;
   readonly overview: LocalizedProjectList;
+  readonly datasetSource?: ProjectDatasetSource;
   readonly contributions: LocalizedProjectList;
   readonly contributionLearning?: LocalizedProjectText;
   readonly technicalNotes?: LocalizedProjectList;
@@ -150,6 +188,7 @@ export interface ProjectCaseStudy {
   readonly dialisisScope?: DialisisSystemScopeData;
   readonly nusaScope?: NusaSystemScopeData;
   readonly simastokScope?: SimastokSystemScopeData;
+  readonly heartMlScope?: HeartMlSystemScopeData;
   readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
   readonly personalTechStack?: readonly string[];
@@ -1943,80 +1982,313 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "06",
     slug: "ml-for-heart-attack-risk-prediction",
     category: "ml",
-    categoryLabel: categoryLabels.ml,
+    categoryLabel: { en: "06 // MACHINE LEARNING", id: "06 // MACHINE LEARNING" },
     title: {
       en: "Machine Learning Model for Heart Attack Risk Prediction",
       id: "Machine Learning Model for Heart Attack Risk Prediction",
     },
-    role: { en: "Machine Learning Developer", id: "Machine Learning Developer" },
-    status: {
-      en: "Prototype with deployed inference service",
-      id: "Purwarupa dengan layanan inferensi yang telah di-deploy",
+    role: { en: "Machine Learning Engineer", id: "Machine Learning Engineer" },
+    period: { en: "June–August 2025", id: "Juni–Agustus 2025" },
+    status: { en: "Completed Prototype", id: "Completed Prototype" },
+    lead: {
+      en: "A machine learning decision-support prototype developed for iHealth Edu that estimates heart attack risk from patient data and delivers the result through a Flask API.",
+      id: "Prototype machine learning untuk decision support pada iHealth Edu yang memperkirakan risiko serangan jantung dari data pasien dan menyajikan hasilnya melalui Flask API.",
     },
-    overview: {
+    metadataRows: [
+      {
+        label: { en: "Role", id: "Peran" },
+        value: { en: "Machine Learning Engineer", id: "Machine Learning Engineer" },
+      },
+      {
+        label: { en: "Period", id: "Periode" },
+        value: { en: "June–August 2025", id: "Juni–Agustus 2025" },
+      },
+      {
+        label: { en: "Status", id: "Status" },
+        value: { en: "Completed Prototype", id: "Completed Prototype" },
+      },
+      {
+        label: { en: "Product Integration", id: "Integrasi Produk" },
+        value: { en: "iHealth Edu", id: "iHealth Edu" },
+      },
+    ],
+    metaTitle: {
+      en: "Heart Attack Risk Prediction — Machine Learning Case Study | Annas Tri Widagdo",
+      id: "Heart Attack Risk Prediction — Studi Kasus Machine Learning | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "A machine learning case study for heart attack risk decision support integrated into iHealth Edu, covering model comparison, Flask inference, and Docker deployment.",
+      id: "Studi kasus machine learning untuk decision support risiko serangan jantung yang terintegrasi dengan iHealth Edu, mencakup perbandingan model, inference Flask, dan deployment Docker.",
+    },
+    keywords: {
       en: [
-        "This risk-prediction prototype compares four binary-classification algorithms on 158,355 observations with 21 predictors.",
-        "A selected Random Forest model is packaged as a Flask inference service that returns a class, probability, supporting factors, and global feature importance.",
+        "Machine Learning",
+        "Machine Learning Engineer",
+        "Binary Classification",
+        "Decision Support",
+        "Python",
+        "Scikit-learn",
+        "Pandas",
+        "SMOTE",
+        "Flask",
+        "Docker",
       ],
       id: [
-        "Purwarupa prediksi risiko ini membandingkan empat algoritma klasifikasi biner pada 158.355 observasi dengan 21 prediktor.",
-        "Model Random Forest terpilih dikemas sebagai layanan inferensi Flask yang menghasilkan kelas, probabilitas, faktor pendukung, dan feature importance global.",
+        "Machine Learning",
+        "Machine Learning Engineer",
+        "Binary Classification",
+        "Decision Support",
+        "Python",
+        "Scikit-learn",
+        "Pandas",
+        "SMOTE",
+        "Flask",
+        "Docker",
       ],
+    },
+    githubUrl: "https://github.com/annastriw/ml-for-heart-attack-risk-prediction.git",
+    overview: {
+      en: [
+        "I developed this project as the machine learning decision-support component integrated into the live iHealth Edu website for healthcare workers. Model development used A. Panday's 2025 Heart Attack Prediction in Indonesia dataset from Kaggle, containing 158,355 observations and 21 predictors.",
+        "The workflow covers data preparation, class balancing, model comparison, evaluation, and inference deployment. Random Forest was selected for its leading accuracy and ROC-AUC, then serialized and served through a Flask REST API deployed with Docker on Ubuntu.",
+      ],
+      id: [
+        "Saya mengembangkan project ini sebagai komponen machine learning decision support yang terintegrasi dengan website iHealth Edu dan digunakan oleh tenaga kesehatan. Pengembangan model menggunakan dataset Heart Attack Prediction in Indonesia oleh A. Panday dari Kaggle tahun 2025, yang terdiri dari 158.355 observasi dan 21 predictor.",
+        "Workflow mencakup data preparation, penyeimbangan kelas, perbandingan model, evaluasi, dan deployment inference. Random Forest dipilih karena menghasilkan accuracy dan ROC-AUC tertinggi, kemudian disimpan dan disajikan melalui Flask REST API yang di-deploy menggunakan Docker pada Ubuntu.",
+      ],
+    },
+    datasetSource: {
+      label: {
+        en: "Dataset Source",
+        id: "Sumber Dataset",
+      },
+      textPrefix: "A. Panday, ",
+      datasetTitle: "Heart Attack Prediction in Indonesia",
+      textSuffix: ", Kaggle, 2025",
+      url: "https://www.kaggle.com/datasets/ankushpanday2/heart-attack-prediction-in-indonesia",
     },
     contributions: {
       en: [
-        "Prepared the dataset by encoding five categorical fields and applying MinMaxScaler.",
-        "Created a stratified 80:20 split and applied SMOTE to the training partition only.",
-        "Compared Random Forest, linear SVM, KNN, and Logistic Regression with RandomizedSearchCV focused on F1.",
-        "Serialized the selected artifacts with Joblib and deployed the Flask service through Docker on Ubuntu.",
+        "Prepared the dataset by encoding five categorical features, scaling the predictors, creating a stratified 80:20 split, and applying SMOTE only to the training data.",
+        "Trained and compared Random Forest, Linear SVM, K-Nearest Neighbors, and Logistic Regression, with hyperparameter tuning focused on F1-score.",
+        "Selected Random Forest based on its accuracy and ROC-AUC, serialized the model and preprocessing artifacts with Joblib, and built a Flask REST API for inference.",
+        "Deployed the inference service with Docker on Ubuntu and integrated its prediction output into iHealth Edu for healthcare workers.",
       ],
       id: [
-        "Menyiapkan dataset dengan encoding lima field kategorikal dan menerapkan MinMaxScaler.",
-        "Membuat pembagian stratified 80:20 dan menerapkan SMOTE hanya pada partisi training.",
-        "Membandingkan Random Forest, linear SVM, KNN, dan Logistic Regression dengan RandomizedSearchCV berfokus pada F1.",
-        "Menyimpan artefak terpilih dengan Joblib dan melakukan deployment layanan Flask melalui Docker di Ubuntu.",
+        "Menyiapkan dataset dengan melakukan encoding pada lima fitur kategorikal, scaling predictor, membagi data secara stratified 80:20, dan menerapkan SMOTE hanya pada data training.",
+        "Melatih dan membandingkan Random Forest, Linear SVM, K-Nearest Neighbors, dan Logistic Regression dengan hyperparameter tuning yang berfokus pada F1-score.",
+        "Memilih Random Forest berdasarkan accuracy dan ROC-AUC, menyimpan model serta preprocessing artifacts menggunakan Joblib, dan membangun Flask REST API untuk inference.",
+        "Melakukan deployment inference service menggunakan Docker pada Ubuntu dan mengintegrasikan hasil prediksi ke iHealth Edu untuk tenaga kesehatan.",
       ],
     },
-    technicalNotes: {
-      en: [
-        "The original data contains 158,355 rows, 22 columns, and no missing values.",
-        "The stratified split produced 126,684 training rows and 31,671 test rows before training-only SMOTE balancing.",
-        "Random Forest reached 71.93% accuracy, 64.12% precision, 68.15% recall, 0.6607 F1, and 0.8015 ROC-AUC.",
-        "Logistic Regression produced the highest compared F1 at 0.6618, while KNN produced the highest recall at 70.40%; Random Forest was selected for its leading accuracy and ROC-AUC.",
-      ],
-      id: [
-        "Data awal berisi 158.355 baris, 22 kolom, dan tidak memiliki missing value.",
-        "Pembagian stratified menghasilkan 126.684 baris training dan 31.671 baris test sebelum penyeimbangan SMOTE khusus training.",
-        "Random Forest mencapai accuracy 71,93%, precision 64,12%, recall 68,15%, F1 0,6607, dan ROC-AUC 0,8015.",
-        "Logistic Regression menghasilkan F1 tertinggi dalam perbandingan sebesar 0,6618, sedangkan KNN menghasilkan recall tertinggi sebesar 70,40%; Random Forest dipilih karena memimpin accuracy dan ROC-AUC.",
-      ],
+    contributionLearning: {
+      en: "This project gave me experience in building a machine learning workflow from data preparation to real product integration.",
+      id: "Project ini memberi saya pengalaman membangun workflow machine learning mulai dari data preparation hingga terintegrasi dengan produk yang digunakan.",
     },
-    techStack: ["Python", "Scikit-learn", "Pandas", "SMOTE", "Joblib", "Flask", "Docker"],
+    personalTechStack: [
+      "Python",
+      "Scikit-learn",
+      "Pandas",
+      "SMOTE",
+      "Flask",
+      "Docker",
+    ],
+    techStack: [
+      "Python",
+      "Scikit-learn",
+      "Pandas",
+      "SMOTE",
+      "Flask",
+      "Docker",
+    ],
+    heartMlScope: {
+      dataPreparation: {
+        title: {
+          en: "Data Preparation",
+          id: "Data Preparation",
+        },
+        items: {
+          en: [
+            "158,355 observations",
+            "22 columns",
+            "21 predictors",
+            "5 categorical features",
+            "No missing values",
+            "Stratified 80:20 split",
+            "SMOTE on training data only",
+          ],
+          id: [
+            "158.355 observasi",
+            "22 kolom",
+            "21 prediktor",
+            "5 fitur kategorikal",
+            "Tidak ada missing value",
+            "Stratified 80:20 split",
+            "SMOTE hanya pada data training",
+          ],
+        },
+      },
+      modelEvaluation: {
+        title: {
+          en: "Model Evaluation",
+          id: "Model Evaluation",
+        },
+        selectionRationale: {
+          en: "Random Forest was selected because it produced the highest accuracy and ROC-AUC in the documented comparison.",
+          id: "Random Forest dipilih karena menghasilkan accuracy dan ROC-AUC tertinggi dalam perbandingan yang didokumentasikan.",
+        },
+        models: [
+          {
+            model: "Random Forest",
+            isSelected: true,
+            accuracy: { en: "71.93%", id: "71,93%" },
+            precision: { en: "64.12%", id: "64,12%" },
+            recall: { en: "68.15%", id: "68,15%" },
+            f1: { en: "0.6607", id: "0,6607" },
+            rocAuc: { en: "0.8015", id: "0,8015" },
+            summaryNote: {
+              en: "Selected model: highest accuracy (71.93%) and ROC-AUC (0.8015)",
+              id: "Model terpilih: accuracy (71,93%) dan ROC-AUC (0,8015) tertinggi",
+            },
+          },
+          {
+            model: "Logistic Regression",
+            f1: { en: "0.6618", id: "0,6618" },
+            summaryNote: {
+              en: "Highest compared F1: 0.6618",
+              id: "F1 tertinggi dalam perbandingan: 0,6618",
+            },
+          },
+          {
+            model: "K-Nearest Neighbors",
+            recall: { en: "70.40%", id: "70,40%" },
+            summaryNote: {
+              en: "Highest compared Recall: 70.40%",
+              id: "Recall tertinggi dalam perbandingan: 70,40%",
+            },
+          },
+          {
+            model: "Linear SVM",
+            summaryNote: {
+              en: "Compared model with no metric added",
+              id: "Model perbandingan tanpa metrik tambahan",
+            },
+          },
+        ],
+      },
+      medicalNote: {
+        en: "This prototype supports risk assessment and does not provide a clinical diagnosis or replace medical judgment.",
+        id: "Prototype ini mendukung penilaian risiko dan tidak memberikan diagnosis klinis maupun menggantikan pertimbangan tenaga kesehatan.",
+      },
+      inferenceIntegration: {
+        title: {
+          en: "Inference Integration",
+          id: "Inference Integration",
+        },
+        items: {
+          en: [
+            "Joblib model and preprocessing artifacts",
+            "Flask REST API",
+            "Risk class and probability",
+            "Supporting factors",
+            "Global feature importance",
+            "Docker deployment on Ubuntu",
+            "iHealth Edu integration for healthcare workers",
+          ],
+          id: [
+            "Joblib model dan preprocessing artifacts",
+            "Flask REST API",
+            "Risk class dan probabilitas",
+            "Faktor pendukung",
+            "Global feature importance",
+            "Deployment Docker pada Ubuntu",
+            "Integrasi iHealth Edu untuk tenaga kesehatan",
+          ],
+        },
+      },
+    },
     cover: {
       src: "/assets/projects/ml-for-heart-attack-risk-prediction/cover.webp",
-      alt: { en: "Structured input for the risk-prediction prototype", id: "Input terstruktur untuk purwarupa prediksi risiko" },
+      alt: {
+        en: "Terminal screen showing structured patient input fields for age, blood pressure, cholesterol, BMI, and lifestyle predictors",
+        id: "Tampilan layar terminal yang menunjukkan kolom input pasien terstruktur untuk usia, tekanan darah, kolesterol, BMI, dan pola hidup",
+      },
       position: "top",
+      caption: {
+        en: "Command-line interface displaying patient input prompts for 21 cardiovascular risk predictors.",
+        id: "Antarmuka command-line yang menampilkan prompt input data pasien untuk 21 predictor risiko kardiovaskular.",
+      },
     },
     evidence: [
       {
         id: "FIG.01",
         src: "/assets/projects/ml-for-heart-attack-risk-prediction/documentation/01.webp",
         format: "wide",
-        alt: { en: "Risk-prediction prototype input evidence", id: "Bukti input purwarupa prediksi risiko" },
-        caption: { en: "Structured patient clinical input submitted to the inference workflow.", id: "Data input klinis pasien terstruktur yang dikirim ke alur inferensi." },
+        alt: {
+          en: "Terminal view of entered clinical and lifestyle parameters prior to model inference",
+          id: "Tampilan terminal berisi parameter klinis dan gaya hidup yang dimasukkan sebelum inferensi model",
+        },
+        caption: {
+          en: "Structured patient feature inputs submitted to the machine learning preprocessing pipeline.",
+          id: "Input fitur data pasien terstruktur yang dikirimkan ke pipeline preprocessing machine learning.",
+        },
       },
       {
         id: "FIG.02",
         src: "/assets/projects/ml-for-heart-attack-risk-prediction/documentation/02.webp",
         format: "wide",
-        alt: { en: "Risk-prediction prototype output evidence", id: "Bukti output purwarupa prediksi risiko" },
-        caption: { en: "Inference response showing risk classification and probability output.", id: "Respons inferensi yang menampilkan klasifikasi risiko dan skor probabilitas." },
+        alt: {
+          en: "Terminal output displaying low-risk classification result, 3% risk probability, factor breakdown, and top five feature weights",
+          id: "Output terminal yang menampilkan hasil klasifikasi risiko rendah, probabilitas risiko 3%, rincian faktor, dan lima bobot fitur teratas",
+        },
+        caption: {
+          en: "Inference response showing risk classification, class probabilities, supporting factors, and top 5 global feature importances.",
+          id: "Respons inferensi yang menampilkan klasifikasi risiko, probabilitas kelas, faktor pendukung, dan 5 feature importance global teratas.",
+        },
       },
     ],
-    claimBoundary: {
-      en: "This is a risk-prediction prototype and decision-support experiment, not a clinical diagnosis.",
-      id: "Ini adalah purwarupa prediksi risiko dan eksperimen pendukung keputusan, bukan diagnosis klinis.",
-    },
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/ml-for-heart-attack-risk-prediction/cover.webp",
+        format: "cover",
+        alt: {
+          en: "Terminal screen showing structured patient input fields for age, blood pressure, cholesterol, BMI, and lifestyle predictors",
+          id: "Tampilan layar terminal yang menunjukkan kolom input pasien terstruktur untuk usia, tekanan darah, kolesterol, BMI, dan pola hidup",
+        },
+        caption: {
+          en: "Command-line interface displaying patient input prompts for 21 cardiovascular risk predictors.",
+          id: "Antarmuka command-line yang menampilkan prompt input data pasien untuk 21 predictor risiko kardiovaskular.",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/ml-for-heart-attack-risk-prediction/documentation/01.webp",
+        format: "wide",
+        alt: {
+          en: "Terminal view of entered clinical and lifestyle parameters prior to model inference",
+          id: "Tampilan terminal berisi parameter klinis dan gaya hidup yang dimasukkan sebelum inferensi model",
+        },
+        caption: {
+          en: "Structured patient feature inputs submitted to the machine learning preprocessing pipeline.",
+          id: "Input fitur data pasien terstruktur yang dikirimkan ke pipeline preprocessing machine learning.",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/ml-for-heart-attack-risk-prediction/documentation/02.webp",
+        format: "wide",
+        alt: {
+          en: "Terminal output displaying low-risk classification result, 3% risk probability, factor breakdown, and top five feature weights",
+          id: "Output terminal yang menampilkan hasil klasifikasi risiko rendah, probabilitas risiko 3%, rincian faktor, dan lima bobot fitur teratas",
+        },
+        caption: {
+          en: "Inference response showing risk classification, class probabilities, supporting factors, and top 5 global feature importances.",
+          id: "Respons inferensi yang menampilkan klasifikasi risiko, probabilitas kelas, faktor pendukung, dan 5 feature importance global teratas.",
+        },
+      },
+    ],
+    galleryThumbnails: true,
   },
   {
     index: "07",

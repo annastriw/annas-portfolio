@@ -420,6 +420,49 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
     "Katalon Studio",
     "Docker",
   ]);
+
+  const heartMl = projectCaseStudies.find(
+    (p) => p.slug === "ml-for-heart-attack-risk-prediction",
+  );
+  assert.ok(heartMl);
+  const heartMlSchema = generateProjectJsonLd(heartMl, "en");
+  assert.equal(heartMlSchema["@type"], "SoftwareSourceCode");
+  assert.equal(
+    heartMlSchema.name,
+    "Machine Learning Model for Heart Attack Risk Prediction",
+  );
+  assert.equal(
+    heartMlSchema.url,
+    "https://annastriwidagdo.me/en/projects/ml-for-heart-attack-risk-prediction",
+  );
+  assert.equal(
+    heartMlSchema.codeRepository,
+    "https://github.com/annastriw/ml-for-heart-attack-risk-prediction.git",
+  );
+  assert.equal(heartMlSchema.relatedLink, undefined);
+  assert.ok(
+    heartMlSchema.image?.includes(
+      "/assets/projects/ml-for-heart-attack-risk-prediction/cover.webp",
+    ),
+  );
+  assert.deepEqual(heartMlSchema.keywords, [
+    "Machine Learning",
+    "Machine Learning Engineer",
+    "Binary Classification",
+    "Decision Support",
+    "Python",
+    "Scikit-learn",
+    "Pandas",
+    "SMOTE",
+    "Flask",
+    "Docker",
+  ]);
+
+  const heartMlJsonString = JSON.stringify(heartMlSchema);
+  assert.doesNotMatch(
+    heartMlJsonString,
+    /medical diagnosis|diagnosis klinis|clinical accuracy|clinically validated|treatment|prevention/i,
+  );
 });
 
 test("generateBlogPostingJsonLd produces valid BlogPosting schema with related project references", () => {

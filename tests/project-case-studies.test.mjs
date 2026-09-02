@@ -86,9 +86,15 @@ test("references only real local visual evidence and verified public links", () 
       ["simastok", "https://simastok.site/"],
     ],
   );
-  assert.equal(
-    projectCaseStudies.some((project) => project.githubUrl),
-    false,
+  const withGithub = projectCaseStudies.filter((project) => project.githubUrl);
+  assert.deepEqual(
+    withGithub.map((project) => [project.slug, project.githubUrl]),
+    [
+      [
+        "ml-for-heart-attack-risk-prediction",
+        "https://github.com/annastriw/ml-for-heart-attack-risk-prediction.git",
+      ],
+    ],
   );
 });
 
@@ -1125,6 +1131,352 @@ test("maintains approved SIMASTOK locked facts, bilingual copy, and content stru
   const stringified = JSON.stringify(simastok);
   assert.doesNotMatch(stringified, /"Fullstack Developer"/i);
   assert.doesNotMatch(stringified, /Production deployment/i);
+});
+
+test("maintains approved Heart ML locked facts, bilingual copy, model evidence, gallery, and content structures", () => {
+  const heartMl = getProjectCaseStudy("ml-for-heart-attack-risk-prediction");
+  assert.ok(heartMl);
+
+  // Locked facts & metadata
+  assert.equal(heartMl.index, "06");
+  assert.equal(heartMl.category, "ml");
+  assert.equal(heartMl.categoryLabel.en, "06 // MACHINE LEARNING");
+  assert.equal(heartMl.categoryLabel.id, "06 // MACHINE LEARNING");
+  assert.equal(heartMl.role.en, "Machine Learning Engineer");
+  assert.equal(heartMl.role.id, "Machine Learning Engineer");
+  assert.equal(heartMl.period?.en, "June–August 2025");
+  assert.equal(heartMl.period?.id, "Juni–Agustus 2025");
+  assert.equal(heartMl.status.en, "Completed Prototype");
+  assert.equal(heartMl.status.id, "Completed Prototype");
+  assert.equal(heartMl.liveUrl, undefined);
+  assert.equal(
+    heartMl.githubUrl,
+    "https://github.com/annastriw/ml-for-heart-attack-risk-prediction.git",
+  );
+  assert.equal(heartMl.repositoryNotice, undefined);
+  assert.equal(heartMl.workingModel, undefined);
+
+  // MetadataRows display only Role, Period, Status, Product Integration
+  assert.ok(heartMl.metadataRows);
+  assert.equal(heartMl.metadataRows.length, 4);
+  assert.deepEqual(
+    heartMl.metadataRows.map((r) => r.label.en),
+    ["Role", "Period", "Status", "Product Integration"],
+  );
+  assert.deepEqual(
+    heartMl.metadataRows.map((r) => r.label.id),
+    ["Peran", "Periode", "Status", "Integrasi Produk"],
+  );
+  assert.deepEqual(
+    heartMl.metadataRows.map((r) => r.value.en),
+    [
+      "Machine Learning Engineer",
+      "June–August 2025",
+      "Completed Prototype",
+      "iHealth Edu",
+    ],
+  );
+  assert.deepEqual(
+    heartMl.metadataRows.map((r) => r.value.id),
+    [
+      "Machine Learning Engineer",
+      "Juni–Agustus 2025",
+      "Completed Prototype",
+      "iHealth Edu",
+    ],
+  );
+
+  // H1 and Lead
+  assert.equal(
+    heartMl.title.en,
+    "Machine Learning Model for Heart Attack Risk Prediction",
+  );
+  assert.equal(
+    heartMl.title.id,
+    "Machine Learning Model for Heart Attack Risk Prediction",
+  );
+  assert.equal(
+    heartMl.lead?.en,
+    "A machine learning decision-support prototype developed for iHealth Edu that estimates heart attack risk from patient data and delivers the result through a Flask API.",
+  );
+  assert.equal(
+    heartMl.lead?.id,
+    "Prototype machine learning untuk decision support pada iHealth Edu yang memperkirakan risiko serangan jantung dari data pasien dan menyajikan hasilnya melalui Flask API.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    heartMl.metaTitle?.en,
+    "Heart Attack Risk Prediction — Machine Learning Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    heartMl.metaTitle?.id,
+    "Heart Attack Risk Prediction — Studi Kasus Machine Learning | Annas Tri Widagdo",
+  );
+  assert.equal(
+    heartMl.metaDescription?.en,
+    "A machine learning case study for heart attack risk decision support integrated into iHealth Edu, covering model comparison, Flask inference, and Docker deployment.",
+  );
+  assert.equal(
+    heartMl.metaDescription?.id,
+    "Studi kasus machine learning untuk decision support risiko serangan jantung yang terintegrasi dengan iHealth Edu, mencakup perbandingan model, inference Flask, dan deployment Docker.",
+  );
+
+  // Overview (exact 2 paragraphs)
+  assert.equal(heartMl.overview.en.length, 2);
+  assert.equal(heartMl.overview.id.length, 2);
+  assert.equal(
+    heartMl.overview.en[0],
+    "I developed this project as the machine learning decision-support component integrated into the live iHealth Edu website for healthcare workers. Model development used A. Panday's 2025 Heart Attack Prediction in Indonesia dataset from Kaggle, containing 158,355 observations and 21 predictors.",
+  );
+  assert.equal(
+    heartMl.overview.en[1],
+    "The workflow covers data preparation, class balancing, model comparison, evaluation, and inference deployment. Random Forest was selected for its leading accuracy and ROC-AUC, then serialized and served through a Flask REST API deployed with Docker on Ubuntu.",
+  );
+  assert.equal(
+    heartMl.overview.id[0],
+    "Saya mengembangkan project ini sebagai komponen machine learning decision support yang terintegrasi dengan website iHealth Edu dan digunakan oleh tenaga kesehatan. Pengembangan model menggunakan dataset Heart Attack Prediction in Indonesia oleh A. Panday dari Kaggle tahun 2025, yang terdiri dari 158.355 observasi dan 21 predictor.",
+  );
+  assert.equal(
+    heartMl.overview.id[1],
+    "Workflow mencakup data preparation, penyeimbangan kelas, perbandingan model, evaluasi, dan deployment inference. Random Forest dipilih karena menghasilkan accuracy dan ROC-AUC tertinggi, kemudian disimpan dan disajikan melalui Flask REST API yang di-deploy menggunakan Docker pada Ubuntu.",
+  );
+
+  // Dataset Source note
+  assert.ok(heartMl.datasetSource);
+  assert.equal(heartMl.datasetSource.label.en, "Dataset Source");
+  assert.equal(heartMl.datasetSource.label.id, "Sumber Dataset");
+  assert.equal(heartMl.datasetSource.textPrefix, "A. Panday, ");
+  assert.equal(
+    heartMl.datasetSource.datasetTitle,
+    "Heart Attack Prediction in Indonesia",
+  );
+  assert.equal(heartMl.datasetSource.textSuffix, ", Kaggle, 2025");
+  assert.equal(
+    heartMl.datasetSource.url,
+    "https://www.kaggle.com/datasets/ankushpanday2/heart-attack-prediction-in-indonesia",
+  );
+
+  // Contributions (exact 4 items + closing learning statement)
+  assert.equal(heartMl.contributions.en.length, 4);
+  assert.equal(heartMl.contributions.id.length, 4);
+  assert.equal(
+    heartMl.contributions.en[0],
+    "Prepared the dataset by encoding five categorical features, scaling the predictors, creating a stratified 80:20 split, and applying SMOTE only to the training data.",
+  );
+  assert.equal(
+    heartMl.contributions.en[1],
+    "Trained and compared Random Forest, Linear SVM, K-Nearest Neighbors, and Logistic Regression, with hyperparameter tuning focused on F1-score.",
+  );
+  assert.equal(
+    heartMl.contributions.en[2],
+    "Selected Random Forest based on its accuracy and ROC-AUC, serialized the model and preprocessing artifacts with Joblib, and built a Flask REST API for inference.",
+  );
+  assert.equal(
+    heartMl.contributions.en[3],
+    "Deployed the inference service with Docker on Ubuntu and integrated its prediction output into iHealth Edu for healthcare workers.",
+  );
+  assert.equal(
+    heartMl.contributions.id[0],
+    "Menyiapkan dataset dengan melakukan encoding pada lima fitur kategorikal, scaling predictor, membagi data secara stratified 80:20, dan menerapkan SMOTE hanya pada data training.",
+  );
+  assert.equal(
+    heartMl.contributions.id[1],
+    "Melatih dan membandingkan Random Forest, Linear SVM, K-Nearest Neighbors, dan Logistic Regression dengan hyperparameter tuning yang berfokus pada F1-score.",
+  );
+  assert.equal(
+    heartMl.contributions.id[2],
+    "Memilih Random Forest berdasarkan accuracy dan ROC-AUC, menyimpan model serta preprocessing artifacts menggunakan Joblib, dan membangun Flask REST API untuk inference.",
+  );
+  assert.equal(
+    heartMl.contributions.id[3],
+    "Melakukan deployment inference service menggunakan Docker pada Ubuntu dan mengintegrasikan hasil prediksi ke iHealth Edu untuk tenaga kesehatan.",
+  );
+  assert.equal(
+    heartMl.contributionLearning?.en,
+    "This project gave me experience in building a machine learning workflow from data preparation to real product integration.",
+  );
+  assert.equal(
+    heartMl.contributionLearning?.id,
+    "Project ini memberi saya pengalaman membangun workflow machine learning mulai dari data preparation hingga terintegrasi dengan produk yang digunakan.",
+  );
+
+  // Personal Tech Stack (exact 6 items in approved order)
+  assert.deepEqual(heartMl.personalTechStack, [
+    "Python",
+    "Scikit-learn",
+    "Pandas",
+    "SMOTE",
+    "Flask",
+    "Docker",
+  ]);
+  assert.deepEqual(heartMl.techStack, [
+    "Python",
+    "Scikit-learn",
+    "Pandas",
+    "SMOTE",
+    "Flask",
+    "Docker",
+  ]);
+
+  // System Scope: exactly 3 groups (Data Preparation, Model Evaluation, Inference Integration)
+  assert.ok(heartMl.heartMlScope);
+  assert.equal(heartMl.heartMlScope.dataPreparation.title.en, "Data Preparation");
+  assert.equal(heartMl.heartMlScope.dataPreparation.title.id, "Data Preparation");
+  assert.deepEqual(heartMl.heartMlScope.dataPreparation.items.en, [
+    "158,355 observations",
+    "22 columns",
+    "21 predictors",
+    "5 categorical features",
+    "No missing values",
+    "Stratified 80:20 split",
+    "SMOTE on training data only",
+  ]);
+  assert.deepEqual(heartMl.heartMlScope.dataPreparation.items.id, [
+    "158.355 observasi",
+    "22 kolom",
+    "21 prediktor",
+    "5 fitur kategorikal",
+    "Tidak ada missing value",
+    "Stratified 80:20 split",
+    "SMOTE hanya pada data training",
+  ]);
+
+  // Model Evaluation metrics
+  assert.equal(heartMl.heartMlScope.modelEvaluation.title.en, "Model Evaluation");
+  assert.equal(heartMl.heartMlScope.modelEvaluation.title.id, "Model Evaluation");
+  const models = heartMl.heartMlScope.modelEvaluation.models;
+  assert.equal(models.length, 4);
+
+  // Random Forest
+  const rf = models.find((m) => m.model === "Random Forest");
+  assert.ok(rf);
+  assert.equal(rf.isSelected, true);
+  assert.equal(rf.accuracy?.en, "71.93%");
+  assert.equal(rf.accuracy?.id, "71,93%");
+  assert.equal(rf.precision?.en, "64.12%");
+  assert.equal(rf.precision?.id, "64,12%");
+  assert.equal(rf.recall?.en, "68.15%");
+  assert.equal(rf.recall?.id, "68,15%");
+  assert.equal(rf.f1?.en, "0.6607");
+  assert.equal(rf.f1?.id, "0,6607");
+  assert.equal(rf.rocAuc?.en, "0.8015");
+  assert.equal(rf.rocAuc?.id, "0,8015");
+
+  // Logistic Regression
+  const lr = models.find((m) => m.model === "Logistic Regression");
+  assert.ok(lr);
+  assert.equal(lr.f1?.en, "0.6618");
+  assert.equal(lr.f1?.id, "0,6618");
+  assert.equal(lr.accuracy, undefined);
+
+  // KNN
+  const knn = models.find((m) => m.model === "K-Nearest Neighbors");
+  assert.ok(knn);
+  assert.equal(knn.recall?.en, "70.40%");
+  assert.equal(knn.recall?.id, "70,40%");
+  assert.equal(knn.accuracy, undefined);
+
+  // Linear SVM (no metric added)
+  const svm = models.find((m) => m.model === "Linear SVM");
+  assert.ok(svm);
+  assert.equal(svm.accuracy, undefined);
+  assert.equal(svm.precision, undefined);
+  assert.equal(svm.recall, undefined);
+  assert.equal(svm.f1, undefined);
+  assert.equal(svm.rocAuc, undefined);
+
+  // Selection Rationale
+  assert.equal(
+    heartMl.heartMlScope.modelEvaluation.selectionRationale.en,
+    "Random Forest was selected because it produced the highest accuracy and ROC-AUC in the documented comparison.",
+  );
+  assert.equal(
+    heartMl.heartMlScope.modelEvaluation.selectionRationale.id,
+    "Random Forest dipilih karena menghasilkan accuracy dan ROC-AUC tertinggi dalam perbandingan yang didokumentasikan.",
+  );
+
+  // Medical boundary note inside System Scope
+  assert.equal(
+    heartMl.heartMlScope.medicalNote.en,
+    "This prototype supports risk assessment and does not provide a clinical diagnosis or replace medical judgment.",
+  );
+  assert.equal(
+    heartMl.heartMlScope.medicalNote.id,
+    "Prototype ini mendukung penilaian risiko dan tidak memberikan diagnosis klinis maupun menggantikan pertimbangan tenaga kesehatan.",
+  );
+
+  // Inference Integration
+  assert.equal(
+    heartMl.heartMlScope.inferenceIntegration.title.en,
+    "Inference Integration",
+  );
+  assert.equal(
+    heartMl.heartMlScope.inferenceIntegration.title.id,
+    "Inference Integration",
+  );
+  assert.deepEqual(heartMl.heartMlScope.inferenceIntegration.items.en, [
+    "Joblib model and preprocessing artifacts",
+    "Flask REST API",
+    "Risk class and probability",
+    "Supporting factors",
+    "Global feature importance",
+    "Docker deployment on Ubuntu",
+    "iHealth Edu integration for healthcare workers",
+  ]);
+  assert.deepEqual(heartMl.heartMlScope.inferenceIntegration.items.id, [
+    "Joblib model dan preprocessing artifacts",
+    "Flask REST API",
+    "Risk class dan probabilitas",
+    "Faktor pendukung",
+    "Global feature importance",
+    "Deployment Docker pada Ubuntu",
+    "Integrasi iHealth Edu untuk tenaga kesehatan",
+  ]);
+
+  // Gallery: exactly 3 slides in cover-first order
+  assert.equal(heartMl.gallery?.length, 3);
+  assert.deepEqual(
+    heartMl.gallery?.map((s) => s.src),
+    [
+      "/assets/projects/ml-for-heart-attack-risk-prediction/cover.webp",
+      "/assets/projects/ml-for-heart-attack-risk-prediction/documentation/01.webp",
+      "/assets/projects/ml-for-heart-attack-risk-prediction/documentation/02.webp",
+    ],
+  );
+  for (let i = 0; i < 3; i++) {
+    const slide = heartMl.gallery?.[i];
+    assert.ok(slide);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.doesNotMatch(slide.caption.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.caption.id, /^TODO_|^\[/);
+    assert.ok(slide.caption.en.length > 10);
+    assert.ok(slide.caption.id.length > 10);
+    assert.doesNotMatch(slide.alt.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.alt.id, /^TODO_|^\[/);
+    assert.ok(slide.alt.en.length > 10);
+    assert.ok(slide.alt.id.length > 10);
+    assert.notEqual(slide.caption.en, slide.alt.en);
+    assert.notEqual(slide.caption.id, slide.alt.id);
+  }
+
+  // Claim boundaries and prohibited strings
+  const stringified = JSON.stringify(heartMl);
+  assert.doesNotMatch(stringified, /"Machine Learning Developer"/i);
+  assert.doesNotMatch(stringified, /Working Model|Development Model/i);
+  assert.doesNotMatch(
+    stringified,
+    /independently developed|dikembangkan secara mandiri/i,
+  );
+  assert.doesNotMatch(stringified, /clinical accuracy|clinically validated/i);
+  assert.match(
+    heartMl.heartMlScope.medicalNote.en,
+    /does not provide a clinical diagnosis/,
+  );
+  assert.match(
+    heartMl.heartMlScope.medicalNote.id,
+    /tidak memberikan diagnosis klinis/,
+  );
 });
 
 test("keeps the project-specific factual boundaries explicit", () => {

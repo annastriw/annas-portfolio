@@ -216,6 +216,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     videoDesc: isId
       ? "Demonstrasi alur pencetakan Android PrintService menuju thermal printer Bluetooth ESC/POS."
       : "Demonstration of the Android PrintService workflow output to a Bluetooth ESC/POS thermal printer.",
+    githubRepo: "View GitHub Repository",
   };
 
   // Section presence detection & sequential dynamic numbering (0 gaps)
@@ -248,6 +249,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       project.dialisisScope ||
       project.nusaScope ||
       project.simastokScope ||
+      project.heartMlScope ||
       (project.technicalNotes?.[locale] &&
         project.technicalNotes[locale].length > 0) ||
       (project.techStack &&
@@ -257,7 +259,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         project.slug !== "ihealth-edu" &&
         project.slug !== "dialisis-connect-edu" &&
         project.slug !== "nusa-dakwah" &&
-        project.slug !== "simastok"),
+        project.slug !== "simastok" &&
+        project.slug !== "ml-for-heart-attack-risk-prediction"),
   );
   const scopeIndex = hasScope
     ? String(++sectionCounter).padStart(2, "0")
@@ -529,9 +532,9 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.repoLink}
-                      aria-label={`${copy.repo}: ${project.title[locale]} (${copy.newTabCue})`}
+                      aria-label={`${copy.githubRepo}: ${project.title[locale]} (${copy.newTabCue})`}
                     >
-                      <span>{copy.repo}</span>
+                      <span>{copy.githubRepo}</span>
                       <span className={styles.linkArrow} aria-hidden="true">
                         ↗
                       </span>
@@ -823,6 +826,28 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                     </p>
                   ))}
                 </div>
+
+                {project.datasetSource ? (
+                  <div className={styles.datasetSourceNote}>
+                    <span className={styles.datasetSourceLabel}>
+                      {project.datasetSource.label[locale]}:
+                    </span>{" "}
+                    <a
+                      href={project.datasetSource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.datasetSourceLink}
+                      aria-label={`${project.datasetSource.label[locale]}: ${project.datasetSource.textPrefix}${project.datasetSource.datasetTitle}${project.datasetSource.textSuffix} (${copy.newTabCue})`}
+                    >
+                      <span>{project.datasetSource.textPrefix}</span>
+                      <em>{project.datasetSource.datasetTitle}</em>
+                      <span>{project.datasetSource.textSuffix}</span>
+                      <span className={styles.linkArrow} aria-hidden="true">
+                        ↗
+                      </span>
+                    </a>
+                  </div>
+                ) : null}
 
                 {project.claimBoundary ? (
                   <div className={styles.claimBoundaryCard}>
@@ -1301,6 +1326,187 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   </div>
                 ) : null}
 
+                {/* Heart ML 3-Group System Scope */}
+                {project.heartMlScope ? (
+                  <div className={styles.heartMlScopeContainer}>
+                    {/* 01 // Data Preparation */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>{`01 // ${project.heartMlScope.dataPreparation.title[locale]}`}</span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        <ul className={styles.contributionList} style={{ margin: 0 }}>
+                          {project.heartMlScope.dataPreparation.items[locale].map(
+                            (item, itemIdx) => (
+                              <li key={itemIdx} className={styles.contributionItem}>
+                                <span
+                                  className={styles.contributionIndex}
+                                  aria-hidden="true"
+                                >
+                                  {String(itemIdx + 1).padStart(2, "0")}
+                                </span>
+                                <span>{item}</span>
+                              </li>
+                            ),
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* 02 // Model Evaluation */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>{`02 // ${project.heartMlScope.modelEvaluation.title[locale]}`}</span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        {/* Desktop Semantic Table */}
+                        <div className={styles.modelTableWrapper}>
+                          <table className={styles.modelTable}>
+                            <thead>
+                              <tr>
+                                <th scope="col">{isId ? "Model" : "Model"}</th>
+                                <th scope="col">{isId ? "Accuracy" : "Accuracy"}</th>
+                                <th scope="col">{isId ? "Precision" : "Precision"}</th>
+                                <th scope="col">{isId ? "Recall" : "Recall"}</th>
+                                <th scope="col">{isId ? "F1-Score" : "F1-Score"}</th>
+                                <th scope="col">{isId ? "ROC-AUC" : "ROC-AUC"}</th>
+                                <th scope="col">{isId ? "Keterangan" : "Highlights / Notes"}</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {project.heartMlScope.modelEvaluation.models.map((m) => (
+                                <tr
+                                  key={m.model}
+                                  className={m.isSelected ? styles.selectedModelRow : undefined}
+                                >
+                                  <td>
+                                    <span>{m.model}</span>
+                                    {m.isSelected ? (
+                                      <span className={styles.selectedModelBadge}>
+                                        [{isId ? "Terpilih" : "Selected"}]
+                                      </span>
+                                    ) : null}
+                                  </td>
+                                  <td>{m.accuracy ? m.accuracy[locale] : "—"}</td>
+                                  <td>{m.precision ? m.precision[locale] : "—"}</td>
+                                  <td>{m.recall ? m.recall[locale] : "—"}</td>
+                                  <td>{m.f1 ? m.f1[locale] : "—"}</td>
+                                  <td>{m.rocAuc ? m.rocAuc[locale] : "—"}</td>
+                                  <td>{m.summaryNote ? m.summaryNote[locale] : "—"}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Mobile Stacked Rows */}
+                        <div className={styles.modelCardsMobile}>
+                          {project.heartMlScope.modelEvaluation.models.map((m) => (
+                            <div
+                              key={m.model}
+                              className={`${styles.modelCardItem} ${
+                                m.isSelected ? styles.selectedModelRow : ""
+                              }`}
+                            >
+                              <div className={styles.modelCardHeader}>
+                                <span className={styles.modelCardTitle}>{m.model}</span>
+                                {m.isSelected ? (
+                                  <span className={styles.selectedModelBadge}>
+                                    [{isId ? "Terpilih" : "Selected"}]
+                                  </span>
+                                ) : null}
+                              </div>
+                              <div className={styles.modelCardMetrics}>
+                                <div className={styles.modelMetricRow}>
+                                  <span className={styles.modelMetricLabel}>Accuracy</span>
+                                  <span className={styles.modelMetricValue}>
+                                    {m.accuracy ? m.accuracy[locale] : "—"}
+                                  </span>
+                                </div>
+                                <div className={styles.modelMetricRow}>
+                                  <span className={styles.modelMetricLabel}>Precision</span>
+                                  <span className={styles.modelMetricValue}>
+                                    {m.precision ? m.precision[locale] : "—"}
+                                  </span>
+                                </div>
+                                <div className={styles.modelMetricRow}>
+                                  <span className={styles.modelMetricLabel}>Recall</span>
+                                  <span className={styles.modelMetricValue}>
+                                    {m.recall ? m.recall[locale] : "—"}
+                                  </span>
+                                </div>
+                                <div className={styles.modelMetricRow}>
+                                  <span className={styles.modelMetricLabel}>F1-Score</span>
+                                  <span className={styles.modelMetricValue}>
+                                    {m.f1 ? m.f1[locale] : "—"}
+                                  </span>
+                                </div>
+                                <div className={styles.modelMetricRow}>
+                                  <span className={styles.modelMetricLabel}>ROC-AUC</span>
+                                  <span className={styles.modelMetricValue}>
+                                    {m.rocAuc ? m.rocAuc[locale] : "—"}
+                                  </span>
+                                </div>
+                              </div>
+                              {m.summaryNote ? (
+                                <p className={styles.modelCardHighlight}>
+                                  {m.summaryNote[locale]}
+                                </p>
+                              ) : null}
+                            </div>
+                          ))}
+                        </div>
+
+                        <p className={styles.modelSelectionRationale}>
+                          {project.heartMlScope.modelEvaluation.selectionRationale[locale]}
+                        </p>
+
+                        {/* Medical Boundary Note inside Scope right after Model Evaluation */}
+                        <div className={styles.medicalBoundaryNote}>
+                          <div className={styles.medicalBoundaryTag}>
+                            <span aria-hidden="true">■</span>
+                            <span>
+                              {isId
+                                ? "[BATAS KLAIM // DECISION SUPPORT MEDIS]"
+                                : "[CLAIM BOUNDARY // MEDICAL DECISION SUPPORT]"}
+                            </span>
+                          </div>
+                          <p className={styles.medicalBoundaryText}>
+                            {project.heartMlScope.medicalNote[locale]}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 03 // Inference Integration */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>{`03 // ${project.heartMlScope.inferenceIntegration.title[locale]}`}</span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        <ul className={styles.contributionList} style={{ margin: 0 }}>
+                          {project.heartMlScope.inferenceIntegration.items[locale].map(
+                            (item, itemIdx) => (
+                              <li key={itemIdx} className={styles.contributionItem}>
+                                <span
+                                  className={styles.contributionIndex}
+                                  aria-hidden="true"
+                                >
+                                  {String(itemIdx + 1).padStart(2, "0")}
+                                </span>
+                                <span>{item}</span>
+                              </li>
+                            ),
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
                 {/* 4. Key Technical Notes */}
                 {project.technicalNotes?.[locale] &&
                 project.technicalNotes[locale].length > 0 &&
@@ -1308,6 +1514,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 !project.dialisisScope &&
                 !project.nusaScope &&
                 !project.simastokScope &&
+                !project.heartMlScope &&
                 !project.modules ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
@@ -1335,7 +1542,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 project.slug !== "ihealth-edu" &&
                 project.slug !== "dialisis-connect-edu" &&
                 project.slug !== "nusa-dakwah" &&
-                project.slug !== "simastok" ? (
+                project.slug !== "simastok" &&
+                project.slug !== "ml-for-heart-attack-risk-prediction" ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
                       <span className={styles.subBlockHeaderTag}>■</span>
