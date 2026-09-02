@@ -1017,7 +1017,7 @@ html.dark .galleryNavBtn:focus-visible {
   overflow-wrap: break-word;
 }
 
-/* System Scope Groups (iHealth style) */
+/* System Scope Groups (iHealth style - 2 columns on desktop) */
 .systemScopeGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1029,6 +1029,27 @@ html.dark .galleryNavBtn:focus-visible {
   .systemScopeGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 3rem;
+  }
+}
+
+/* System Scope Groups (Dialisis style - 3 columns on desktop, 2 on tablet, 1 on mobile) */
+.systemScopeGrid3Col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  min-width: 0;
+}
+
+@media (min-width: 48rem) {
+  .systemScopeGrid3Col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .systemScopeGrid3Col {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
   }
 }
 

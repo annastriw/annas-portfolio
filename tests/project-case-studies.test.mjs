@@ -50,8 +50,10 @@ test("publishes exactly 10 ordered bilingual case studies", () => {
       assert.ok(project.overview[locale].length <= 3);
       assert.ok(project.contributions[locale].length >= 3);
       assert.ok(project.contributions[locale].length <= 5);
-      assert.ok(project.technicalNotes[locale].length >= 3);
-      assert.ok(project.technicalNotes[locale].length <= 5);
+      if (project.technicalNotes) {
+        assert.ok(project.technicalNotes[locale].length >= 3);
+        assert.ok(project.technicalNotes[locale].length <= 5);
+      }
     }
     assert.ok(project.techStack.length >= 2);
     assert.ok(project.techStack.length <= 8);
@@ -79,6 +81,7 @@ test("references only real local visual evidence and verified public links", () 
     [
       ["ukg-system", "https://ukgsystem.site/"],
       ["ihealth-edu", "https://www.ihealthedu.site/"],
+      ["dialisis-connect-edu", "https://dialisisconnectedu.vercel.app/"],
     ],
   );
   assert.equal(
@@ -100,6 +103,8 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
   assert.equal(ukg.period?.id, "Januari–April 2026");
   assert.equal(ukg.status.en, "Live Production");
   assert.equal(ukg.status.id, "Live Production");
+  assert.equal(ukg.workingModel?.en, "Independently developed");
+  assert.equal(ukg.workingModel?.id, "Dikembangkan mandiri");
   assert.equal(ukg.liveUrl, "https://ukgsystem.site/");
   assert.equal(ukg.githubUrl, undefined);
   assert.equal(ukg.repositoryNotice?.en, "Private Repository");
@@ -115,6 +120,24 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
   assert.equal(
     ukg.lead?.id,
     "ERP multi-cabang yang menyatukan pengelolaan stok, penjualan, dan operasional harian dalam satu sistem.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    ukg.metaTitle?.en,
+    "UKG System — Full-Stack Web Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    ukg.metaTitle?.id,
+    "UKG System — Studi Kasus Full-Stack Web Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    ukg.metaDescription?.en,
+    "A full-stack case study of a multi-branch ERP that centralizes inventory, sales, and daily operations for remote monitoring.",
+  );
+  assert.equal(
+    ukg.metaDescription?.id,
+    "Studi kasus full-stack ERP multi-cabang yang memusatkan stok, penjualan, dan operasional harian agar dapat dipantau dari mana saja.",
   );
 
   // Overview (exact 2 paragraphs)
@@ -161,7 +184,25 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     "Project ini memperkuat pengalaman saya dalam mengembangkan sistem dari kebutuhan bisnis hingga digunakan dalam operasional sehari-hari.",
   );
 
-  // System scope: 8 ordered modules and no workflow diagram data
+  // Personal tech stack (max 6 items)
+  assert.deepEqual(ukg.personalTechStack, [
+    "Figma",
+    "Next.js",
+    "NestJS",
+    "MySQL",
+    "Katalon Studio",
+    "Linux Ubuntu",
+  ]);
+  assert.deepEqual(ukg.techStack, [
+    "Figma",
+    "Next.js",
+    "NestJS",
+    "MySQL",
+    "Katalon Studio",
+    "Linux Ubuntu",
+  ]);
+
+  // System scope: 8 ordered module names with no descriptions, no tech groups, no tech notes
   assert.deepEqual(ukg.modules, [
     "User & Role Management",
     "Branch & Attendance",
@@ -173,13 +214,9 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     "Dashboard & Analytics",
   ]);
   assert.equal(ukg.workflow, undefined);
-
-  // System scope: 5 technology groups
-  assert.equal(ukg.technologyGroups?.length, 5);
-  assert.deepEqual(
-    ukg.technologyGroups?.map((g) => g.category),
-    ["Design", "Frontend", "Backend & Data", "Testing", "Deployment"],
-  );
+  assert.equal(ukg.technologyGroups, undefined);
+  assert.equal(ukg.technicalNotes, undefined);
+  assert.equal(ukg.optionalModule, undefined);
 
   // Gallery: exactly 9 slides with 18 unique searchable placeholders
   assert.equal(ukg.gallery?.length, 9);
@@ -190,19 +227,18 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     assert.ok(slide);
     assert.equal(slide.slide, num);
     assert.ok(existsSync(join(root, "public", slide.src)));
-    assert.match(slide.caption.en, new RegExp(`\\[UKG_CAPTION_${num}_EN\\]`));
-    assert.match(slide.caption.id, new RegExp(`\\[UKG_CAPTION_${num}_ID\\]`));
-    assert.doesNotMatch(slide.alt.en, /UKG_CAPTION/);
-    assert.doesNotMatch(slide.alt.id, /UKG_CAPTION/);
+    assert.equal(slide.caption.en, `TODO_UKG_CAPTION_${num}_EN`);
+    assert.equal(slide.caption.id, `TODO_UKG_CAPTION_${num}_ID`);
+    assert.doesNotMatch(slide.alt.en, /TODO_UKG/);
+    assert.doesNotMatch(slide.alt.id, /TODO_UKG/);
   }
 
-  // Verify exactly 18 occurrences of UKG_CAPTION_ in project-case-studies.ts
+  // Verify exactly 18 occurrences of TODO_UKG_CAPTION_ in project-case-studies.ts
   const caseStudiesSource = readFileSync(
     join(root, "src", "content", "projects", "project-case-studies.ts"),
     "utf8",
   );
-  const captionTokens = caseStudiesSource.match(/\[UKG_CAPTION_\d+_[A-Z]+\]/g) ?? [];
-  assert.equal(captionTokens.length, 18);
+  const captionTokens = caseStudiesSource.match(/TODO_UKG_CAPTION_\d+_[A-Z]+/g) ?? [];
   assert.equal(new Set(captionTokens).size, 18);
 
   // Claim boundaries and prohibited strings
@@ -255,8 +291,14 @@ test("maintains approved iHealth Edu locked facts, bilingual copy, and content s
     ihealth.metaTitle?.id,
     "iHealth Edu — Studi Kasus Frontend Web Development | Annas Tri Widagdo",
   );
-  assert.match(ihealth.metaDescription?.en ?? "", /Frontend web development case study for iHealth Edu/);
-  assert.match(ihealth.metaDescription?.id ?? "", /Studi kasus frontend web development untuk iHealth Edu/);
+  assert.equal(
+    ihealth.metaDescription?.en,
+    "A frontend case study covering UI/UX, IoT health data, and machine learning decision-support integration for iHealth Edu.",
+  );
+  assert.equal(
+    ihealth.metaDescription?.id,
+    "Studi kasus frontend iHealth Edu yang mencakup UI/UX, data kesehatan IoT, dan integrasi machine learning decision support.",
+  );
 
   // Overview (exact 2 paragraphs from Section 7)
   assert.equal(ihealth.overview.en.length, 2);
@@ -375,6 +417,229 @@ test("maintains approved iHealth Edu locked facts, bilingual copy, and content s
   assert.doesNotMatch(stringified, /Docker containerization|deployment pada Linux Ubuntu/i);
   assert.doesNotMatch(stringified, /validated instrument|terstandar DSMQ/i);
   assert.doesNotMatch(stringified, /158[,.]?355/);
+});
+
+test("maintains approved Dialisis Connect Edu locked facts, bilingual copy, and content structures", () => {
+  const dialisis = getProjectCaseStudy("dialisis-connect-edu");
+  assert.ok(dialisis);
+
+  // Locked facts & metadata
+  assert.equal(
+    dialisis.client?.en,
+    "Ikatan Perawat Dialisis Indonesia (IPDI) Jawa Tengah",
+  );
+  assert.equal(
+    dialisis.client?.id,
+    "Ikatan Perawat Dialisis Indonesia (IPDI) Jawa Tengah",
+  );
+  assert.equal(dialisis.clientLabel?.en, "Stakeholder");
+  assert.equal(dialisis.clientLabel?.id, "Stakeholder");
+  assert.equal(dialisis.role.en, "Frontend Web Developer");
+  assert.equal(dialisis.role.id, "Frontend Web Developer");
+  assert.equal(dialisis.workingModel?.en, "Four-person team");
+  assert.equal(dialisis.workingModel?.id, "Tim beranggotakan empat orang");
+  assert.equal(dialisis.period?.en, "February–May 2025");
+  assert.equal(dialisis.period?.id, "Februari–Mei 2025");
+  assert.equal(dialisis.status.en, "Live Production");
+  assert.equal(dialisis.status.id, "Live Production");
+  assert.equal(dialisis.liveUrl, "https://dialisisconnectedu.vercel.app/");
+  assert.equal(
+    dialisis.frontendRepoUrl,
+    "https://github.com/annastriw/fe-dialisis.git",
+  );
+  assert.equal(
+    dialisis.backendRepoUrl,
+    "https://github.com/annastriw/be-dialisis.git",
+  );
+
+  // Category & Lead
+  assert.equal(dialisis.categoryLabel.en, "03 / WEB APPLICATION");
+  assert.equal(dialisis.categoryLabel.id, "03 / WEB APPLICATION");
+  assert.equal(
+    dialisis.lead?.en,
+    "An education and community platform that helps patients undergoing hemodialysis and people living with kidney disease access structured learning materials and participate in digital discussions from wherever they are.",
+  );
+  assert.equal(
+    dialisis.lead?.id,
+    "Platform edukasi dan komunitas yang membantu pasien hemodialisis dan pengguna dengan penyakit ginjal mengakses materi terstruktur serta mengikuti diskusi digital dari mana saja.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    dialisis.metaTitle?.en,
+    "Dialisis Connect Edu — Frontend Web Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    dialisis.metaTitle?.id,
+    "Dialisis Connect Edu — Studi Kasus Frontend Web Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    dialisis.metaDescription?.en,
+    "A frontend and UI/UX case study for a kidney health education platform with digital learning and community discussion, developed with IPDI Central Java.",
+  );
+  assert.equal(
+    dialisis.metaDescription?.id,
+    "Studi kasus frontend dan UI/UX platform edukasi kesehatan ginjal dengan pembelajaran digital dan forum diskusi, dikembangkan bersama IPDI Jawa Tengah.",
+  );
+
+  // Overview (exact 2 paragraphs)
+  assert.equal(dialisis.overview.en.length, 2);
+  assert.equal(dialisis.overview.id.length, 2);
+  assert.equal(
+    dialisis.overview.en[0],
+    "Dialisis Connect Edu was developed by a four-person team with IPDI Central Java to bring kidney health education and community interaction into an accessible digital platform.",
+  );
+  assert.equal(
+    dialisis.overview.en[1],
+    "The platform provides articles, educational videos, digital booklets, and discussion forums for patients, healthcare professionals, administrators, families, and the wider public. Requirements were refined through interviews, discussions, and feedback from IPDI Central Java.",
+  );
+  assert.equal(
+    dialisis.overview.id[0],
+    "Dialisis Connect Edu dikembangkan oleh tim beranggotakan empat orang bersama IPDI Jawa Tengah untuk menghadirkan edukasi kesehatan ginjal dan interaksi komunitas melalui platform digital yang mudah diakses.",
+  );
+  assert.equal(
+    dialisis.overview.id[1],
+    "Platform ini menyediakan artikel, video edukasi, booklet digital, dan forum diskusi bagi pasien, tenaga kesehatan, administrator, keluarga, serta masyarakat. Kebutuhan sistem dirumuskan melalui wawancara, diskusi, dan feedback dari IPDI Jawa Tengah.",
+  );
+
+  // Claim boundary
+  assert.equal(
+    dialisis.claimBoundary?.en,
+    "The platform provides education and community discussion, not diagnosis or a substitute for consultation with a healthcare professional.",
+  );
+  assert.equal(
+    dialisis.claimBoundary?.id,
+    "Platform ini menyediakan edukasi dan ruang diskusi, bukan diagnosis atau pengganti konsultasi dengan tenaga kesehatan.",
+  );
+  assert.equal(
+    dialisis.claimBoundaryTag?.en,
+    "[CLAIM BOUNDARY // MEDICAL USE]",
+  );
+  assert.equal(
+    dialisis.claimBoundaryTag?.id,
+    "[BATAS KLAIM // PENGGUNAAN MEDIS]",
+  );
+
+  // Contributions (exact 4 items)
+  assert.equal(dialisis.contributions.en.length, 4);
+  assert.equal(dialisis.contributions.id.length, 4);
+  assert.equal(
+    dialisis.contributions.en[0],
+    "Gathered requirements through interviews and discussions with IPDI Central Java, then incorporated stakeholder feedback throughout the revision process.",
+  );
+  assert.equal(
+    dialisis.contributions.en[1],
+    "Designed the user flow, information architecture, and UI/UX in Figma.",
+  );
+  assert.equal(
+    dialisis.contributions.en[2],
+    "Developed the complete role-based frontend in Next.js and integrated the REST API, including authentication flows, validation, loading states, and error states.",
+  );
+  assert.equal(
+    dialisis.contributions.en[3],
+    "Performed manual and automated testing with Katalon Studio and contributed to the Docker and production deployment process.",
+  );
+  assert.equal(
+    dialisis.contributions.id[0],
+    "Menggali kebutuhan melalui wawancara dan diskusi dengan IPDI Jawa Tengah, kemudian mengolah feedback stakeholder selama proses revisi.",
+  );
+  assert.equal(
+    dialisis.contributions.id[1],
+    "Merancang user flow, information architecture, dan UI/UX menggunakan Figma.",
+  );
+  assert.equal(
+    dialisis.contributions.id[2],
+    "Mengembangkan seluruh frontend berbasis role menggunakan Next.js dan mengintegrasikan REST API, termasuk authentication flow, validation, loading state, dan error state.",
+  );
+  assert.equal(
+    dialisis.contributions.id[3],
+    "Melakukan manual dan automation testing dengan Katalon Studio serta ikut dalam proses Docker dan deployment ke production.",
+  );
+
+  // Personal tech stack (exact 6 items)
+  assert.deepEqual(dialisis.personalTechStack, [
+    "Figma",
+    "Next.js",
+    "React",
+    "REST API",
+    "Katalon Studio",
+    "Docker",
+  ]);
+  assert.deepEqual(dialisis.techStack, [
+    "Figma",
+    "Next.js",
+    "React",
+    "REST API",
+    "Katalon Studio",
+    "Docker",
+  ]);
+
+  // System Scope (3 groups)
+  assert.ok(dialisis.dialisisScope);
+  assert.equal(dialisis.dialisisScope.userRoles.length, 3);
+  assert.deepEqual(
+    dialisis.dialisisScope.userRoles.map((r) => r.name.en),
+    ["Patient", "Healthcare Professional", "Administrator"],
+  );
+  assert.deepEqual(
+    dialisis.dialisisScope.educationalContent.formats.items.en,
+    ["Articles", "Embedded YouTube videos", "Digital PDF booklets"],
+  );
+  assert.deepEqual(
+    dialisis.dialisisScope.educationalContent.topics.items.en,
+    [
+      "Kidney care",
+      "Dialysis",
+      "Transplantation",
+      "Healthy lifestyle",
+      "Support for chronic kidney disease",
+    ],
+  );
+  assert.deepEqual(
+    dialisis.dialisisScope.communityDiscussion.features.en,
+    [
+      "Creating discussion topics",
+      "Reading discussions",
+      "Comments and replies",
+      "Role-appropriate moderation",
+    ],
+  );
+
+  // Absence of legacy modules
+  assert.equal(dialisis.technicalNotes, undefined);
+  assert.equal(dialisis.optionalModule, undefined);
+
+  // Gallery: exactly 8 slides with 16 unique searchable placeholders
+  assert.equal(dialisis.gallery?.length, 8);
+  assert.equal(dialisis.gallery?.[0].src, "/assets/projects/dialisis-connect-edu/cover.webp");
+  for (let i = 1; i <= 8; i++) {
+    const num = String(i).padStart(2, "0");
+    const slide = dialisis.gallery?.[i - 1];
+    assert.ok(slide);
+    assert.equal(slide.slide, num);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.equal(slide.caption.en, `TODO_DIALISIS_CAPTION_${num}_EN`);
+    assert.equal(slide.caption.id, `TODO_DIALISIS_CAPTION_${num}_ID`);
+    assert.doesNotMatch(slide.alt.en, /TODO_DIALISIS/);
+    assert.doesNotMatch(slide.alt.id, /TODO_DIALISIS/);
+  }
+
+  // Verify exactly 16 occurrences of TODO_DIALISIS_CAPTION_ in project-case-studies.ts
+  const caseStudiesSource = readFileSync(
+    join(root, "src", "content", "projects", "project-case-studies.ts"),
+    "utf8",
+  );
+  const dialisisTokens = caseStudiesSource.match(/TODO_DIALISIS_CAPTION_\d+_[A-Z]+/g) ?? [];
+  assert.equal(new Set(dialisisTokens).size, 16);
+
+  // Claim boundaries and prohibited legacy claims
+  const stringified = JSON.stringify(dialisis);
+  assert.match(stringified, /not diagnosis or a substitute for consultation/i);
+  assert.match(stringified, /bukan diagnosis atau pengganti konsultasi/i);
+  assert.doesNotMatch(stringified, /Built the Next\.js frontend and Laravel REST backend/i);
+  assert.doesNotMatch(stringified, /Membangun frontend Next\.js dan backend REST Laravel/i);
+  assert.doesNotMatch(stringified, /MySQL persistence|penyimpanan MySQL/i);
+  assert.doesNotMatch(stringified, /"Fullstack Developer"/i);
 });
 
 test("keeps the project-specific factual boundaries explicit", () => {
@@ -679,7 +944,7 @@ test("gallery navigation wrap-around and counter synchronization are mathematica
   }
 });
 
-test("physical asset files for iHealth Edu (8 images) and UKG System (9 images) exist at exact paths without mutation", () => {
+test("physical asset files for iHealth Edu (8 images), UKG System (9 images), and Dialisis Connect Edu (8 images) exist at exact paths without mutation", () => {
   const ihealthExpectedPaths = [
     "public/assets/projects/ihealth-edu/cover.webp",
     "public/assets/projects/ihealth-edu/documentation/02.webp",
@@ -709,6 +974,22 @@ test("physical asset files for iHealth Edu (8 images) and UKG System (9 images) 
   ];
 
   for (const relPath of ukgExpectedPaths) {
+    const fullPath = join(root, relPath);
+    assert.ok(existsSync(fullPath), `Expected asset exists: ${relPath}`);
+  }
+
+  const dialisisExpectedPaths = [
+    "public/assets/projects/dialisis-connect-edu/cover.webp",
+    "public/assets/projects/dialisis-connect-edu/documentation/01.webp",
+    "public/assets/projects/dialisis-connect-edu/documentation/02.webp",
+    "public/assets/projects/dialisis-connect-edu/documentation/03.webp",
+    "public/assets/projects/dialisis-connect-edu/documentation/04.webp",
+    "public/assets/projects/dialisis-connect-edu/documentation/05.webp",
+    "public/assets/projects/dialisis-connect-edu/documentation/06.webp",
+    "public/assets/projects/dialisis-connect-edu/documentation/07.webp",
+  ];
+
+  for (const relPath of dialisisExpectedPaths) {
     const fullPath = join(root, relPath);
     assert.ok(existsSync(fullPath), `Expected asset exists: ${relPath}`);
   }

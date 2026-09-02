@@ -166,11 +166,12 @@ export function generateProjectJsonLd(
   project: ProjectCaseStudy,
   locale: Locale,
 ): JsonLdSoftwareSourceCode {
-  const language = project.techStack[0] || undefined;
+  const techList = project.personalTechStack ?? project.techStack;
+  const language = techList[0] || undefined;
   const keywords = [
     project.category,
     project.role[locale],
-    ...project.techStack,
+    ...techList.slice(0, 6),
   ].filter((k): k is string => Boolean(k) && k !== "-");
 
   return {

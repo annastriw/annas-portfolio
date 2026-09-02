@@ -245,13 +245,15 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     (project.modules && project.modules.length > 0) ||
       (project.technologyGroups && project.technologyGroups.length > 0) ||
       project.systemScope ||
+      project.dialisisScope ||
       (project.technicalNotes?.[locale] &&
         project.technicalNotes[locale].length > 0) ||
       (project.techStack &&
         project.techStack.length > 0 &&
         !project.technologyGroups &&
         !project.personalTechStack &&
-        project.slug !== "ihealth-edu"),
+        project.slug !== "ihealth-edu" &&
+        project.slug !== "dialisis-connect-edu"),
   );
   const scopeIndex = hasScope
     ? String(++sectionCounter).padStart(2, "0")
@@ -1138,10 +1140,114 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   </div>
                 ) : null}
 
+                {/* Dialisis Connect Edu 3-Group System Scope */}
+                {project.dialisisScope ? (
+                  <div className={styles.systemScopeGrid3Col}>
+                    {/* 01 // User Roles */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>{isId ? "01 // Peran Pengguna" : "01 // User Roles"}</span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        <ul className={styles.roleList}>
+                          {project.dialisisScope.userRoles.map((role) => (
+                            <li
+                              key={role.name.en}
+                              className={styles.roleItem}
+                            >
+                              <span className={styles.roleName}>
+                                {role.name[locale]}
+                              </span>
+                              <p className={styles.roleDescription}>
+                                {role.description[locale]}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* 02 // Educational Content */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>
+                          {isId ? "02 // Konten Edukasi" : "02 // Educational Content"}
+                        </span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        <div className={styles.scopeSubSection}>
+                          <span className={styles.subSectionTitle}>
+                            {project.dialisisScope.educationalContent.formats.label[locale]}
+                          </span>
+                          <div className={styles.tagRow}>
+                            {project.dialisisScope.educationalContent.formats.items[
+                              locale
+                            ].map((fmt) => (
+                              <span key={fmt} className={styles.tagPill}>
+                                {fmt}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className={styles.scopeSubSection}>
+                          <span className={styles.subSectionTitle}>
+                            {project.dialisisScope.educationalContent.topics.label[locale]}
+                          </span>
+                          <div className={styles.tagRow}>
+                            {project.dialisisScope.educationalContent.topics.items[
+                              locale
+                            ].map((topic) => (
+                              <span key={topic} className={styles.tagPill}>
+                                {topic}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 03 // Community Discussion */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>
+                          {isId ? "03 // Diskusi Komunitas" : "03 // Community Discussion"}
+                        </span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        {project.dialisisScope.communityDiscussion.label ? (
+                          <span className={styles.subSectionTitle}>
+                            {project.dialisisScope.communityDiscussion.label[locale]}
+                          </span>
+                        ) : null}
+                        <ul className={styles.contributionList} style={{ margin: 0 }}>
+                          {project.dialisisScope.communityDiscussion.features[locale].map(
+                            (feat, fIdx) => (
+                              <li key={feat} className={styles.contributionItem}>
+                                <span
+                                  className={styles.contributionIndex}
+                                  aria-hidden="true"
+                                >
+                                  {String(fIdx + 1).padStart(2, "0")}
+                                </span>
+                                <span>{feat}</span>
+                              </li>
+                            ),
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
                 {/* 4. Key Technical Notes */}
                 {project.technicalNotes?.[locale] &&
                 project.technicalNotes[locale].length > 0 &&
                 !project.systemScope &&
+                !project.dialisisScope &&
                 !project.modules ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
@@ -1166,7 +1272,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 project.techStack.length > 0 &&
                 !project.technologyGroups &&
                 !project.personalTechStack &&
-                project.slug !== "ihealth-edu" ? (
+                project.slug !== "ihealth-edu" &&
+                project.slug !== "dialisis-connect-edu" ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
                       <span className={styles.subBlockHeaderTag}>■</span>

@@ -67,6 +67,28 @@ export interface IHealthSystemScopeData {
   readonly architectureNote?: LocalizedProjectText;
 }
 
+export interface DialisisEducationalContent {
+  readonly formats: {
+    readonly label: LocalizedProjectText;
+    readonly items: LocalizedProjectList;
+  };
+  readonly topics: {
+    readonly label: LocalizedProjectText;
+    readonly items: LocalizedProjectList;
+  };
+}
+
+export interface DialisisCommunityDiscussion {
+  readonly label?: LocalizedProjectText;
+  readonly features: LocalizedProjectList;
+}
+
+export interface DialisisSystemScopeData {
+  readonly userRoles: readonly SystemUserRole[];
+  readonly educationalContent: DialisisEducationalContent;
+  readonly communityDiscussion: DialisisCommunityDiscussion;
+}
+
 export interface ProjectMetadataRow {
   readonly label: LocalizedProjectText;
   readonly value: LocalizedProjectText;
@@ -102,11 +124,12 @@ export interface ProjectCaseStudy {
   readonly overview: LocalizedProjectList;
   readonly contributions: LocalizedProjectList;
   readonly contributionLearning?: LocalizedProjectText;
-  readonly technicalNotes: LocalizedProjectList;
+  readonly technicalNotes?: LocalizedProjectList;
   readonly modules?: readonly string[];
   readonly workflow?: LocalizedProjectList;
   readonly technologyGroups?: readonly ProjectTechnologyGroup[];
   readonly systemScope?: IHealthSystemScopeData;
+  readonly dialisisScope?: DialisisSystemScopeData;
   readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
   readonly personalTechStack?: readonly string[];
@@ -161,9 +184,21 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       en: "CV Universal Kharisma Globalindo",
       id: "CV Universal Kharisma Globalindo",
     },
+    workingModel: {
+      en: "Independently developed",
+      id: "Dikembangkan mandiri",
+    },
     lead: {
       en: "A multi-branch ERP that brings inventory, sales, and daily operations into one system.",
       id: "ERP multi-cabang yang menyatukan pengelolaan stok, penjualan, dan operasional harian dalam satu sistem.",
+    },
+    metaTitle: {
+      en: "UKG System — Full-Stack Web Development Case Study | Annas Tri Widagdo",
+      id: "UKG System — Studi Kasus Full-Stack Web Development | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "A full-stack case study of a multi-branch ERP that centralizes inventory, sales, and daily operations for remote monitoring.",
+      id: "Studi kasus full-stack ERP multi-cabang yang memusatkan stok, penjualan, dan operasional harian agar dapat dipantau dari mana saja.",
     },
     repositoryNotice: {
       en: "Private Repository",
@@ -195,6 +230,14 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       en: "This project strengthened my experience in taking a system from business requirements to everyday operational use.",
       id: "Project ini memperkuat pengalaman saya dalam mengembangkan sistem dari kebutuhan bisnis hingga digunakan dalam operasional sehari-hari.",
     },
+    personalTechStack: [
+      "Figma",
+      "Next.js",
+      "NestJS",
+      "MySQL",
+      "Katalon Studio",
+      "Linux Ubuntu",
+    ],
     modules: [
       "User & Role Management",
       "Branch & Attendance",
@@ -205,44 +248,9 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       "Reports & Finance",
       "Dashboard & Analytics",
     ],
-    technologyGroups: [
-      {
-        category: "Design",
-        technologies: ["Figma"],
-      },
-      {
-        category: "Frontend",
-        technologies: ["Next.js", "React", "TypeScript"],
-      },
-      {
-        category: "Backend & Data",
-        technologies: ["NestJS", "REST API", "MySQL"],
-      },
-      {
-        category: "Testing",
-        technologies: ["Katalon Studio"],
-      },
-      {
-        category: "Deployment",
-        technologies: ["Linux Ubuntu", "VPS"],
-      },
-    ],
-    technicalNotes: {
-      en: [
-        "Eight integrated operational modules: User & Role Management, Branch & Attendance, Inventory & Stock, Stock Order, Store Operations, Cashier & Sales, Reports & Finance, and Dashboard & Analytics.",
-        "Modular backend and relational database architecture centralizes branch operations and supports remote owner monitoring.",
-        "Role-based multi-branch architecture separates owner oversight and remote monitoring from branch employee workflows.",
-      ],
-      id: [
-        "Delapan modul operasional terintegrasi: User & Role Management, Branch & Attendance, Inventory & Stock, Stock Order, Store Operations, Cashier & Sales, Reports & Finance, dan Dashboard & Analytics.",
-        "Arsitektur backend modular dan database relasional menyatukan operasional cabang serta mendukung pemantauan jarak jauh oleh owner.",
-        "Arsitektur multi-cabang berbasis peran memisahkan pengawasan dan pemantauan jarak jauh owner dari alur kerja karyawan cabang.",
-      ],
-    },
     techStack: [
+      "Figma",
       "Next.js",
-      "React",
-      "TypeScript",
       "NestJS",
       "MySQL",
       "Katalon Studio",
@@ -255,6 +263,10 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
         id: "Dashboard administrasi ERP multi-cabang UKG System dengan grafik operasional",
       },
       position: "top",
+      caption: {
+        en: "TODO_UKG_CAPTION_01_EN",
+        id: "TODO_UKG_CAPTION_01_ID",
+      },
     },
     evidence: [
       {
@@ -266,8 +278,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tampilan manajemen inventaris dan alokasi stok UKG System",
         },
         caption: {
-          en: "Inventory management and stock allocation view across branch locations.",
-          id: "Tampilan manajemen inventaris dan alokasi stok di berbagai cabang.",
+          en: "TODO_UKG_CAPTION_02_EN",
+          id: "TODO_UKG_CAPTION_02_ID",
         },
       },
       {
@@ -279,8 +291,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka transaksi kasir dan operasional UKG System",
         },
         caption: {
-          en: "Point of sale transaction and operational interface for branch staff.",
-          id: "Antarmuka transaksi kasir dan operasional untuk staf cabang.",
+          en: "TODO_UKG_CAPTION_03_EN",
+          id: "TODO_UKG_CAPTION_03_ID",
         },
       },
       {
@@ -292,8 +304,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Pencatatan operasional toko dan manajemen kas UKG System",
         },
         caption: {
-          en: "Store operations and cash management recording interface.",
-          id: "Pencatatan operasional toko dan antarmuka manajemen kas.",
+          en: "TODO_UKG_CAPTION_04_EN",
+          id: "TODO_UKG_CAPTION_04_ID",
         },
       },
       {
@@ -305,8 +317,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka pengajuan order stok dan transfer cabang UKG System",
         },
         caption: {
-          en: "Stock order request and inter-branch transfer workflow interface.",
-          id: "Pengajuan order stok dan alur transfer antar-cabang.",
+          en: "TODO_UKG_CAPTION_05_EN",
+          id: "TODO_UKG_CAPTION_05_ID",
         },
       },
       {
@@ -318,8 +330,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tabel presensi karyawan dan jadwal shift UKG System",
         },
         caption: {
-          en: "Employee attendance records and shift scheduling overview.",
-          id: "Catatan presensi karyawan dan jadwal kerja shift.",
+          en: "TODO_UKG_CAPTION_06_EN",
+          id: "TODO_UKG_CAPTION_06_ID",
         },
       },
       {
@@ -331,8 +343,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tabel laporan keuangan dan transaksi penjualan UKG System",
         },
         caption: {
-          en: "Financial report table and summarized branch sales ledger.",
-          id: "Tabel laporan keuangan dan rekapitulasi buku besar penjualan cabang.",
+          en: "TODO_UKG_CAPTION_07_EN",
+          id: "TODO_UKG_CAPTION_07_ID",
         },
       },
       {
@@ -344,8 +356,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka hak akses pengguna dan konfigurasi peran UKG System",
         },
         caption: {
-          en: "Role-based access control and system user permission settings.",
-          id: "Kontrol akses berbasis peran dan konfigurasi hak pengguna sistem.",
+          en: "TODO_UKG_CAPTION_08_EN",
+          id: "TODO_UKG_CAPTION_08_ID",
         },
       },
       {
@@ -357,8 +369,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Ringkasan analitik dan total penjualan multi-cabang UKG System",
         },
         caption: {
-          en: "Multi-branch sales analytics charts and operational summary.",
-          id: "Grafik analitik penjualan multi-cabang dan ringkasan operasional.",
+          en: "TODO_UKG_CAPTION_09_EN",
+          id: "TODO_UKG_CAPTION_09_ID",
         },
       },
     ],
@@ -372,8 +384,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Dashboard administrasi ERP multi-cabang UKG System dengan grafik operasional",
         },
         caption: {
-          en: "[UKG_CAPTION_01_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_01_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_01_EN",
+          id: "TODO_UKG_CAPTION_01_ID",
         },
       },
       {
@@ -385,8 +397,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tampilan manajemen inventaris dan alokasi stok UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_02_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_02_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_02_EN",
+          id: "TODO_UKG_CAPTION_02_ID",
         },
       },
       {
@@ -398,8 +410,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka transaksi kasir dan operasional UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_03_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_03_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_03_EN",
+          id: "TODO_UKG_CAPTION_03_ID",
         },
       },
       {
@@ -411,8 +423,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Pencatatan operasional toko dan manajemen kas UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_04_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_04_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_04_EN",
+          id: "TODO_UKG_CAPTION_04_ID",
         },
       },
       {
@@ -424,8 +436,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka pengajuan order stok dan transfer cabang UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_05_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_05_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_05_EN",
+          id: "TODO_UKG_CAPTION_05_ID",
         },
       },
       {
@@ -437,8 +449,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tabel presensi karyawan dan jadwal shift UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_06_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_06_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_06_EN",
+          id: "TODO_UKG_CAPTION_06_ID",
         },
       },
       {
@@ -450,8 +462,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Tabel laporan keuangan dan transaksi penjualan UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_07_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_07_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_07_EN",
+          id: "TODO_UKG_CAPTION_07_ID",
         },
       },
       {
@@ -463,8 +475,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Antarmuka hak akses pengguna dan konfigurasi peran UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_08_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_08_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_08_EN",
+          id: "TODO_UKG_CAPTION_08_ID",
         },
       },
       {
@@ -476,8 +488,8 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           id: "Ringkasan analitik dan total penjualan multi-cabang UKG System",
         },
         caption: {
-          en: "[UKG_CAPTION_09_EN] Add a short description of this screenshot.",
-          id: "[UKG_CAPTION_09_ID] Tambahkan deskripsi singkat tentang tampilan ini.",
+          en: "TODO_UKG_CAPTION_09_EN",
+          id: "TODO_UKG_CAPTION_09_ID",
         },
       },
     ],
@@ -522,29 +534,12 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       id: "iHealth Edu — Studi Kasus Frontend Web Development | Annas Tri Widagdo",
     },
     metaDescription: {
-      en: "Frontend web development case study for iHealth Edu with Puskesmas Padangsari, covering UI/UX design in Figma, role-based Next.js interfaces, IoT health data, and ML decision support.",
-      id: "Studi kasus frontend web development untuk iHealth Edu bersama Puskesmas Padangsari, mencakup desain UI/UX Figma, antarmuka Next.js berbasis role, data kesehatan IoT, dan decision support ML.",
+      en: "A frontend case study covering UI/UX, IoT health data, and machine learning decision-support integration for iHealth Edu.",
+      id: "Studi kasus frontend iHealth Edu yang mencakup UI/UX, data kesehatan IoT, dan integrasi machine learning decision support.",
     },
     liveUrl: "https://www.ihealthedu.site/",
     frontendRepoUrl: "https://github.com/annastriw/frontend-ihealth.git",
     backendRepoUrl: "https://github.com/annastriw/backend-ihealth.git",
-    projectLinks: [
-      {
-        label: { en: "Visit Live Website", id: "Buka Website" },
-        url: "https://www.ihealthedu.site/",
-        type: "primary",
-      },
-      {
-        label: { en: "View Frontend Repository", id: "Lihat Repositori Frontend" },
-        url: "https://github.com/annastriw/frontend-ihealth.git",
-        type: "secondary",
-      },
-      {
-        label: { en: "View Backend Repository", id: "Lihat Repositori Backend" },
-        url: "https://github.com/annastriw/backend-ihealth.git",
-        type: "secondary",
-      },
-    ],
     overview: {
       en: [
         "iHealth Edu was developed with Puskesmas Padangsari to bring health records, structured screening, and educational content into a digital platform designed around primary-care workflows.",
@@ -569,6 +564,14 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
         "Mengintegrasikan hasil machine learning decision support ke dalam antarmuka tenaga kesehatan.",
       ],
     },
+    personalTechStack: [
+      "Figma",
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "REST API",
+    ],
     techStack: [
       "Figma",
       "Next.js",
@@ -645,10 +648,10 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           title: { en: "Patient History", id: "Riwayat Pasien" },
           items: {
             en: [
-              "Centralized records reviewed over time by appropriate user roles",
+              "Centralized patient history for appropriate role-based monitoring.",
             ],
             id: [
-              "Catatan terpusat yang dapat dipantau dari waktu ke waktu oleh role terkait",
+              "Catatan terpusat yang dapat dipantau oleh role terkait.",
             ],
           },
         },
@@ -679,20 +682,6 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
         },
       ],
     },
-    technicalNotes: {
-      en: [
-        "User Roles: Patient (completes screening, accesses educational content, views health history), Administrator (manages accounts, content, operational system data), and Health Worker (monitors patient data, reviews decision-support results).",
-        "Screening & Education: DSMQ, HSMBQ, and DASS-21 screening modules alongside diabetes, hypertension, and mental health education with a Pre-Test → Education Module → Post-Test sequence.",
-        "Patient Data: IoT measurements (blood pressure, blood glucose, cholesterol), manually entered website data (height, weight, lifestyle, BMI calculation), and centralized patient history.",
-        "System Integrations: ESP32 / User Input → Laravel API → MySQL → Next.js Interface and Flask ML Service / Random Forest → Decision-Support Result → Health-Worker Interface.",
-      ],
-      id: [
-        "Role Pengguna: Pasien (mengikuti screening, mengakses modul edukasi, melihat riwayat kesehatan), Admin (mengelola akun, konten, data operasional sistem), dan Tenaga Kesehatan (memantau data pasien, meninjau hasil decision support).",
-        "Screening & Edukasi: Modul screening DSMQ, HSMBQ, dan DASS-21 serta edukasi diabetes, hipertensi, dan kesehatan mental dengan alur Pre-Test → Modul Edukasi → Post-Test.",
-        "Data Pasien: Pengukuran IoT (tekanan darah, gula darah, kolesterol), input manual website (tinggi, berat badan, gaya hidup, kalkulasi BMI), dan riwayat pasien terpusat.",
-        "Integrasi Sistem: ESP32 / User Input → Laravel API → MySQL → Next.js Interface dan Flask ML Service / Random Forest → Decision-Support Result → Antarmuka Tenaga Kesehatan.",
-      ],
-    },
     cover: {
       src: "/assets/projects/ihealth-edu/cover.webp",
       alt: {
@@ -708,28 +697,93 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     evidence: [
       {
         id: "FIG.01",
-        src: "/assets/projects/ihealth-edu/documentation/01.webp",
+        src: "/assets/projects/ihealth-edu/documentation/02.webp",
         format: "wide",
         alt: {
-          en: "iHealth Edu platform documentation",
-          id: "Dokumentasi platform iHealth Edu",
+          en: "iHealth Edu patient dashboard and screening records",
+          id: "Dashboard pasien dan riwayat screening iHealth Edu",
         },
         caption: {
-          en: "Patient dashboard with health metrics, screening history, and educational modules.",
-          id: "Dashboard pasien dengan metrik kesehatan, riwayat screening, dan modul edukasi.",
+          en: "TODO_IHEALTH_CAPTION_02_EN",
+          id: "TODO_IHEALTH_CAPTION_02_ID",
         },
       },
       {
         id: "FIG.02",
-        src: "/assets/projects/ihealth-edu/documentation/02.webp",
+        src: "/assets/projects/ihealth-edu/documentation/03.webp",
         format: "wide",
         alt: {
-          en: "iHealth Edu education workflow",
-          id: "Alur edukasi iHealth Edu",
+          en: "iHealth Edu structured questionnaire assessment interface",
+          id: "Antarmuka asesmen kuesioner terstruktur iHealth Edu",
         },
         caption: {
-          en: "Structured health screening and assessment workflow interface.",
-          id: "Antarmuka alur screening dan asesmen kesehatan terstruktur.",
+          en: "TODO_IHEALTH_CAPTION_03_EN",
+          id: "TODO_IHEALTH_CAPTION_03_ID",
+        },
+      },
+      {
+        id: "FIG.03",
+        src: "/assets/projects/ihealth-edu/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu educational module and learning path interface",
+          id: "Antarmuka modul edukasi dan alur pembelajaran iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_04_EN",
+          id: "TODO_IHEALTH_CAPTION_04_ID",
+        },
+      },
+      {
+        id: "FIG.04",
+        src: "/assets/projects/ihealth-edu/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu patient biometric records and health data interface",
+          id: "Antarmuka data kesehatan dan rekam biometrik pasien iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_05_EN",
+          id: "TODO_IHEALTH_CAPTION_05_ID",
+        },
+      },
+      {
+        id: "FIG.05",
+        src: "/assets/projects/ihealth-edu/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu health worker monitoring and decision support interface",
+          id: "Antarmuka pemantauan tenaga kesehatan dan decision support iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_06_EN",
+          id: "TODO_IHEALTH_CAPTION_06_ID",
+        },
+      },
+      {
+        id: "FIG.06",
+        src: "/assets/projects/ihealth-edu/documentation/07.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu administrator content and user management console",
+          id: "Konsol pengelolaan pengguna dan konten administrator iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_07_EN",
+          id: "TODO_IHEALTH_CAPTION_07_ID",
+        },
+      },
+      {
+        id: "FIG.07",
+        src: "/assets/projects/ihealth-edu/documentation/08.webp",
+        format: "wide",
+        alt: {
+          en: "iHealth Edu geographic patient distribution and reporting map",
+          id: "Peta persebaran geografis dan pelaporan pasien iHealth Edu",
+        },
+        caption: {
+          en: "TODO_IHEALTH_CAPTION_08_EN",
+          id: "TODO_IHEALTH_CAPTION_08_ID",
         },
       },
     ],
@@ -849,70 +903,377 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "03",
     slug: "dialisis-connect-edu",
     category: "web-app",
-    categoryLabel: categoryLabels["web-app"],
+    categoryLabel: { en: "03 / WEB APPLICATION", id: "03 / WEB APPLICATION" },
     title: { en: "Dialisis Connect Edu", id: "Dialisis Connect Edu" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
-    status: { en: "Production deployment", id: "Deploy ke production" },
+    client: {
+      en: "Ikatan Perawat Dialisis Indonesia (IPDI) Jawa Tengah",
+      id: "Ikatan Perawat Dialisis Indonesia (IPDI) Jawa Tengah",
+    },
+    clientLabel: {
+      en: "Stakeholder",
+      id: "Stakeholder",
+    },
+    role: {
+      en: "Frontend Web Developer",
+      id: "Frontend Web Developer",
+    },
+    workingModel: {
+      en: "Four-person team",
+      id: "Tim beranggotakan empat orang",
+    },
+    period: {
+      en: "February–May 2025",
+      id: "Februari–Mei 2025",
+    },
+    status: {
+      en: "Live Production",
+      id: "Live Production",
+    },
+    lead: {
+      en: "An education and community platform that helps patients undergoing hemodialysis and people living with kidney disease access structured learning materials and participate in digital discussions from wherever they are.",
+      id: "Platform edukasi dan komunitas yang membantu pasien hemodialisis dan pengguna dengan penyakit ginjal mengakses materi terstruktur serta mengikuti diskusi digital dari mana saja.",
+    },
+    metaTitle: {
+      en: "Dialisis Connect Edu — Frontend Web Development Case Study | Annas Tri Widagdo",
+      id: "Dialisis Connect Edu — Studi Kasus Frontend Web Development | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "A frontend and UI/UX case study for a kidney health education platform with digital learning and community discussion, developed with IPDI Central Java.",
+      id: "Studi kasus frontend dan UI/UX platform edukasi kesehatan ginjal dengan pembelajaran digital dan forum diskusi, dikembangkan bersama IPDI Jawa Tengah.",
+    },
+    liveUrl: "https://dialisisconnectedu.vercel.app/",
+    frontendRepoUrl: "https://github.com/annastriw/fe-dialisis.git",
+    backendRepoUrl: "https://github.com/annastriw/be-dialisis.git",
     overview: {
       en: [
-        "Dialisis Connect Edu is an education and community platform developed for IPDI Central Java.",
-        "It gives patients, families, health workers, and the public role-appropriate access to articles, videos, PDF booklets, and discussion spaces.",
+        "Dialisis Connect Edu was developed by a four-person team with IPDI Central Java to bring kidney health education and community interaction into an accessible digital platform.",
+        "The platform provides articles, educational videos, digital booklets, and discussion forums for patients, healthcare professionals, administrators, families, and the wider public. Requirements were refined through interviews, discussions, and feedback from IPDI Central Java.",
       ],
       id: [
-        "Dialisis Connect Edu adalah platform edukasi dan komunitas yang dikembangkan untuk IPDI Jawa Tengah.",
-        "Platform ini memberi pasien, keluarga, tenaga kesehatan, dan masyarakat akses berbasis peran ke artikel, video, booklet PDF, dan ruang diskusi.",
+        "Dialisis Connect Edu dikembangkan oleh tim beranggotakan empat orang bersama IPDI Jawa Tengah untuk menghadirkan edukasi kesehatan ginjal dan interaksi komunitas melalui platform digital yang mudah diakses.",
+        "Platform ini menyediakan artikel, video edukasi, booklet digital, dan forum diskusi bagi pasien, tenaga kesehatan, administrator, keluarga, serta masyarakat. Kebutuhan sistem dirumuskan melalui wawancara, diskusi, dan feedback dari IPDI Jawa Tengah.",
       ],
+    },
+    claimBoundary: {
+      en: "The platform provides education and community discussion, not diagnosis or a substitute for consultation with a healthcare professional.",
+      id: "Platform ini menyediakan edukasi dan ruang diskusi, bukan diagnosis atau pengganti konsultasi dengan tenaga kesehatan.",
+    },
+    claimBoundaryTag: {
+      en: "[CLAIM BOUNDARY // MEDICAL USE]",
+      id: "[BATAS KLAIM // PENGGUNAAN MEDIS]",
     },
     contributions: {
       en: [
-        "Designed the content and community flows in Figma.",
-        "Built the Next.js frontend and Laravel REST backend with MySQL persistence.",
-        "Implemented role-based access for patients, health workers, and administrators.",
-        "Validated core journeys with Katalon and deployed the Docker-based application on Ubuntu.",
+        "Gathered requirements through interviews and discussions with IPDI Central Java, then incorporated stakeholder feedback throughout the revision process.",
+        "Designed the user flow, information architecture, and UI/UX in Figma.",
+        "Developed the complete role-based frontend in Next.js and integrated the REST API, including authentication flows, validation, loading states, and error states.",
+        "Performed manual and automated testing with Katalon Studio and contributed to the Docker and production deployment process.",
       ],
       id: [
-        "Merancang alur konten dan komunitas di Figma.",
-        "Membangun frontend Next.js dan backend REST Laravel dengan penyimpanan MySQL.",
-        "Mengimplementasikan akses berbasis peran untuk pasien, tenaga kesehatan, dan administrator.",
-        "Memvalidasi perjalanan utama dengan Katalon dan melakukan deployment aplikasi berbasis Docker di Ubuntu.",
+        "Menggali kebutuhan melalui wawancara dan diskusi dengan IPDI Jawa Tengah, kemudian mengolah feedback stakeholder selama proses revisi.",
+        "Merancang user flow, information architecture, dan UI/UX menggunakan Figma.",
+        "Mengembangkan seluruh frontend berbasis role menggunakan Next.js dan mengintegrasikan REST API, termasuk authentication flow, validation, loading state, dan error state.",
+        "Melakukan manual dan automation testing dengan Katalon Studio serta ikut dalam proses Docker dan deployment ke production.",
       ],
     },
-    technicalNotes: {
-      en: [
-        "The content model supports articles, embedded YouTube video, and downloadable PDF booklets.",
-        "Role-based presentation separates patient, health-worker, and administrator functions.",
-        "The forum provides a dedicated space for moderated community discussion.",
-        "The platform is informational and educational; no clinical outcome is claimed.",
+    personalTechStack: [
+      "Figma",
+      "Next.js",
+      "React",
+      "REST API",
+      "Katalon Studio",
+      "Docker",
+    ],
+    dialisisScope: {
+      userRoles: [
+        {
+          name: { en: "Patient", id: "Pasien" },
+          description: {
+            en: "Accesses learning materials and participates in community discussions.",
+            id: "Mengakses materi pembelajaran dan mengikuti diskusi komunitas.",
+          },
+        },
+        {
+          name: { en: "Healthcare Professional", id: "Tenaga Kesehatan" },
+          description: {
+            en: "Provides educational material and participates in discussions.",
+            id: "Menyediakan materi edukasi dan berpartisipasi dalam diskusi.",
+          },
+        },
+        {
+          name: { en: "Administrator", id: "Administrator" },
+          description: {
+            en: "Manages users, content, and platform activity.",
+            id: "Mengelola pengguna, konten, dan aktivitas platform.",
+          },
+        },
       ],
-      id: [
-        "Model konten mendukung artikel, video YouTube tersemat, dan booklet PDF yang dapat diunduh.",
-        "Penyajian berbasis peran memisahkan fungsi pasien, tenaga kesehatan, dan administrator.",
-        "Forum menyediakan ruang khusus untuk diskusi komunitas yang termoderasi.",
-        "Platform bersifat informatif dan edukatif; tidak ada klaim hasil klinis.",
-      ],
+      educationalContent: {
+        formats: {
+          label: { en: "Content Formats", id: "Format Konten" },
+          items: {
+            en: ["Articles", "Embedded YouTube videos", "Digital PDF booklets"],
+            id: ["Artikel", "Video YouTube tersemat", "Booklet digital PDF"],
+          },
+        },
+        topics: {
+          label: { en: "Education Topics", id: "Topik Edukasi" },
+          items: {
+            en: [
+              "Kidney care",
+              "Dialysis",
+              "Transplantation",
+              "Healthy lifestyle",
+              "Support for chronic kidney disease",
+            ],
+            id: [
+              "Perawatan ginjal",
+              "Dialisis",
+              "Transplantasi",
+              "Pola hidup sehat",
+              "Dukungan penyakit ginjal kronis",
+            ],
+          },
+        },
+      },
+      communityDiscussion: {
+        label: { en: "Frontend Discussion Features", id: "Fitur Diskusi Frontend" },
+        features: {
+          en: [
+            "Creating discussion topics",
+            "Reading discussions",
+            "Comments and replies",
+            "Role-appropriate moderation",
+          ],
+          id: [
+            "Membuat topik diskusi",
+            "Membaca diskusi",
+            "Komentar dan balasan",
+            "Moderasi sesuai peran",
+          ],
+        },
+      },
     },
-    techStack: ["Next.js", "Laravel", "MySQL", "REST API", "Katalon Studio", "Docker"],
+    techStack: [
+      "Figma",
+      "Next.js",
+      "React",
+      "REST API",
+      "Katalon Studio",
+      "Docker",
+    ],
     cover: {
       src: "/assets/projects/dialisis-connect-edu/cover.webp",
-      alt: { en: "Dialisis Connect Edu education platform", id: "Platform edukasi Dialisis Connect Edu" },
+      alt: {
+        en: "Dialisis Connect Edu kidney health education and community platform homepage",
+        id: "Beranda platform edukasi kesehatan ginjal dan komunitas Dialisis Connect Edu",
+      },
       position: "top",
+      caption: {
+        en: "TODO_DIALISIS_CAPTION_01_EN",
+        id: "TODO_DIALISIS_CAPTION_01_ID",
+      },
     },
     evidence: [
       {
         id: "FIG.01",
         src: "/assets/projects/dialisis-connect-edu/documentation/01.webp",
         format: "wide",
-        alt: { en: "Dialisis Connect Edu interface documentation", id: "Dokumentasi antarmuka Dialisis Connect Edu" },
-        caption: { en: "Educational content portal and resource directory view.", id: "Tampilan portal konten edukasi dan direktori materi." },
+        alt: {
+          en: "Dialisis Connect Edu article reading and educational booklet library interface",
+          id: "Antarmuka perpustakaan booklet edukasi dan pembaca artikel Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_02_EN",
+          id: "TODO_DIALISIS_CAPTION_02_ID",
+        },
       },
       {
         id: "FIG.02",
         src: "/assets/projects/dialisis-connect-edu/documentation/02.webp",
         format: "wide",
-        alt: { en: "Dialisis Connect Edu content interface", id: "Antarmuka konten Dialisis Connect Edu" },
-        caption: { en: "Interactive community discussion and article reading interface.", id: "Antarmuka membaca artikel edukasi dan forum diskusi interaktif." },
+        alt: {
+          en: "Dialisis Connect Edu interactive video learning and educational materials page",
+          id: "Halaman materi edukasi dan pembelajaran video interaktif Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_03_EN",
+          id: "TODO_DIALISIS_CAPTION_03_ID",
+        },
+      },
+      {
+        id: "FIG.03",
+        src: "/assets/projects/dialisis-connect-edu/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu community discussion forum with moderated thread topics",
+          id: "Forum diskusi komunitas Dialisis Connect Edu dengan topik utas termoderasi",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_04_EN",
+          id: "TODO_DIALISIS_CAPTION_04_ID",
+        },
+      },
+      {
+        id: "FIG.04",
+        src: "/assets/projects/dialisis-connect-edu/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu detailed discussion thread and user comment replies",
+          id: "Utas diskusi detail dan balasan komentar pengguna Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_05_EN",
+          id: "TODO_DIALISIS_CAPTION_05_ID",
+        },
+      },
+      {
+        id: "FIG.05",
+        src: "/assets/projects/dialisis-connect-edu/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu user role management and profile configuration view",
+          id: "Tampilan manajemen peran pengguna dan konfigurasi profil Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_06_EN",
+          id: "TODO_DIALISIS_CAPTION_06_ID",
+        },
+      },
+      {
+        id: "FIG.06",
+        src: "/assets/projects/dialisis-connect-edu/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu educational content publication and administration console",
+          id: "Konsol administrasi dan publikasi konten edukasi Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_07_EN",
+          id: "TODO_DIALISIS_CAPTION_07_ID",
+        },
+      },
+      {
+        id: "FIG.07",
+        src: "/assets/projects/dialisis-connect-edu/documentation/07.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu digital booklet PDF reader and resource viewer",
+          id: "Penampil dokumen dan pembaca PDF booklet digital Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_08_EN",
+          id: "TODO_DIALISIS_CAPTION_08_ID",
+        },
       },
     ],
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/dialisis-connect-edu/cover.webp",
+        format: "cover",
+        alt: {
+          en: "Dialisis Connect Edu kidney health education and community platform homepage",
+          id: "Beranda platform edukasi kesehatan ginjal dan komunitas Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_01_EN",
+          id: "TODO_DIALISIS_CAPTION_01_ID",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/dialisis-connect-edu/documentation/01.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu article reading and educational booklet library interface",
+          id: "Antarmuka perpustakaan booklet edukasi dan pembaca artikel Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_02_EN",
+          id: "TODO_DIALISIS_CAPTION_02_ID",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/dialisis-connect-edu/documentation/02.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu interactive video learning and educational materials page",
+          id: "Halaman materi edukasi dan pembelajaran video interaktif Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_03_EN",
+          id: "TODO_DIALISIS_CAPTION_03_ID",
+        },
+      },
+      {
+        slide: "04",
+        src: "/assets/projects/dialisis-connect-edu/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu community discussion forum with moderated thread topics",
+          id: "Forum diskusi komunitas Dialisis Connect Edu dengan topik utas termoderasi",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_04_EN",
+          id: "TODO_DIALISIS_CAPTION_04_ID",
+        },
+      },
+      {
+        slide: "05",
+        src: "/assets/projects/dialisis-connect-edu/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu detailed discussion thread and user comment replies",
+          id: "Utas diskusi detail dan balasan komentar pengguna Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_05_EN",
+          id: "TODO_DIALISIS_CAPTION_05_ID",
+        },
+      },
+      {
+        slide: "06",
+        src: "/assets/projects/dialisis-connect-edu/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu user role management and profile configuration view",
+          id: "Tampilan manajemen peran pengguna dan konfigurasi profil Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_06_EN",
+          id: "TODO_DIALISIS_CAPTION_06_ID",
+        },
+      },
+      {
+        slide: "07",
+        src: "/assets/projects/dialisis-connect-edu/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu educational content publication and administration console",
+          id: "Konsol administrasi dan publikasi konten edukasi Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_07_EN",
+          id: "TODO_DIALISIS_CAPTION_07_ID",
+        },
+      },
+      {
+        slide: "08",
+        src: "/assets/projects/dialisis-connect-edu/documentation/07.webp",
+        format: "wide",
+        alt: {
+          en: "Dialisis Connect Edu digital booklet PDF reader and resource viewer",
+          id: "Penampil dokumen dan pembaca PDF booklet digital Dialisis Connect Edu",
+        },
+        caption: {
+          en: "TODO_DIALISIS_CAPTION_08_EN",
+          id: "TODO_DIALISIS_CAPTION_08_ID",
+        },
+      },
+    ],
+    galleryThumbnails: true,
   },
   {
     index: "04",

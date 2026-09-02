@@ -321,7 +321,7 @@ test("Projects Hub metadata generates valid Section 10 metadata and OG cover", (
   assert.equal(metaId.alternates?.canonical, "https://annastriwidagdo.me/id/projects");
 });
 
-test("generateProjectJsonLd accurately represents project facts and live URLs", () => {
+test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, and Dialisis", () => {
   const ukg = projectCaseStudies.find((p) => p.slug === "ukg-system");
   assert.ok(ukg);
   const ukgSchema = generateProjectJsonLd(ukg, "en");
@@ -331,6 +331,16 @@ test("generateProjectJsonLd accurately represents project facts and live URLs", 
   assert.equal(ukgSchema.url, "https://annastriwidagdo.me/en/projects/ukg-system");
   assert.equal(ukgSchema.relatedLink, "https://ukgsystem.site/");
   assert.ok(ukgSchema.image?.includes("/assets/projects/ukg-system/cover.webp"));
+  assert.deepEqual(ukgSchema.keywords, [
+    "web-app",
+    "Full-Stack Web Developer",
+    "Figma",
+    "Next.js",
+    "NestJS",
+    "MySQL",
+    "Katalon Studio",
+    "Linux Ubuntu",
+  ]);
 
   const ihealth = projectCaseStudies.find((p) => p.slug === "ihealth-edu");
   assert.ok(ihealth);
@@ -340,6 +350,35 @@ test("generateProjectJsonLd accurately represents project facts and live URLs", 
   assert.equal(ihealthSchema.url, "https://annastriwidagdo.me/en/projects/ihealth-edu");
   assert.equal(ihealthSchema.relatedLink, "https://www.ihealthedu.site/");
   assert.ok(ihealthSchema.image?.includes("/assets/projects/ihealth-edu/cover.webp"));
+  assert.deepEqual(ihealthSchema.keywords, [
+    "web-app",
+    "Frontend Web Developer",
+    "Figma",
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "REST API",
+  ]);
+
+  const dialisis = projectCaseStudies.find((p) => p.slug === "dialisis-connect-edu");
+  assert.ok(dialisis);
+  const dialisisSchema = generateProjectJsonLd(dialisis, "en");
+  assert.equal(dialisisSchema["@type"], "SoftwareSourceCode");
+  assert.equal(dialisisSchema.name, "Dialisis Connect Edu");
+  assert.equal(dialisisSchema.url, "https://annastriwidagdo.me/en/projects/dialisis-connect-edu");
+  assert.equal(dialisisSchema.relatedLink, "https://dialisisconnectedu.vercel.app/");
+  assert.ok(dialisisSchema.image?.includes("/assets/projects/dialisis-connect-edu/cover.webp"));
+  assert.deepEqual(dialisisSchema.keywords, [
+    "web-app",
+    "Frontend Web Developer",
+    "Figma",
+    "Next.js",
+    "React",
+    "REST API",
+    "Katalon Studio",
+    "Docker",
+  ]);
 });
 
 test("generateBlogPostingJsonLd produces valid BlogPosting schema with related project references", () => {
