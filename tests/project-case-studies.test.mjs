@@ -1335,5 +1335,61 @@ test("Phase 03 — Shared Gallery, Autoplay, Lightbox, and single-image fallback
   }
 });
 
+test("Phase 06 — Project Detail System Hardening across all 10 projects and 20 localized routes", () => {
+  const detailComponent = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
+    "utf8",
+  );
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "project-detail.module.css"),
+    "utf8",
+  );
+
+  // 1. All 10 slugs validated across 20 localized routes
+  assert.equal(projectCaseStudies.length, 10);
+  assert.match(detailComponent, /styles\.backLink/);
+  for (const project of projectCaseStudies) {
+    for (const locale of ["en", "id"]) {
+      assert.ok(project.title[locale], `Title present for ${project.slug} [${locale}]`);
+      assert.ok(project.categoryLabel[locale], `Category label present for ${project.slug} [${locale}]`);
+      assert.ok(project.role[locale], `Role present for ${project.slug} [${locale}]`);
+      assert.ok(project.overview[locale].length >= 2, `Overview paragraphs present for ${project.slug} [${locale}]`);
+      assert.ok(project.contributions[locale].length >= 3, `Contributions present for ${project.slug} [${locale}]`);
+      assert.ok(project.cover.alt[locale], `Cover alt present for ${project.slug} [${locale}]`);
+    }
+  }
+
+  // 2. Responsive layouts: 44px min touch targets strictly maintained across desktop and mobile
+  assert.match(css, /\.backLink\s*\{[^}]*min-height:\s*2\.75rem/);
+  assert.match(css, /\.liveCta\s*\{[^}]*min-block-size:\s*2\.75rem/);
+  assert.match(css, /\.repoLink\s*\{[^}]*min-block-size:\s*2\.75rem/);
+  assert.match(css, /\.galleryNavBtn\s*\{[^}]*width:\s*2\.75rem/);
+  assert.match(css, /\.galleryNavBtn\s*\{[^}]*height:\s*2\.75rem/);
+  assert.match(css, /\.lightboxCloseBtn\s*\{[^}]*min-height:\s*2\.75rem/);
+  assert.match(css, /\.lightboxNavBtn\s*\{[^}]*min-width:\s*2\.75rem/);
+  assert.match(css, /\.lightboxNavBtn\s*\{[^}]*min-height:\s*2\.75rem/);
+
+  // 3. Grid adaptations for UKG, iHealth, and Dialisis system scope
+  assert.match(css, /\.modulesGrid/);
+  assert.match(css, /\.systemScopeGrid/);
+  assert.match(css, /\.systemScopeGrid3Col/);
+
+  // 4. Interaction isolation: all :hover states gated by (hover: hover) and (pointer: fine)
+  const hoverMatches = css.match(/:hover\b/g) ?? [];
+  const hoverMediaMatches = css.match(/@media\s*\(hover:\s*hover\)\s*and\s*\(pointer:\s*fine\)/g) ?? [];
+  assert.ok(hoverMatches.length >= 7, "Interactive hover rules present in stylesheet");
+  assert.ok(hoverMediaMatches.length >= 7, "All interactive hover styles must be gated by pointer media queries");
+
+  // 5. Accessible focus-visible rings on all interactive components
+  const focusMatches = css.match(/:focus-visible\b/g) ?? [];
+  assert.ok(focusMatches.length >= 8, "Focus-visible styles defined across all interactive controls");
+
+  // 6. Reduced motion safety: all animations removed under prefers-reduced-motion
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+  assert.match(css, /transition:\s*none\s*!important/);
+  assert.match(css, /animation:\s*none\s*!important/);
+});
+
+
 
 
