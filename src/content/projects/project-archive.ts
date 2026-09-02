@@ -207,7 +207,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     summary: {
       en: "A machine learning prototype for exploring heart attack risk prediction, with model inference served through a Flask API. Built for experimentation, not medical diagnosis.",
-      id: "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inferensi model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
+      id: "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inference model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
     },
     primaryTechnologies: [
       "Python",

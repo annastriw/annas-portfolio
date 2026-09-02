@@ -171,17 +171,17 @@ test("Featured projects renders 4-row full-width editorial index with visible Ex
   assert.match(homeSelectedProjects[1].summary.en, /IoT health data/);
   assert.match(homeSelectedProjects[1].summary.id, /data kesehatan dari IoT/);
 
-  // 03 Heart Attack Risk Prediction synchronization (shorter home title, experimental prototype boundary)
+  // 03 Heart Attack Risk Prediction synchronization (shorter home title, decision support, evaluated model metrics)
   assert.equal(homeSelectedProjects[2].title.en, "Heart Attack Risk Prediction");
   assert.equal(homeSelectedProjects[2].role.en, "Machine Learning Engineer");
   assert.equal(homeSelectedProjects[2].status.en, "Completed Prototype");
   assert.equal(
     homeSelectedProjects[2].summary.en,
-    "A machine learning prototype for exploring heart attack risk prediction, with model inference served through a Flask API. Built for experimentation, not medical diagnosis.",
+    "A machine learning decision-support prototype integrated into iHealth Edu. The selected Random Forest model was evaluated on 158,355 records, achieved 71.93% accuracy and 0.8015 ROC-AUC, and was served through a Flask REST API.",
   );
   assert.equal(
     homeSelectedProjects[2].summary.id,
-    "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inferensi model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
+    "Prototype machine learning decision support yang terintegrasi dengan iHealth Edu. Model Random Forest terpilih dievaluasi menggunakan 158.355 data, menghasilkan accuracy 71,93% dan ROC-AUC 0,8015, lalu disajikan melalui Flask REST API.",
   );
   assert.deepEqual(homeSelectedProjects[2].technologies, [
     "Python",
@@ -191,7 +191,20 @@ test("Featured projects renders 4-row full-width editorial index with visible Ex
     "Flask",
     "Docker",
   ]);
-  assert.doesNotMatch(homeSelectedProjects[2].summary.en, /158,355|71\.93%/);
+  assert.match(homeSelectedProjects[2].summary.en, /158,355 records/);
+  assert.match(homeSelectedProjects[2].summary.en, /71\.93% accuracy/);
+  assert.match(homeSelectedProjects[2].summary.en, /0\.8015 ROC-AUC/);
+  assert.match(homeSelectedProjects[2].summary.id, /158\.355 data/);
+  assert.match(homeSelectedProjects[2].summary.id, /accuracy 71,93%/);
+  assert.match(homeSelectedProjects[2].summary.id, /ROC-AUC 0,8015/);
+  assert.doesNotMatch(
+    homeSelectedProjects[2].summary.en,
+    /clinical diagnosis|diagnostic accuracy|clinical validation|treatment|replaces doctor|replaces healthcare/i,
+  );
+  assert.doesNotMatch(
+    homeSelectedProjects[2].summary.id,
+    /diagnosis klinis|akurasi diagnostik|validasi klinis|pengobatan|menggantikan dokter|menggantikan tenaga kesehatan/i,
+  );
 
   // 04 Panoramic Virtual Tour synchronization
   assert.equal(homeSelectedProjects[3].title.en, "Panoramic Virtual Tour");

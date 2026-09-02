@@ -93,7 +93,7 @@ const expectedSummaries = {
   },
   "ml-for-heart-attack-risk-prediction": {
     en: "A machine learning prototype for exploring heart attack risk prediction, with model inference served through a Flask API. Built for experimentation, not medical diagnosis.",
-    id: "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inferensi model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
+    id: "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inference model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
   },
   "speech-to-text-system": {
     en: "An audio and video transcription workflow using Wav2Vec2, covering audio preparation, speech recognition, and export to text files and video subtitles.",
@@ -186,7 +186,7 @@ test("preserves original project indexes when categories are filtered", () => {
   );
 });
 
-test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, and SIMASTOK", () => {
+test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, and Heart ML", () => {
   for (const project of projectArchive) {
     assert.ok(
       project.primaryTechnologies.length <= 6,
@@ -249,6 +249,19 @@ test("enforces max 6 displayed technologies and exact approved stacks for UKG, i
     "PHP",
     "MySQL",
     "Katalon Studio",
+    "Docker",
+  ]);
+
+  const heart = projectArchive.find(
+    (p) => p.slug === "ml-for-heart-attack-risk-prediction",
+  );
+  assert.ok(heart);
+  assert.deepEqual(heart.primaryTechnologies, [
+    "Python",
+    "Scikit-learn",
+    "Pandas",
+    "SMOTE",
+    "Flask",
     "Docker",
   ]);
 });
@@ -628,4 +641,175 @@ test("synchronizes SIMASTOK Hub entry with exact facts, 5-item stack, and absenc
     assert.equal(p.summary.id, expectedSummaries[slug].id);
   }
 });
+
+test("synchronizes Heart ML Hub entry with exact facts, 6-item stack, medical boundary, and absence of metrics or external links", () => {
+  const heart = projectArchive.find(
+    (p) => p.slug === "ml-for-heart-attack-risk-prediction",
+  );
+  assert.ok(heart, "Heart ML must exist in projectArchive");
+
+  // Exact fields
+  assert.equal(heart.index, "06");
+  assert.equal(heart.category, "ml");
+  assert.equal(
+    heart.title.en,
+    "Machine Learning Model for Heart Attack Risk Prediction",
+  );
+  assert.equal(
+    heart.title.id,
+    "Machine Learning Model for Heart Attack Risk Prediction",
+  );
+  assert.equal(heart.role.en, "Machine Learning Engineer");
+  assert.equal(heart.role.id, "Machine Learning Engineer");
+  assert.equal(heart.status.en, "Completed Prototype");
+  assert.equal(heart.status.id, "Completed Prototype");
+  assert.equal(
+    heart.coverImage,
+    "/assets/projects/ml-for-heart-attack-risk-prediction/cover.webp",
+  );
+  assert.equal(heart.coverPosition, "top");
+  assert.equal(
+    heart.coverAlt.en,
+    "Structured patient input used by the heart attack risk prediction prototype",
+  );
+  assert.equal(
+    heart.coverAlt.id,
+    "Input pasien terstruktur untuk prototype prediksi risiko serangan jantung",
+  );
+  assert.equal(
+    heart.summary.en,
+    "A machine learning prototype for exploring heart attack risk prediction, with model inference served through a Flask API. Built for experimentation, not medical diagnosis.",
+  );
+  assert.equal(
+    heart.summary.id,
+    "Prototype machine learning untuk mengeksplorasi prediksi risiko serangan jantung, dengan inference model melalui Flask API. Dikembangkan untuk eksperimen, bukan diagnosis medis.",
+  );
+  assert.deepEqual(heart.primaryTechnologies, [
+    "Python",
+    "Scikit-learn",
+    "Pandas",
+    "SMOTE",
+    "Flask",
+    "Docker",
+  ]);
+
+  // Absence of metrics and external links in Hub record
+  assert.equal("liveUrl" in heart, false);
+  assert.equal("githubUrl" in heart, false);
+  assert.doesNotMatch(heart.summary.en, /158[,.]?355/);
+  assert.doesNotMatch(heart.summary.en, /71\.93%/);
+  assert.doesNotMatch(heart.summary.en, /0\.8015/);
+  assert.doesNotMatch(heart.summary.id, /158[,.]?355/);
+  assert.doesNotMatch(heart.summary.id, /71,93%/);
+  assert.doesNotMatch(heart.summary.id, /0,8015/);
+  assert.doesNotMatch(JSON.stringify(heart), /kaggle|github\.com/i);
+
+  // No unsupported clinical claims
+  assert.doesNotMatch(
+    heart.summary.en,
+    /clinical diagnosis|diagnostic accuracy|clinical validation|treatment|replaces doctor|replaces healthcare/i,
+  );
+  assert.doesNotMatch(
+    heart.summary.id,
+    /diagnosis klinis|akurasi diagnostik|validasi klinis|pengobatan|menggantikan dokter|menggantikan tenaga kesehatan/i,
+  );
+
+  // All 10 Hub records and order preserved
+  assert.equal(projectArchive.length, 10);
+  assert.deepEqual(
+    projectArchive.map((p) => p.slug),
+    expectedSlugs,
+  );
+
+  // All category filters preserved
+  const counts = getProjectArchiveCategoryCounts(projectArchive);
+  assert.deepEqual(counts, {
+    all: 10,
+    "web-app": 5,
+    ml: 2,
+    mobile: 2,
+    other: 1,
+  });
+
+  // Home Selected Projects synchronization and order
+  assert.equal(homeSelectedProjects.length, 4);
+  assert.deepEqual(
+    homeSelectedProjects.map((p) => p.slug),
+    [
+      "ukg-system",
+      "ihealth-edu",
+      "ml-for-heart-attack-risk-prediction",
+      "panoramic-virtual-tour",
+    ],
+  );
+  assert.equal(
+    homeFeaturedConfig.slot3Slug,
+    "ml-for-heart-attack-risk-prediction",
+  );
+
+  const homeHeart = homeSelectedProjects[2];
+  assert.equal(homeHeart.index, "03");
+  assert.equal(homeHeart.title.en, "Heart Attack Risk Prediction");
+  assert.equal(homeHeart.title.id, "Heart Attack Risk Prediction");
+  assert.equal(homeHeart.role.en, "Machine Learning Engineer");
+  assert.equal(homeHeart.role.id, "Machine Learning Engineer");
+  assert.equal(homeHeart.status.en, "Completed Prototype");
+  assert.equal(homeHeart.status.id, "Completed Prototype");
+  assert.equal(
+    homeHeart.coverImage,
+    "/assets/projects/ml-for-heart-attack-risk-prediction/cover.webp",
+  );
+  assert.deepEqual(homeHeart.technologies, [
+    "Python",
+    "Scikit-learn",
+    "Pandas",
+    "SMOTE",
+    "Flask",
+    "Docker",
+  ]);
+  assert.equal(
+    homeHeart.summary.en,
+    "A machine learning decision-support prototype integrated into iHealth Edu. The selected Random Forest model was evaluated on 158,355 records, achieved 71.93% accuracy and 0.8015 ROC-AUC, and was served through a Flask REST API.",
+  );
+  assert.equal(
+    homeHeart.summary.id,
+    "Prototype machine learning decision support yang terintegrasi dengan iHealth Edu. Model Random Forest terpilih dievaluasi menggunakan 158.355 data, menghasilkan accuracy 71,93% dan ROC-AUC 0,8015, lalu disajikan melalui Flask REST API.",
+  );
+
+  // Exact locale-specific dataset and metric formatting in Home
+  assert.match(homeHeart.summary.en, /158,355 records/);
+  assert.match(homeHeart.summary.en, /71\.93% accuracy/);
+  assert.match(homeHeart.summary.en, /0\.8015 ROC-AUC/);
+  assert.match(homeHeart.summary.id, /158\.355 data/);
+  assert.match(homeHeart.summary.id, /accuracy 71,93%/);
+  assert.match(homeHeart.summary.id, /ROC-AUC 0,8015/);
+
+  // No unsupported clinical claims in Home
+  assert.doesNotMatch(
+    homeHeart.summary.en,
+    /clinical diagnosis|diagnostic accuracy|clinical validation|treatment|replaces doctor|replaces healthcare/i,
+  );
+  assert.doesNotMatch(
+    homeHeart.summary.id,
+    /diagnosis klinis|akurasi diagnostik|validasi klinis|pengobatan|menggantikan dokter|menggantikan tenaga kesehatan/i,
+  );
+
+  // Confirm other 9 Hub records remain intact and unchanged
+  const otherNineSlugs = expectedSlugs.filter(
+    (s) => s !== "ml-for-heart-attack-risk-prediction",
+  );
+  assert.equal(otherNineSlugs.length, 9);
+  for (const slug of otherNineSlugs) {
+    const p = projectArchive.find((proj) => proj.slug === slug);
+    assert.ok(p, `Project ${slug} must exist in archive`);
+    assert.equal(p.summary.en, expectedSummaries[slug].en);
+    assert.equal(p.summary.id, expectedSummaries[slug].id);
+  }
+
+  // Confirm other 3 Home entries remain intact and unchanged
+  assert.equal(homeSelectedProjects[0].slug, "ukg-system");
+  assert.equal(homeSelectedProjects[1].slug, "ihealth-edu");
+  assert.equal(homeSelectedProjects[3].slug, "panoramic-virtual-tour");
+});
+
 
