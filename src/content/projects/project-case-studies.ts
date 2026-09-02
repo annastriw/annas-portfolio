@@ -143,6 +143,22 @@ export interface HeartMlSystemScopeData {
   };
 }
 
+export interface SpeechToTextSystemScopeData {
+  readonly mediaPreparation: {
+    readonly title: LocalizedProjectText;
+    readonly items: LocalizedProjectList;
+  };
+  readonly asrInference: {
+    readonly title: LocalizedProjectText;
+    readonly items: LocalizedProjectList;
+  };
+  readonly modelNote: LocalizedProjectText;
+  readonly transcriptOutputs: {
+    readonly title: LocalizedProjectText;
+    readonly items: LocalizedProjectList;
+  };
+}
+
 export interface ProjectMetadataRow {
   readonly label: LocalizedProjectText;
   readonly value: LocalizedProjectText;
@@ -189,6 +205,7 @@ export interface ProjectCaseStudy {
   readonly nusaScope?: NusaSystemScopeData;
   readonly simastokScope?: SimastokSystemScopeData;
   readonly heartMlScope?: HeartMlSystemScopeData;
+  readonly speechToTextScope?: SpeechToTextSystemScopeData;
   readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
   readonly personalTechStack?: readonly string[];
@@ -2294,63 +2311,244 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "07",
     slug: "speech-to-text-system",
     category: "ml",
-    categoryLabel: categoryLabels.ml,
+    categoryLabel: { en: "07 // MACHINE LEARNING", id: "07 // MACHINE LEARNING" },
     title: { en: "Speech-to-Text System", id: "Speech-to-Text System" },
-    role: { en: "Machine Learning / AI Developer", id: "Machine Learning / AI Developer" },
-    status: { en: "Completed workflow", id: "Workflow selesai" },
-    overview: {
+    role: { en: "Machine Learning Engineer", id: "Machine Learning Engineer" },
+    period: { en: "March–April 2025", id: "Maret–April 2025" },
+    status: { en: "Completed Prototype", id: "Completed Prototype" },
+    lead: {
+      en: "An end-to-end English speech-to-text prototype that converts audio and video into reusable transcripts, SRT subtitles, and video with burned-in captions.",
+      id: "Prototype speech-to-text end-to-end untuk bahasa Inggris yang mengubah audio dan video menjadi transkrip, subtitle SRT, serta video dengan subtitle tertanam.",
+    },
+    metadataRows: [
+      {
+        label: { en: "Role", id: "Peran" },
+        value: { en: "Machine Learning Engineer", id: "Machine Learning Engineer" },
+      },
+      {
+        label: { en: "Period", id: "Periode" },
+        value: { en: "March–April 2025", id: "Maret–April 2025" },
+      },
+      {
+        label: { en: "Status", id: "Status" },
+        value: { en: "Completed Prototype", id: "Completed Prototype" },
+      },
+      {
+        label: { en: "Platform", id: "Platform" },
+        value: { en: "Google Colab", id: "Google Colab" },
+      },
+    ],
+    metaTitle: {
+      en: "Speech-to-Text System — Machine Learning Case Study | Annas Tri Widagdo",
+      id: "Speech-to-Text System — Studi Kasus Machine Learning | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "An English speech-to-text prototype that processes audio and video with pretrained Wav2Vec2 and produces transcripts, SRT subtitles, and burned-in video captions.",
+      id: "Prototype speech-to-text bahasa Inggris yang memproses audio dan video menggunakan pretrained Wav2Vec2 serta menghasilkan transkrip, subtitle SRT, dan subtitle yang tertanam pada video.",
+    },
+    keywords: {
       en: [
-        "This Google Colab workflow converts audio or video into reusable transcript and subtitle outputs.",
-        "It normalizes source media, performs inference with the pretrained facebook/wav2vec2-base-960h model, and exports TXT, CSV, JSON, SRT, and burned-in subtitles.",
+        "Machine Learning",
+        "Machine Learning Engineer",
+        "Automatic Speech Recognition",
+        "English Speech-to-Text",
+        "Python",
+        "Wav2Vec2",
+        "Hugging Face Transformers",
+        "Librosa",
+        "FFmpeg",
+        "Google Colab",
       ],
       id: [
-        "Workflow Google Colab ini mengubah audio atau video menjadi output transkrip dan subtitle yang dapat digunakan kembali.",
-        "Workflow menormalisasi media sumber, menjalankan inferensi dengan model pralatih facebook/wav2vec2-base-960h, serta mengekspor TXT, CSV, JSON, SRT, dan burned-in subtitle.",
+        "Machine Learning",
+        "Machine Learning Engineer",
+        "Automatic Speech Recognition",
+        "English Speech-to-Text",
+        "Python",
+        "Wav2Vec2",
+        "Hugging Face Transformers",
+        "Librosa",
+        "FFmpeg",
+        "Google Colab",
+      ],
+    },
+    githubUrl: "https://github.com/annastriw/speech-to-text-system.git",
+    overview: {
+      en: [
+        "Built in Google Colab, the workflow accepts WAV and MP3 audio or MP4 video. Video audio is extracted with FFmpeg, converted to mono at 16 kHz, and divided into chunks before transcription.",
+        "Each audio chunk is processed with the pretrained facebook/wav2vec2-base-960h model through Hugging Face Transformers. The results can be exported as TXT, CSV, JSON, and SRT files or embedded directly into the final video.",
+      ],
+      id: [
+        "Workflow ini dikembangkan di Google Colab dan menerima input audio WAV dan MP3 atau video MP4. Audio dari video diekstrak menggunakan FFmpeg, dikonversi menjadi mono 16 kHz, lalu dibagi menjadi beberapa chunk sebelum proses transkripsi.",
+        "Setiap audio chunk diproses menggunakan pretrained model facebook/wav2vec2-base-960h melalui Hugging Face Transformers. Hasilnya dapat diekspor sebagai file TXT, CSV, JSON, dan SRT atau ditanamkan langsung ke video akhir.",
       ],
     },
     contributions: {
       en: [
-        "Built the media-ingestion flow for audio and video sources.",
-        "Implemented mono 16 kHz conversion and chunk-based processing before inference.",
-        "Structured transcript output for plain text, tabular, JSON, and subtitle formats.",
-        "Added SRT generation and an FFmpeg step for burned-in subtitle output.",
+        "Built the ingestion workflow for WAV and MP3 audio and MP4 video, including audio extraction from video with FFmpeg.",
+        "Implemented mono 16 kHz conversion and chunk-based processing to prepare longer audio for sequential inference.",
+        "Integrated the pretrained Wav2Vec2 model through Hugging Face Transformers and structured the transcription results as TXT, CSV, and JSON files.",
+        "Generated timestamp-based SRT subtitles and used FFmpeg to embed them into the final video.",
       ],
       id: [
-        "Membangun alur ingest media untuk sumber audio dan video.",
-        "Mengimplementasikan konversi mono 16 kHz dan pemrosesan berbasis chunk sebelum inferensi.",
-        "Menyusun output transkrip untuk format teks biasa, tabular, JSON, dan subtitle.",
-        "Menambahkan pembuatan SRT dan tahap FFmpeg untuk output burned-in subtitle.",
+        "Membangun workflow input untuk audio WAV dan MP3 serta video MP4, termasuk proses ekstraksi audio dari video menggunakan FFmpeg.",
+        "Mengimplementasikan konversi audio menjadi mono 16 kHz dan pemrosesan berbasis chunk untuk menyiapkan audio berdurasi panjang sebelum inference bertahap.",
+        "Mengintegrasikan pretrained model Wav2Vec2 melalui Hugging Face Transformers dan menyusun hasil transkripsi dalam format TXT, CSV, dan JSON.",
+        "Menghasilkan subtitle SRT berdasarkan timestamp dan menggunakan FFmpeg untuk menanamkannya ke video akhir.",
       ],
     },
-    technicalNotes: {
-      en: [
-        "Audio is converted to mono at a 16 kHz sample rate before model inference.",
-        "Long inputs are divided into chunks so the workflow can process them sequentially.",
-        "The implementation uses the pretrained Wav2Vec2 base 960-hour model as documented.",
-        "The available project record does not include a benchmark evaluation.",
-      ],
-      id: [
-        "Audio dikonversi menjadi mono dengan sample rate 16 kHz sebelum inferensi model.",
-        "Input panjang dibagi menjadi beberapa chunk agar workflow dapat memprosesnya secara berurutan.",
-        "Implementasi menggunakan model pralatih Wav2Vec2 base 960-hour sesuai dokumentasi.",
-        "Catatan proyek yang tersedia tidak mencakup evaluasi benchmark.",
-      ],
+    contributionLearning: {
+      en: "This project gave me experience combining a pretrained machine learning model with an end-to-end audio and video processing workflow.",
+      id: "Project ini memberi saya pengalaman menggabungkan pretrained machine learning model dengan workflow pemrosesan audio dan video secara end-to-end.",
     },
-    techStack: ["Python", "Wav2Vec2", "Hugging Face Transformers", "Librosa", "FFmpeg", "Pandas"],
+    personalTechStack: [
+      "Python",
+      "Wav2Vec2",
+      "Hugging Face Transformers",
+      "Librosa",
+      "FFmpeg",
+      "Google Colab",
+    ],
+    techStack: [
+      "Python",
+      "Wav2Vec2",
+      "Hugging Face Transformers",
+      "Librosa",
+      "FFmpeg",
+      "Google Colab",
+    ],
+    speechToTextScope: {
+      mediaPreparation: {
+        title: {
+          en: "Media Preparation",
+          id: "Persiapan Media",
+        },
+        items: {
+          en: [
+            "WAV and MP3 audio input",
+            "MP4 video input",
+            "FFmpeg audio extraction from video",
+            "Mono 16 kHz conversion",
+            "Chunk-based processing for longer audio",
+          ],
+          id: [
+            "Input audio WAV dan MP3",
+            "Input video MP4",
+            "Ekstraksi audio dari video dengan FFmpeg",
+            "Konversi mono 16 kHz",
+            "Pemrosesan berbasis chunk untuk audio panjang",
+          ],
+        },
+      },
+      asrInference: {
+        title: {
+          en: "ASR Inference",
+          id: "Inferensi ASR",
+        },
+        items: {
+          en: [
+            "English transcription only",
+            "Pretrained facebook/wav2vec2-base-960h",
+            "Hugging Face Transformers model execution",
+            "Sequential inference for audio chunks",
+            "No custom fine-tuning",
+            "No WER or CER benchmark",
+          ],
+          id: [
+            "Transkripsi bahasa Inggris saja",
+            "Pretrained model facebook/wav2vec2-base-960h",
+            "Eksekusi model melalui Hugging Face Transformers",
+            "Inference bertahap untuk chunk audio",
+            "Tanpa custom fine-tuning",
+            "Tanpa benchmark WER atau CER",
+          ],
+        },
+      },
+      modelNote: {
+        en: "This prototype uses a pretrained model without custom fine-tuning and does not include a WER or CER benchmark.",
+        id: "Prototype ini menggunakan pretrained model tanpa custom fine-tuning dan tidak mencakup benchmark WER maupun CER.",
+      },
+      transcriptOutputs: {
+        title: {
+          en: "Transcript & Subtitle Outputs",
+          id: "Output Transkrip & Subtitle",
+        },
+        items: {
+          en: [
+            "TXT transcript",
+            "CSV transcript",
+            "JSON transcript",
+            "Timestamp-based SRT subtitle",
+            "Video with burned-in subtitles",
+            "Before-and-after visual evidence",
+          ],
+          id: [
+            "Transkrip TXT",
+            "Transkrip CSV",
+            "Transkrip JSON",
+            "Subtitle SRT berbasis timestamp",
+            "Video dengan subtitle tertanam",
+            "Bukti visual perbandingan sebelum dan sesudah",
+          ],
+        },
+      },
+    },
     cover: {
       src: "/assets/projects/speech-to-text-system/cover.webp",
-      alt: { en: "Before and after subtitle output from the speech-to-text workflow", id: "Perbandingan output subtitle dari workflow speech-to-text" },
+      alt: {
+        en: "Side-by-side comparison showing the video sample before subtitles and the final video with burned-in English subtitles",
+        id: "Perbandingan berdampingan menampilkan sampel video sebelum subtitle dan video akhir dengan subtitle bahasa Inggris tertanam",
+      },
       position: "center",
+      caption: {
+        en: "Side-by-side comparison showing source video playback and the generated video with burned-in English subtitles.",
+        id: "Perbandingan berdampingan yang menunjukkan pemutaran video sumber dan video hasil pemrosesan dengan subtitle bahasa Inggris tertanam.",
+      },
     },
     evidence: [
       {
         id: "FIG.01",
         src: "/assets/projects/speech-to-text-system/documentation/01.webp",
         format: "wide",
-        alt: { en: "Speech-to-text subtitle workflow evidence", id: "Bukti alur subtitle speech-to-text" },
-        caption: { en: "Automatic speech recognition output showing generated video subtitles.", id: "Output automatic speech recognition yang menampilkan subtitle video otomatis." },
+        alt: {
+          en: "Detailed view of the speech-to-text pipeline output with burned-in uppercase subtitles on the sample video frame",
+          id: "Tampilan detail output pipeline speech-to-text dengan subtitle huruf kapital tertanam pada frame sampel video",
+        },
+        caption: {
+          en: "Pipeline output demonstrating automatic transcription and subtitle embedding on a sample video.",
+          id: "Hasil output pipeline yang mendemonstrasikan transkripsi otomatis dan penanaman subtitle pada sampel video.",
+        },
       },
     ],
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/speech-to-text-system/cover.webp",
+        format: "cover",
+        alt: {
+          en: "Side-by-side comparison showing the video sample before subtitles and the final video with burned-in English subtitles",
+          id: "Perbandingan berdampingan menampilkan sampel video sebelum subtitle dan video akhir dengan subtitle bahasa Inggris tertanam",
+        },
+        caption: {
+          en: "Side-by-side comparison showing source video playback and the generated video with burned-in English subtitles.",
+          id: "Perbandingan berdampingan yang menunjukkan pemutaran video sumber dan video hasil pemrosesan dengan subtitle bahasa Inggris tertanam.",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/speech-to-text-system/documentation/01.webp",
+        format: "wide",
+        alt: {
+          en: "Detailed view of the speech-to-text pipeline output with burned-in uppercase subtitles on the sample video frame",
+          id: "Tampilan detail output pipeline speech-to-text dengan subtitle huruf kapital tertanam pada frame sampel video",
+        },
+        caption: {
+          en: "Pipeline output demonstrating automatic transcription and subtitle embedding on a sample video.",
+          id: "Hasil output pipeline yang mendemonstrasikan transkripsi otomatis dan penanaman subtitle pada sampel video.",
+        },
+      },
+    ],
+    galleryThumbnails: true,
   },
   {
     index: "08",

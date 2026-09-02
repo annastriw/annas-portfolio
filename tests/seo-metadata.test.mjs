@@ -463,6 +463,46 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
     heartMlJsonString,
     /medical diagnosis|diagnosis klinis|clinical accuracy|clinically validated|treatment|prevention/i,
   );
+
+  const stt = projectCaseStudies.find(
+    (p) => p.slug === "speech-to-text-system",
+  );
+  assert.ok(stt);
+  const sttSchema = generateProjectJsonLd(stt, "en");
+  assert.equal(sttSchema["@type"], "SoftwareSourceCode");
+  assert.equal(sttSchema.name, "Speech-to-Text System");
+  assert.equal(
+    sttSchema.url,
+    "https://annastriwidagdo.me/en/projects/speech-to-text-system",
+  );
+  assert.equal(
+    sttSchema.codeRepository,
+    "https://github.com/annastriw/speech-to-text-system.git",
+  );
+  assert.equal(sttSchema.relatedLink, undefined);
+  assert.ok(
+    sttSchema.image?.includes(
+      "/assets/projects/speech-to-text-system/cover.webp",
+    ),
+  );
+  assert.deepEqual(sttSchema.keywords, [
+    "Machine Learning",
+    "Machine Learning Engineer",
+    "Automatic Speech Recognition",
+    "English Speech-to-Text",
+    "Python",
+    "Wav2Vec2",
+    "Hugging Face Transformers",
+    "Librosa",
+    "FFmpeg",
+    "Google Colab",
+  ]);
+
+  const sttJsonString = JSON.stringify(sttSchema);
+  assert.doesNotMatch(
+    sttJsonString,
+    /fine-tuned model|custom ASR|custom-trained|transcription accuracy|multilingual|production-grade|API|web application|deployment/i,
+  );
 });
 
 test("generateBlogPostingJsonLd produces valid BlogPosting schema with related project references", () => {

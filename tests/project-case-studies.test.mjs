@@ -94,6 +94,10 @@ test("references only real local visual evidence and verified public links", () 
         "ml-for-heart-attack-risk-prediction",
         "https://github.com/annastriw/ml-for-heart-attack-risk-prediction.git",
       ],
+      [
+        "speech-to-text-system",
+        "https://github.com/annastriw/speech-to-text-system.git",
+      ],
     ],
   );
 });
@@ -1479,6 +1483,307 @@ test("maintains approved Heart ML locked facts, bilingual copy, model evidence, 
   );
 });
 
+test("maintains approved Speech-to-Text System locked facts, bilingual copy, model boundary, gallery, and content structures", () => {
+  const stt = getProjectCaseStudy("speech-to-text-system");
+  assert.ok(stt);
+
+  // Locked facts & metadata
+  assert.equal(stt.index, "07");
+  assert.equal(stt.category, "ml");
+  assert.equal(stt.categoryLabel.en, "07 // MACHINE LEARNING");
+  assert.equal(stt.categoryLabel.id, "07 // MACHINE LEARNING");
+  assert.equal(stt.role.en, "Machine Learning Engineer");
+  assert.equal(stt.role.id, "Machine Learning Engineer");
+  assert.equal(stt.period?.en, "March–April 2025");
+  assert.equal(stt.period?.id, "Maret–April 2025");
+  assert.equal(stt.status.en, "Completed Prototype");
+  assert.equal(stt.status.id, "Completed Prototype");
+  assert.equal(stt.liveUrl, undefined);
+  assert.equal(
+    stt.githubUrl,
+    "https://github.com/annastriw/speech-to-text-system.git",
+  );
+  assert.equal(stt.repositoryNotice, undefined);
+  assert.equal(stt.client, undefined);
+  assert.equal(stt.workingModel, undefined);
+
+  // MetadataRows display only Role, Period, Status, Platform
+  assert.ok(stt.metadataRows);
+  assert.equal(stt.metadataRows.length, 4);
+  assert.deepEqual(
+    stt.metadataRows.map((r) => r.label.en),
+    ["Role", "Period", "Status", "Platform"],
+  );
+  assert.deepEqual(
+    stt.metadataRows.map((r) => r.label.id),
+    ["Peran", "Periode", "Status", "Platform"],
+  );
+  assert.deepEqual(
+    stt.metadataRows.map((r) => r.value.en),
+    [
+      "Machine Learning Engineer",
+      "March–April 2025",
+      "Completed Prototype",
+      "Google Colab",
+    ],
+  );
+  assert.deepEqual(
+    stt.metadataRows.map((r) => r.value.id),
+    [
+      "Machine Learning Engineer",
+      "Maret–April 2025",
+      "Completed Prototype",
+      "Google Colab",
+    ],
+  );
+
+  // H1 and Lead
+  assert.equal(stt.title.en, "Speech-to-Text System");
+  assert.equal(stt.title.id, "Speech-to-Text System");
+  assert.equal(
+    stt.lead?.en,
+    "An end-to-end English speech-to-text prototype that converts audio and video into reusable transcripts, SRT subtitles, and video with burned-in captions.",
+  );
+  assert.equal(
+    stt.lead?.id,
+    "Prototype speech-to-text end-to-end untuk bahasa Inggris yang mengubah audio dan video menjadi transkrip, subtitle SRT, serta video dengan subtitle tertanam.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    stt.metaTitle?.en,
+    "Speech-to-Text System — Machine Learning Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    stt.metaTitle?.id,
+    "Speech-to-Text System — Studi Kasus Machine Learning | Annas Tri Widagdo",
+  );
+  assert.equal(
+    stt.metaDescription?.en,
+    "An English speech-to-text prototype that processes audio and video with pretrained Wav2Vec2 and produces transcripts, SRT subtitles, and burned-in video captions.",
+  );
+  assert.equal(
+    stt.metaDescription?.id,
+    "Prototype speech-to-text bahasa Inggris yang memproses audio dan video menggunakan pretrained Wav2Vec2 serta menghasilkan transkrip, subtitle SRT, dan subtitle yang tertanam pada video.",
+  );
+
+  // Keywords
+  assert.deepEqual(stt.keywords?.en, [
+    "Machine Learning",
+    "Machine Learning Engineer",
+    "Automatic Speech Recognition",
+    "English Speech-to-Text",
+    "Python",
+    "Wav2Vec2",
+    "Hugging Face Transformers",
+    "Librosa",
+    "FFmpeg",
+    "Google Colab",
+  ]);
+  assert.deepEqual(stt.keywords?.id, [
+    "Machine Learning",
+    "Machine Learning Engineer",
+    "Automatic Speech Recognition",
+    "English Speech-to-Text",
+    "Python",
+    "Wav2Vec2",
+    "Hugging Face Transformers",
+    "Librosa",
+    "FFmpeg",
+    "Google Colab",
+  ]);
+
+  // Overview (exact 2 paragraphs)
+  assert.equal(stt.overview.en.length, 2);
+  assert.equal(stt.overview.id.length, 2);
+  assert.equal(
+    stt.overview.en[0],
+    "Built in Google Colab, the workflow accepts WAV and MP3 audio or MP4 video. Video audio is extracted with FFmpeg, converted to mono at 16 kHz, and divided into chunks before transcription.",
+  );
+  assert.equal(
+    stt.overview.en[1],
+    "Each audio chunk is processed with the pretrained facebook/wav2vec2-base-960h model through Hugging Face Transformers. The results can be exported as TXT, CSV, JSON, and SRT files or embedded directly into the final video.",
+  );
+  assert.equal(
+    stt.overview.id[0],
+    "Workflow ini dikembangkan di Google Colab dan menerima input audio WAV dan MP3 atau video MP4. Audio dari video diekstrak menggunakan FFmpeg, dikonversi menjadi mono 16 kHz, lalu dibagi menjadi beberapa chunk sebelum proses transkripsi.",
+  );
+  assert.equal(
+    stt.overview.id[1],
+    "Setiap audio chunk diproses menggunakan pretrained model facebook/wav2vec2-base-960h melalui Hugging Face Transformers. Hasilnya dapat diekspor sebagai file TXT, CSV, JSON, dan SRT atau ditanamkan langsung ke video akhir.",
+  );
+
+  // Contributions (exact 4 items + closing learning statement)
+  assert.equal(stt.contributions.en.length, 4);
+  assert.equal(stt.contributions.id.length, 4);
+  assert.equal(
+    stt.contributions.en[0],
+    "Built the ingestion workflow for WAV and MP3 audio and MP4 video, including audio extraction from video with FFmpeg.",
+  );
+  assert.equal(
+    stt.contributions.en[1],
+    "Implemented mono 16 kHz conversion and chunk-based processing to prepare longer audio for sequential inference.",
+  );
+  assert.equal(
+    stt.contributions.en[2],
+    "Integrated the pretrained Wav2Vec2 model through Hugging Face Transformers and structured the transcription results as TXT, CSV, and JSON files.",
+  );
+  assert.equal(
+    stt.contributions.en[3],
+    "Generated timestamp-based SRT subtitles and used FFmpeg to embed them into the final video.",
+  );
+  assert.equal(
+    stt.contributions.id[0],
+    "Membangun workflow input untuk audio WAV dan MP3 serta video MP4, termasuk proses ekstraksi audio dari video menggunakan FFmpeg.",
+  );
+  assert.equal(
+    stt.contributions.id[1],
+    "Mengimplementasikan konversi audio menjadi mono 16 kHz dan pemrosesan berbasis chunk untuk menyiapkan audio berdurasi panjang sebelum inference bertahap.",
+  );
+  assert.equal(
+    stt.contributions.id[2],
+    "Mengintegrasikan pretrained model Wav2Vec2 melalui Hugging Face Transformers dan menyusun hasil transkripsi dalam format TXT, CSV, dan JSON.",
+  );
+  assert.equal(
+    stt.contributions.id[3],
+    "Menghasilkan subtitle SRT berdasarkan timestamp dan menggunakan FFmpeg untuk menanamkannya ke video akhir.",
+  );
+  assert.equal(
+    stt.contributionLearning?.en,
+    "This project gave me experience combining a pretrained machine learning model with an end-to-end audio and video processing workflow.",
+  );
+  assert.equal(
+    stt.contributionLearning?.id,
+    "Project ini memberi saya pengalaman menggabungkan pretrained machine learning model dengan workflow pemrosesan audio dan video secara end-to-end.",
+  );
+
+  // Personal Tech Stack (exact 6 items in approved order)
+  assert.deepEqual(stt.personalTechStack, [
+    "Python",
+    "Wav2Vec2",
+    "Hugging Face Transformers",
+    "Librosa",
+    "FFmpeg",
+    "Google Colab",
+  ]);
+  assert.deepEqual(stt.techStack, [
+    "Python",
+    "Wav2Vec2",
+    "Hugging Face Transformers",
+    "Librosa",
+    "FFmpeg",
+    "Google Colab",
+  ]);
+
+  // System Scope: exactly 3 groups (Media Preparation, ASR Inference, Transcript & Subtitle Outputs) + Model Note
+  assert.ok(stt.speechToTextScope);
+  assert.equal(stt.speechToTextScope.mediaPreparation.title.en, "Media Preparation");
+  assert.equal(stt.speechToTextScope.mediaPreparation.title.id, "Persiapan Media");
+  assert.deepEqual(stt.speechToTextScope.mediaPreparation.items.en, [
+    "WAV and MP3 audio input",
+    "MP4 video input",
+    "FFmpeg audio extraction from video",
+    "Mono 16 kHz conversion",
+    "Chunk-based processing for longer audio",
+  ]);
+  assert.deepEqual(stt.speechToTextScope.mediaPreparation.items.id, [
+    "Input audio WAV dan MP3",
+    "Input video MP4",
+    "Ekstraksi audio dari video dengan FFmpeg",
+    "Konversi mono 16 kHz",
+    "Pemrosesan berbasis chunk untuk audio panjang",
+  ]);
+
+  assert.equal(stt.speechToTextScope.asrInference.title.en, "ASR Inference");
+  assert.equal(stt.speechToTextScope.asrInference.title.id, "Inferensi ASR");
+  assert.deepEqual(stt.speechToTextScope.asrInference.items.en, [
+    "English transcription only",
+    "Pretrained facebook/wav2vec2-base-960h",
+    "Hugging Face Transformers model execution",
+    "Sequential inference for audio chunks",
+    "No custom fine-tuning",
+    "No WER or CER benchmark",
+  ]);
+  assert.deepEqual(stt.speechToTextScope.asrInference.items.id, [
+    "Transkripsi bahasa Inggris saja",
+    "Pretrained model facebook/wav2vec2-base-960h",
+    "Eksekusi model melalui Hugging Face Transformers",
+    "Inference bertahap untuk chunk audio",
+    "Tanpa custom fine-tuning",
+    "Tanpa benchmark WER atau CER",
+  ]);
+
+  // Model boundary note inside System Scope
+  assert.equal(
+    stt.speechToTextScope.modelNote.en,
+    "This prototype uses a pretrained model without custom fine-tuning and does not include a WER or CER benchmark.",
+  );
+  assert.equal(
+    stt.speechToTextScope.modelNote.id,
+    "Prototype ini menggunakan pretrained model tanpa custom fine-tuning dan tidak mencakup benchmark WER maupun CER.",
+  );
+
+  assert.equal(
+    stt.speechToTextScope.transcriptOutputs.title.en,
+    "Transcript & Subtitle Outputs",
+  );
+  assert.equal(
+    stt.speechToTextScope.transcriptOutputs.title.id,
+    "Output Transkrip & Subtitle",
+  );
+  assert.deepEqual(stt.speechToTextScope.transcriptOutputs.items.en, [
+    "TXT transcript",
+    "CSV transcript",
+    "JSON transcript",
+    "Timestamp-based SRT subtitle",
+    "Video with burned-in subtitles",
+    "Before-and-after visual evidence",
+  ]);
+  assert.deepEqual(stt.speechToTextScope.transcriptOutputs.items.id, [
+    "Transkrip TXT",
+    "Transkrip CSV",
+    "Transkrip JSON",
+    "Subtitle SRT berbasis timestamp",
+    "Video dengan subtitle tertanam",
+    "Bukti visual perbandingan sebelum dan sesudah",
+  ]);
+
+  // Gallery: exactly 2 slides in cover-first order
+  assert.equal(stt.gallery?.length, 2);
+  assert.deepEqual(
+    stt.gallery?.map((s) => s.src),
+    [
+      "/assets/projects/speech-to-text-system/cover.webp",
+      "/assets/projects/speech-to-text-system/documentation/01.webp",
+    ],
+  );
+  for (let i = 0; i < 2; i++) {
+    const slide = stt.gallery?.[i];
+    assert.ok(slide);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.doesNotMatch(slide.caption.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.caption.id, /^TODO_|^\[/);
+    assert.ok(slide.caption.en.length > 10);
+    assert.ok(slide.caption.id.length > 10);
+    assert.doesNotMatch(slide.alt.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.alt.id, /^TODO_|^\[/);
+    assert.ok(slide.alt.en.length > 10);
+    assert.ok(slide.alt.id.length > 10);
+    assert.notEqual(slide.caption.en, slide.alt.en);
+    assert.notEqual(slide.caption.id, slide.alt.id);
+  }
+
+  // Claim boundaries and prohibited strings
+  const stringified = JSON.stringify(stt);
+  assert.doesNotMatch(stringified, /"Machine Learning \/ AI Developer"/i);
+  assert.doesNotMatch(stringified, /Completed workflow/i);
+  assert.doesNotMatch(stringified, /Workflow selesai/i);
+  assert.doesNotMatch(stringified, /Working Model|Development Model/i);
+  assert.doesNotMatch(stringified, /Private Repository/i);
+  assert.doesNotMatch(stringified, /custom-trained|custom training|fine-tuned model/i);
+  assert.doesNotMatch(stringified, /production-grade|multilingual|forced alignment/i);
+});
+
 test("keeps the project-specific factual boundaries explicit", () => {
   const stringify = (slug) => JSON.stringify(getProjectCaseStudy(slug));
 
@@ -1492,7 +1797,7 @@ test("keeps the project-specific factual boundaries explicit", () => {
     /0\.8015|0,8015/,
   );
   assert.match(stringify("speech-to-text-system"), /pretrained|pralatih/i);
-  assert.doesNotMatch(stringify("speech-to-text-system"), /fine[- ]tun|\bWER\b|accuracy|akurasi/i);
+  assert.doesNotMatch(stringify("speech-to-text-system"), /fine-tuned model|custom-trained|custom training|transcription accuracy|multilingual/i);
   assert.doesNotMatch(stringify("footy-standings"), /real[- ]?time|live data|data live/i);
   assert.doesNotMatch(stringify("panoramic-virtual-tour"), /\bAR\b|\bVR\b|WebGL/i);
   assert.doesNotMatch(stringify("thermal-printer-service"), /universal|semua printer/i);

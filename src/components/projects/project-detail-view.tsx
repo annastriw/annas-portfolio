@@ -250,6 +250,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       project.nusaScope ||
       project.simastokScope ||
       project.heartMlScope ||
+      project.speechToTextScope ||
       (project.technicalNotes?.[locale] &&
         project.technicalNotes[locale].length > 0) ||
       (project.techStack &&
@@ -260,7 +261,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         project.slug !== "dialisis-connect-edu" &&
         project.slug !== "nusa-dakwah" &&
         project.slug !== "simastok" &&
-        project.slug !== "ml-for-heart-attack-risk-prediction"),
+        project.slug !== "ml-for-heart-attack-risk-prediction" &&
+        project.slug !== "speech-to-text-system"),
   );
   const scopeIndex = hasScope
     ? String(++sectionCounter).padStart(2, "0")
@@ -1507,6 +1509,119 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   </div>
                 ) : null}
 
+                {/* Speech-to-Text System 3-Group System Scope */}
+                {project.speechToTextScope ? (
+                  <div className={styles.systemScopeGrid3Col}>
+                    {/* 01 // Media Preparation */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>{`01 // ${project.speechToTextScope.mediaPreparation.title[locale]}`}</span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        <ul
+                          className={styles.contributionList}
+                          style={{ margin: 0 }}
+                        >
+                          {project.speechToTextScope.mediaPreparation.items[
+                            locale
+                          ].map((item, itemIdx) => (
+                            <li
+                              key={itemIdx}
+                              className={styles.contributionItem}
+                            >
+                              <span
+                                className={styles.contributionIndex}
+                                aria-hidden="true"
+                              >
+                                {String(itemIdx + 1).padStart(2, "0")}
+                              </span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* 02 // ASR Inference */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>{`02 // ${project.speechToTextScope.asrInference.title[locale]}`}</span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        <ul
+                          className={styles.contributionList}
+                          style={{ margin: 0 }}
+                        >
+                          {project.speechToTextScope.asrInference.items[
+                            locale
+                          ].map((item, itemIdx) => (
+                            <li
+                              key={itemIdx}
+                              className={styles.contributionItem}
+                            >
+                              <span
+                                className={styles.contributionIndex}
+                                aria-hidden="true"
+                              >
+                                {String(itemIdx + 1).padStart(2, "0")}
+                              </span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Model Boundary Note inside Scope right after ASR Inference */}
+                        <div className={styles.modelBoundaryNote}>
+                          <div className={styles.modelBoundaryTag}>
+                            <span aria-hidden="true">■</span>
+                            <span>
+                              {isId
+                                ? "[BATAS KLAIM // MODEL PRETRAINED]"
+                                : "[CLAIM BOUNDARY // PRETRAINED MODEL]"}
+                            </span>
+                          </div>
+                          <p className={styles.modelBoundaryText}>
+                            {project.speechToTextScope.modelNote[locale]}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 03 // Transcript & Subtitle Outputs */}
+                    <div className={styles.scopeGroup}>
+                      <div className={styles.scopeGroupHeader}>
+                        <span className={styles.scopeGroupHeaderTag}>■</span>
+                        <span>{`03 // ${project.speechToTextScope.transcriptOutputs.title[locale]}`}</span>
+                      </div>
+                      <div className={styles.scopeGroupBody}>
+                        <ul
+                          className={styles.contributionList}
+                          style={{ margin: 0 }}
+                        >
+                          {project.speechToTextScope.transcriptOutputs.items[
+                            locale
+                          ].map((item, itemIdx) => (
+                            <li
+                              key={itemIdx}
+                              className={styles.contributionItem}
+                            >
+                              <span
+                                className={styles.contributionIndex}
+                                aria-hidden="true"
+                              >
+                                {String(itemIdx + 1).padStart(2, "0")}
+                              </span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
                 {/* 4. Key Technical Notes */}
                 {project.technicalNotes?.[locale] &&
                 project.technicalNotes[locale].length > 0 &&
@@ -1515,6 +1630,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 !project.nusaScope &&
                 !project.simastokScope &&
                 !project.heartMlScope &&
+                !project.speechToTextScope &&
                 !project.modules ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
@@ -1543,7 +1659,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 project.slug !== "dialisis-connect-edu" &&
                 project.slug !== "nusa-dakwah" &&
                 project.slug !== "simastok" &&
-                project.slug !== "ml-for-heart-attack-risk-prediction" ? (
+                project.slug !== "ml-for-heart-attack-risk-prediction" &&
+                project.slug !== "speech-to-text-system" ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
                       <span className={styles.subBlockHeaderTag}>■</span>
