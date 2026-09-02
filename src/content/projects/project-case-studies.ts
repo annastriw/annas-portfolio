@@ -98,6 +98,15 @@ export interface NusaSystemScopeData {
   readonly groups: readonly NusaSystemScopeGroup[];
 }
 
+export interface SimastokSystemScopeGroup {
+  readonly title: LocalizedProjectText;
+  readonly description: LocalizedProjectText;
+}
+
+export interface SimastokSystemScopeData {
+  readonly groups: readonly SimastokSystemScopeGroup[];
+}
+
 export interface ProjectMetadataRow {
   readonly label: LocalizedProjectText;
   readonly value: LocalizedProjectText;
@@ -140,6 +149,7 @@ export interface ProjectCaseStudy {
   readonly systemScope?: IHealthSystemScopeData;
   readonly dialisisScope?: DialisisSystemScopeData;
   readonly nusaScope?: NusaSystemScopeData;
+  readonly simastokScope?: SimastokSystemScopeData;
   readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
   readonly personalTechStack?: readonly string[];
@@ -1610,70 +1620,324 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "05",
     slug: "simastok",
     category: "web-app",
-    categoryLabel: categoryLabels["web-app"],
+    categoryLabel: { en: "05 // WEB APPLICATION", id: "05 // WEB APPLICATION" },
     title: { en: "SIMASTOK SHR Jaya Motor", id: "SIMASTOK SHR Jaya Motor" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
-    status: { en: "Production deployment", id: "Deploy ke production" },
+    client: { en: "SHR Jaya Motor", id: "SHR Jaya Motor" },
+    clientLabel: { en: "Stakeholder", id: "Stakeholder" },
+    role: {
+      en: "Full-Stack Web Developer",
+      id: "Full-Stack Web Developer",
+    },
+    period: {
+      en: "December 2025–January 2026",
+      id: "Desember 2025–Januari 2026",
+    },
+    status: { en: "Live Production", id: "Live Production" },
+    lead: {
+      en: "A web-based inventory system that replaces handwritten stock records with a centralized workflow for monitoring inventory, tracking incoming and outgoing parts, and preparing reports.",
+      id: "Sistem inventory berbasis web yang menggantikan pencatatan stok di buku dengan workflow terpusat untuk memantau persediaan, menelusuri barang masuk dan keluar, serta membuat laporan.",
+    },
+    metadataRows: [
+      {
+        label: { en: "Role", id: "Peran" },
+        value: {
+          en: "Full-Stack Web Developer",
+          id: "Full-Stack Web Developer",
+        },
+      },
+      {
+        label: { en: "Period", id: "Periode" },
+        value: {
+          en: "December 2025–January 2026",
+          id: "Desember 2025–Januari 2026",
+        },
+      },
+      {
+        label: { en: "Status", id: "Status" },
+        value: { en: "Live Production", id: "Live Production" },
+      },
+      {
+        label: { en: "Stakeholder", id: "Stakeholder" },
+        value: { en: "SHR Jaya Motor", id: "SHR Jaya Motor" },
+      },
+    ],
+    metaTitle: {
+      en: "SIMASTOK SHR Jaya Motor — Full-Stack Web Development Case Study | Annas Tri Widagdo",
+      id: "SIMASTOK SHR Jaya Motor — Studi Kasus Full-Stack Web Development | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "A full-stack case study of a production inventory system used by SHR Jaya Motor for centralized stock tracking, transaction history, and reporting.",
+      id: "Studi kasus full-stack sistem inventory production yang digunakan SHR Jaya Motor untuk pemantauan stok, riwayat transaksi, dan laporan terpusat.",
+    },
+    liveUrl: "https://simastok.site/",
+    repositoryNotice: {
+      en: "Private Repository",
+      id: "Private Repository",
+    },
     overview: {
       en: [
-        "SIMASTOK is an inventory-management web application built for SHR Jaya Motor.",
-        "It centralizes master data, incoming and outgoing stock, transaction history, date-based reports, and PDF exports for administrator and user roles.",
+        "SHR Jaya Motor previously recorded its inventory manually in books, making it difficult to monitor stock, trace transactions, and prepare reports. I gathered the system requirements through interviews and iterative feedback with the workshop.",
+        "I independently designed and developed SIMASTOK for the owner and employees. The production system brings inventory records, stock transactions, automatic updates, validation, transaction history, and period-based PDF reports into one application.",
       ],
       id: [
-        "SIMASTOK adalah aplikasi web pengelolaan inventaris yang dibangun untuk SHR Jaya Motor.",
-        "Aplikasi ini memusatkan data master, stok masuk dan keluar, riwayat transaksi, laporan berdasarkan tanggal, serta ekspor PDF untuk peran administrator dan pengguna.",
+        "Sebelum menggunakan SIMASTOK, SHR Jaya Motor mencatat persediaan secara manual di buku sehingga pemantauan stok, penelusuran transaksi, dan pembuatan laporan menjadi lebih sulit. Saya menggali kebutuhan sistem melalui wawancara dan feedback bertahap bersama pihak bengkel.",
+        "Saya merancang dan mengembangkan SIMASTOK secara mandiri untuk owner dan pegawai. Sistem yang digunakan dalam operasional ini menyatukan pencatatan inventory, transaksi stok, pembaruan otomatis, validasi, riwayat transaksi, serta laporan PDF berdasarkan periode dalam satu aplikasi.",
       ],
     },
     contributions: {
       en: [
-        "Designed the inventory workflows and interface in Figma.",
-        "Built the Laravel frontend and backend with MySQL data storage.",
-        "Implemented role access, stock mutation rules, insufficient-stock validation, history, and PDF reporting.",
-        "Ran functional and regression checks with Katalon and deployed the Dockerized application on Ubuntu.",
+        "Gathered inventory requirements through interviews and iterative feedback with SHR Jaya Motor.",
+        "Designed the inventory workflows and interfaces in Figma, then built the Laravel frontend and backend with MySQL.",
+        "Implemented role-based access, master data, stock movements, insufficient-stock validation, transaction history, and reporting.",
+        "Performed manual and automated testing with Katalon Studio, then containerized and deployed the application with Docker.",
       ],
       id: [
-        "Merancang alur inventaris dan antarmuka di Figma.",
-        "Membangun frontend dan backend Laravel dengan penyimpanan data MySQL.",
-        "Mengimplementasikan akses peran, aturan perubahan stok, validasi stok tidak mencukupi, riwayat, dan laporan PDF.",
-        "Menjalankan pemeriksaan fungsional dan regresi dengan Katalon serta melakukan deployment aplikasi berbasis Docker di Ubuntu.",
+        "Menggali kebutuhan inventory melalui wawancara dan feedback bertahap bersama SHR Jaya Motor.",
+        "Merancang workflow inventory dan antarmuka di Figma, kemudian membangun frontend dan backend menggunakan Laravel serta MySQL.",
+        "Mengimplementasikan akses berbasis role, master data, pergerakan stok, validasi stok tidak mencukupi, riwayat transaksi, dan laporan.",
+        "Melakukan manual dan automation testing menggunakan Katalon Studio, kemudian menjalankan containerization dan deployment aplikasi menggunakan Docker.",
       ],
     },
-    technicalNotes: {
-      en: [
-        "Master data covers goods, categories, and suppliers.",
-        "Incoming and outgoing transactions update stock records automatically.",
-        "Outgoing transactions are blocked when the available quantity is insufficient.",
-        "Reports can be filtered by date range and exported as PDF documents.",
-      ],
-      id: [
-        "Data master mencakup barang, kategori, dan pemasok.",
-        "Transaksi masuk dan keluar memperbarui catatan stok secara otomatis.",
-        "Transaksi keluar diblokir ketika jumlah stok tersedia tidak mencukupi.",
-        "Laporan dapat difilter berdasarkan rentang tanggal dan diekspor sebagai dokumen PDF.",
+    contributionLearning: {
+      en: "This project strengthened my ability to build an inventory system end-to-end until it was used in real operations.",
+      id: "Project ini memperkuat kemampuan saya dalam membangun sistem inventory secara end-to-end hingga digunakan dalam operasional nyata.",
+    },
+    personalTechStack: [
+      "Figma",
+      "Laravel",
+      "PHP",
+      "MySQL",
+      "Katalon Studio",
+      "Docker",
+    ],
+    techStack: [
+      "Figma",
+      "Laravel",
+      "PHP",
+      "MySQL",
+      "Katalon Studio",
+      "Docker",
+    ],
+    simastokScope: {
+      groups: [
+        {
+          title: {
+            en: "Inventory Records",
+            id: "Pencatatan Persediaan",
+          },
+          description: {
+            en: "Centralized records for parts, categories, suppliers, and available stock.",
+            id: "Pencatatan terpusat untuk suku cadang, kategori, supplier, dan stok yang tersedia.",
+          },
+        },
+        {
+          title: {
+            en: "Stock Transactions",
+            id: "Transaksi Stok",
+          },
+          description: {
+            en: "Incoming and outgoing transactions update stock automatically, prevent invalid withdrawals, and preserve movement history.",
+            id: "Transaksi barang masuk dan keluar memperbarui stok secara otomatis, mencegah pengeluaran melebihi stok, dan menyimpan riwayat pergerakan barang.",
+          },
+        },
+        {
+          title: {
+            en: "Reporting & Access",
+            id: "Laporan & Akses",
+          },
+          description: {
+            en: "Role-based access for the owner and employees, supported by date-range reports and PDF exports.",
+            id: "Akses berbasis role untuk owner dan pegawai, dilengkapi laporan berdasarkan rentang tanggal serta ekspor PDF.",
+          },
+        },
       ],
     },
-    techStack: ["Laravel", "PHP", "MySQL", "Katalon Studio", "Docker", "Ubuntu"],
     cover: {
       src: "/assets/projects/simastok/cover.webp",
-      alt: { en: "SIMASTOK inventory system sign-in interface", id: "Antarmuka masuk sistem inventaris SIMASTOK" },
+      alt: {
+        en: "SIMASTOK sign-in screen with email and password fields over a workshop tool background",
+        id: "Halaman login SIMASTOK dengan formulir email dan kata sandi berlatar peralatan bengkel",
+      },
       position: "center",
+      caption: {
+        en: "Authentication interface for SIMASTOK SHR Jaya Motor.",
+        id: "Antarmuka autentikasi pengguna SIMASTOK SHR Jaya Motor.",
+      },
     },
     evidence: [
       {
         id: "FIG.01",
         src: "/assets/projects/simastok/documentation/01.webp",
         format: "wide",
-        alt: { en: "SIMASTOK inventory interface documentation", id: "Dokumentasi antarmuka inventaris SIMASTOK" },
-        caption: { en: "Inventory authentication and master dashboard view.", id: "Tampilan autentikasi dan dashboard master inventaris." },
+        alt: {
+          en: "SIMASTOK login modal with email and password input fields",
+          id: "Modal login SIMASTOK dengan kolom input email dan kata sandi",
+        },
+        caption: {
+          en: "User login screen with authentication controls and registration link.",
+          id: "Halaman login pengguna dengan kontrol autentikasi dan tautan pendaftaran.",
+        },
       },
       {
         id: "FIG.02",
         src: "/assets/projects/simastok/documentation/02.webp",
         format: "wide",
-        alt: { en: "SIMASTOK stock workflow interface", id: "Antarmuka alur stok SIMASTOK" },
-        caption: { en: "Stock movement recording and date-range reporting view.", id: "Pencatatan pergerakan stok dan tampilan pelaporan berbasis tanggal." },
+        alt: {
+          en: "SIMASTOK administrator dashboard with summary stat cards and stock movement bar chart",
+          id: "Dashboard admin SIMASTOK dengan kartu statistik ringkasan dan grafik batang pergerakan stok",
+        },
+        caption: {
+          en: "Administrator dashboard showing inventory summary metrics and stock movement charts.",
+          id: "Dashboard administrator yang menampilkan metrik ringkasan inventaris dan grafik pergerakan stok.",
+        },
+      },
+      {
+        id: "FIG.03",
+        src: "/assets/projects/simastok/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK inventory table displaying spare parts list, categories, suppliers, stock counts, and action buttons",
+          id: "Tabel inventaris SIMASTOK menampilkan daftar suku cadang, kategori, pemasok, jumlah stok, dan tombol aksi",
+        },
+        caption: {
+          en: "Inventory records table with item details, category tags, supplier information, and stock levels.",
+          id: "Tabel data persediaan barang dengan detail barang, kategori, supplier, dan jumlah stok.",
+        },
+      },
+      {
+        id: "FIG.04",
+        src: "/assets/projects/simastok/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK outgoing goods form with dropdown item selector, quantity input, and date picker",
+          id: "Formulir barang keluar SIMASTOK dengan pilihan barang, input jumlah, dan pemilih tanggal",
+        },
+        caption: {
+          en: "Outgoing stock transaction form for recording part withdrawals.",
+          id: "Formulir pencatatan transaksi barang keluar untuk pengeluaran suku cadang.",
+        },
+      },
+      {
+        id: "FIG.05",
+        src: "/assets/projects/simastok/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK stock report page showing date-range filter, total incoming and outgoing cards, and detailed transaction records",
+          id: "Halaman laporan stok SIMASTOK menampilkan filter tanggal, kartu ringkasan barang masuk dan keluar, serta catatan transaksi",
+        },
+        caption: {
+          en: "Stock movement report view with date-range filtering, summary totals, and transaction history.",
+          id: "Tampilan laporan pergerakan barang dengan filter rentang tanggal, total ringkasan, dan riwayat transaksi.",
+        },
+      },
+      {
+        id: "FIG.06",
+        src: "/assets/projects/simastok/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK user profile settings page with profile information and password update forms",
+          id: "Halaman pengaturan profil pengguna SIMASTOK dengan formulir data profil dan pembaruan kata sandi",
+        },
+        caption: {
+          en: "User profile settings view for updating account information and password.",
+          id: "Tampilan pengaturan profil pengguna untuk memperbarui informasi akun dan kata sandi.",
+        },
       },
     ],
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/simastok/cover.webp",
+        format: "cover",
+        alt: {
+          en: "SIMASTOK sign-in screen with email and password fields over a workshop tool background",
+          id: "Halaman login SIMASTOK dengan formulir email dan kata sandi berlatar peralatan bengkel",
+        },
+        caption: {
+          en: "Authentication interface for SIMASTOK SHR Jaya Motor.",
+          id: "Antarmuka autentikasi pengguna SIMASTOK SHR Jaya Motor.",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/simastok/documentation/01.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK login modal with email and password input fields",
+          id: "Modal login SIMASTOK dengan kolom input email dan kata sandi",
+        },
+        caption: {
+          en: "User login screen with authentication controls and registration link.",
+          id: "Halaman login pengguna dengan kontrol autentikasi dan tautan pendaftaran.",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/simastok/documentation/02.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK administrator dashboard with summary stat cards and stock movement bar chart",
+          id: "Dashboard admin SIMASTOK dengan kartu statistik ringkasan dan grafik batang pergerakan stok",
+        },
+        caption: {
+          en: "Administrator dashboard showing inventory summary metrics and stock movement charts.",
+          id: "Dashboard administrator yang menampilkan metrik ringkasan inventaris dan grafik pergerakan stok.",
+        },
+      },
+      {
+        slide: "04",
+        src: "/assets/projects/simastok/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK inventory table displaying spare parts list, categories, suppliers, stock counts, and action buttons",
+          id: "Tabel inventaris SIMASTOK menampilkan daftar suku cadang, kategori, pemasok, jumlah stok, dan tombol aksi",
+        },
+        caption: {
+          en: "Inventory records table with item details, category tags, supplier information, and stock levels.",
+          id: "Tabel data persediaan barang dengan detail barang, kategori, supplier, dan jumlah stok.",
+        },
+      },
+      {
+        slide: "05",
+        src: "/assets/projects/simastok/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK outgoing goods form with dropdown item selector, quantity input, and date picker",
+          id: "Formulir barang keluar SIMASTOK dengan pilihan barang, input jumlah, dan pemilih tanggal",
+        },
+        caption: {
+          en: "Outgoing stock transaction form for recording part withdrawals.",
+          id: "Formulir pencatatan transaksi barang keluar untuk pengeluaran suku cadang.",
+        },
+      },
+      {
+        slide: "06",
+        src: "/assets/projects/simastok/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK stock report page showing date-range filter, total incoming and outgoing cards, and detailed transaction records",
+          id: "Halaman laporan stok SIMASTOK menampilkan filter tanggal, kartu ringkasan barang masuk dan keluar, serta catatan transaksi",
+        },
+        caption: {
+          en: "Stock movement report view with date-range filtering, summary totals, and transaction history.",
+          id: "Tampilan laporan pergerakan barang dengan filter rentang tanggal, total ringkasan, dan riwayat transaksi.",
+        },
+      },
+      {
+        slide: "07",
+        src: "/assets/projects/simastok/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "SIMASTOK user profile settings page with profile information and password update forms",
+          id: "Halaman pengaturan profil pengguna SIMASTOK dengan formulir data profil dan pembaruan kata sandi",
+        },
+        caption: {
+          en: "User profile settings view for updating account information and password.",
+          id: "Tampilan pengaturan profil pengguna untuk memperbarui informasi akun dan kata sandi.",
+        },
+      },
+    ],
+    galleryThumbnails: true,
   },
   {
     index: "06",

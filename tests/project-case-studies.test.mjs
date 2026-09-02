@@ -83,6 +83,7 @@ test("references only real local visual evidence and verified public links", () 
       ["ihealth-edu", "https://www.ihealthedu.site/"],
       ["dialisis-connect-edu", "https://dialisisconnectedu.vercel.app/"],
       ["nusa-dakwah", "https://nusadakwah.vercel.app/"],
+      ["simastok", "https://simastok.site/"],
     ],
   );
   assert.equal(
@@ -879,6 +880,251 @@ test("maintains approved Nusa Dakwah locked facts, bilingual copy, and content s
   const stringified = JSON.stringify(nusa);
   assert.doesNotMatch(stringified, /search\b|search results|pencarian/i);
   assert.doesNotMatch(stringified, /"Fullstack Developer"/i);
+});
+
+test("maintains approved SIMASTOK locked facts, bilingual copy, and content structures", () => {
+  const simastok = getProjectCaseStudy("simastok");
+  assert.ok(simastok);
+
+  // Locked facts & metadata
+  assert.equal(simastok.index, "05");
+  assert.equal(simastok.client?.en, "SHR Jaya Motor");
+  assert.equal(simastok.client?.id, "SHR Jaya Motor");
+  assert.equal(simastok.clientLabel?.en, "Stakeholder");
+  assert.equal(simastok.clientLabel?.id, "Stakeholder");
+  assert.equal(simastok.role.en, "Full-Stack Web Developer");
+  assert.equal(simastok.role.id, "Full-Stack Web Developer");
+  assert.equal(simastok.period?.en, "December 2025–January 2026");
+  assert.equal(simastok.period?.id, "Desember 2025–Januari 2026");
+  assert.equal(simastok.status.en, "Live Production");
+  assert.equal(simastok.status.id, "Live Production");
+  assert.equal(simastok.workingModel, undefined);
+  assert.equal(simastok.liveUrl, "https://simastok.site/");
+  assert.equal(simastok.githubUrl, undefined);
+  assert.equal(simastok.frontendRepoUrl, undefined);
+  assert.equal(simastok.backendRepoUrl, undefined);
+  assert.equal(simastok.repositoryNotice?.en, "Private Repository");
+  assert.equal(simastok.repositoryNotice?.id, "Private Repository");
+
+  // MetadataRows display only Role, Period, Status, Stakeholder
+  assert.ok(simastok.metadataRows);
+  assert.equal(simastok.metadataRows.length, 4);
+  assert.deepEqual(
+    simastok.metadataRows.map((r) => r.label.en),
+    ["Role", "Period", "Status", "Stakeholder"],
+  );
+  assert.deepEqual(
+    simastok.metadataRows.map((r) => r.label.id),
+    ["Peran", "Periode", "Status", "Stakeholder"],
+  );
+  assert.deepEqual(
+    simastok.metadataRows.map((r) => r.value.en),
+    [
+      "Full-Stack Web Developer",
+      "December 2025–January 2026",
+      "Live Production",
+      "SHR Jaya Motor",
+    ],
+  );
+  assert.deepEqual(
+    simastok.metadataRows.map((r) => r.value.id),
+    [
+      "Full-Stack Web Developer",
+      "Desember 2025–Januari 2026",
+      "Live Production",
+      "SHR Jaya Motor",
+    ],
+  );
+
+  // Category & Lead
+  assert.equal(simastok.categoryLabel.en, "05 // WEB APPLICATION");
+  assert.equal(simastok.categoryLabel.id, "05 // WEB APPLICATION");
+  assert.equal(
+    simastok.lead?.en,
+    "A web-based inventory system that replaces handwritten stock records with a centralized workflow for monitoring inventory, tracking incoming and outgoing parts, and preparing reports.",
+  );
+  assert.equal(
+    simastok.lead?.id,
+    "Sistem inventory berbasis web yang menggantikan pencatatan stok di buku dengan workflow terpusat untuk memantau persediaan, menelusuri barang masuk dan keluar, serta membuat laporan.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    simastok.metaTitle?.en,
+    "SIMASTOK SHR Jaya Motor — Full-Stack Web Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    simastok.metaTitle?.id,
+    "SIMASTOK SHR Jaya Motor — Studi Kasus Full-Stack Web Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    simastok.metaDescription?.en,
+    "A full-stack case study of a production inventory system used by SHR Jaya Motor for centralized stock tracking, transaction history, and reporting.",
+  );
+  assert.equal(
+    simastok.metaDescription?.id,
+    "Studi kasus full-stack sistem inventory production yang digunakan SHR Jaya Motor untuk pemantauan stok, riwayat transaksi, dan laporan terpusat.",
+  );
+
+  // Overview (exact 2 paragraphs from Sections 7-8)
+  assert.equal(simastok.overview.en.length, 2);
+  assert.equal(simastok.overview.id.length, 2);
+  assert.equal(
+    simastok.overview.en[0],
+    "SHR Jaya Motor previously recorded its inventory manually in books, making it difficult to monitor stock, trace transactions, and prepare reports. I gathered the system requirements through interviews and iterative feedback with the workshop.",
+  );
+  assert.equal(
+    simastok.overview.en[1],
+    "I independently designed and developed SIMASTOK for the owner and employees. The production system brings inventory records, stock transactions, automatic updates, validation, transaction history, and period-based PDF reports into one application.",
+  );
+  assert.equal(
+    simastok.overview.id[0],
+    "Sebelum menggunakan SIMASTOK, SHR Jaya Motor mencatat persediaan secara manual di buku sehingga pemantauan stok, penelusuran transaksi, dan pembuatan laporan menjadi lebih sulit. Saya menggali kebutuhan sistem melalui wawancara dan feedback bertahap bersama pihak bengkel.",
+  );
+  assert.equal(
+    simastok.overview.id[1],
+    "Saya merancang dan mengembangkan SIMASTOK secara mandiri untuk owner dan pegawai. Sistem yang digunakan dalam operasional ini menyatukan pencatatan inventory, transaksi stok, pembaruan otomatis, validasi, riwayat transaksi, serta laporan PDF berdasarkan periode dalam satu aplikasi.",
+  );
+
+  // Contributions (exact 4 items + closing learning statement)
+  assert.equal(simastok.contributions.en.length, 4);
+  assert.equal(simastok.contributions.id.length, 4);
+  assert.equal(
+    simastok.contributions.en[0],
+    "Gathered inventory requirements through interviews and iterative feedback with SHR Jaya Motor.",
+  );
+  assert.equal(
+    simastok.contributions.en[1],
+    "Designed the inventory workflows and interfaces in Figma, then built the Laravel frontend and backend with MySQL.",
+  );
+  assert.equal(
+    simastok.contributions.en[2],
+    "Implemented role-based access, master data, stock movements, insufficient-stock validation, transaction history, and reporting.",
+  );
+  assert.equal(
+    simastok.contributions.en[3],
+    "Performed manual and automated testing with Katalon Studio, then containerized and deployed the application with Docker.",
+  );
+  assert.equal(
+    simastok.contributions.id[0],
+    "Menggali kebutuhan inventory melalui wawancara dan feedback bertahap bersama SHR Jaya Motor.",
+  );
+  assert.equal(
+    simastok.contributions.id[1],
+    "Merancang workflow inventory dan antarmuka di Figma, kemudian membangun frontend dan backend menggunakan Laravel serta MySQL.",
+  );
+  assert.equal(
+    simastok.contributions.id[2],
+    "Mengimplementasikan akses berbasis role, master data, pergerakan stok, validasi stok tidak mencukupi, riwayat transaksi, dan laporan.",
+  );
+  assert.equal(
+    simastok.contributions.id[3],
+    "Melakukan manual dan automation testing menggunakan Katalon Studio, kemudian menjalankan containerization dan deployment aplikasi menggunakan Docker.",
+  );
+  assert.equal(
+    simastok.contributionLearning?.en,
+    "This project strengthened my ability to build an inventory system end-to-end until it was used in real operations.",
+  );
+  assert.equal(
+    simastok.contributionLearning?.id,
+    "Project ini memperkuat kemampuan saya dalam membangun sistem inventory secara end-to-end hingga digunakan dalam operasional nyata.",
+  );
+
+  // Personal tech stack (exact 6 items in approved order)
+  assert.deepEqual(simastok.personalTechStack, [
+    "Figma",
+    "Laravel",
+    "PHP",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
+  assert.deepEqual(simastok.techStack, [
+    "Figma",
+    "Laravel",
+    "PHP",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
+
+  // System Scope (exact 3 groups from Section 9)
+  assert.ok(simastok.simastokScope);
+  assert.equal(simastok.simastokScope.groups.length, 3);
+  assert.deepEqual(
+    simastok.simastokScope.groups.map((g) => g.title.en),
+    ["Inventory Records", "Stock Transactions", "Reporting & Access"],
+  );
+  assert.deepEqual(
+    simastok.simastokScope.groups.map((g) => g.title.id),
+    ["Pencatatan Persediaan", "Transaksi Stok", "Laporan & Akses"],
+  );
+  assert.equal(
+    simastok.simastokScope.groups[0].description.en,
+    "Centralized records for parts, categories, suppliers, and available stock.",
+  );
+  assert.equal(
+    simastok.simastokScope.groups[0].description.id,
+    "Pencatatan terpusat untuk suku cadang, kategori, supplier, dan stok yang tersedia.",
+  );
+  assert.equal(
+    simastok.simastokScope.groups[1].description.en,
+    "Incoming and outgoing transactions update stock automatically, prevent invalid withdrawals, and preserve movement history.",
+  );
+  assert.equal(
+    simastok.simastokScope.groups[1].description.id,
+    "Transaksi barang masuk dan keluar memperbarui stok secara otomatis, mencegah pengeluaran melebihi stok, dan menyimpan riwayat pergerakan barang.",
+  );
+  assert.equal(
+    simastok.simastokScope.groups[2].description.en,
+    "Role-based access for the owner and employees, supported by date-range reports and PDF exports.",
+  );
+  assert.equal(
+    simastok.simastokScope.groups[2].description.id,
+    "Akses berbasis role untuk owner dan pegawai, dilengkapi laporan berdasarkan rentang tanggal serta ekspor PDF.",
+  );
+
+  // Absence of forbidden sections
+  assert.equal(simastok.technicalNotes, undefined);
+  assert.equal(simastok.optionalModule, undefined);
+  assert.equal(simastok.workflow, undefined);
+  assert.equal(simastok.modules, undefined);
+  assert.equal(simastok.technologyGroups, undefined);
+  assert.equal(simastok.videoSrc, undefined);
+
+  // Gallery: exactly 7 slides in exact path order with non-placeholder captions
+  assert.equal(simastok.gallery?.length, 7);
+  assert.equal(simastok.gallery?.[0].src, "/assets/projects/simastok/cover.webp");
+  const expectedPaths = [
+    "/assets/projects/simastok/cover.webp",
+    "/assets/projects/simastok/documentation/01.webp",
+    "/assets/projects/simastok/documentation/02.webp",
+    "/assets/projects/simastok/documentation/03.webp",
+    "/assets/projects/simastok/documentation/04.webp",
+    "/assets/projects/simastok/documentation/05.webp",
+    "/assets/projects/simastok/documentation/06.webp",
+  ];
+  for (let i = 0; i < 7; i++) {
+    const slide = simastok.gallery?.[i];
+    assert.ok(slide);
+    assert.equal(slide.src, expectedPaths[i]);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.doesNotMatch(slide.caption.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.caption.id, /^TODO_|^\[/);
+    assert.ok(slide.caption.en.length > 10);
+    assert.ok(slide.caption.id.length > 10);
+    assert.doesNotMatch(slide.alt.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.alt.id, /^TODO_|^\[/);
+    assert.ok(slide.alt.en.length > 10);
+    assert.ok(slide.alt.id.length > 10);
+    assert.notEqual(slide.caption.en, slide.alt.en);
+    assert.notEqual(slide.caption.id, slide.alt.id);
+  }
+
+  // Claim boundaries
+  const stringified = JSON.stringify(simastok);
+  assert.doesNotMatch(stringified, /"Fullstack Developer"/i);
+  assert.doesNotMatch(stringified, /Production deployment/i);
 });
 
 test("keeps the project-specific factual boundaries explicit", () => {

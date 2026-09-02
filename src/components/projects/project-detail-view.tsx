@@ -247,6 +247,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       project.systemScope ||
       project.dialisisScope ||
       project.nusaScope ||
+      project.simastokScope ||
       (project.technicalNotes?.[locale] &&
         project.technicalNotes[locale].length > 0) ||
       (project.techStack &&
@@ -255,7 +256,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         !project.personalTechStack &&
         project.slug !== "ihealth-edu" &&
         project.slug !== "dialisis-connect-edu" &&
-        project.slug !== "nusa-dakwah"),
+        project.slug !== "nusa-dakwah" &&
+        project.slug !== "simastok"),
   );
   const scopeIndex = hasScope
     ? String(++sectionCounter).padStart(2, "0")
@@ -1280,12 +1282,32 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   </div>
                 ) : null}
 
+                {/* SIMASTOK 3-Group System Scope */}
+                {project.simastokScope ? (
+                  <div className={styles.systemScopeGrid3Col}>
+                    {project.simastokScope.groups.map((group, gIdx) => (
+                      <div key={group.title.en} className={styles.scopeGroup}>
+                        <div className={styles.scopeGroupHeader}>
+                          <span className={styles.scopeGroupHeaderTag}>■</span>
+                          <span>{`${String(gIdx + 1).padStart(2, "0")} // ${group.title[locale]}`}</span>
+                        </div>
+                        <div className={styles.scopeGroupBody}>
+                          <p className={styles.roleDescription}>
+                            {group.description[locale]}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
                 {/* 4. Key Technical Notes */}
                 {project.technicalNotes?.[locale] &&
                 project.technicalNotes[locale].length > 0 &&
                 !project.systemScope &&
                 !project.dialisisScope &&
                 !project.nusaScope &&
+                !project.simastokScope &&
                 !project.modules ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
@@ -1312,7 +1334,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 !project.personalTechStack &&
                 project.slug !== "ihealth-edu" &&
                 project.slug !== "dialisis-connect-edu" &&
-                project.slug !== "nusa-dakwah" ? (
+                project.slug !== "nusa-dakwah" &&
+                project.slug !== "simastok" ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
                       <span className={styles.subBlockHeaderTag}>■</span>

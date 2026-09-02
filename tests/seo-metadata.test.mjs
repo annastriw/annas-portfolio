@@ -321,7 +321,7 @@ test("Projects Hub metadata generates valid Section 10 metadata and OG cover", (
   assert.equal(metaId.alternates?.canonical, "https://annastriwidagdo.me/id/projects");
 });
 
-test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, Dialisis, and Nusa Dakwah", () => {
+test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, Dialisis, Nusa Dakwah, and SIMASTOK", () => {
   const ukg = projectCaseStudies.find((p) => p.slug === "ukg-system");
   assert.ok(ukg);
   const ukgSchema = generateProjectJsonLd(ukg, "en");
@@ -401,6 +401,25 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
 
   const nusaJsonString = JSON.stringify(nusaSchema);
   assert.doesNotMatch(nusaJsonString, /search|pencarian/i);
+
+  const simastok = projectCaseStudies.find((p) => p.slug === "simastok");
+  assert.ok(simastok);
+  const simastokSchema = generateProjectJsonLd(simastok, "en");
+  assert.equal(simastokSchema["@type"], "SoftwareSourceCode");
+  assert.equal(simastokSchema.name, "SIMASTOK SHR Jaya Motor");
+  assert.equal(simastokSchema.url, "https://annastriwidagdo.me/en/projects/simastok");
+  assert.equal(simastokSchema.relatedLink, "https://simastok.site/");
+  assert.ok(simastokSchema.image?.includes("/assets/projects/simastok/cover.webp"));
+  assert.deepEqual(simastokSchema.keywords, [
+    "web-app",
+    "Full-Stack Web Developer",
+    "Figma",
+    "Laravel",
+    "PHP",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
 });
 
 test("generateBlogPostingJsonLd produces valid BlogPosting schema with related project references", () => {
