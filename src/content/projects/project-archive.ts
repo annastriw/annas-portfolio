@@ -18,7 +18,6 @@ export interface ProjectArchiveItem {
   readonly coverAlt: LocalizedText;
   readonly coverPosition?: "center" | "top";
   readonly status: LocalizedText;
-  readonly liveUrl?: string;
 }
 
 export const projectArchiveCategories: readonly {
@@ -63,13 +62,13 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Full-Stack Web Developer",
     },
     summary: {
-      en: "A multi-branch ERP developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and production deployment.",
-      id: "ERP multi-cabang yang dikembangkan secara end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment ke production.",
+      en: "A multi-branch ERP that centralizes inventory, sales, and daily operations in one production system.",
+      id: "ERP multi-cabang yang memusatkan stok, penjualan, dan operasional harian dalam satu sistem production.",
     },
     primaryTechnologies: [
+      "Figma",
       "Next.js",
       "NestJS",
-      "TypeScript",
       "MySQL",
       "Katalon Studio",
       "Linux Ubuntu",
@@ -81,7 +80,6 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     coverPosition: "top",
     status: { en: "Live Production", id: "Live Production" },
-    liveUrl: "https://ukgsystem.site/",
   },
   {
     index: "02",
@@ -93,10 +91,17 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Frontend Web Developer",
     },
     summary: {
-      en: "A health education and screening platform developed with Puskesmas Padangsari, integrating patient data management, IoT telemetry, and machine learning decision support.",
-      id: "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan pengelolaan data pasien, telemetri IoT, dan dukungan pengambilan keputusan berbasis machine learning.",
+      en: "A digital health platform for structured screening, patient records, health education, IoT data, and machine learning decision support.",
+      id: "Platform kesehatan digital untuk screening terstruktur, data pasien, edukasi kesehatan, data IoT, dan machine learning decision support.",
     },
-    primaryTechnologies: ["Next.js", "Laravel", "MySQL", "Flask", "Docker"],
+    primaryTechnologies: [
+      "Figma",
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "REST API",
+    ],
     coverImage: "/assets/projects/ihealth-edu/cover.webp",
     coverAlt: {
       en: "iHealth Edu health education and screening interface",
@@ -119,9 +124,10 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Platform edukasi dan komunitas kesehatan ginjal yang dikembangkan bersama IPDI Jawa Tengah, menyediakan materi pembelajaran, panduan video, booklet digital, dan forum diskusi.",
     },
     primaryTechnologies: [
+      "Figma",
       "Next.js",
-      "Laravel",
-      "MySQL",
+      "React",
+      "REST API",
       "Katalon Studio",
       "Docker",
     ],

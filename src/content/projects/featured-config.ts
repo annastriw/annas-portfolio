@@ -29,13 +29,13 @@ export const homeSelectedProjects: readonly HomeSelectedProject[] = [
       id: "Live Production",
     },
     summary: {
-      en: "A multi-branch ERP developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and production deployment.",
-      id: "ERP multi-cabang yang dikembangkan secara end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment ke production.",
+      en: "A multi-branch ERP developed end to end to centralize inventory, sales, and daily operations for remote monitoring.",
+      id: "ERP multi-cabang yang dikembangkan secara end-to-end untuk memusatkan data stok, penjualan, dan operasional agar dapat dipantau dari mana saja.",
     },
     technologies: [
+      "Figma",
       "Next.js",
       "NestJS",
-      "TypeScript",
       "MySQL",
       "Katalon Studio",
       "Linux Ubuntu",

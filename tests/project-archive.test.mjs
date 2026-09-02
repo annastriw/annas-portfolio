@@ -68,12 +68,12 @@ const expectedStatuses = [
 
 const expectedSummaries = {
   "ukg-system": {
-    en: "A multi-branch ERP developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and production deployment.",
-    id: "ERP multi-cabang yang dikembangkan secara end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment ke production.",
+    en: "A multi-branch ERP that centralizes inventory, sales, and daily operations in one production system.",
+    id: "ERP multi-cabang yang memusatkan stok, penjualan, dan operasional harian dalam satu sistem production.",
   },
   "ihealth-edu": {
-    en: "A health education and screening platform developed with Puskesmas Padangsari, integrating patient data management, IoT telemetry, and machine learning decision support.",
-    id: "Platform edukasi dan screening kesehatan yang dikembangkan bersama Puskesmas Padangsari, dengan pengelolaan data pasien, telemetri IoT, dan dukungan pengambilan keputusan berbasis machine learning.",
+    en: "A digital health platform for structured screening, patient records, health education, IoT data, and machine learning decision support.",
+    id: "Platform kesehatan digital untuk screening terstruktur, data pasien, edukasi kesehatan, data IoT, dan machine learning decision support.",
   },
   "dialisis-connect-edu": {
     en: "A kidney health education and community platform developed with IPDI Central Java, providing learning resources, video guides, digital booklets, and discussion forums.",
@@ -182,7 +182,7 @@ test("preserves original project indexes when categories are filtered", () => {
   );
 });
 
-test("enforces max 6 displayed technologies and exact 5 items for iHealth excluding ESP32", () => {
+test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, and Dialisis", () => {
   for (const project of projectArchive) {
     assert.ok(
       project.primaryTechnologies.length <= 6,
@@ -194,19 +194,38 @@ test("enforces max 6 displayed technologies and exact 5 items for iHealth exclud
     );
   }
 
+  const ukg = projectArchive.find((p) => p.slug === "ukg-system");
+  assert.ok(ukg);
+  assert.deepEqual(ukg.primaryTechnologies, [
+    "Figma",
+    "Next.js",
+    "NestJS",
+    "MySQL",
+    "Katalon Studio",
+    "Linux Ubuntu",
+  ]);
+
   const ihealth = projectArchive.find((p) => p.slug === "ihealth-edu");
   assert.ok(ihealth);
   assert.deepEqual(ihealth.primaryTechnologies, [
+    "Figma",
     "Next.js",
-    "Laravel",
-    "MySQL",
-    "Flask",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "REST API",
+  ]);
+
+  const dialisis = projectArchive.find((p) => p.slug === "dialisis-connect-edu");
+  assert.ok(dialisis);
+  assert.deepEqual(dialisis.primaryTechnologies, [
+    "Figma",
+    "Next.js",
+    "React",
+    "REST API",
+    "Katalon Studio",
     "Docker",
   ]);
-  assert.ok(
-    !ihealth.primaryTechnologies.includes("ESP32"),
-    "iHealth displayed stack must exclude ESP32",
-  );
 });
 
 test("matches exact approved bilingual summaries and preserves medical boundaries", () => {
@@ -234,15 +253,12 @@ test("matches exact approved bilingual summaries and preserves medical boundarie
   const ihealth = projectArchive.find((p) => p.slug === "ihealth-edu");
   assert.ok(ihealth);
   assert.match(ihealth.summary.en, /decision support/i);
-  assert.match(ihealth.summary.id, /dukungan pengambilan keputusan/i);
+  assert.match(ihealth.summary.id, /decision support/i);
 });
 
-test("exposes only the verified UKG production link with approved destination", () => {
-  const linkedProjects = projectArchive.filter((project) => project.liveUrl);
-  assert.deepEqual(
-    linkedProjects.map(({ slug, liveUrl }) => ({ slug, liveUrl })),
-    [{ slug: "ukg-system", liveUrl: "https://ukgsystem.site/" }],
-  );
+test("does not expose external links in Projects Hub entries", () => {
+  const linkedProjects = projectArchive.filter((project) => "liveUrl" in project && project.liveUrl);
+  assert.equal(linkedProjects.length, 0, "No project archive item should contain external liveUrl");
 });
 
 test("verifies that all project cover images exist in the public directory", () => {

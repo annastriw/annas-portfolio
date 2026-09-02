@@ -123,20 +123,25 @@ test("Featured projects renders 4-row full-width editorial index with visible Ex
   assert.equal(homeSelectedProjects[0].status.en, "Live Production");
   assert.equal(
     homeSelectedProjects[0].summary.en,
-    "A multi-branch ERP developed end-to-end for CV Universal Kharisma Globalindo, covering operational workflows, automated testing, and production deployment.",
+    "A multi-branch ERP developed end to end to centralize inventory, sales, and daily operations for remote monitoring.",
   );
   assert.equal(
     homeSelectedProjects[0].summary.id,
-    "ERP multi-cabang yang dikembangkan secara end-to-end untuk CV Universal Kharisma Globalindo, mencakup workflow operasional, automated testing, dan deployment ke production.",
+    "ERP multi-cabang yang dikembangkan secara end-to-end untuk memusatkan data stok, penjualan, dan operasional agar dapat dipantau dari mana saja.",
   );
   assert.deepEqual(homeSelectedProjects[0].technologies, [
+    "Figma",
     "Next.js",
     "NestJS",
-    "TypeScript",
     "MySQL",
     "Katalon Studio",
     "Linux Ubuntu",
   ]);
+  assert.equal(homeSelectedProjects[0].technologies.length, 6);
+
+  // Confirm Dialisis Connect Edu is not on Home
+  assert.ok(!homeSelectedProjects.some((p) => p.slug === "dialisis-connect-edu"));
+  assert.ok(!Object.values(homeFeaturedConfig).includes("dialisis-connect-edu"));
 
   // 02 iHealth Edu synchronization (approved Frontend Web Developer, 6-item stack, approved bilingual summary)
   assert.equal(homeSelectedProjects[1].title.en, "iHealth Edu");
