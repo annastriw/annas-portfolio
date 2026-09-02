@@ -321,7 +321,7 @@ test("Projects Hub metadata generates valid Section 10 metadata and OG cover", (
   assert.equal(metaId.alternates?.canonical, "https://annastriwidagdo.me/id/projects");
 });
 
-test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, Dialisis, Nusa Dakwah, and SIMASTOK", () => {
+test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, Heart ML, and Speech-to-Text", () => {
   const ukg = projectCaseStudies.find((p) => p.slug === "ukg-system");
   assert.ok(ukg);
   const ukgSchema = generateProjectJsonLd(ukg, "en");
