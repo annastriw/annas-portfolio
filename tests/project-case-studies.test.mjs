@@ -82,6 +82,7 @@ test("references only real local visual evidence and verified public links", () 
       ["ukg-system", "https://ukgsystem.site/"],
       ["ihealth-edu", "https://www.ihealthedu.site/"],
       ["dialisis-connect-edu", "https://dialisisconnectedu.vercel.app/"],
+      ["nusa-dakwah", "https://nusadakwah.vercel.app/"],
     ],
   );
   assert.equal(
@@ -642,6 +643,244 @@ test("maintains approved Dialisis Connect Edu locked facts, bilingual copy, and 
   assert.doesNotMatch(stringified, /"Fullstack Developer"/i);
 });
 
+test("maintains approved Nusa Dakwah locked facts, bilingual copy, and content structures", () => {
+  const nusa = getProjectCaseStudy("nusa-dakwah");
+  assert.ok(nusa);
+
+  // Locked facts & metadata
+  assert.equal(nusa.index, "04");
+  assert.equal(nusa.slug, "nusa-dakwah");
+  assert.equal(nusa.category, "web-app");
+  assert.equal(nusa.categoryLabel.en, "04 / WEB APPLICATION");
+  assert.equal(nusa.categoryLabel.id, "04 / WEB APPLICATION");
+  assert.equal(nusa.title.en, "Nusa Dakwah");
+  assert.equal(nusa.title.id, "Nusa Dakwah");
+  assert.equal(nusa.role.en, "Full-Stack Web Developer");
+  assert.equal(nusa.role.id, "Full-Stack Web Developer");
+  assert.equal(nusa.period?.en, "January–February 2026");
+  assert.equal(nusa.period?.id, "Januari–Februari 2026");
+  assert.equal(nusa.status.en, "Live Production");
+  assert.equal(nusa.status.id, "Live Production");
+  assert.equal(
+    nusa.workingModel?.en,
+    "Independently developed without a client",
+  );
+  assert.equal(
+    nusa.workingModel?.id,
+    "Dikembangkan mandiri tanpa klien",
+  );
+  assert.equal(nusa.client, undefined);
+  assert.equal(nusa.clientLabel, undefined);
+  assert.equal(nusa.liveUrl, "https://nusadakwah.vercel.app/");
+  assert.equal(nusa.frontendRepoUrl, undefined);
+  assert.equal(nusa.backendRepoUrl, undefined);
+  assert.equal(nusa.githubUrl, undefined);
+  assert.equal(nusa.repositoryNotice?.en, "Private Repository");
+  assert.equal(nusa.repositoryNotice?.id, "Private Repository");
+
+  // Lead
+  assert.equal(
+    nusa.lead?.en,
+    "A digital learning platform that organizes Islamic educational content into structured modules and connects each lesson with community discussion.",
+  );
+  assert.equal(
+    nusa.lead?.id,
+    "Platform pembelajaran digital yang menyusun materi dakwah dalam modul terstruktur dan menghubungkan setiap materi dengan ruang diskusi.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    nusa.metaTitle?.en,
+    "Nusa Dakwah — Full-Stack Web Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    nusa.metaTitle?.id,
+    "Nusa Dakwah — Studi Kasus Full-Stack Web Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    nusa.metaDescription?.en,
+    "A full-stack case study of a digital Islamic learning platform with structured modules, multimedia content, and community discussion.",
+  );
+  assert.equal(
+    nusa.metaDescription?.id,
+    "Studi kasus full-stack platform pembelajaran dan dakwah digital dengan modul terstruktur, konten multimedia, dan diskusi komunitas.",
+  );
+
+  // Overview (exact 2 paragraphs from Section 7)
+  assert.equal(nusa.overview.en.length, 2);
+  assert.equal(nusa.overview.id.length, 2);
+  assert.equal(
+    nusa.overview.en[0],
+    "Nusa Dakwah was independently developed to make Islamic learning materials easier for the public to access and follow online.",
+  );
+  assert.equal(
+    nusa.overview.en[1],
+    "Content is organized into modules, submodules, articles, and YouTube videos. Each lesson includes a discussion space, while administrators manage learning content, conversations, and user accounts.",
+  );
+  assert.equal(
+    nusa.overview.id[0],
+    "Nusa Dakwah dikembangkan secara mandiri agar materi dakwah lebih mudah diakses dan dipelajari secara online oleh masyarakat umum.",
+  );
+  assert.equal(
+    nusa.overview.id[1],
+    "Materi disusun dalam modul, submodul, artikel, dan video YouTube. Setiap materi memiliki ruang diskusi, sementara admin mengelola konten pembelajaran, percakapan, dan akun pengguna.",
+  );
+
+  // Contributions (exact 4 items from Section 8)
+  assert.equal(nusa.contributions.en.length, 4);
+  assert.equal(nusa.contributions.id.length, 4);
+  assert.equal(
+    nusa.contributions.en[0],
+    "Defined the product requirements and designed the user flow, information architecture, wireframes, and UI/UX in Figma.",
+  );
+  assert.equal(
+    nusa.contributions.en[1],
+    "Developed the Next.js frontend, Laravel REST API, and MySQL database.",
+  );
+  assert.equal(
+    nusa.contributions.en[2],
+    "Implemented role-based learning content, community discussions, and administration flows, including input validation and forum sanitization.",
+  );
+  assert.equal(
+    nusa.contributions.en[3],
+    "Performed manual and automated testing with Katalon Studio, then deployed the frontend to Vercel and the Dockerized backend to Linux Ubuntu.",
+  );
+  assert.equal(
+    nusa.contributions.id[0],
+    "Merumuskan kebutuhan produk serta merancang user flow, information architecture, wireframe, dan UI/UX menggunakan Figma.",
+  );
+  assert.equal(
+    nusa.contributions.id[1],
+    "Mengembangkan frontend Next.js, REST API Laravel, dan database MySQL.",
+  );
+  assert.equal(
+    nusa.contributions.id[2],
+    "Mengimplementasikan konten pembelajaran, forum diskusi, dan alur administrasi berbasis role, termasuk validasi input dan sanitasi forum.",
+  );
+  assert.equal(
+    nusa.contributions.id[3],
+    "Melakukan manual dan automation testing dengan Katalon Studio, kemudian melakukan deployment frontend ke Vercel dan backend berbasis Docker ke Linux Ubuntu.",
+  );
+
+  // Personal tech stack (exact 6 items)
+  assert.deepEqual(nusa.personalTechStack, [
+    "Figma",
+    "Next.js",
+    "Laravel",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
+  assert.deepEqual(nusa.techStack, [
+    "Figma",
+    "Next.js",
+    "Laravel",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
+
+  // System Scope (exact 3 groups from Section 9)
+  assert.ok(nusa.nusaScope);
+  assert.equal(nusa.nusaScope.groups.length, 3);
+  assert.deepEqual(
+    nusa.nusaScope.groups.map((g) => g.title.en),
+    ["Learning Structure", "Community Discussion", "Administration"],
+  );
+  assert.deepEqual(
+    nusa.nusaScope.groups[0].items.en,
+    [
+      "Module → Submodule → Learning Content",
+      "Articles",
+      "YouTube Videos",
+      "Structured content navigation",
+    ],
+  );
+  assert.deepEqual(
+    nusa.nusaScope.groups[0].items.id,
+    [
+      "Modul → Submodul → Materi Pembelajaran",
+      "Artikel",
+      "Video YouTube",
+      "Navigasi konten terstruktur",
+    ],
+  );
+  assert.deepEqual(
+    nusa.nusaScope.groups[1].items.en,
+    [
+      "Discussion space attached to each lesson",
+      "Comments and replies",
+      "Nested replies",
+      "Administrator moderation",
+    ],
+  );
+  assert.deepEqual(
+    nusa.nusaScope.groups[1].items.id,
+    [
+      "Ruang diskusi pada setiap materi",
+      "Komentar dan balasan",
+      "Balasan bertingkat (nested replies)",
+      "Moderasi administrator",
+    ],
+  );
+  assert.deepEqual(
+    nusa.nusaScope.groups[2].items.en,
+    [
+      "Authentication and role-based access for User and Administrator",
+      "Module, submodule, and learning-content management",
+      "Discussion management",
+      "User and account management",
+    ],
+  );
+  assert.deepEqual(
+    nusa.nusaScope.groups[2].items.id,
+    [
+      "Autentikasi dan hak akses berbasis role untuk User dan Administrator",
+      "Pengelolaan modul, submodul, dan konten pembelajaran",
+      "Pengelolaan diskusi",
+      "Pengelolaan pengguna dan akun",
+    ],
+  );
+
+  // Absence of optional modules, technical notes, workflow, etc.
+  assert.equal(nusa.technicalNotes, undefined);
+  assert.equal(nusa.optionalModule, undefined);
+  assert.equal(nusa.workflow, undefined);
+  assert.equal(nusa.modules, undefined);
+  assert.equal(nusa.technologyGroups, undefined);
+  assert.equal(nusa.videoSrc, undefined);
+
+  // Gallery: exactly 7 slides with 14 unique searchable placeholders
+  assert.equal(nusa.gallery?.length, 7);
+  assert.equal(nusa.gallery?.[0].src, "/assets/projects/nusa-dakwah/cover.webp");
+  for (let i = 1; i <= 7; i++) {
+    const num = String(i).padStart(2, "0");
+    const slide = nusa.gallery?.[i - 1];
+    assert.ok(slide);
+    assert.equal(slide.slide, num);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.equal(slide.caption.en, `TODO_NUSA_DAKWAH_CAPTION_${num}_EN`);
+    assert.equal(slide.caption.id, `TODO_NUSA_DAKWAH_CAPTION_${num}_ID`);
+    assert.doesNotMatch(slide.alt.en, /TODO_NUSA_DAKWAH/);
+    assert.doesNotMatch(slide.alt.id, /TODO_NUSA_DAKWAH/);
+    assert.ok(slide.alt.en.length > 5);
+    assert.ok(slide.alt.id.length > 5);
+  }
+
+  // Verify exactly 14 unique occurrences of TODO_NUSA_DAKWAH_CAPTION_ in project-case-studies.ts
+  const caseStudiesSource = readFileSync(
+    join(root, "src", "content", "projects", "project-case-studies.ts"),
+    "utf8",
+  );
+  const nusaTokens = caseStudiesSource.match(/TODO_NUSA_DAKWAH_CAPTION_\d+_[A-Z]+/g) ?? [];
+  assert.equal(new Set(nusaTokens).size, 14);
+
+  // Absolute absence of search claims in Nusa Dakwah case study
+  const stringified = JSON.stringify(nusa);
+  assert.doesNotMatch(stringified, /search\b|search results|pencarian/i);
+  assert.doesNotMatch(stringified, /"Fullstack Developer"/i);
+});
+
 test("keeps the project-specific factual boundaries explicit", () => {
   const stringify = (slug) => JSON.stringify(getProjectCaseStudy(slug));
 
@@ -944,7 +1183,7 @@ test("gallery navigation wrap-around and counter synchronization are mathematica
   }
 });
 
-test("physical asset files for iHealth Edu (8 images), UKG System (9 images), and Dialisis Connect Edu (8 images) exist at exact paths without mutation", () => {
+test("physical asset files for iHealth Edu (8 images), UKG System (9 images), Dialisis Connect Edu (8 images), and Nusa Dakwah (7 images) exist at exact paths without mutation", () => {
   const ihealthExpectedPaths = [
     "public/assets/projects/ihealth-edu/cover.webp",
     "public/assets/projects/ihealth-edu/documentation/02.webp",
@@ -990,6 +1229,21 @@ test("physical asset files for iHealth Edu (8 images), UKG System (9 images), an
   ];
 
   for (const relPath of dialisisExpectedPaths) {
+    const fullPath = join(root, relPath);
+    assert.ok(existsSync(fullPath), `Expected asset exists: ${relPath}`);
+  }
+
+  const nusaExpectedPaths = [
+    "public/assets/projects/nusa-dakwah/cover.webp",
+    "public/assets/projects/nusa-dakwah/documentation/01.webp",
+    "public/assets/projects/nusa-dakwah/documentation/02.webp",
+    "public/assets/projects/nusa-dakwah/documentation/03.webp",
+    "public/assets/projects/nusa-dakwah/documentation/04.webp",
+    "public/assets/projects/nusa-dakwah/documentation/05.webp",
+    "public/assets/projects/nusa-dakwah/documentation/06.webp",
+  ];
+
+  for (const relPath of nusaExpectedPaths) {
     const fullPath = join(root, relPath);
     assert.ok(existsSync(fullPath), `Expected asset exists: ${relPath}`);
   }

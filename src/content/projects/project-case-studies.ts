@@ -89,6 +89,15 @@ export interface DialisisSystemScopeData {
   readonly communityDiscussion: DialisisCommunityDiscussion;
 }
 
+export interface NusaSystemScopeGroup {
+  readonly title: LocalizedProjectText;
+  readonly items: LocalizedProjectList;
+}
+
+export interface NusaSystemScopeData {
+  readonly groups: readonly NusaSystemScopeGroup[];
+}
+
 export interface ProjectMetadataRow {
   readonly label: LocalizedProjectText;
   readonly value: LocalizedProjectText;
@@ -130,6 +139,7 @@ export interface ProjectCaseStudy {
   readonly technologyGroups?: readonly ProjectTechnologyGroup[];
   readonly systemScope?: IHealthSystemScopeData;
   readonly dialisisScope?: DialisisSystemScopeData;
+  readonly nusaScope?: NusaSystemScopeData;
   readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
   readonly personalTechStack?: readonly string[];
@@ -1279,70 +1289,322 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "04",
     slug: "nusa-dakwah",
     category: "web-app",
-    categoryLabel: categoryLabels["web-app"],
+    categoryLabel: { en: "04 / WEB APPLICATION", id: "04 / WEB APPLICATION" },
     title: { en: "Nusa Dakwah", id: "Nusa Dakwah" },
-    role: { en: "Fullstack Developer", id: "Fullstack Developer" },
-    status: { en: "Production deployment", id: "Deploy ke production" },
+    role: { en: "Full-Stack Web Developer", id: "Full-Stack Web Developer" },
+    period: { en: "January–February 2026", id: "Januari–Februari 2026" },
+    status: { en: "Live Production", id: "Live Production" },
+    workingModel: {
+      en: "Independently developed without a client",
+      id: "Dikembangkan mandiri tanpa klien",
+    },
+    lead: {
+      en: "A digital learning platform that organizes Islamic educational content into structured modules and connects each lesson with community discussion.",
+      id: "Platform pembelajaran digital yang menyusun materi dakwah dalam modul terstruktur dan menghubungkan setiap materi dengan ruang diskusi.",
+    },
+    metaTitle: {
+      en: "Nusa Dakwah — Full-Stack Web Development Case Study | Annas Tri Widagdo",
+      id: "Nusa Dakwah — Studi Kasus Full-Stack Web Development | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "A full-stack case study of a digital Islamic learning platform with structured modules, multimedia content, and community discussion.",
+      id: "Studi kasus full-stack platform pembelajaran dan dakwah digital dengan modul terstruktur, konten multimedia, dan diskusi komunitas.",
+    },
+    liveUrl: "https://nusadakwah.vercel.app/",
+    repositoryNotice: {
+      en: "Private Repository",
+      id: "Private Repository",
+    },
     overview: {
       en: [
-        "Nusa Dakwah is a full-stack digital learning platform for structured educational content and community discussion.",
-        "Users can explore modules, submodules, articles, YouTube material, search results, and moderated conversations, while administrators manage the system.",
+        "Nusa Dakwah was independently developed to make Islamic learning materials easier for the public to access and follow online.",
+        "Content is organized into modules, submodules, articles, and YouTube videos. Each lesson includes a discussion space, while administrators manage learning content, conversations, and user accounts.",
       ],
       id: [
-        "Nusa Dakwah adalah platform dakwah digital fullstack untuk konten pembelajaran terstruktur dan diskusi komunitas.",
-        "Pengguna dapat menjelajahi modul, submodul, artikel, materi YouTube, hasil pencarian, dan percakapan termoderasi, sedangkan administrator mengelola sistem.",
+        "Nusa Dakwah dikembangkan secara mandiri agar materi dakwah lebih mudah diakses dan dipelajari secara online oleh masyarakat umum.",
+        "Materi disusun dalam modul, submodul, artikel, dan video YouTube. Setiap materi memiliki ruang diskusi, sementara admin mengelola konten pembelajaran, percakapan, dan akun pengguna.",
       ],
     },
     contributions: {
       en: [
-        "Designed the learning and discussion journeys in Figma.",
-        "Built the Next.js frontend and Laravel REST backend backed by MySQL.",
-        "Implemented nested replies, moderation controls, search, validation, and sanitization.",
-        "Ran manual and automated Katalon checks and deployed the Dockerized application to Ubuntu.",
+        "Defined the product requirements and designed the user flow, information architecture, wireframes, and UI/UX in Figma.",
+        "Developed the Next.js frontend, Laravel REST API, and MySQL database.",
+        "Implemented role-based learning content, community discussions, and administration flows, including input validation and forum sanitization.",
+        "Performed manual and automated testing with Katalon Studio, then deployed the frontend to Vercel and the Dockerized backend to Linux Ubuntu.",
       ],
       id: [
-        "Merancang perjalanan pembelajaran dan diskusi di Figma.",
-        "Membangun frontend Next.js dan backend REST Laravel dengan MySQL.",
-        "Mengimplementasikan nested reply, kontrol moderasi, pencarian, validasi, dan sanitasi.",
-        "Menjalankan pemeriksaan manual dan otomatis dengan Katalon serta melakukan deployment aplikasi berbasis Docker ke Ubuntu.",
+        "Merumuskan kebutuhan produk serta merancang user flow, information architecture, wireframe, dan UI/UX menggunakan Figma.",
+        "Mengembangkan frontend Next.js, REST API Laravel, dan database MySQL.",
+        "Mengimplementasikan konten pembelajaran, forum diskusi, dan alur administrasi berbasis role, termasuk validasi input dan sanitasi forum.",
+        "Melakukan manual dan automation testing dengan Katalon Studio, kemudian melakukan deployment frontend ke Vercel dan backend berbasis Docker ke Linux Ubuntu.",
       ],
     },
-    technicalNotes: {
-      en: [
-        "Learning content follows a module, submodule, and content hierarchy.",
-        "The forum supports comments, nested replies, and administrator moderation.",
-        "Search spans the published content available to users.",
-        "Input validation and sanitization protect content-management and discussion flows.",
-      ],
-      id: [
-        "Konten pembelajaran mengikuti hierarki modul, submodul, dan konten.",
-        "Forum mendukung komentar, nested reply, dan moderasi administrator.",
-        "Pencarian mencakup konten terpublikasi yang tersedia bagi pengguna.",
-        "Validasi dan sanitasi input melindungi alur pengelolaan konten dan diskusi.",
+    personalTechStack: [
+      "Figma",
+      "Next.js",
+      "Laravel",
+      "MySQL",
+      "Katalon Studio",
+      "Docker",
+    ],
+    nusaScope: {
+      groups: [
+        {
+          title: {
+            en: "Learning Structure",
+            id: "Struktur Pembelajaran",
+          },
+          items: {
+            en: [
+              "Module → Submodule → Learning Content",
+              "Articles",
+              "YouTube Videos",
+              "Structured content navigation",
+            ],
+            id: [
+              "Modul → Submodul → Materi Pembelajaran",
+              "Artikel",
+              "Video YouTube",
+              "Navigasi konten terstruktur",
+            ],
+          },
+        },
+        {
+          title: {
+            en: "Community Discussion",
+            id: "Diskusi Komunitas",
+          },
+          items: {
+            en: [
+              "Discussion space attached to each lesson",
+              "Comments and replies",
+              "Nested replies",
+              "Administrator moderation",
+            ],
+            id: [
+              "Ruang diskusi pada setiap materi",
+              "Komentar dan balasan",
+              "Balasan bertingkat (nested replies)",
+              "Moderasi administrator",
+            ],
+          },
+        },
+        {
+          title: {
+            en: "Administration",
+            id: "Administrasi",
+          },
+          items: {
+            en: [
+              "Authentication and role-based access for User and Administrator",
+              "Module, submodule, and learning-content management",
+              "Discussion management",
+              "User and account management",
+            ],
+            id: [
+              "Autentikasi dan hak akses berbasis role untuk User dan Administrator",
+              "Pengelolaan modul, submodul, dan konten pembelajaran",
+              "Pengelolaan diskusi",
+              "Pengelolaan pengguna dan akun",
+            ],
+          },
+        },
       ],
     },
-    techStack: ["Next.js", "Laravel", "MySQL", "REST API", "Katalon Studio", "Docker"],
+    techStack: [
+      "Figma",
+      "Next.js",
+      "Laravel",
+      "MySQL",
+      "Katalon Studio",
+      "Docker",
+    ],
     cover: {
       src: "/assets/projects/nusa-dakwah/cover.webp",
-      alt: { en: "Nusa Dakwah digital content platform", id: "Platform konten digital Nusa Dakwah" },
+      alt: {
+        en: "Nusa Dakwah digital Islamic learning platform homepage and featured modules",
+        id: "Beranda platform pembelajaran digital dan dakwah Islam Nusa Dakwah dengan modul pilihan",
+      },
       position: "top",
+      caption: {
+        en: "TODO_NUSA_DAKWAH_CAPTION_01_EN",
+        id: "TODO_NUSA_DAKWAH_CAPTION_01_ID",
+      },
     },
     evidence: [
       {
         id: "FIG.01",
         src: "/assets/projects/nusa-dakwah/documentation/01.webp",
         format: "wide",
-        alt: { en: "Nusa Dakwah interface documentation", id: "Dokumentasi antarmuka Nusa Dakwah" },
-        caption: { en: "Learning catalog with structured module navigation.", id: "Katalog pembelajaran dengan navigasi modul terstruktur." },
+        alt: {
+          en: "Nusa Dakwah learning catalog with structured module and submodule navigation",
+          id: "Katalog pembelajaran Nusa Dakwah dengan navigasi modul dan submodul terstruktur",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_02_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_02_ID",
+        },
       },
       {
         id: "FIG.02",
         src: "/assets/projects/nusa-dakwah/documentation/02.webp",
         format: "wide",
-        alt: { en: "Nusa Dakwah content workflow", id: "Alur konten Nusa Dakwah" },
-        caption: { en: "Modular content reader and integrated discussion forum.", id: "Pembaca materi modular dan forum diskusi terintegrasi." },
+        alt: {
+          en: "Nusa Dakwah lesson content reader with multimedia article and video view",
+          id: "Tampilan pembaca materi pembelajaran Nusa Dakwah dengan artikel multimedia dan video",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_03_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_03_ID",
+        },
+      },
+      {
+        id: "FIG.03",
+        src: "/assets/projects/nusa-dakwah/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah interactive lesson-attached community discussion space",
+          id: "Ruang diskusi komunitas terintegrasi pada materi pembelajaran Nusa Dakwah",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_04_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_04_ID",
+        },
+      },
+      {
+        id: "FIG.04",
+        src: "/assets/projects/nusa-dakwah/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah discussion thread with user comments and nested reply flow",
+          id: "Utas diskusi Nusa Dakwah dengan komentar pengguna dan alur balasan bertingkat",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_05_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_05_ID",
+        },
+      },
+      {
+        id: "FIG.05",
+        src: "/assets/projects/nusa-dakwah/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah administrator console for module, submodule, and content management",
+          id: "Konsol administrator Nusa Dakwah untuk pengelolaan modul, submodul, dan konten pembelajaran",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_06_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_06_ID",
+        },
+      },
+      {
+        id: "FIG.06",
+        src: "/assets/projects/nusa-dakwah/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah administrator dashboard for discussion moderation and user account management",
+          id: "Dashboard administrator Nusa Dakwah untuk moderasi diskusi dan pengelolaan akun pengguna",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_07_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_07_ID",
+        },
       },
     ],
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/nusa-dakwah/cover.webp",
+        format: "cover",
+        alt: {
+          en: "Nusa Dakwah digital Islamic learning platform homepage and featured modules",
+          id: "Beranda platform pembelajaran digital dan dakwah Islam Nusa Dakwah dengan modul pilihan",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_01_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_01_ID",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/nusa-dakwah/documentation/01.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah learning catalog with structured module and submodule navigation",
+          id: "Katalog pembelajaran Nusa Dakwah dengan navigasi modul dan submodul terstruktur",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_02_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_02_ID",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/nusa-dakwah/documentation/02.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah lesson content reader with multimedia article and video view",
+          id: "Tampilan pembaca materi pembelajaran Nusa Dakwah dengan artikel multimedia dan video",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_03_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_03_ID",
+        },
+      },
+      {
+        slide: "04",
+        src: "/assets/projects/nusa-dakwah/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah interactive lesson-attached community discussion space",
+          id: "Ruang diskusi komunitas terintegrasi pada materi pembelajaran Nusa Dakwah",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_04_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_04_ID",
+        },
+      },
+      {
+        slide: "05",
+        src: "/assets/projects/nusa-dakwah/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah discussion thread with user comments and nested reply flow",
+          id: "Utas diskusi Nusa Dakwah dengan komentar pengguna dan alur balasan bertingkat",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_05_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_05_ID",
+        },
+      },
+      {
+        slide: "06",
+        src: "/assets/projects/nusa-dakwah/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah administrator console for module, submodule, and content management",
+          id: "Konsol administrator Nusa Dakwah untuk pengelolaan modul, submodul, dan konten pembelajaran",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_06_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_06_ID",
+        },
+      },
+      {
+        slide: "07",
+        src: "/assets/projects/nusa-dakwah/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "Nusa Dakwah administrator dashboard for discussion moderation and user account management",
+          id: "Dashboard administrator Nusa Dakwah untuk moderasi diskusi dan pengelolaan akun pengguna",
+        },
+        caption: {
+          en: "TODO_NUSA_DAKWAH_CAPTION_07_EN",
+          id: "TODO_NUSA_DAKWAH_CAPTION_07_ID",
+        },
+      },
+    ],
+    galleryThumbnails: true,
   },
   {
     index: "05",

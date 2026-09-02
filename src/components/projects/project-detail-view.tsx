@@ -246,6 +246,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       (project.technologyGroups && project.technologyGroups.length > 0) ||
       project.systemScope ||
       project.dialisisScope ||
+      project.nusaScope ||
       (project.technicalNotes?.[locale] &&
         project.technicalNotes[locale].length > 0) ||
       (project.techStack &&
@@ -253,7 +254,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         !project.technologyGroups &&
         !project.personalTechStack &&
         project.slug !== "ihealth-edu" &&
-        project.slug !== "dialisis-connect-edu"),
+        project.slug !== "dialisis-connect-edu" &&
+        project.slug !== "nusa-dakwah"),
   );
   const scopeIndex = hasScope
     ? String(++sectionCounter).padStart(2, "0")
@@ -1243,11 +1245,47 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   </div>
                 ) : null}
 
+                {/* Nusa Dakwah 3-Group System Scope */}
+                {project.nusaScope ? (
+                  <div className={styles.systemScopeGrid3Col}>
+                    {project.nusaScope.groups.map((group, gIdx) => (
+                      <div key={group.title.en} className={styles.scopeGroup}>
+                        <div className={styles.scopeGroupHeader}>
+                          <span className={styles.scopeGroupHeaderTag}>■</span>
+                          <span>{`${String(gIdx + 1).padStart(2, "0")} // ${group.title[locale]}`}</span>
+                        </div>
+                        <div className={styles.scopeGroupBody}>
+                          <ul
+                            className={styles.contributionList}
+                            style={{ margin: 0 }}
+                          >
+                            {group.items[locale].map((item, itemIdx) => (
+                              <li
+                                key={itemIdx}
+                                className={styles.contributionItem}
+                              >
+                                <span
+                                  className={styles.contributionIndex}
+                                  aria-hidden="true"
+                                >
+                                  {String(itemIdx + 1).padStart(2, "0")}
+                                </span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
                 {/* 4. Key Technical Notes */}
                 {project.technicalNotes?.[locale] &&
                 project.technicalNotes[locale].length > 0 &&
                 !project.systemScope &&
                 !project.dialisisScope &&
+                !project.nusaScope &&
                 !project.modules ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
@@ -1273,7 +1311,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 !project.technologyGroups &&
                 !project.personalTechStack &&
                 project.slug !== "ihealth-edu" &&
-                project.slug !== "dialisis-connect-edu" ? (
+                project.slug !== "dialisis-connect-edu" &&
+                project.slug !== "nusa-dakwah" ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>
                       <span className={styles.subBlockHeaderTag}>■</span>

@@ -321,7 +321,7 @@ test("Projects Hub metadata generates valid Section 10 metadata and OG cover", (
   assert.equal(metaId.alternates?.canonical, "https://annastriwidagdo.me/id/projects");
 });
 
-test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, and Dialisis", () => {
+test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, Dialisis, and Nusa Dakwah", () => {
   const ukg = projectCaseStudies.find((p) => p.slug === "ukg-system");
   assert.ok(ukg);
   const ukgSchema = generateProjectJsonLd(ukg, "en");
@@ -379,6 +379,28 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
     "Katalon Studio",
     "Docker",
   ]);
+
+  const nusa = projectCaseStudies.find((p) => p.slug === "nusa-dakwah");
+  assert.ok(nusa);
+  const nusaSchema = generateProjectJsonLd(nusa, "en");
+  assert.equal(nusaSchema["@type"], "SoftwareSourceCode");
+  assert.equal(nusaSchema.name, "Nusa Dakwah");
+  assert.equal(nusaSchema.url, "https://annastriwidagdo.me/en/projects/nusa-dakwah");
+  assert.equal(nusaSchema.relatedLink, "https://nusadakwah.vercel.app/");
+  assert.ok(nusaSchema.image?.includes("/assets/projects/nusa-dakwah/cover.webp"));
+  assert.deepEqual(nusaSchema.keywords, [
+    "web-app",
+    "Full-Stack Web Developer",
+    "Figma",
+    "Next.js",
+    "Laravel",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
+
+  const nusaJsonString = JSON.stringify(nusaSchema);
+  assert.doesNotMatch(nusaJsonString, /search|pencarian/i);
 });
 
 test("generateBlogPostingJsonLd produces valid BlogPosting schema with related project references", () => {
