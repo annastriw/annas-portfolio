@@ -88,8 +88,8 @@ const expectedSummaries = {
     id: "Platform pembelajaran dan dakwah digital dengan modul terstruktur, artikel, video YouTube, dan diskusi komunitas yang dimoderasi.",
   },
   simastok: {
-    en: "A spare-parts inventory system that brings stock management, transaction records, and reporting into one application with role-based access.",
-    id: "Sistem inventory suku cadang yang menyatukan pengelolaan stok, pencatatan transaksi, dan laporan dalam satu aplikasi dengan akses berbasis role.",
+    en: "An inventory system used by SHR Jaya Motor to replace handwritten stock records with centralized stock tracking, transaction history, and reporting.",
+    id: "Sistem inventory yang digunakan SHR Jaya Motor untuk menggantikan pencatatan manual dengan pemantauan stok, riwayat transaksi, dan laporan yang terpusat.",
   },
   "ml-for-heart-attack-risk-prediction": {
     en: "A machine learning prototype for exploring heart attack risk prediction, with model inference served through a Flask API. Built for experimentation, not medical diagnosis.",
@@ -186,7 +186,7 @@ test("preserves original project indexes when categories are filtered", () => {
   );
 });
 
-test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, and Nusa Dakwah", () => {
+test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, and SIMASTOK", () => {
   for (const project of projectArchive) {
     assert.ok(
       project.primaryTechnologies.length <= 6,
@@ -237,6 +237,16 @@ test("enforces max 6 displayed technologies and exact approved stacks for UKG, i
     "Figma",
     "Next.js",
     "Laravel",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
+
+  const simastok = projectArchive.find((p) => p.slug === "simastok");
+  assert.ok(simastok);
+  assert.deepEqual(simastok.primaryTechnologies, [
+    "Laravel",
+    "PHP",
     "MySQL",
     "Katalon Studio",
     "Docker",
@@ -526,5 +536,96 @@ test("synchronizes Nusa Dakwah Hub entry with exact facts, 6-item stack, no sear
       "panoramic-virtual-tour",
     ],
   );
+});
+
+test("synchronizes SIMASTOK Hub entry with exact facts, 5-item stack, and absence from Home", () => {
+  const simastok = projectArchive.find((p) => p.slug === "simastok");
+  assert.ok(simastok, "SIMASTOK must exist in projectArchive");
+
+  // Exact fields
+  assert.equal(simastok.index, "05");
+  assert.equal(simastok.category, "web-app");
+  assert.equal(simastok.title.en, "SIMASTOK SHR Jaya Motor");
+  assert.equal(simastok.title.id, "SIMASTOK SHR Jaya Motor");
+  assert.equal(simastok.role.en, "Full-Stack Web Developer");
+  assert.equal(simastok.role.id, "Full-Stack Web Developer");
+  assert.equal(simastok.status.en, "Live Production");
+  assert.equal(simastok.status.id, "Live Production");
+  assert.equal(simastok.coverImage, "/assets/projects/simastok/cover.webp");
+  assert.equal(simastok.coverPosition, "center");
+  assert.equal(
+    simastok.coverAlt.en,
+    "SIMASTOK SHR Jaya Motor inventory system sign-in screen",
+  );
+  assert.equal(
+    simastok.coverAlt.id,
+    "Halaman masuk sistem inventaris SIMASTOK SHR Jaya Motor",
+  );
+  assert.equal(
+    simastok.summary.en,
+    "An inventory system used by SHR Jaya Motor to replace handwritten stock records with centralized stock tracking, transaction history, and reporting.",
+  );
+  assert.equal(
+    simastok.summary.id,
+    "Sistem inventory yang digunakan SHR Jaya Motor untuk menggantikan pencatatan manual dengan pemantauan stok, riwayat transaksi, dan laporan yang terpusat.",
+  );
+  assert.deepEqual(simastok.primaryTechnologies, [
+    "Laravel",
+    "PHP",
+    "MySQL",
+    "Katalon Studio",
+    "Docker",
+  ]);
+
+  // No external links in Hub record
+  assert.equal("liveUrl" in simastok, false);
+  assert.equal("githubUrl" in simastok, false);
+
+  // Absence from Home Selected Projects
+  assert.ok(
+    !homeSelectedProjects.some((p) => p.slug === "simastok"),
+    "SIMASTOK must remain absent from Home selected projects",
+  );
+  assert.ok(
+    !Object.values(homeFeaturedConfig).includes("simastok"),
+    "SIMASTOK must not be in homeFeaturedConfig",
+  );
+  assert.equal(homeSelectedProjects.length, 4);
+  assert.deepEqual(
+    homeSelectedProjects.map((p) => p.slug),
+    [
+      "ukg-system",
+      "ihealth-edu",
+      "ml-for-heart-attack-risk-prediction",
+      "panoramic-virtual-tour",
+    ],
+  );
+
+  // All 10 Hub records and order preserved
+  assert.equal(projectArchive.length, 10);
+  assert.deepEqual(
+    projectArchive.map((p) => p.slug),
+    expectedSlugs,
+  );
+
+  // All category filters preserved
+  const counts = getProjectArchiveCategoryCounts(projectArchive);
+  assert.deepEqual(counts, {
+    all: 10,
+    "web-app": 5,
+    ml: 2,
+    mobile: 2,
+    other: 1,
+  });
+
+  // Confirm other 9 records remain intact and unchanged
+  const otherNineSlugs = expectedSlugs.filter((s) => s !== "simastok");
+  assert.equal(otherNineSlugs.length, 9);
+  for (const slug of otherNineSlugs) {
+    const p = projectArchive.find((proj) => proj.slug === slug);
+    assert.ok(p, `Project ${slug} must exist in archive`);
+    assert.equal(p.summary.en, expectedSummaries[slug].en);
+    assert.equal(p.summary.id, expectedSummaries[slug].id);
+  }
 });
 

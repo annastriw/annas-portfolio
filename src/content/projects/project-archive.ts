@@ -181,8 +181,8 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       id: "Full-Stack Web Developer",
     },
     summary: {
-      en: "A spare-parts inventory system that brings stock management, transaction records, and reporting into one application with role-based access.",
-      id: "Sistem inventory suku cadang yang menyatukan pengelolaan stok, pencatatan transaksi, dan laporan dalam satu aplikasi dengan akses berbasis role.",
+      en: "An inventory system used by SHR Jaya Motor to replace handwritten stock records with centralized stock tracking, transaction history, and reporting.",
+      id: "Sistem inventory yang digunakan SHR Jaya Motor untuk menggantikan pencatatan manual dengan pemantauan stok, riwayat transaksi, dan laporan yang terpusat.",
     },
     primaryTechnologies: ["Laravel", "PHP", "MySQL", "Katalon Studio", "Docker"],
     coverImage: "/assets/projects/simastok/cover.webp",
