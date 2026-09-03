@@ -560,6 +560,67 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
     tpsJsonString,
     /universal printer|universal compatibility|benchmark|speed improvement|success rate|queue persistence|Wi-Fi|USB/i,
   );
+
+  const footy = projectCaseStudies.find((p) => p.slug === "footy-standings");
+  assert.ok(footy);
+  const footySchemaEn = generateProjectJsonLd(footy, "en");
+  assert.equal(footySchemaEn["@type"], "SoftwareSourceCode");
+  assert.equal(footySchemaEn.name, "Footy Standings");
+  assert.equal(
+    footySchemaEn.url,
+    "https://annastriwidagdo.me/en/projects/footy-standings",
+  );
+  assert.equal(
+    footySchemaEn.codeRepository,
+    "https://github.com/annastriw/FootyStandings.git",
+  );
+  assert.equal(footySchemaEn.programmingLanguage, "Dart");
+  assert.equal(footySchemaEn.relatedLink, undefined);
+  assert.ok(
+    footySchemaEn.image?.includes("/assets/projects/footy-standings/cover.webp"),
+  );
+  assert.deepEqual(footySchemaEn.keywords, [
+    "Android",
+    "Flutter",
+    "Dart",
+    "Football Data REST API",
+    "REST API",
+    "HTTP",
+    "JSON",
+    "FutureBuilder",
+    "Android Developer",
+  ]);
+
+  const footySchemaId = generateProjectJsonLd(footy, "id");
+  assert.equal(footySchemaId["@type"], "SoftwareSourceCode");
+  assert.equal(footySchemaId.name, "Footy Standings");
+  assert.equal(
+    footySchemaId.url,
+    "https://annastriwidagdo.me/id/projects/footy-standings",
+  );
+  assert.equal(
+    footySchemaId.codeRepository,
+    "https://github.com/annastriw/FootyStandings.git",
+  );
+  assert.equal(footySchemaId.programmingLanguage, "Dart");
+  assert.equal(footySchemaId.relatedLink, undefined);
+  assert.deepEqual(footySchemaId.keywords, [
+    "Android",
+    "Flutter",
+    "Dart",
+    "Football Data REST API",
+    "REST API",
+    "HTTP",
+    "JSON",
+    "FutureBuilder",
+    "Android Developer",
+  ]);
+
+  const footyJsonString = JSON.stringify(footySchemaEn);
+  assert.doesNotMatch(
+    footyJsonString,
+    /real[- ]?time scores|live score|instant sync|automatic refresh|polling|iOS|Play Store|Google Play/i,
+  );
 });
 
 test("Thermal Printer Service generates valid bilingual page metadata matching approved decision", () => {
@@ -618,6 +679,65 @@ test("Thermal Printer Service generates valid bilingual page metadata matching a
     en: "https://annastriwidagdo.me/en/projects/thermal-printer-service",
     id: "https://annastriwidagdo.me/id/projects/thermal-printer-service",
     "x-default": "https://annastriwidagdo.me/en/projects/thermal-printer-service",
+  });
+});
+
+test("Footy Standings generates valid bilingual page metadata matching approved decision", () => {
+  const footy = projectCaseStudies.find((p) => p.slug === "footy-standings");
+  assert.ok(footy);
+
+  const enMeta = createPageMetadata({
+    locale: "en",
+    path: `projects/${footy.slug}`,
+    title: footy.metaTitle.en,
+    description: footy.metaDescription.en,
+    type: "article",
+    images: [{ url: footy.cover.src, alt: footy.cover.alt.en }],
+  });
+
+  assert.equal(
+    enMeta.title,
+    "Footy Standings — Android Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    enMeta.description,
+    "An Android application built with Flutter and Dart for football standings, fixtures, top scorers, and club details, featuring REST API integration and asynchronous UI states.",
+  );
+  assert.equal(
+    enMeta.alternates?.canonical,
+    "https://annastriwidagdo.me/en/projects/footy-standings",
+  );
+  assert.deepEqual(enMeta.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/projects/footy-standings",
+    id: "https://annastriwidagdo.me/id/projects/footy-standings",
+    "x-default": "https://annastriwidagdo.me/en/projects/footy-standings",
+  });
+
+  const idMeta = createPageMetadata({
+    locale: "id",
+    path: `projects/${footy.slug}`,
+    title: footy.metaTitle.id,
+    description: footy.metaDescription.id,
+    type: "article",
+    images: [{ url: footy.cover.src, alt: footy.cover.alt.id }],
+  });
+
+  assert.equal(
+    idMeta.title,
+    "Footy Standings — Studi Kasus Android Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    idMeta.description,
+    "Aplikasi Android berbasis Flutter dan Dart untuk melihat klasemen sepak bola, jadwal pertandingan, top scorer, dan detail klub, dengan integrasi REST API dan penanganan status pemuatan data.",
+  );
+  assert.equal(
+    idMeta.alternates?.canonical,
+    "https://annastriwidagdo.me/id/projects/footy-standings",
+  );
+  assert.deepEqual(idMeta.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/projects/footy-standings",
+    id: "https://annastriwidagdo.me/id/projects/footy-standings",
+    "x-default": "https://annastriwidagdo.me/en/projects/footy-standings",
   });
 });
 

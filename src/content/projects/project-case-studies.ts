@@ -168,6 +168,16 @@ export interface ThermalPrinterSystemScopeData {
   readonly groups: readonly ThermalPrinterScopeGroup[];
 }
 
+export interface FootyScopeGroup {
+  readonly title: LocalizedProjectText;
+  readonly items: LocalizedProjectList;
+  readonly compactList?: string;
+}
+
+export interface FootySystemScopeData {
+  readonly groups: readonly FootyScopeGroup[];
+}
+
 export interface ProjectTechnicalMetadataItem {
   readonly value: string;
   readonly label: LocalizedProjectText;
@@ -197,6 +207,7 @@ export interface ProjectCaseStudy {
   readonly role: LocalizedProjectText;
   readonly period?: LocalizedProjectText;
   readonly status: LocalizedProjectText;
+  readonly programmingLanguage?: string;
   readonly client?: LocalizedProjectText;
   readonly clientLabel?: LocalizedProjectText;
   readonly workingModel?: LocalizedProjectText;
@@ -221,6 +232,7 @@ export interface ProjectCaseStudy {
   readonly heartMlScope?: HeartMlSystemScopeData;
   readonly speechToTextScope?: SpeechToTextSystemScopeData;
   readonly thermalPrinterScope?: ThermalPrinterSystemScopeData;
+  readonly footyScope?: FootySystemScopeData;
   readonly technicalMetadata?: readonly ProjectTechnicalMetadataItem[];
   readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
@@ -2880,77 +2892,294 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     index: "09",
     slug: "footy-standings",
     category: "mobile",
-    categoryLabel: categoryLabels.mobile,
+    categoryLabel: { en: "09 // MOBILE APPLICATION", id: "09 // MOBILE APPLICATION" },
     title: { en: "Footy Standings", id: "Footy Standings" },
-    role: { en: "Flutter Developer", id: "Flutter Developer" },
-    status: { en: "Implementation documented", id: "Implementasi terdokumentasi" },
-    overview: {
+    role: { en: "Android Developer", id: "Android Developer" },
+    period: { en: "October–November 2024", id: "Oktober–November 2024" },
+    status: { en: "Completed Application", id: "Completed Application" },
+    programmingLanguage: "Dart",
+    lead: {
+      en: "An Android application built with Flutter for exploring football standings, fixtures, top scorers, and club information.",
+      id: "Aplikasi Android berbasis Flutter untuk melihat klasemen sepak bola, jadwal pertandingan, top scorer, dan informasi klub.",
+    },
+    metadataRows: [
+      {
+        label: { en: "Role", id: "Peran" },
+        value: { en: "Android Developer", id: "Android Developer" },
+      },
+      {
+        label: { en: "Period", id: "Periode" },
+        value: { en: "October–November 2024", id: "Oktober–November 2024" },
+      },
+      {
+        label: { en: "Status", id: "Status" },
+        value: { en: "Completed Application", id: "Completed Application" },
+      },
+      {
+        label: { en: "Platform", id: "Platform" },
+        value: { en: "Android", id: "Android" },
+      },
+    ],
+    metaTitle: {
+      en: "Footy Standings — Android Development Case Study | Annas Tri Widagdo",
+      id: "Footy Standings — Studi Kasus Android Development | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "An Android application built with Flutter and Dart for football standings, fixtures, top scorers, and club details, featuring REST API integration and asynchronous UI states.",
+      id: "Aplikasi Android berbasis Flutter dan Dart untuk melihat klasemen sepak bola, jadwal pertandingan, top scorer, dan detail klub, dengan integrasi REST API dan penanganan status pemuatan data.",
+    },
+    keywords: {
       en: [
-        "Footy Standings is a Flutter application that retrieves football competition data from the Football Data REST API.",
-        "It presents standings, upcoming fixtures, top scorers, and club details across six supported competitions in a five-destination mobile interface.",
+        "Android",
+        "Flutter",
+        "Dart",
+        "Football Data REST API",
+        "REST API",
+        "HTTP",
+        "JSON",
+        "FutureBuilder",
+        "Android Developer",
       ],
       id: [
-        "Footy Standings adalah aplikasi Flutter yang mengambil data kompetisi sepak bola dari Football Data REST API.",
-        "Aplikasi ini menyajikan klasemen, jadwal mendatang, pencetak gol terbanyak, dan detail klub untuk enam kompetisi melalui antarmuka mobile dengan lima tujuan navigasi.",
+        "Android",
+        "Flutter",
+        "Dart",
+        "Football Data REST API",
+        "REST API",
+        "HTTP",
+        "JSON",
+        "FutureBuilder",
+        "Android Developer",
+      ],
+    },
+    githubUrl: "https://github.com/annastriw/FootyStandings.git",
+    overview: {
+      en: [
+        "I built Footy Standings for personal use to follow football league standings in one mobile application. I developed the interface, navigation, and REST API integration using Flutter and Dart.",
+        "The application maps API responses into structured data models and handles loading, errors, empty results, and successful requests to keep the interface clear.",
+      ],
+      id: [
+        "Saya mengembangkan Footy Standings untuk kebutuhan pribadi dalam mengikuti klasemen liga sepak bola melalui satu aplikasi mobile. Saya membangun antarmuka, navigasi, dan integrasi REST API menggunakan Flutter dan Dart.",
+        "Aplikasi memetakan respons API ke model data terstruktur serta menangani kondisi loading, error, data kosong, dan data berhasil dimuat agar informasi tetap mudah dipahami.",
       ],
     },
     contributions: {
       en: [
-        "Built the Flutter and Dart interface with Material components and bottom navigation.",
-        "Integrated Football Data REST endpoints through HTTP and JSON parsing.",
-        "Created four data models for competition, fixture, scorer, and club-detail responses.",
-        "Implemented explicit loading, error, empty, and success states with Future and FutureBuilder.",
+        "Built the Android interface and navigation using Flutter and Dart.",
+        "Integrated the Football Data REST API through HTTP requests and JSON parsing.",
+        "Created structured data models for standings, fixtures, top scorers, and club details.",
+        "Handled loading, error, empty, and success states using Future and FutureBuilder.",
       ],
       id: [
-        "Membangun antarmuka Flutter dan Dart dengan komponen Material serta bottom navigation.",
-        "Mengintegrasikan endpoint Football Data REST melalui HTTP dan parsing JSON.",
-        "Membuat empat model data untuk respons kompetisi, jadwal, pencetak gol, dan detail klub.",
-        "Mengimplementasikan status loading, error, kosong, dan berhasil secara eksplisit dengan Future dan FutureBuilder.",
+        "Membangun antarmuka dan navigasi aplikasi Android menggunakan Flutter dan Dart.",
+        "Mengintegrasikan Football Data REST API melalui HTTP request dan parsing JSON.",
+        "Membuat model data terstruktur untuk klasemen, jadwal pertandingan, top scorer, dan detail klub.",
+        "Menangani kondisi loading, error, data kosong, dan data berhasil dimuat menggunakan Future dan FutureBuilder.",
       ],
     },
-    technicalNotes: {
-      en: [
-        "The app covers Premier League, La Liga, Bundesliga, Serie A, Ligue 1, and Primeira Liga.",
-        "Four API-backed feature groups cover tables, fixtures, scorers, and club details.",
-        "FutureBuilder maps asynchronous requests into clear interface states.",
-        "External destinations are opened through url_launcher where used.",
-      ],
-      id: [
-        "Aplikasi mencakup Premier League, La Liga, Bundesliga, Serie A, Ligue 1, dan Primeira Liga.",
-        "Empat kelompok fitur berbasis API mencakup klasemen, jadwal, pencetak gol, dan detail klub.",
-        "FutureBuilder memetakan request asynchronous menjadi status antarmuka yang jelas.",
-        "Tujuan eksternal dibuka melalui url_launcher ketika digunakan.",
+    contributionLearning: {
+      en: "This project strengthened my experience in turning API data into clear, accessible information within an Android application.",
+      id: "Project ini memperkuat pengalaman saya dalam mengolah data API menjadi informasi yang mudah diakses dan dipahami melalui aplikasi Android.",
+    },
+    personalTechStack: [
+      "Flutter",
+      "Dart",
+      "REST API",
+      "HTTP",
+      "JSON",
+      "FutureBuilder",
+    ],
+    techStack: [
+      "Flutter",
+      "Dart",
+      "REST API",
+      "HTTP",
+      "JSON",
+      "FutureBuilder",
+    ],
+    footyScope: {
+      groups: [
+        {
+          title: {
+            en: "Football Information",
+            id: "Informasi Sepak Bola",
+          },
+          items: {
+            en: [
+              "League standings",
+              "Upcoming fixtures",
+              "Top scorers",
+              "Club details",
+            ],
+            id: [
+              "Klasemen liga",
+              "Jadwal pertandingan mendatang",
+              "Top scorer",
+              "Detail klub",
+            ],
+          },
+          compactList:
+            "Premier League · La Liga · Bundesliga · Serie A · Ligue 1 · Primeira Liga",
+        },
+        {
+          title: {
+            en: "API Integration",
+            id: "Integrasi API",
+          },
+          items: {
+            en: [
+              "Football Data REST API",
+              "HTTP requests",
+              "JSON parsing",
+              "Structured Dart data models",
+            ],
+            id: [
+              "Football Data REST API",
+              "HTTP request",
+              "Parsing JSON",
+              "Model data Dart terstruktur",
+            ],
+          },
+        },
+        {
+          title: {
+            en: "Navigation & UI States",
+            id: "Navigasi & Status Antarmuka",
+          },
+          items: {
+            en: [
+              "Application navigation",
+              "Loading state",
+              "Error and empty states",
+              "Success state",
+            ],
+            id: [
+              "Navigasi aplikasi",
+              "Status loading",
+              "Status error dan data kosong",
+              "Status sukses",
+            ],
+          },
+        },
       ],
     },
-    techStack: ["Flutter", "Dart", "Football Data REST API", "HTTP", "JSON", "FutureBuilder"],
     cover: {
       src: "/assets/projects/footy-standings/cover.webp",
-      alt: { en: "Footy Standings mobile league table", id: "Klasemen liga pada aplikasi Footy Standings" },
+      alt: {
+        en: "Footy Standings mobile league standings table",
+        id: "Tabel klasemen liga sepak bola pada aplikasi Footy Standings",
+      },
       position: "top",
     },
     evidence: [
       {
         id: "FIG.01",
-        src: "/assets/projects/footy-standings/documentation/01.webp",
+        src: "/assets/projects/footy-standings/cover.webp",
         format: "mobile",
-        alt: { en: "Footy Standings competition interface", id: "Antarmuka kompetisi Footy Standings" },
-        caption: { en: "League standings view showing table rankings and club statistics.", id: "Tampilan klasemen liga yang menyajikan posisi tabel dan statistik klub." },
+        alt: {
+          en: "Footy Standings mobile league standings table",
+          id: "Tabel klasemen liga sepak bola pada aplikasi Footy Standings",
+        },
+        caption: {
+          en: "League standings view displaying table rankings and match statistics.",
+          id: "Tampilan klasemen liga yang menyajikan peringkat tabel dan statistik pertandingan.",
+        },
       },
       {
         id: "FIG.02",
         src: "/assets/projects/footy-standings/documentation/02.webp",
         format: "mobile",
-        alt: { en: "Footy Standings fixture interface", id: "Antarmuka jadwal Footy Standings" },
-        caption: { en: "Documented fixture and competition match calendar view.", id: "Tampilan jadwal pertandingan dan kalender kompetisi yang terdokumentasi." },
+        alt: {
+          en: "Footy Standings upcoming fixtures schedule view",
+          id: "Tampilan jadwal pertandingan mendatang pada aplikasi Footy Standings",
+        },
+        caption: {
+          en: "Upcoming fixtures schedule with match dates, kickoff times, and club pairings.",
+          id: "Jadwal pertandingan mendatang yang memuat tanggal, waktu kick-off, dan pasangan klub.",
+        },
       },
       {
         id: "FIG.03",
         src: "/assets/projects/footy-standings/documentation/03.webp",
         format: "mobile",
-        alt: { en: "Footy Standings club data interface", id: "Antarmuka data klub Footy Standings" },
-        caption: { en: "Club details and top goalscorer ranking presentation.", id: "Penyajian detail profil klub dan peringkat top goalscorer." },
+        alt: {
+          en: "Footy Standings top goalscorers ranking view",
+          id: "Tampilan peringkat top scorer pada aplikasi Footy Standings",
+        },
+        caption: {
+          en: "Top scorers ranking listing leading goalscorers, club affiliations, and goal totals.",
+          id: "Peringkat top scorer yang menampilkan daftar pencetak gol terbanyak, klub, dan jumlah gol.",
+        },
+      },
+      {
+        id: "FIG.04",
+        src: "/assets/projects/footy-standings/documentation/04.webp",
+        format: "mobile",
+        alt: {
+          en: "Footy Standings club details profile view",
+          id: "Tampilan detail informasi klub pada aplikasi Footy Standings",
+        },
+        caption: {
+          en: "Club details screen presenting club crest, founding year, colors, venue, and website link.",
+          id: "Layar detail klub yang menyajikan logo klub, tahun pendirian, warna klub, stadion, dan tautan website.",
+        },
       },
     ],
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/footy-standings/cover.webp",
+        format: "mobile",
+        alt: {
+          en: "Footy Standings mobile league standings table",
+          id: "Tabel klasemen liga sepak bola pada aplikasi Footy Standings",
+        },
+        caption: {
+          en: "League standings view displaying table rankings and match statistics.",
+          id: "Tampilan klasemen liga yang menyajikan peringkat tabel dan statistik pertandingan.",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/footy-standings/documentation/02.webp",
+        format: "mobile",
+        alt: {
+          en: "Footy Standings upcoming fixtures schedule view",
+          id: "Tampilan jadwal pertandingan mendatang pada aplikasi Footy Standings",
+        },
+        caption: {
+          en: "Upcoming fixtures schedule with match dates, kickoff times, and club pairings.",
+          id: "Jadwal pertandingan mendatang yang memuat tanggal, waktu kick-off, dan pasangan klub.",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/footy-standings/documentation/03.webp",
+        format: "mobile",
+        alt: {
+          en: "Footy Standings top goalscorers ranking view",
+          id: "Tampilan peringkat top scorer pada aplikasi Footy Standings",
+        },
+        caption: {
+          en: "Top scorers ranking listing leading goalscorers, club affiliations, and goal totals.",
+          id: "Peringkat top scorer yang menampilkan daftar pencetak gol terbanyak, klub, dan jumlah gol.",
+        },
+      },
+      {
+        slide: "04",
+        src: "/assets/projects/footy-standings/documentation/04.webp",
+        format: "mobile",
+        alt: {
+          en: "Footy Standings club details profile view",
+          id: "Tampilan detail informasi klub pada aplikasi Footy Standings",
+        },
+        caption: {
+          en: "Club details screen presenting club crest, founding year, colors, venue, and website link.",
+          id: "Layar detail klub yang menyajikan logo klub, tahun pendirian, warna klub, stadion, dan tautan website.",
+        },
+      },
+    ],
+    galleryThumbnails: true,
   },
   {
     index: "10",

@@ -167,7 +167,7 @@ export function generateProjectJsonLd(
   locale: Locale,
 ): JsonLdSoftwareSourceCode {
   const techList = project.personalTechStack ?? project.techStack;
-  const language = techList[0] || undefined;
+  const language = project.programmingLanguage ?? (techList[0] || undefined);
   const rawKeywords: readonly string[] = project.keywords
     ? Array.isArray(project.keywords)
       ? project.keywords

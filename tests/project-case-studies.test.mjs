@@ -102,6 +102,10 @@ test("references only real local visual evidence and verified public links", () 
         "thermal-printer-service",
         "https://github.com/annastriw/ThermalPrinterService.git",
       ],
+      [
+        "footy-standings",
+        "https://github.com/annastriw/FootyStandings.git",
+      ],
     ],
   );
 });
@@ -2089,6 +2093,291 @@ test("maintains approved Thermal Printer Service locked facts, bilingual copy, c
   assert.doesNotMatch(stringifiedTPS, /speed improvement|benchmark|success rate|\b\d+%\s*speed/i);
   assert.doesNotMatch(stringifiedTPS, /Wi-Fi|USB printing|cloud printing/i);
   assert.doesNotMatch(stringifiedTPS, /Private Repository/i);
+});
+
+test("maintains approved Footy Standings locked facts, bilingual copy, compact scope, unique gallery, and factual boundaries", () => {
+  const footy = getProjectCaseStudy("footy-standings");
+  assert.ok(footy);
+
+  // Locked facts & metadata
+  assert.equal(footy.index, "09");
+  assert.equal(footy.slug, "footy-standings");
+  assert.equal(footy.category, "mobile");
+  assert.equal(footy.categoryLabel.en, "09 // MOBILE APPLICATION");
+  assert.equal(footy.categoryLabel.id, "09 // MOBILE APPLICATION");
+  assert.equal(footy.role.en, "Android Developer");
+  assert.equal(footy.role.id, "Android Developer");
+  assert.equal(footy.period?.en, "October–November 2024");
+  assert.equal(footy.period?.id, "Oktober–November 2024");
+  assert.equal(footy.status.en, "Completed Application");
+  assert.equal(footy.status.id, "Completed Application");
+  assert.equal(footy.programmingLanguage, "Dart");
+  assert.equal(footy.liveUrl, undefined);
+  assert.equal(
+    footy.githubUrl,
+    "https://github.com/annastriw/FootyStandings.git",
+  );
+  assert.equal(footy.repositoryNotice, undefined);
+  assert.equal(footy.client, undefined);
+  assert.equal(footy.workingModel, undefined);
+
+  // MetadataRows display only Role, Period, Status, Platform
+  assert.ok(footy.metadataRows);
+  assert.equal(footy.metadataRows.length, 4);
+  assert.deepEqual(
+    footy.metadataRows.map((r) => r.label.en),
+    ["Role", "Period", "Status", "Platform"],
+  );
+  assert.deepEqual(
+    footy.metadataRows.map((r) => r.label.id),
+    ["Peran", "Periode", "Status", "Platform"],
+  );
+  assert.deepEqual(
+    footy.metadataRows.map((r) => r.value.en),
+    [
+      "Android Developer",
+      "October–November 2024",
+      "Completed Application",
+      "Android",
+    ],
+  );
+  assert.deepEqual(
+    footy.metadataRows.map((r) => r.value.id),
+    [
+      "Android Developer",
+      "Oktober–November 2024",
+      "Completed Application",
+      "Android",
+    ],
+  );
+
+  // Title and Lead
+  assert.equal(footy.title.en, "Footy Standings");
+  assert.equal(footy.title.id, "Footy Standings");
+  assert.equal(
+    footy.lead?.en,
+    "An Android application built with Flutter for exploring football standings, fixtures, top scorers, and club information.",
+  );
+  assert.equal(
+    footy.lead?.id,
+    "Aplikasi Android berbasis Flutter untuk melihat klasemen sepak bola, jadwal pertandingan, top scorer, dan informasi klub.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    footy.metaTitle?.en,
+    "Footy Standings — Android Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    footy.metaTitle?.id,
+    "Footy Standings — Studi Kasus Android Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    footy.metaDescription?.en,
+    "An Android application built with Flutter and Dart for football standings, fixtures, top scorers, and club details, featuring REST API integration and asynchronous UI states.",
+  );
+  assert.equal(
+    footy.metaDescription?.id,
+    "Aplikasi Android berbasis Flutter dan Dart untuk melihat klasemen sepak bola, jadwal pertandingan, top scorer, dan detail klub, dengan integrasi REST API dan penanganan status pemuatan data.",
+  );
+
+  // Keywords
+  assert.deepEqual(footy.keywords?.en, [
+    "Android",
+    "Flutter",
+    "Dart",
+    "Football Data REST API",
+    "REST API",
+    "HTTP",
+    "JSON",
+    "FutureBuilder",
+    "Android Developer",
+  ]);
+  assert.deepEqual(footy.keywords?.id, [
+    "Android",
+    "Flutter",
+    "Dart",
+    "Football Data REST API",
+    "REST API",
+    "HTTP",
+    "JSON",
+    "FutureBuilder",
+    "Android Developer",
+  ]);
+
+  // Overview (exact 2 paragraphs)
+  assert.equal(footy.overview.en.length, 2);
+  assert.equal(footy.overview.id.length, 2);
+  assert.equal(
+    footy.overview.en[0],
+    "I built Footy Standings for personal use to follow football league standings in one mobile application. I developed the interface, navigation, and REST API integration using Flutter and Dart.",
+  );
+  assert.equal(
+    footy.overview.en[1],
+    "The application maps API responses into structured data models and handles loading, errors, empty results, and successful requests to keep the interface clear.",
+  );
+  assert.equal(
+    footy.overview.id[0],
+    "Saya mengembangkan Footy Standings untuk kebutuhan pribadi dalam mengikuti klasemen liga sepak bola melalui satu aplikasi mobile. Saya membangun antarmuka, navigasi, dan integrasi REST API menggunakan Flutter dan Dart.",
+  );
+  assert.equal(
+    footy.overview.id[1],
+    "Aplikasi memetakan respons API ke model data terstruktur serta menangani kondisi loading, error, data kosong, dan data berhasil dimuat agar informasi tetap mudah dipahami.",
+  );
+
+  // Contributions (exact 4 items + closing learning statement)
+  assert.equal(footy.contributions.en.length, 4);
+  assert.equal(footy.contributions.id.length, 4);
+  assert.equal(
+    footy.contributions.en[0],
+    "Built the Android interface and navigation using Flutter and Dart.",
+  );
+  assert.equal(
+    footy.contributions.en[1],
+    "Integrated the Football Data REST API through HTTP requests and JSON parsing.",
+  );
+  assert.equal(
+    footy.contributions.en[2],
+    "Created structured data models for standings, fixtures, top scorers, and club details.",
+  );
+  assert.equal(
+    footy.contributions.en[3],
+    "Handled loading, error, empty, and success states using Future and FutureBuilder.",
+  );
+  assert.equal(
+    footy.contributions.id[0],
+    "Membangun antarmuka dan navigasi aplikasi Android menggunakan Flutter dan Dart.",
+  );
+  assert.equal(
+    footy.contributions.id[1],
+    "Mengintegrasikan Football Data REST API melalui HTTP request dan parsing JSON.",
+  );
+  assert.equal(
+    footy.contributions.id[2],
+    "Membuat model data terstruktur untuk klasemen, jadwal pertandingan, top scorer, dan detail klub.",
+  );
+  assert.equal(
+    footy.contributions.id[3],
+    "Menangani kondisi loading, error, data kosong, dan data berhasil dimuat menggunakan Future dan FutureBuilder.",
+  );
+  assert.equal(
+    footy.contributionLearning?.en,
+    "This project strengthened my experience in turning API data into clear, accessible information within an Android application.",
+  );
+  assert.equal(
+    footy.contributionLearning?.id,
+    "Project ini memperkuat pengalaman saya dalam mengolah data API menjadi informasi yang mudah diakses dan dipahami melalui aplikasi Android.",
+  );
+
+  // Personal Tech Stack (exact 6 items in approved order)
+  assert.deepEqual(footy.personalTechStack, [
+    "Flutter",
+    "Dart",
+    "REST API",
+    "HTTP",
+    "JSON",
+    "FutureBuilder",
+  ]);
+  assert.deepEqual(footy.techStack, [
+    "Flutter",
+    "Dart",
+    "REST API",
+    "HTTP",
+    "JSON",
+    "FutureBuilder",
+  ]);
+
+  // System Scope: exactly 3 groups with 4 items each, group 1 has compactList
+  assert.ok(footy.footyScope);
+  assert.equal(footy.footyScope.groups.length, 3);
+
+  const [fGroup1, fGroup2, fGroup3] = footy.footyScope.groups;
+  assert.equal(fGroup1.title.en, "Football Information");
+  assert.equal(fGroup1.title.id, "Informasi Sepak Bola");
+  assert.deepEqual(fGroup1.items.en, [
+    "League standings",
+    "Upcoming fixtures",
+    "Top scorers",
+    "Club details",
+  ]);
+  assert.deepEqual(fGroup1.items.id, [
+    "Klasemen liga",
+    "Jadwal pertandingan mendatang",
+    "Top scorer",
+    "Detail klub",
+  ]);
+  assert.equal(
+    fGroup1.compactList,
+    "Premier League · La Liga · Bundesliga · Serie A · Ligue 1 · Primeira Liga",
+  );
+
+  assert.equal(fGroup2.title.en, "API Integration");
+  assert.equal(fGroup2.title.id, "Integrasi API");
+  assert.deepEqual(fGroup2.items.en, [
+    "Football Data REST API",
+    "HTTP requests",
+    "JSON parsing",
+    "Structured Dart data models",
+  ]);
+  assert.deepEqual(fGroup2.items.id, [
+    "Football Data REST API",
+    "HTTP request",
+    "Parsing JSON",
+    "Model data Dart terstruktur",
+  ]);
+
+  assert.equal(fGroup3.title.en, "Navigation & UI States");
+  assert.equal(fGroup3.title.id, "Navigasi & Status Antarmuka");
+  assert.deepEqual(fGroup3.items.en, [
+    "Application navigation",
+    "Loading state",
+    "Error and empty states",
+    "Success state",
+  ]);
+  assert.deepEqual(fGroup3.items.id, [
+    "Navigasi aplikasi",
+    "Status loading",
+    "Status error dan data kosong",
+    "Status sukses",
+  ]);
+
+  // Gallery: exactly 4 unique slides in cover-first order
+  assert.equal(footy.gallery?.length, 4);
+  assert.deepEqual(
+    footy.gallery?.map((s) => s.src),
+    [
+      "/assets/projects/footy-standings/cover.webp",
+      "/assets/projects/footy-standings/documentation/02.webp",
+      "/assets/projects/footy-standings/documentation/03.webp",
+      "/assets/projects/footy-standings/documentation/04.webp",
+    ],
+  );
+  for (let i = 0; i < 4; i++) {
+    const slide = footy.gallery?.[i];
+    assert.ok(slide);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.doesNotMatch(slide.caption.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.caption.id, /^TODO_|^\[/);
+    assert.ok(slide.caption.en.length > 10);
+    assert.ok(slide.caption.id.length > 10);
+    assert.doesNotMatch(slide.alt.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.alt.id, /^TODO_|^\[/);
+    assert.ok(slide.alt.en.length > 10);
+    assert.ok(slide.alt.id.length > 10);
+  }
+
+  // No video or technical metadata strip
+  assert.equal(footy.videoSrc, undefined);
+  assert.equal(footy.technicalMetadata, undefined);
+
+  // Prohibited claims & factual boundaries
+  const stringifiedFooty = JSON.stringify(footy);
+  assert.doesNotMatch(stringifiedFooty, /"Flutter Developer"/i);
+  assert.doesNotMatch(stringifiedFooty, /Implementation documented/i);
+  assert.doesNotMatch(stringifiedFooty, /real[- ]?time scores|live score|instant sync|automatic refresh|polling/i);
+  assert.doesNotMatch(stringifiedFooty, /iOS|Play Store|Google Play|App Store/i);
+  assert.doesNotMatch(stringifiedFooty, /downloads|active users|revenue/i);
+  assert.doesNotMatch(stringifiedFooty, /Private Repository/i);
 });
 
 test("keeps the project-specific factual boundaries explicit", () => {

@@ -1097,6 +1097,17 @@ html.dark .galleryNavBtn:focus-visible {
   }
 }
 
+/* Footy Standings Competitions Compact List */
+.footyCompetitionsList {
+  margin-block-start: 1rem;
+  padding-block-start: 0.75rem;
+  border-block-start: 1px dashed var(--border);
+  font: 500 0.75rem / 1.5 var(--font-mono);
+  color: var(--muted);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
 /* Heart ML System Scope Container */
 .heartMlScopeContainer {
   display: flex;
