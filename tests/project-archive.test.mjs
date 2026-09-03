@@ -100,8 +100,8 @@ const expectedSummaries = {
     id: "Prototype speech-to-text bahasa Inggris yang memproses audio dan video menggunakan pretrained Wav2Vec2, lalu menghasilkan transkrip, subtitle SRT, dan video dengan subtitle tertanam.",
   },
   "thermal-printer-service": {
-    en: "A native Android printing service that connects the system print framework to Bluetooth thermal printers, with print calibration and retry handling.",
-    id: "Layanan printing Android native yang menghubungkan fitur cetak sistem dengan printer thermal Bluetooth, dilengkapi kalibrasi cetak dan penanganan percobaan ulang.",
+    en: "A native Kotlin Android PrintService that converts Android print jobs into monochrome ESC/POS output and sends them to configured Bluetooth thermal printers.",
+    id: "Android PrintService native berbasis Kotlin yang mengubah print job Android menjadi output ESC/POS monokrom dan mengirimkannya ke thermal printer Bluetooth yang telah dikonfigurasi.",
   },
   "footy-standings": {
     en: "A Flutter application for following football league standings, match schedules, top scorers, and club profiles through a football data API.",
@@ -186,7 +186,7 @@ test("preserves original project indexes when categories are filtered", () => {
   );
 });
 
-test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, Heart ML, and Speech-to-Text", () => {
+test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, Heart ML, Speech-to-Text, and Thermal Printer Service", () => {
   for (const project of projectArchive) {
     assert.ok(
       project.primaryTechnologies.length <= 6,
@@ -274,6 +274,19 @@ test("enforces max 6 displayed technologies and exact approved stacks for UKG, i
     "Librosa",
     "FFmpeg",
     "Google Colab",
+  ]);
+
+  const thermal = projectArchive.find(
+    (p) => p.slug === "thermal-printer-service",
+  );
+  assert.ok(thermal);
+  assert.deepEqual(thermal.primaryTechnologies, [
+    "Kotlin",
+    "Android SDK",
+    "Android Print Framework",
+    "Bluetooth",
+    "ESC/POS",
+    "Gradle",
   ]);
 });
 
@@ -923,5 +936,114 @@ test("synchronizes Speech-to-Text System Hub entry with exact facts, 6-item stac
     assert.equal(p.summary.id, expectedSummaries[slug].id);
   }
 });
+
+test("synchronizes Thermal Printer Service Hub entry with exact facts, 6-item stack, and absence from Home", () => {
+  const tps = projectArchive.find((p) => p.slug === "thermal-printer-service");
+  assert.ok(tps, "Thermal Printer Service must exist in projectArchive");
+
+  assert.equal(tps.index, "08");
+  assert.equal(tps.category, "mobile");
+  assert.equal(tps.title.en, "Thermal Printer Service");
+  assert.equal(tps.title.id, "Thermal Printer Service");
+  assert.equal(tps.role.en, "Android Developer");
+  assert.equal(tps.role.id, "Android Developer");
+  assert.equal(tps.status.en, "Completed Application");
+  assert.equal(tps.status.id, "Completed Application");
+  assert.equal(
+    tps.coverImage,
+    "/assets/projects/thermal-printer-service/cover.webp",
+  );
+  assert.equal(
+    tps.coverAlt.en,
+    "Thermal Printer Service Android application icon",
+  );
+  assert.equal(
+    tps.coverAlt.id,
+    "Ikon aplikasi Android Thermal Printer Service",
+  );
+  assert.equal(tps.coverPosition, "center");
+
+  assert.deepEqual(tps.primaryTechnologies, [
+    "Kotlin",
+    "Android SDK",
+    "Android Print Framework",
+    "Bluetooth",
+    "ESC/POS",
+    "Gradle",
+  ]);
+
+  assert.equal(
+    tps.summary.en,
+    "A native Kotlin Android PrintService that converts Android print jobs into monochrome ESC/POS output and sends them to configured Bluetooth thermal printers.",
+  );
+  assert.equal(
+    tps.summary.id,
+    "Android PrintService native berbasis Kotlin yang mengubah print job Android menjadi output ESC/POS monokrom dan mengirimkannya ke thermal printer Bluetooth yang telah dikonfigurasi.",
+  );
+
+  // Factual boundaries: no UKG System mention, no persistent queue claim, no universal compatibility, no metrics, no external links
+  assert.doesNotMatch(tps.summary.en, /UKG System/i);
+  assert.doesNotMatch(tps.summary.id, /UKG System/i);
+  assert.doesNotMatch(
+    tps.summary.en,
+    /persistent queue|universal|benchmark|speed|success rate|Wi-Fi|USB|cloud/i,
+  );
+  assert.doesNotMatch(
+    tps.summary.id,
+    /antrean persisten|universal|benchmark|kecepatan|success rate|Wi-Fi|USB|cloud/i,
+  );
+  assert.doesNotMatch(JSON.stringify(tps), /github\.com|liveUrl|githubUrl/i);
+  assert.equal("liveUrl" in tps, false);
+  assert.equal("githubUrl" in tps, false);
+
+  // All 10 Hub records and order preserved
+  assert.equal(projectArchive.length, 10);
+  assert.deepEqual(
+    projectArchive.map((p) => p.slug),
+    expectedSlugs,
+  );
+
+  // All category filters preserved
+  const counts = getProjectArchiveCategoryCounts(projectArchive);
+  assert.deepEqual(counts, {
+    all: 10,
+    "web-app": 5,
+    ml: 2,
+    mobile: 2,
+    other: 1,
+  });
+
+  // Home Selected Projects synchronization and order: Thermal Printer Service must NOT be in Home Selected Projects
+  assert.equal(homeSelectedProjects.length, 4);
+  assert.deepEqual(
+    homeSelectedProjects.map((p) => p.slug),
+    [
+      "ukg-system",
+      "ihealth-edu",
+      "ml-for-heart-attack-risk-prediction",
+      "panoramic-virtual-tour",
+    ],
+  );
+  assert.equal(
+    homeSelectedProjects.some((p) => p.slug === "thermal-printer-service"),
+    false,
+  );
+  assert.ok(
+    !Object.values(homeFeaturedConfig).includes("thermal-printer-service"),
+  );
+
+  // Confirm other 9 Hub records remain intact and unchanged
+  const otherNineSlugs = expectedSlugs.filter(
+    (s) => s !== "thermal-printer-service",
+  );
+  assert.equal(otherNineSlugs.length, 9);
+  for (const slug of otherNineSlugs) {
+    const p = projectArchive.find((proj) => proj.slug === slug);
+    assert.ok(p, `Project ${slug} must exist in archive`);
+    assert.equal(p.summary.en, expectedSummaries[slug].en);
+    assert.equal(p.summary.id, expectedSummaries[slug].id);
+  }
+});
+
 
 

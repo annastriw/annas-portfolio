@@ -271,15 +271,16 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
     },
     role: { en: "Android Developer", id: "Android Developer" },
     summary: {
-      en: "A native Android printing service that connects the system print framework to Bluetooth thermal printers, with print calibration and retry handling.",
-      id: "Layanan printing Android native yang menghubungkan fitur cetak sistem dengan printer thermal Bluetooth, dilengkapi kalibrasi cetak dan penanganan percobaan ulang.",
+      en: "A native Kotlin Android PrintService that converts Android print jobs into monochrome ESC/POS output and sends them to configured Bluetooth thermal printers.",
+      id: "Android PrintService native berbasis Kotlin yang mengubah print job Android menjadi output ESC/POS monokrom dan mengirimkannya ke thermal printer Bluetooth yang telah dikonfigurasi.",
     },
     primaryTechnologies: [
       "Kotlin",
       "Android SDK",
       "Android Print Framework",
-      "Bluetooth RFCOMM/SPP",
+      "Bluetooth",
       "ESC/POS",
+      "Gradle",
     ],
     coverImage: "/assets/projects/thermal-printer-service/cover.webp",
     coverAlt: {
