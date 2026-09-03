@@ -1,18 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BlogAdjacentNav } from "@/components/blog/blog-adjacent-nav";
-import { BlogArticleBody } from "@/components/blog/blog-article-body";
-import { BlogArticleHeader } from "@/components/blog/blog-article-header";
-import { JsonLd } from "@/components/seo/json-ld";
-import {
-  blogArticles,
-  getAdjacentBlogArticles,
-  getBlogArticle,
-} from "@/content/blog";
-import { getProjectCaseStudy } from "@/content/projects/project-case-studies";
+import { blogArticles, getBlogArticle } from "@/content/blog";
 import { isLocale, supportedLocales, type Locale } from "@/lib/i18n/config";
-import { generateBlogPostingJsonLd, createPageMetadata } from "@/lib/seo";
+import { createPageMetadata } from "@/lib/seo";
+import { BlogPlaceholderView } from "@/components/blog/blog-placeholder-view";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -38,28 +29,20 @@ export async function generateMetadata({
   const article = getBlogArticle(slug);
   if (!article) return {};
 
-  const title = `${article.title[locale]} - Annas Tri Widagdo`;
-  const description = article.abstract[locale];
-
-  const primaryProject = article.sourceProjectSlugs[0]
-    ? getProjectCaseStudy(article.sourceProjectSlugs[0])
-    : null;
-  const imageSrc = primaryProject?.cover.src || "/assets/profile/pas-foto.webp";
-  const imageAlt = primaryProject?.cover.alt[locale] || title;
+  const isId = locale === "id";
+  const title = isId
+    ? "Arsip Blog | Annas Tri Widagdo"
+    : "Blog Archive | Annas Tri Widagdo";
+  const description = isId
+    ? "Blog ini sedang disiapkan. Artikel akan tersedia di sini setelah siap dipublikasikan."
+    : "This blog is being prepared. Articles will be available here once they’re ready.";
 
   return createPageMetadata({
     locale,
     path: `blog/${slug}`,
     title,
     description,
-    type: "article",
-    keywords: article.tags,
-    images: [
-      {
-        url: imageSrc,
-        alt: imageAlt,
-      },
-    ],
+    type: "website",
   });
 }
 
@@ -77,64 +60,5 @@ export default async function BlogPostDetailPage({
     notFound();
   }
 
-  const { previous, next } = getAdjacentBlogArticles(slug);
-  const isId = locale === "id";
-
-  return (
-    <article className="blog-article-page">
-      <div className="blog-article-container">
-        <JsonLd schema={generateBlogPostingJsonLd(article, locale)} />
-
-        <nav
-          className="blog-detail-breadcrumb"
-          aria-label={isId ? "Navigasi artikel" : "Article navigation"}
-        >
-          <Link href={`/${locale}/blog`} className="back-to-blog-link">
-            <span aria-hidden="true">←</span>
-            <span>{isId ? "Kembali ke indeks" : "Back to index"}</span>
-          </Link>
-          <span className="breadcrumb-path" aria-hidden="true">
-            BLOG / {article.index}
-          </span>
-        </nav>
-
-        <BlogArticleHeader article={article} locale={locale} />
-
-        <section
-          className="blog-article-content"
-          aria-label={isId ? "Isi artikel" : "Article body"}
-        >
-          <BlogArticleBody article={article} locale={locale} />
-        </section>
-
-        <aside className="blog-source-records" aria-labelledby="blog-source-heading">
-          <h2 id="blog-source-heading">
-            {isId ? "Pengalaman proyek terkait" : "Related project experience"}
-          </h2>
-          <div>
-            {article.sourceProjectSlugs.map((projectSlug) => {
-              const project = getProjectCaseStudy(projectSlug);
-              if (!project) return null;
-
-              return (
-                <Link
-                  href={`/${locale}/projects/${project.slug}`}
-                  key={project.slug}
-                >
-                  <span>{project.title[locale]}</span>
-                  <span aria-hidden="true">↗</span>
-                </Link>
-              );
-            })}
-          </div>
-        </aside>
-
-        <BlogAdjacentNav
-          previous={previous}
-          next={next}
-          locale={locale as Locale}
-        />
-      </div>
-    </article>
-  );
+  return <BlogPlaceholderView locale={locale as Locale} isArticle={true} />;
 }

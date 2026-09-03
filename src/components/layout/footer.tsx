@@ -18,7 +18,7 @@ export function Footer({ locale }: FooterProps) {
   const copy = {
     footerNavigation: isId ? "Navigasi footer" : "Footer navigation",
     rolesLabel: isId ? "Peran profesional" : "Professional roles",
-    linkedInValue: "/in/annastriw",
+    linkedInValue: "/in/annastriwidagdo",
     gitHubValue: "@annastriw",
     openContact: isId ? "Buka Kontak" : "Open Contact",
     backToTop: isId ? "KEMBALI KE ATAS" : "BACK TO TOP",

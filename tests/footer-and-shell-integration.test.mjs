@@ -60,7 +60,7 @@ test("Footer preserves runtime email link and verified communication channels", 
 
   // LinkedIn channel
   assert.match(footerFile, /href=\{siteContact\.linkedInUrl\}/);
-  assert.match(footerFile, /\/in\/annastriw/);
+  assert.match(footerFile, /\/in\/annastriwidagdo/);
 
   // GitHub channel
   assert.match(footerFile, /href=\{siteContact\.gitHubUrl\}/);

@@ -153,7 +153,7 @@ test("generatePersonJsonLd outputs factual credentials without forbidden claims"
   assert.match(person.address?.addressLocality ?? "", /Jakarta/);
   assert.equal(person.address?.addressCountry, "Indonesia");
   assert.ok(person.sameAs.includes("https://github.com/annastriw"));
-  assert.ok(person.sameAs.includes("https://www.linkedin.com/in/annastriw"));
+  assert.ok(person.sameAs.includes("https://www.linkedin.com/in/annastriwidagdo"));
 
   const jsonString = JSON.stringify(person);
   assert.doesNotMatch(jsonString, /Best Graduate/i);
@@ -894,4 +894,90 @@ test("generateBreadcrumbJsonLd produces valid BreadcrumbList schema", () => {
   assert.equal(schema.itemListElement[2].position, 3);
   assert.equal(schema.itemListElement[2].item, "https://annastriwidagdo.me/en/projects/ukg-system");
 });
+
+test("Blog Hub and article placeholders generate valid bilingual page metadata matching approved temporary decision", () => {
+  const hubEn = createPageMetadata({
+    locale: "en",
+    path: "blog",
+    title: "Blog Archive | Annas Tri Widagdo",
+    description:
+      "This blog is being prepared. Articles will be available here once they’re ready.",
+    type: "website",
+  });
+
+  assert.equal(hubEn.title, "Blog Archive | Annas Tri Widagdo");
+  assert.equal(
+    hubEn.description,
+    "This blog is being prepared. Articles will be available here once they’re ready.",
+  );
+  assert.equal(hubEn.alternates?.canonical, "https://annastriwidagdo.me/en/blog");
+  assert.deepEqual(hubEn.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/blog",
+    id: "https://annastriwidagdo.me/id/blog",
+    "x-default": "https://annastriwidagdo.me/en/blog",
+  });
+  assert.equal(hubEn.openGraph?.type, "website");
+
+  const hubId = createPageMetadata({
+    locale: "id",
+    path: "blog",
+    title: "Arsip Blog | Annas Tri Widagdo",
+    description:
+      "Blog ini sedang disiapkan. Artikel akan tersedia di sini setelah siap dipublikasikan.",
+    type: "website",
+  });
+
+  assert.equal(hubId.title, "Arsip Blog | Annas Tri Widagdo");
+  assert.equal(
+    hubId.description,
+    "Blog ini sedang disiapkan. Artikel akan tersedia di sini setelah siap dipublikasikan.",
+  );
+  assert.equal(hubId.alternates?.canonical, "https://annastriwidagdo.me/id/blog");
+  assert.deepEqual(hubId.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/blog",
+    id: "https://annastriwidagdo.me/id/blog",
+    "x-default": "https://annastriwidagdo.me/en/blog",
+  });
+
+  for (const article of blogArticles) {
+    const articleEn = createPageMetadata({
+      locale: "en",
+      path: `blog/${article.slug}`,
+      title: "Blog Archive | Annas Tri Widagdo",
+      description:
+        "This blog is being prepared. Articles will be available here once they’re ready.",
+      type: "website",
+    });
+
+    assert.equal(articleEn.title, "Blog Archive | Annas Tri Widagdo");
+    assert.equal(
+      articleEn.description,
+      "This blog is being prepared. Articles will be available here once they’re ready.",
+    );
+    assert.equal(
+      articleEn.alternates?.canonical,
+      `https://annastriwidagdo.me/en/blog/${article.slug}`,
+    );
+    assert.deepEqual(articleEn.alternates?.languages, {
+      en: `https://annastriwidagdo.me/en/blog/${article.slug}`,
+      id: `https://annastriwidagdo.me/id/blog/${article.slug}`,
+      "x-default": `https://annastriwidagdo.me/en/blog/${article.slug}`,
+    });
+
+    const articleId = createPageMetadata({
+      locale: "id",
+      path: `blog/${article.slug}`,
+      title: "Arsip Blog | Annas Tri Widagdo",
+      description:
+        "Blog ini sedang disiapkan. Artikel akan tersedia di sini setelah siap dipublikasikan.",
+      type: "website",
+    });
+
+    assert.equal(
+      articleId.alternates?.canonical,
+      `https://annastriwidagdo.me/id/blog/${article.slug}`,
+    );
+  }
+});
+
 

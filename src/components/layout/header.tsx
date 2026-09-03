@@ -8,6 +8,7 @@ import { NavLinks } from "@/components/navigation/nav-links";
 import { LocaleSwitcher } from "@/components/navigation/locale-switcher";
 import { ThemeToggle } from "@/components/navigation/theme-toggle";
 import { MobileNav } from "@/components/navigation/mobile-nav";
+import { syncContactRoute } from "@/components/contact/contact-draft-store";
 
 interface HeaderProps {
   locale: Locale;
@@ -22,6 +23,10 @@ export function Header({ locale }: HeaderProps) {
     setPrevPathname(pathname);
     setNavKey((k) => k + 1);
   }
+
+  useEffect(() => {
+    syncContactRoute(pathname);
+  }, [pathname]);
 
   // Check if initial splash is active to coordinate header entrance
   const [isSplashActive, setIsSplashActive] = useState(() => {
