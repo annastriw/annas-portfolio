@@ -53,7 +53,7 @@ const expectedRoles = [
   "Machine Learning Engineer",
   "Machine Learning Engineer",
   "Android Developer",
-  "Flutter Developer",
+  "Android Developer",
   "Junior Game Developer",
 ];
 
@@ -104,8 +104,8 @@ const expectedSummaries = {
     id: "Android PrintService native berbasis Kotlin yang mengubah print job Android menjadi output ESC/POS monokrom dan mengirimkannya ke thermal printer Bluetooth yang telah dikonfigurasi.",
   },
   "footy-standings": {
-    en: "A Flutter application for following football league standings, match schedules, top scorers, and club profiles through a football data API.",
-    id: "Aplikasi Flutter untuk mengikuti klasemen liga sepak bola, jadwal pertandingan, top scorer, dan profil klub melalui API data sepak bola.",
+    en: "An Android application built with Flutter that brings football standings, fixtures, top scorers, and club details together using data from a REST API.",
+    id: "Aplikasi Android berbasis Flutter yang menyajikan klasemen sepak bola, jadwal pertandingan, top scorer, dan detail klub menggunakan data dari REST API.",
   },
   "panoramic-virtual-tour": {
     en: "A Unity-based virtual tour developed during an internship at PT Duta Basis Dataprima, combining architectural panoramas with hotspot navigation.",
@@ -186,7 +186,7 @@ test("preserves original project indexes when categories are filtered", () => {
   );
 });
 
-test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, Heart ML, Speech-to-Text, and Thermal Printer Service", () => {
+test("enforces max 6 displayed technologies and exact approved stacks for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, Heart ML, Speech-to-Text, Thermal Printer Service, and Footy Standings", () => {
   for (const project of projectArchive) {
     assert.ok(
       project.primaryTechnologies.length <= 6,
@@ -287,6 +287,17 @@ test("enforces max 6 displayed technologies and exact approved stacks for UKG, i
     "Bluetooth",
     "ESC/POS",
     "Gradle",
+  ]);
+
+  const footy = projectArchive.find((p) => p.slug === "footy-standings");
+  assert.ok(footy);
+  assert.deepEqual(footy.primaryTechnologies, [
+    "Flutter",
+    "Dart",
+    "REST API",
+    "HTTP",
+    "JSON",
+    "FutureBuilder",
   ]);
 });
 
@@ -1044,6 +1055,123 @@ test("synchronizes Thermal Printer Service Hub entry with exact facts, 6-item st
     assert.equal(p.summary.id, expectedSummaries[slug].id);
   }
 });
+
+test("synchronizes Footy Standings Hub entry with exact facts, 6-item stack, and absence from Home", () => {
+  const footy = projectArchive.find((p) => p.slug === "footy-standings");
+  assert.ok(footy, "Footy Standings must exist in projectArchive");
+
+  assert.equal(footy.index, "09");
+  assert.equal(footy.category, "mobile");
+  assert.equal(footy.title.en, "Footy Standings");
+  assert.equal(footy.title.id, "Footy Standings");
+  assert.equal(footy.role.en, "Android Developer");
+  assert.equal(footy.role.id, "Android Developer");
+  assert.equal(footy.status.en, "Completed Application");
+  assert.equal(footy.status.id, "Completed Application");
+  assert.equal(
+    footy.coverImage,
+    "/assets/projects/footy-standings/cover.webp",
+  );
+  assert.equal(
+    footy.coverAlt.en,
+    "Footy Standings mobile league standings table",
+  );
+  assert.equal(
+    footy.coverAlt.id,
+    "Tabel klasemen liga sepak bola pada aplikasi Footy Standings",
+  );
+  assert.equal(footy.coverPosition, "top");
+
+  assert.deepEqual(footy.primaryTechnologies, [
+    "Flutter",
+    "Dart",
+    "REST API",
+    "HTTP",
+    "JSON",
+    "FutureBuilder",
+  ]);
+
+  assert.equal(
+    footy.summary.en,
+    "An Android application built with Flutter that brings football standings, fixtures, top scorers, and club details together using data from a REST API.",
+  );
+  assert.equal(
+    footy.summary.id,
+    "Aplikasi Android berbasis Flutter yang menyajikan klasemen sepak bola, jadwal pertandingan, top scorer, dan detail klub menggunakan data dari REST API.",
+  );
+
+  // Factual boundaries: no personal-use narrative, no league names, no technical counters, no external links
+  assert.doesNotMatch(footy.summary.en, /personal use|kebutuhan pribadi/i);
+  assert.doesNotMatch(footy.summary.id, /personal use|kebutuhan pribadi/i);
+  assert.doesNotMatch(
+    footy.summary.en,
+    /Premier League|La Liga|Bundesliga|Serie A|Ligue 1|Primeira Liga/i,
+  );
+  assert.doesNotMatch(
+    footy.summary.id,
+    /Premier League|La Liga|Bundesliga|Serie A|Ligue 1|Primeira Liga/i,
+  );
+  assert.doesNotMatch(
+    footy.summary.en,
+    /real[- ]?time|live scores|polling|stream|iOS|App Store|Google Play/i,
+  );
+  assert.doesNotMatch(
+    footy.summary.id,
+    /real[- ]?time|skor langsung|polling|stream|iOS|App Store|Google Play/i,
+  );
+  assert.doesNotMatch(JSON.stringify(footy), /github\.com|liveUrl|githubUrl/i);
+  assert.equal("liveUrl" in footy, false);
+  assert.equal("githubUrl" in footy, false);
+
+  // All 10 Hub records and order preserved
+  assert.equal(projectArchive.length, 10);
+  assert.deepEqual(
+    projectArchive.map((p) => p.slug),
+    expectedSlugs,
+  );
+
+  // All category filters preserved
+  const counts = getProjectArchiveCategoryCounts(projectArchive);
+  assert.deepEqual(counts, {
+    all: 10,
+    "web-app": 5,
+    ml: 2,
+    mobile: 2,
+    other: 1,
+  });
+
+  // Home Selected Projects synchronization and order: Footy Standings must NOT be in Home Selected Projects
+  assert.equal(homeSelectedProjects.length, 4);
+  assert.deepEqual(
+    homeSelectedProjects.map((p) => p.slug),
+    [
+      "ukg-system",
+      "ihealth-edu",
+      "ml-for-heart-attack-risk-prediction",
+      "panoramic-virtual-tour",
+    ],
+  );
+  assert.equal(
+    homeSelectedProjects.some((p) => p.slug === "footy-standings"),
+    false,
+  );
+  assert.ok(
+    !Object.values(homeFeaturedConfig).includes("footy-standings"),
+  );
+
+  // Confirm other 9 Hub records remain intact and unchanged
+  const otherNineSlugs = expectedSlugs.filter(
+    (s) => s !== "footy-standings",
+  );
+  assert.equal(otherNineSlugs.length, 9);
+  for (const slug of otherNineSlugs) {
+    const p = projectArchive.find((proj) => proj.slug === slug);
+    assert.ok(p, `Project ${slug} must exist in archive`);
+    assert.equal(p.summary.en, expectedSummaries[slug].en);
+    assert.equal(p.summary.id, expectedSummaries[slug].id);
+  }
+});
+
 
 
 
