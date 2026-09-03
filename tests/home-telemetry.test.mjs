@@ -63,6 +63,63 @@ test("Hero section maintains factual 3-sentence bilingual bio, noninteractive ro
   assert.doesNotMatch(heroFile, /Saya mengubah permasalahan nyata menjadi sistem dan produk/i);
 });
 
+test("Hero continuous roles reel prevents mobile collapse, defines responsive short label for role 03, and preserves accessibility and rotation invariants", () => {
+  const rolesFile = readFileSync(
+    join(root, "src", "components", "home", "hero", "continuous-roles.tsx"),
+    "utf8",
+  );
+
+  // 1. Mobile height collapse fix & 360px layout breakpoint: flex-1 is bounded by xs: (360px) and mobile (<360px) has w-full
+  assert.match(rolesFile, /hero-role-reel[^"]*w-full\s+xs:w-auto\s+xs:flex-1/);
+  assert.match(rolesFile, /hero-role-reel[^"]*min-h-6/);
+  assert.match(rolesFile, /hero-role-reel[^"]*overflow-hidden/);
+  assert.match(rolesFile, /hero-role-reel[^"]*min-w-0/);
+  assert.match(rolesFile, /hero-role-reel[^"]*grid/);
+
+  // Ensure fixed 24px (standalone h-6) and truncate are NOT used (prevent clipping when text wraps)
+  assert.doesNotMatch(rolesFile, /hero-role-reel[^"]*(?<!min-)h-6/);
+  assert.doesNotMatch(rolesFile, /<span className="truncate">/);
+
+  // Ensure unconstrained flex-1 without xs: is NOT present on the reel
+  assert.doesNotMatch(rolesFile, /hero-role-reel[^"]*min-w-0\s+flex-1/);
+
+  // 2. Responsive short label for role 03 only (640px / sm: breakpoint)
+  assert.match(rolesFile, /shortTitle:\s*"AI & ML Enthusiast"/);
+  assert.match(rolesFile, /shortTitle:\s*"Software Engineer"/);
+  assert.match(rolesFile, /shortTitle:\s*"Full-Stack Web Developer"/);
+
+  // Responsive spans: sm:hidden for short label, hidden sm:inline for full label
+  assert.match(rolesFile, /<span className="sm:hidden">\{role\.shortTitle\}<\/span>/);
+  assert.match(rolesFile, /<span className="hidden sm:inline">\{role\.title\}<\/span>/);
+
+  // 3. Responsive Indonesian prefix (640px / sm: breakpoint): "Saya" <640px, "Saya seorang" >=640px
+  assert.match(rolesFile, /<span className="sm:hidden">Saya<\/span>/);
+  assert.match(rolesFile, /<span className="hidden sm:inline">Saya seorang<\/span>/);
+
+  // 4. Separated layout breakpoint (360px / xs:): 2-row ellipsis strictly <360px, 1-row elements >=360px
+  assert.match(rolesFile, /xs:hidden[^"]*hero-role-ellipsis|hero-role-ellipsis\s+xs:hidden/);
+  assert.match(rolesFile, /hidden\s+xs:flex[^"]*hero-role-ellipsis|hero-role-ellipsis\s+hidden\s+xs:flex/);
+  assert.match(rolesFile, /hidden\s+xs:inline/);
+
+  // 5. Stabilized prefix slot for EN
+  assert.match(rolesFile, /hero-role-intro-slot|min-w-\[6\.5ch\]/);
+
+  // First two roles are not shortened or truncated with ellipsis
+  assert.doesNotMatch(rolesFile, /shortTitle:\s*"SE"/);
+  assert.doesNotMatch(rolesFile, /shortTitle:\s*"Dev"/);
+
+  // 6. Accessibility & screen reader: aria-hidden on reel, full text in sr-only
+  assert.match(rolesFile, /aria-hidden="true"/);
+  assert.match(rolesFile, /className="sr-only"/);
+  assert.match(rolesFile, /activeRole\.title/);
+
+  // 7. Invariants: 4000ms cycle interval, reduced motion static role 1, a/an prefix logic
+  assert.match(rolesFile, /CYCLE_INTERVAL_MS = 4000/);
+  assert.match(rolesFile, /prefers-reduced-motion/);
+  assert.match(rolesFile, /isThirdActive\s*&&\s*isEnglishPrefix/);
+  assert.match(rolesFile, /I'm an/);
+});
+
 function escapeRegex(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

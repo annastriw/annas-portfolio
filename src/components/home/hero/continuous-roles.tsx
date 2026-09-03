@@ -12,9 +12,21 @@ import type { Locale } from "@/lib/i18n/config";
 import { siteIdentity } from "@/content/site/identity";
 
 const roles = [
-  { id: "01", title: siteIdentity.roles[0] },
-  { id: "02", title: siteIdentity.roles[1] },
-  { id: "03", title: siteIdentity.roles[2] },
+  {
+    id: "01",
+    title: siteIdentity.roles[0],
+    shortTitle: "Software Engineer",
+  },
+  {
+    id: "02",
+    title: siteIdentity.roles[1],
+    shortTitle: "Full-Stack Web Developer",
+  },
+  {
+    id: "03",
+    title: siteIdentity.roles[2],
+    shortTitle: "AI & ML Enthusiast",
+  },
 ] as const;
 
 const CYCLE_INTERVAL_MS = 4000;
@@ -111,31 +123,38 @@ export function ContinuousRoles({
           : `${activeIntro}: ${activeRole.title}. Professional roles: Software Engineer, Full-Stack Web Developer, AI & Machine Learning Enthusiast.`}
       </span>
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 w-full">
-        {/* Row 1 on mobile / Left group on desktop: Marker + Intro Prefix + Mobile Ellipsis */}
-        <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-2.5 min-w-0" aria-hidden="true">
-          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+      <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 xs:gap-2 sm:gap-4 w-full">
+        {/* Row 1 on mobile (<360px) / Left group on >=360px: Marker + Intro Prefix + (Mobile Ellipsis on <360px) */}
+        <div className="flex items-center justify-between xs:justify-start gap-1.5 sm:gap-2.5 min-w-0" aria-hidden="true">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
             <span className="text-(--color-accent) font-mono text-xs font-bold shrink-0">
               ■
             </span>
             <span
               className={`font-mono text-xs text-(--color-muted) uppercase tracking-wider font-semibold shrink-0 ${
-                isEnglishPrefix ? "min-w-[6ch] inline-block" : ""
+                isEnglishPrefix ? "hero-role-intro-slot min-w-[6.5ch] inline-block" : ""
               }`}
             >
-              {activeIntro}
+              {isId ? (
+                <>
+                  <span className="sm:hidden">Saya</span>
+                  <span className="hidden sm:inline">Saya seorang</span>
+                </>
+              ) : (
+                activeIntro
+              )}
             </span>
             <span
-              className="hidden sm:inline text-(--color-border) font-mono text-xs shrink-0"
+              className="hidden xs:inline text-(--color-border) font-mono text-xs shrink-0"
               aria-hidden="true"
             >
               /
             </span>
           </div>
 
-          {/* Mobile-only 3-dot ellipsis (aligned right on Row 1) */}
+          {/* Mobile-only 3-dot ellipsis on Row 1 (strictly below 360px) */}
           <div
-            className="hero-role-ellipsis sm:hidden flex items-center gap-1 shrink-0 select-none pointer-events-none"
+            className="hero-role-ellipsis xs:hidden flex items-center gap-1 shrink-0 select-none pointer-events-none"
             aria-hidden="true"
           >
             {roles.map((role, idx) => {
@@ -154,9 +173,9 @@ export function ContinuousRoles({
           </div>
         </div>
 
-        {/* Masked Active Role Reel (Row 2 on mobile, full width available, 0 truncation) */}
+        {/* Masked Active Role Reel (Row 2 on <360px, full available width, self-adjusting grid height) */}
         <div
-          className="hero-role-reel relative overflow-hidden h-6 min-w-0 flex-1 flex items-center"
+          className="hero-role-reel relative overflow-hidden min-h-6 min-w-0 w-full xs:w-auto xs:flex-1 grid grid-cols-1 grid-rows-1 items-center"
           aria-hidden="true"
         >
           {roles.map((role, idx) => {
@@ -164,7 +183,7 @@ export function ContinuousRoles({
             return (
               <div
                 key={role.id}
-                className={`absolute inset-0 flex items-center font-sans font-semibold text-xs sm:text-sm md:text-base text-(--color-foreground) truncate transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                className={`col-start-1 row-start-1 flex items-center font-sans font-semibold text-xs sm:text-sm md:text-base text-(--color-foreground) transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
                   isCurrent
                     ? "opacity-100 translate-y-0 pointer-events-auto"
                     : idx < activeIndex
@@ -175,15 +194,24 @@ export function ContinuousRoles({
                 <span className="font-mono text-xs font-bold text-(--color-accent) mr-1.5 shrink-0">
                   [{role.id}]
                 </span>
-                <span className="truncate">{role.title}</span>
+                <span>
+                  {role.shortTitle !== role.title ? (
+                    <>
+                      <span className="sm:hidden">{role.shortTitle}</span>
+                      <span className="hidden sm:inline">{role.title}</span>
+                    </>
+                  ) : (
+                    role.title
+                  )}
+                </span>
               </div>
             );
           })}
         </div>
 
-        {/* Desktop 3-dot ellipsis (Far right) */}
+        {/* Single-row 3-dot ellipsis (Far right, visible starting at 360px) */}
         <div
-          className="hero-role-ellipsis hidden sm:flex items-center gap-1 shrink-0 select-none pointer-events-none"
+          className="hero-role-ellipsis hidden xs:flex items-center gap-1 shrink-0 select-none pointer-events-none"
           aria-hidden="true"
         >
           {roles.map((role, idx) => {
