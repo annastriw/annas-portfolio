@@ -1,54 +1,80 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { defaultLocale } from "@/lib/i18n/config";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { runtimeErrorCopy, getLocaleFromPathname } from "@/content/site/status-screens";
+import styles from "@/components/ui/status-screen.module.css";
 
 interface ErrorProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
+function getClientLocaleSnapshot(): Locale {
+  if (typeof window !== "undefined") {
+    return getLocaleFromPathname(window.location.pathname);
+  }
+  return defaultLocale;
+}
+
+function getServerLocaleSnapshot(): Locale {
+  return defaultLocale;
+}
+
+function subscribeNoop() {
+  return () => {};
+}
+
 export default function GlobalErrorPage({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // Log unexpected runtime errors locally
+    // Preserve essential diagnostic logging without leaking technical details to UI
     console.error("Runtime application error caught by boundary:", error);
   }, [error]);
 
+  const targetLocale = useSyncExternalStore(
+    subscribeNoop,
+    getClientLocaleSnapshot,
+    getServerLocaleSnapshot
+  );
+
+  const homeHref = `/${targetLocale}`;
+  const copy = runtimeErrorCopy[targetLocale] || runtimeErrorCopy[defaultLocale];
+  const isId = targetLocale === "id";
+
   return (
-    <div className="not-found-page">
-      <div className="not-found-container">
-        <header className="not-found-header">
-          <div className="not-found-meta">
-            <span className="not-found-pill">[STATUS // 500]</span>
-            <span className="not-found-pill not-found-pill-accent">
-              RUNTIME EXCEPTION // EXECUTION FAULT
-            </span>
-          </div>
-
-          <h1 className="not-found-title">System Interruption</h1>
-
-          <p className="not-found-lead">
-            An unexpected error occurred during page rendering. The application
-            has isolated the failure to prevent cascading system faults.
-          </p>
-
-          {error.digest && (
-            <p className="error-digest">
-              <code>Error Digest: {error.digest}</code>
-            </p>
-          )}
+    <main
+      className={styles.page}
+      role="main"
+      aria-label={isId ? "Terjadi Kesalahan" : "Something Went Wrong"}
+    >
+      <div className={styles.container}>
+        {/* 1. Main heading, 2. Short explanation */}
+        <header className={styles.header}>
+          <h1 className={styles.title}>{copy.title}</h1>
+          <p className={styles.description}>{copy.description}</p>
         </header>
 
-        <div className="not-found-actions">
-          <button type="button" onClick={() => reset()} className="hero-btn-primary">
-            <span>↺ Retry Transmission</span>
+        {/* 3. Retry and Home actions */}
+        <div className={styles.actions}>
+          <button
+            type="button"
+            onClick={() => reset()}
+            className={styles.primaryAction}
+          >
+            <span>{copy.primaryAction}</span>
+            <span aria-hidden="true" className={styles.actionArrow}>
+              {"\u2192"}
+            </span>
           </button>
-          <Link href={`/${defaultLocale}`} className="hero-btn-secondary">
-            <span>Return to Home Base</span>
+          <Link href={homeHref} className={styles.secondaryAction}>
+            <span>{copy.secondaryAction}</span>
+            <span aria-hidden="true" className={styles.actionArrow}>
+              {"\u2192"}
+            </span>
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

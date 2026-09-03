@@ -1,27 +1,27 @@
 "use client";
 
-import { useEffect, useState, useRef, useSyncExternalStore } from "react";
+import { useEffect, useState, useRef, useSyncExternalStore, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { notFoundCopy, getLocaleFromPathname } from "@/content/site/status-screens";
+import styles from "@/components/ui/status-screen.module.css";
 
 const REDIRECT_DURATION_MS = 6000;
 
-function getClientLocaleSnapshot(): "en" | "id" {
+function getClientLocaleSnapshot(): Locale {
   if (typeof window !== "undefined") {
-    const pathname = window.location.pathname;
-    if (pathname.startsWith("/id") || pathname.includes("/id/")) {
-      return "id";
-    }
+    return getLocaleFromPathname(window.location.pathname);
   }
-  return "en";
+  return defaultLocale;
+}
+
+function getServerLocaleSnapshot(): Locale {
+  return defaultLocale;
 }
 
 function subscribeNoop() {
   return () => {};
-}
-
-function getServerLocaleSnapshot(): "en" | "id" {
-  return "en";
 }
 
 export default function NotFound() {
@@ -33,126 +33,117 @@ export default function NotFound() {
   );
 
   const [progress, setProgress] = useState<number>(0);
-  const [secondsRemaining, setSecondsRemaining] = useState<number>(6);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const hasNavigatedRef = useRef<boolean>(false);
+
+  const homeHref = `/${targetLocale}`;
+  const projectsHref = `/${targetLocale}/projects`;
+  const copy = notFoundCopy[targetLocale] || notFoundCopy[defaultLocale];
+  const isId = targetLocale === "id";
+
+  const cancelPendingRedirect = useCallback(() => {
+    hasNavigatedRef.current = true;
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
 
   useEffect(() => {
+    hasNavigatedRef.current = false;
     const startTime = Date.now();
 
-    // Progress update interval
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       const elapsed = Date.now() - startTime;
-      const pct = Math.min(100, Math.round((elapsed / REDIRECT_DURATION_MS) * 100));
-      const rem = Math.max(0, Math.ceil((REDIRECT_DURATION_MS - elapsed) / 1000));
+      const pct = Math.min(100, (elapsed / REDIRECT_DURATION_MS) * 100);
       setProgress(pct);
-      setSecondsRemaining(rem);
 
       if (elapsed >= REDIRECT_DURATION_MS) {
-        clearInterval(interval);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
       }
     }, 40);
 
-    // Redirect timer
     timerRef.current = setTimeout(() => {
-      router.push(`/${targetLocale}`);
+      if (!hasNavigatedRef.current) {
+        hasNavigatedRef.current = true;
+        router.push(homeHref);
+      }
     }, REDIRECT_DURATION_MS);
 
     return () => {
-      clearInterval(interval);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
       if (timerRef.current) {
         clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
     };
-  }, [router, targetLocale]);
-
-  const isId = targetLocale === "id";
-  const homeHref = `/${targetLocale}`;
-
-  const copy = {
-    tag: isId ? "[404 // HALAMAN TIDAK DITEMUKAN]" : "[404 // PAGE NOT FOUND]",
-    subtag: isId ? "STATUS DOKUMEN: TIDAK TERSEDIA" : "DOCUMENT STATUS: NOT FOUND",
-    title: isId ? "Halaman Tidak Ditemukan" : "Document Not Found",
-    description: isId
-      ? "Halaman yang Anda cari tidak tersedia. Anda akan diarahkan kembali ke halaman utama."
-      : "The document you requested could not be found. Returning you to the portfolio home page.",
-    returningLabel: isId ? "MENGALIHKAN KE BERANDA" : "RETURNING TO HOME",
-    manualCta: isId ? "Kembali ke Beranda Sekarang" : "Return Home Now",
-    exploreCta: isId ? "Jelajahi Proyek" : "Browse Projects",
-  };
+  }, [router, homeHref]);
 
   return (
     <main
-      className="not-found-page min-h-[80vh] flex items-center justify-center py-16 px-4"
+      className={styles.page}
       role="main"
-      aria-label="404 Page Not Found"
+      aria-label={isId ? "404 Halaman Tidak Ditemukan" : "404 Page Not Found"}
     >
-      <div className="not-found-container w-full max-w-2xl mx-auto border border-(--color-border) bg-(--color-background) p-6 sm:p-10 flex flex-col gap-8 shadow-sm">
-        {/* Header Rail */}
-        <header className="not-found-header flex flex-col gap-3 border-b border-(--color-border) pb-6">
-          <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-(--color-muted)">
-            <span className="text-(--color-accent) font-semibold">{copy.tag}</span>
-            <span>{copy.subtag}</span>
-          </div>
-
-          <h1 className="font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
-            {copy.title}
-          </h1>
-
-          <p className="text-sm sm:text-base text-(--color-muted) leading-relaxed m-0 max-w-xl">
-            {copy.description}
-          </p>
+      <div className={styles.container}>
+        {/* 1. 404 marker, 2. Main heading, 3. Description */}
+        <header className={styles.header}>
+          <span className={styles.marker}>{copy.marker}</span>
+          <h1 className={styles.title}>{copy.title}</h1>
+          <p className={styles.description}>{copy.description}</p>
         </header>
 
-        {/* 6-Second Redirect Progress Indicator */}
-        <div
-          className="not-found-progress-block flex flex-col gap-2.5 bg-(--color-surface-subtle,var(--color-background)) border border-(--color-border) p-4 sm:p-5"
-          role="status"
-          aria-live="polite"
-        >
-          <div className="flex items-center justify-between font-mono text-xs">
-            <span className="font-semibold text-(--color-foreground)">
-              {copy.returningLabel}
+        {/* 4. Two actions (Back to Home, Explore Projects) */}
+        <div className={styles.actions}>
+          <Link
+            href={homeHref}
+            onClick={cancelPendingRedirect}
+            className={styles.primaryAction}
+          >
+            <span>{copy.primaryAction}</span>
+            <span aria-hidden="true" className={styles.actionArrow}>
+              {"\u2192"}
             </span>
-            <span className="text-(--color-accent) font-bold">
-              {`${secondsRemaining}s (${progress}%)`}
+          </Link>
+          <Link
+            href={projectsHref}
+            onClick={cancelPendingRedirect}
+            className={styles.secondaryAction}
+          >
+            <span>{copy.secondaryAction}</span>
+            <span aria-hidden="true" className={styles.actionArrow}>
+              {"\u2192"}
             </span>
-          </div>
+          </Link>
+        </div>
 
-          {/* Progress Rule */}
+        {/* 5. Small redirect notice, 6. Thin progress bar */}
+        <div className={styles.progressSection}>
+          <p className={styles.redirectNotice}>{copy.redirectNotice}</p>
           <div
-            className="not-found-progress-track w-full h-[2px] bg-(--color-border) relative overflow-hidden"
+            className={styles.progressTrack}
             role="progressbar"
-            aria-valuenow={progress}
+            aria-label={copy.redirectNotice}
+            aria-valuenow={Math.round(progress)}
             aria-valuemin={0}
             aria-valuemax={100}
           >
             <div
-              className="not-found-progress-fill absolute top-0 left-0 h-full bg-(--color-accent) transition-all duration-75 ease-linear"
+              className={styles.progressFill}
               style={{ width: `${progress}%` }}
             />
           </div>
-
-          <div className="flex justify-between font-mono text-[11px] text-(--color-muted)">
-            <span>INDEX 00</span>
-            <span>HOME BASE {targetLocale.toUpperCase()}</span>
-            <span>100%</span>
-          </div>
-        </div>
-
-        {/* Actions Rail */}
-        <div className="not-found-actions flex flex-wrap items-center gap-4 pt-2">
-          <Link
-            href={homeHref}
-            className="hero-btn-primary inline-flex items-center gap-2 font-mono text-xs font-semibold px-5 py-3 border border-(--color-foreground) bg-(--color-foreground) text-(--color-background) hover:bg-(--color-accent) hover:border-(--color-accent) transition-colors"
-          >
-            <span>← {copy.manualCta}</span>
-          </Link>
-          <Link
-            href={`/${targetLocale}/projects`}
-            className="hero-btn-secondary inline-flex items-center gap-2 font-mono text-xs px-5 py-3 border border-(--color-border) bg-(--color-background) text-(--color-foreground) hover:border-(--color-accent) hover:text-(--color-accent) transition-colors"
-          >
-            <span>{copy.exploreCta} →</span>
-          </Link>
         </div>
       </div>
     </main>
