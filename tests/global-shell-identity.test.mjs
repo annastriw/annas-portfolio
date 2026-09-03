@@ -68,7 +68,7 @@ test("Authoritative professional roles use exact approved full titles", () => {
   const expectedRoles = [
     "Software Engineer",
     "Full-Stack Web Developer",
-    "Machine Learning Engineer",
+    "AI & Machine Learning Enthusiast",
   ];
 
   assert.deepEqual(Array.from(professionalRoles), expectedRoles);
@@ -80,11 +80,11 @@ test("Authoritative professional roles use exact approved full titles", () => {
   // Roles in positioning text
   assert.equal(
     siteIdentity.positioning.en,
-    "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
   );
   assert.equal(
     siteIdentity.positioning.id,
-    "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
   );
 });
 

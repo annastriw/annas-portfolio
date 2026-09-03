@@ -3,7 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 export const professionalRoles = [
   "Software Engineer",
   "Full-Stack Web Developer",
-  "Machine Learning Engineer",
+  "AI & Machine Learning Enthusiast",
 ] as const;
 
 export type ProfessionalRole = (typeof professionalRoles)[number];
@@ -27,8 +27,8 @@ export const siteIdentity: SiteIdentity = {
   primaryJobTitle: "Software Engineer",
   roles: professionalRoles,
   positioning: {
-    en: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
-    id: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    en: "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
+    id: "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
   },
   location: "Jakarta, Indonesia",
   locationMetadata: "JAKARTA, INDONESIA · UTC+7",

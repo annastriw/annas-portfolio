@@ -26,7 +26,7 @@ test("Footer component renders approved identity, 3 full roles, and dynamic colo
   assert.deepEqual(Array.from(siteIdentity.roles), [
     "Software Engineer",
     "Full-Stack Web Developer",
-    "Machine Learning Engineer",
+    "AI & Machine Learning Enthusiast",
   ]);
   assert.match(footerFile, /siteIdentity\.roles\.map/);
 

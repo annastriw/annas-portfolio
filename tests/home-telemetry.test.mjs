@@ -19,7 +19,8 @@ test("Hero section maintains factual 3-sentence bilingual bio, noninteractive ro
   assert.match(heroFile, /Annas Tri Widagdo/);
   assert.match(rolesFile, /Software Engineer/);
   assert.match(rolesFile, /Full-Stack Web Developer/);
-  assert.match(rolesFile, /Machine Learning Engineer/);
+  assert.match(rolesFile, /AI & Machine Learning Enthusiast/);
+  assert.match(rolesFile, /I'm an/);
   assert.match(rolesFile, /CYCLE_INTERVAL_MS = 4000/);
   assert.match(rolesFile, /visibilitychange/);
   assert.match(rolesFile, /prefers-reduced-motion/);

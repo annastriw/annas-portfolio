@@ -92,6 +92,12 @@ export function ContinuousRoles({
   const activeIndex = prefersReducedMotion ? 0 : currentIndex;
   const activeRole = roles[activeIndex];
 
+  const isThirdActive = activeIndex === 2;
+  const isEnglishPrefix = intro === "I'm a" || intro === "I’m a";
+  const activeIntro = isThirdActive && isEnglishPrefix
+    ? intro === "I’m a" ? "I’m an" : "I'm an"
+    : intro;
+
   return (
     <div
       className="hero-role-rail w-full border-y border-(--color-border) py-2 my-1"
@@ -101,51 +107,83 @@ export function ContinuousRoles({
       {/* Screen Reader Static Label */}
       <span className="sr-only">
         {isId
-          ? `${intro}: ${activeRole.title}. Peran profesional: Software Engineer, Full-Stack Web Developer, Machine Learning Engineer.`
-          : `${intro}: ${activeRole.title}. Professional roles: Software Engineer, Full-Stack Web Developer, Machine Learning Engineer.`}
+          ? `${activeIntro}: ${activeRole.title}. Peran profesional: Software Engineer, Full-Stack Web Developer, AI & Machine Learning Enthusiast.`
+          : `${activeIntro}: ${activeRole.title}. Professional roles: Software Engineer, Full-Stack Web Developer, AI & Machine Learning Enthusiast.`}
       </span>
 
-      <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
-        {/* Left Area: Restrained Marker + I'M A + Active Role Name */}
-        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1" aria-hidden="true">
-          <span className="text-(--color-accent) font-mono text-xs font-bold shrink-0">
-            ■
-          </span>
-          <span className="font-mono text-xs text-(--color-muted) uppercase tracking-wider font-semibold shrink-0">
-            {intro}
-          </span>
-          <span className="text-(--color-border) font-mono text-xs shrink-0">
-            /
-          </span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 w-full">
+        {/* Row 1 on mobile / Left group on desktop: Marker + Intro Prefix + Mobile Ellipsis */}
+        <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-2.5 min-w-0" aria-hidden="true">
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+            <span className="text-(--color-accent) font-mono text-xs font-bold shrink-0">
+              ■
+            </span>
+            <span
+              className={`font-mono text-xs text-(--color-muted) uppercase tracking-wider font-semibold shrink-0 ${
+                isEnglishPrefix ? "min-w-[6ch] inline-block" : ""
+              }`}
+            >
+              {activeIntro}
+            </span>
+            <span
+              className="hidden sm:inline text-(--color-border) font-mono text-xs shrink-0"
+              aria-hidden="true"
+            >
+              /
+            </span>
+          </div>
 
-          {/* Masked Active Role Reel */}
-          <div className="hero-role-reel relative overflow-hidden h-6 min-w-0 flex-1 flex items-center">
+          {/* Mobile-only 3-dot ellipsis (aligned right on Row 1) */}
+          <div
+            className="hero-role-ellipsis sm:hidden flex items-center gap-1 shrink-0 select-none pointer-events-none"
+            aria-hidden="true"
+          >
             {roles.map((role, idx) => {
-              const isCurrent = idx === activeIndex;
+              const isActive = idx === activeIndex;
               return (
-                <div
+                <span
                   key={role.id}
-                  className={`absolute inset-0 flex items-center font-sans font-semibold text-xs sm:text-sm md:text-base text-(--color-foreground) truncate transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
-                    isCurrent
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : idx < activeIndex
-                      ? "opacity-0 -translate-y-full pointer-events-none"
-                      : "opacity-0 translate-y-full pointer-events-none"
+                  className={`block w-1.5 h-1.5 rounded-full transition-opacity duration-300 motion-reduce:transition-none ${
+                    isActive
+                      ? "bg-(--color-accent) opacity-100"
+                      : "bg-(--color-muted) opacity-35"
                   }`}
-                >
-                  <span className="font-mono text-xs font-bold text-(--color-accent) mr-1.5 shrink-0">
-                    [{role.id}]
-                  </span>
-                  <span className="truncate">{role.title}</span>
-                </div>
+                />
               );
             })}
           </div>
         </div>
 
-        {/* Right Area: Compact Noninteractive Ellipsis (3 tight dots, aria-hidden) */}
+        {/* Masked Active Role Reel (Row 2 on mobile, full width available, 0 truncation) */}
         <div
-          className="hero-role-ellipsis flex items-center gap-1 shrink-0 select-none pointer-events-none"
+          className="hero-role-reel relative overflow-hidden h-6 min-w-0 flex-1 flex items-center"
+          aria-hidden="true"
+        >
+          {roles.map((role, idx) => {
+            const isCurrent = idx === activeIndex;
+            return (
+              <div
+                key={role.id}
+                className={`absolute inset-0 flex items-center font-sans font-semibold text-xs sm:text-sm md:text-base text-(--color-foreground) truncate transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                  isCurrent
+                    ? "opacity-100 translate-y-0 pointer-events-auto"
+                    : idx < activeIndex
+                    ? "opacity-0 -translate-y-full pointer-events-none"
+                    : "opacity-0 translate-y-full pointer-events-none"
+                }`}
+              >
+                <span className="font-mono text-xs font-bold text-(--color-accent) mr-1.5 shrink-0">
+                  [{role.id}]
+                </span>
+                <span className="truncate">{role.title}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop 3-dot ellipsis (Far right) */}
+        <div
+          className="hero-role-ellipsis hidden sm:flex items-center gap-1 shrink-0 select-none pointer-events-none"
           aria-hidden="true"
         >
           {roles.map((role, idx) => {

@@ -98,8 +98,8 @@ export const profileData: ProfileData = {
   },
   name: "Annas Tri Widagdo",
   headline: {
-    en: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
-    id: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    en: "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
+    id: "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
   },
   lead: {
     en: "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, focused on full-stack web development and machine learning.",
@@ -129,8 +129,8 @@ export const profileData: ProfileData = {
   },
   metadata: {
     role: {
-      en: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
-      id: "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+      en: "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
+      id: "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
     },
     education: {
       en: "Bachelor of Engineering in Computer Engineering · Diponegoro University",

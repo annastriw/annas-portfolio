@@ -191,7 +191,7 @@ test("MobileNav component implements Table of Contents, dialog semantics, scroll
   assert.deepEqual(Array.from(siteIdentity.roles), [
     "Software Engineer",
     "Full-Stack Web Developer",
-    "Machine Learning Engineer",
+    "AI & Machine Learning Enthusiast",
   ]);
 
   // Excluded contact and location metadata per Prompt 10/12

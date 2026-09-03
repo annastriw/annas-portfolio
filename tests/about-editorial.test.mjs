@@ -17,15 +17,15 @@ test("About profile maintains verified factual information, exact bilingual narr
   assert.equal(profileData.name, "Annas Tri Widagdo");
   assert.equal(
     profileData.headline.en,
-    "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
   );
   assert.equal(
     profileData.headline.id,
-    "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
   );
   assert.equal(
     profileData.metadata.role.en,
-    "Software Engineer · Full-Stack Web Developer · Machine Learning Engineer",
+    "Software Engineer · Full-Stack Web Developer · AI & Machine Learning Enthusiast",
   );
 
   // Approved Lead Copy
