@@ -103,72 +103,74 @@ export function EmailComposer({ locale }: EmailComposerProps) {
         className={styles.composerForm}
         onSubmit={(event) => event.preventDefault()}
       >
-        <fieldset
-          aria-describedby={`contact-template-hint-${locale}`}
-          className={styles.templateFieldset}
-        >
-          <legend className={styles.templateLegend}>
-            <span>01 /</span> {copy.templateLegend}
-          </legend>
-          <p
-            className={styles.templateHint}
-            id={`contact-template-hint-${locale}`}
+        <div className={styles.templateSection}>
+          <fieldset
+            aria-describedby={`contact-template-hint-${locale}`}
+            className={styles.templateFieldset}
           >
-            <svg
-              aria-hidden="true"
-              className={styles.templateHintIcon}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.4"
-              viewBox="0 0 16 16"
+            <legend className={styles.templateLegend}>
+              <span>01 /</span> {copy.templateLegend}
+            </legend>
+            <p
+              className={styles.templateHint}
+              id={`contact-template-hint-${locale}`}
             >
-              <circle cx="8" cy="8" r="6.25" />
-              <path d="M8 7.25v3.75M8 5h.01" strokeLinecap="round" />
-            </svg>
-            <span className={styles.templateHintText}>{copy.templateHint}</span>
-          </p>
-          <div className={styles.templateGrid}>
-            {templates.map((template, index) => {
-              const isSelected = draft.selectedTemplate === template.id;
-              const inputId = `contact-template-${locale}-${template.id}`;
+              <svg
+                aria-hidden="true"
+                className={styles.templateHintIcon}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.4"
+                viewBox="0 0 16 16"
+              >
+                <circle cx="8" cy="8" r="6.25" />
+                <path d="M8 7.25v3.75M8 5h.01" strokeLinecap="round" />
+              </svg>
+              <span className={styles.templateHintText}>{copy.templateHint}</span>
+            </p>
+            <div className={styles.templateGrid}>
+              {templates.map((template, index) => {
+                const isSelected = draft.selectedTemplate === template.id;
+                const inputId = `contact-template-${locale}-${template.id}`;
 
-              return (
-                <div className={styles.templateOption} key={template.id}>
-                  <input
-                    checked={isSelected}
-                    className={styles.templateInput}
-                    id={inputId}
-                    name="contact-template"
-                    onChange={(event) =>
-                      handleSelectTemplate(template.id, event.currentTarget)
-                    }
-                    onClick={(event) =>
-                      handleSelectTemplate(template.id, event.currentTarget)
-                    }
-                    type="radio"
-                    value={template.id}
-                  />
-                  <label
-                    className={styles.templateLabel}
-                    data-selected={isSelected ? "true" : "false"}
-                    htmlFor={inputId}
-                  >
-                    <span className={styles.templateIndex}>
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className={styles.templateName}>{template.label}</span>
-                    <span
-                      aria-hidden={!isSelected}
-                      className={styles.templateState}
+                return (
+                  <div className={styles.templateOption} key={template.id}>
+                    <input
+                      checked={isSelected}
+                      className={styles.templateInput}
+                      id={inputId}
+                      name="contact-template"
+                      onChange={(event) =>
+                        handleSelectTemplate(template.id, event.currentTarget)
+                      }
+                      onClick={(event) =>
+                        handleSelectTemplate(template.id, event.currentTarget)
+                      }
+                      type="radio"
+                      value={template.id}
+                    />
+                    <label
+                      className={styles.templateLabel}
+                      data-selected={isSelected ? "true" : "false"}
+                      htmlFor={inputId}
                     >
-                      {isSelected ? copy.selectedTemplate : ""}
-                    </span>
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-        </fieldset>
+                      <span className={styles.templateIndex}>
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className={styles.templateName}>{template.label}</span>
+                      <span
+                        aria-hidden={!isSelected}
+                        className={styles.templateState}
+                      >
+                        {isSelected ? copy.selectedTemplate : ""}
+                      </span>
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          </fieldset>
+        </div>
 
         <div className={styles.fieldGroup}>
           <label

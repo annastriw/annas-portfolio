@@ -473,9 +473,11 @@ test("Contact styles implement matching section dividers and wide-layout header 
     "utf8",
   );
 
-  // Both columns have matching border-top dividers
+  // Both columns have matching border-top dividers, with templateSection providing dedicated full-width rule
   assert.match(cssFile, /\.channelList\s*\{[^}]*border-top:\s*1px solid var\(--border\)/);
-  assert.match(cssFile, /\.templateFieldset\s*\{[^}]*border-top:\s*1px solid var\(--border\)/);
+  assert.match(cssFile, /\.templateSection\s*\{[^}]*border-top:\s*1px solid var\(--border\)/);
+  assert.match(cssFile, /\.fieldGroup\s*\{[^}]*border-top:\s*1px solid var\(--border\)/);
+  assert.doesNotMatch(cssFile, /\.templateFieldset\s*\{[^}]*border-top/);
 
   // Wide layout min-height alignment for headers at min-width: 64rem
   assert.match(cssFile, /@media\s*\(min-width:\s*64rem\)\s*\{[\s\S]*?\.channelsHeader,\s*\n?\.composerHeader\s*\{[\s\S]*?min-height:/);

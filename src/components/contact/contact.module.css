@@ -243,12 +243,17 @@
   width: 100%;
 }
 
-/* Template Selection Fieldset */
+/* Template Selection Section */
+.templateSection {
+  border-top: 1px solid var(--border);
+  padding-block: 0.875rem 1.25rem;
+}
+
 .templateFieldset {
   margin: 0;
-  padding: 0.875rem 0 1.25rem;
+  padding: 0;
   border: 0;
-  border-top: 1px solid var(--border);
+  min-inline-size: 0;
 }
 
 .templateLegend,
@@ -262,8 +267,11 @@
 }
 
 .templateLegend {
+  display: block;
+  float: none;
   width: 100%;
   margin-bottom: 0.25rem;
+  padding: 0;
 }
 
 .templateLegend span,
