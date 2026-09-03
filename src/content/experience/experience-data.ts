@@ -41,12 +41,12 @@ export const experiencesData: ExperienceItem[] = [
       en: [
         "Developed a multi-branch ERP end-to-end using a Next.js frontend, NestJS REST API, and MySQL database.",
         "Designed role-based workflows for inventory, sales, approvals, reporting, and automated stock updates.",
-        "Conducted manual and automated testing with Katalon Studio, then deployed the system to an Ubuntu VPS where it remains in active use.",
+        "Performed manual testing and automated end-to-end testing with Playwright, then deployed the system to an Ubuntu VPS where it remains in active use.",
       ],
       id: [
         "Mengembangkan ERP multi-cabang secara end-to-end menggunakan frontend Next.js, REST API NestJS, dan database MySQL.",
         "Merancang workflow berbasis role untuk inventory, penjualan, approval, laporan, dan pembaruan stok otomatis.",
-        "Menjalankan manual dan automated testing dengan Katalon Studio, kemudian melakukan deployment ke VPS Ubuntu. Sistem masih aktif digunakan hingga saat ini.",
+        "Melakukan testing manual dan automated end-to-end testing menggunakan Playwright, lalu melakukan deployment ke VPS Ubuntu yang masih digunakan hingga saat ini.",
       ],
     },
     technologies: [
@@ -54,7 +54,7 @@ export const experiencesData: ExperienceItem[] = [
       "NestJS",
       "TypeScript",
       "MySQL",
-      "Katalon Studio",
+      "Playwright",
       "Linux Ubuntu",
     ],
   },

@@ -37,7 +37,7 @@ export const homeSelectedProjects: readonly HomeSelectedProject[] = [
       "Next.js",
       "NestJS",
       "MySQL",
-      "Katalon Studio",
+      "Playwright",
       "Linux Ubuntu",
     ],
     coverImage: "/assets/projects/ukg-system/cover.webp",

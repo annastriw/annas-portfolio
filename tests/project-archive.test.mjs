@@ -205,7 +205,7 @@ test("enforces max 6 displayed technologies and exact approved stacks for UKG, i
     "Next.js",
     "NestJS",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Linux Ubuntu",
   ]);
 

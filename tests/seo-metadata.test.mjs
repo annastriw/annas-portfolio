@@ -338,7 +338,7 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
     "Next.js",
     "NestJS",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Linux Ubuntu",
   ]);
 

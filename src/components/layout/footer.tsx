@@ -13,7 +13,7 @@ interface FooterProps {
 export function Footer({ locale }: FooterProps) {
   const isId = locale === "id";
   const currentYear = new Date().getFullYear();
-  const signature = `\u00A9 ${currentYear} Annas Tri Widagdo. Drafted in grids, shipped in code.`;
+  const signature = `\u00A9 ${currentYear} Annas Tri Widagdo. Find the purpose. Build the solution.`;
 
   const copy = {
     footerNavigation: isId ? "Navigasi footer" : "Footer navigation",

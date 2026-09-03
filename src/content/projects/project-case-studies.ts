@@ -332,12 +332,12 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       en: [
         "Gathered requirements through interviews with the owner and designed the UI/UX.",
         "Independently developed the frontend, backend, and workflows connecting the system’s modules.",
-        "Tested and deployed the system for use in daily operations.",
+        "Performed manual testing and automated end-to-end testing with Playwright, then deployed the system to an Ubuntu VPS where it remains in active use.",
       ],
       id: [
         "Menggali kebutuhan melalui wawancara dengan owner dan merancang UI/UX.",
         "Mengembangkan frontend, backend, dan integrasi workflow antar modul secara mandiri.",
-        "Melakukan testing dan deployment hingga sistem digunakan di production.",
+        "Melakukan testing manual dan automated end-to-end testing menggunakan Playwright, lalu melakukan deployment ke VPS Ubuntu yang masih digunakan hingga saat ini.",
       ],
     },
     contributionLearning: {
@@ -349,7 +349,7 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       "Next.js",
       "NestJS",
       "MySQL",
-      "Katalon Studio",
+      "Playwright",
       "Linux Ubuntu",
     ],
     modules: [
@@ -367,7 +367,7 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       "Next.js",
       "NestJS",
       "MySQL",
-      "Katalon Studio",
+      "Playwright",
       "Linux Ubuntu",
     ],
     cover: {

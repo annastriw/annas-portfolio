@@ -40,9 +40,9 @@ test("Hero section maintains factual 3-sentence bilingual bio, noninteractive ro
 
   // Exact 3-sentence approved bio in EN and ID
   const expectedBioEn =
-    "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, focused on full-stack web development and machine learning. I turn problems into software products designed around what users actually need. I want every solution I develop to work reliably, provide clear value, and be easy to use.";
+    "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, with a focus on full-stack web development and an interest in AI, machine learning, and data science. I turn problems into software products designed around what users actually need. I want every solution I develop to work reliably, provide clear value, and be easy to use.";
   const expectedBioId =
-    "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development dan machine learning. Saya mengubah permasalahan menjadi software product yang dirancang berdasarkan kebutuhan pengguna. Saya ingin setiap solusi yang saya kembangkan bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan.";
+    "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development, dengan minat pada AI, machine learning, dan data science. Saya mengubah permasalahan menjadi produk software yang dirancang sesuai kebutuhan pengguna. Saya ingin setiap solusi yang saya kembangkan dapat bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan.";
 
   assert.match(heroFile, new RegExp(escapeRegex(expectedBioEn)));
   assert.match(heroFile, new RegExp(escapeRegex(expectedBioId)));
@@ -56,7 +56,7 @@ test("Hero section maintains factual 3-sentence bilingual bio, noninteractive ro
   // Exact terminology requirements
   assert.match(expectedBioEn, /fresh graduate/);
   assert.match(expectedBioId, /fresh graduate/);
-  assert.match(expectedBioId, /software product/);
+  assert.match(expectedBioId, /produk software/);
 
   // Absence of previous bio copy and removed technical-layer list
   assert.doesNotMatch(heroFile, /connecting interfaces, backend systems, data/i);
@@ -135,7 +135,7 @@ test("Featured projects renders 4-row full-width editorial index with visible Ex
     "Next.js",
     "NestJS",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Linux Ubuntu",
   ]);
   assert.equal(homeSelectedProjects[0].technologies.length, 6);

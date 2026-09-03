@@ -504,6 +504,6 @@ test("publishes localized Contact routes, metadata, sitemap entries, and current
   assert.match(sitemap, /\/id\/contact/);
   assert.doesNotMatch(footer + navigation, /annastriw23@gmail\.com/);
   assert.doesNotMatch(footer, /Built with|All rights reserved|Hak cipta dilindungi/);
-  assert.match(footer, /Drafted in grids, shipped in code\./);
+  assert.match(footer, /Find the purpose\. Build the solution\./);
   assert.match(footer, /BackToTop/);
 });

@@ -139,10 +139,6 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
             <span className="font-semibold text-(--color-accent)">
               {isId ? "[03 // SERTIFIKASI]" : "[03 // CREDENTIALS]"}
             </span>
-            <span className="text-(--color-border)" aria-hidden="true">
-              /
-            </span>
-            <span className="uppercase tracking-wider">{copy.subtag[locale]}</span>
           </div>
 
           <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">

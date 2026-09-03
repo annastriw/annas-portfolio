@@ -70,7 +70,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       "Next.js",
       "NestJS",
       "MySQL",
-      "Katalon Studio",
+      "Playwright",
       "Linux Ubuntu",
     ],
     coverImage: "/assets/projects/ukg-system/cover.webp",

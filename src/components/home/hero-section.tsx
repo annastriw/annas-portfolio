@@ -15,13 +15,12 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
   const copy = {
     sectionTag: "[01 // PROFILE]",
-    introTitle: isId ? "RINGKASAN PROFESIONAL" : "PROFESSIONAL SUMMARY",
     greeting: isId ? "Halo, saya" : "Hello, I’m",
     name: "Annas Tri Widagdo",
     roleIntro: isId ? "Saya seorang" : "I'm a",
     personalBrand: isId
-      ? "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development dan machine learning. Saya mengubah permasalahan menjadi software product yang dirancang berdasarkan kebutuhan pengguna. Saya ingin setiap solusi yang saya kembangkan bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan."
-      : "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, focused on full-stack web development and machine learning. I turn problems into software products designed around what users actually need. I want every solution I develop to work reliably, provide clear value, and be easy to use.",
+      ? "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development, dengan minat pada AI, machine learning, dan data science. Saya mengubah permasalahan menjadi produk software yang dirancang sesuai kebutuhan pengguna. Saya ingin setiap solusi yang saya kembangkan dapat bekerja dengan andal, memberikan manfaat yang jelas, dan mudah digunakan."
+      : "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, with a focus on full-stack web development and an interest in AI, machine learning, and data science. I turn problems into software products designed around what users actually need. I want every solution I develop to work reliably, provide clear value, and be easy to use.",
     location: siteIdentity.location,
     statusText: isId ? "Terbuka untuk Kolaborasi" : "Open to Collaboration",
     primaryCta: isId ? "Jelajahi Arsip Proyek" : "Explore Project Archive",
@@ -59,7 +58,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
   return (
     <section
       className="home-hero-section py-8 sm:py-10 md:py-12 lg:py-16 border-b border-(--color-border) overflow-hidden"
-      aria-label={isId ? "Ringkasan Profesional" : "Professional Summary"}
+      aria-label={isId ? "Profil" : "Profile"}
     >
       <div className="home-hero-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
@@ -68,12 +67,6 @@ export function HeroSection({ locale }: HeroSectionProps) {
             <div className="hero-intro-header lg:col-span-2 flex items-center gap-2.5 font-mono text-xs text-(--color-muted) border-b border-(--color-border)/70 pb-2.5">
               <span className="font-bold text-(--color-accent)">
                 {copy.sectionTag}
-              </span>
-              <span className="text-(--color-border)" aria-hidden="true">
-                /
-              </span>
-              <span className="uppercase tracking-wider font-semibold">
-                {copy.introTitle}
               </span>
             </div>
 

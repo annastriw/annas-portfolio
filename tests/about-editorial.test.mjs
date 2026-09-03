@@ -31,11 +31,11 @@ test("About profile maintains verified factual information, exact bilingual narr
   // Approved Lead Copy
   assert.equal(
     profileData.lead.en,
-    "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, focused on full-stack web development and machine learning.",
+    "I am a Software Engineer and a fresh graduate in Computer Engineering from Diponegoro University, with a focus on full-stack web development and an interest in AI, machine learning, and data science.",
   );
   assert.equal(
     profileData.lead.id,
-    "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development dan machine learning.",
+    "Saya adalah Software Engineer dan fresh graduate Teknik Komputer Universitas Diponegoro yang berfokus pada full-stack web development, dengan minat pada AI, machine learning, dan data science.",
   );
 
   // Approved 2-Paragraph Narrative
@@ -43,19 +43,19 @@ test("About profile maintains verified factual information, exact bilingual narr
   assert.equal(profileData.paragraphs.id.length, 2);
   assert.equal(
     profileData.paragraphs.en[0],
-    "I built my experience through academic work, internships, and projects, developing different parts of a product from interfaces and backend systems to data flows and machine learning model integration. These experiences shaped the way I see software as a complete system rather than a collection of separate features.",
+    "Through academic work, internships, and projects, I have gained experience building interfaces, backend systems, and data flows, as well as integrating machine learning models into applications. These experiences have helped me understand how different parts of a product work together and how technical decisions affect the people using it.",
   );
   assert.equal(
     profileData.paragraphs.en[1],
-    "When developing a product, I begin by understanding the problem, shaping the right solution, and implementing it in a structured way. I aim to build products that are reliable, useful, and easy to use, while continuing to learn, grow, and take on new challenges.",
+    "I approach development by understanding the problem and user needs, then turning them into a practical solution. My goal is to build reliable, useful, and easy-to-use products. I continue to learn, develop my skills, and take on new challenges.",
   );
   assert.equal(
     profileData.paragraphs.id[0],
-    "Saya membangun pengalaman melalui perkuliahan, magang, dan project dengan mengembangkan berbagai bagian produk, mulai dari antarmuka dan backend hingga alur data dan integrasi model machine learning. Pengalaman tersebut membentuk cara saya melihat software sebagai sebuah sistem yang utuh, bukan sekadar kumpulan fitur.",
+    "Melalui perkuliahan, magang, dan project, saya membangun pengalaman dalam mengembangkan antarmuka, backend, dan alur data, serta mengintegrasikan model machine learning ke dalam aplikasi. Pengalaman tersebut membantu saya memahami bagaimana berbagai bagian produk saling terhubung dan bagaimana keputusan teknis memengaruhi pengguna.",
   );
   assert.equal(
     profileData.paragraphs.id[1],
-    "Dalam mengembangkan produk, saya memulai dengan memahami masalah, menyusun solusi yang tepat, lalu mengimplementasikannya secara terstruktur. Saya ingin menghasilkan produk yang andal, bermanfaat, dan mudah digunakan, sekaligus terus membuka ruang untuk belajar, berkembang, dan menghadapi tantangan baru.",
+    "Saya memulai pengembangan dengan memahami permasalahan dan kebutuhan pengguna, lalu menerjemahkannya menjadi solusi yang dapat digunakan. Tujuan saya adalah menghasilkan produk yang andal, bermanfaat, dan mudah digunakan. Saya terus membuka ruang untuk belajar, berkembang, dan menghadapi tantangan baru.",
   );
 
   // Portrait asset & caption
@@ -102,19 +102,23 @@ test("About education section references verified degree, exact period, thesis, 
   assert.equal(educationData.status.en, "Fresh Graduate");
   assert.equal(educationData.status.id, "Lulusan Baru");
 
-  // Education Summary (artificial intelligence removed, core pillars present)
+  // Education Summary (academic focus on SE, web dev, AI, ML, and data science)
   assert.equal(
     educationData.summary.en,
-    "Completed a Bachelor of Engineering in Computer Engineering with an academic focus on software engineering, full-stack web development, and machine learning.",
+    "Completed a Bachelor of Engineering in Computer Engineering, with an academic focus on software engineering, full-stack web development, artificial intelligence, machine learning, and data science.",
   );
   assert.equal(
     educationData.summary.id,
-    "Menyelesaikan pendidikan Sarjana Teknik pada program studi Teknik Komputer dengan fokus akademik pada software engineering, full-stack web development, dan machine learning.",
+    "Menyelesaikan pendidikan sarjana Teknik Komputer dengan fokus akademik pada software engineering, full-stack web development, artificial intelligence, machine learning, dan data science.",
   );
 
-  // Focus validations: contains SE, web dev, ML; does NOT contain AI in education summary
-  assert.doesNotMatch(educationData.summary.en, /artificial intelligence/i);
-  assert.doesNotMatch(educationData.summary.id, /artificial intelligence/i);
+  // Focus validations: contains SE, web dev, AI, ML, data science; does NOT use plural data sciences
+  assert.match(educationData.summary.en, /artificial intelligence/i);
+  assert.match(educationData.summary.id, /artificial intelligence/i);
+  assert.match(educationData.summary.en, /data science/i);
+  assert.match(educationData.summary.id, /data science/i);
+  assert.doesNotMatch(educationData.summary.en, /data sciences/i);
+  assert.doesNotMatch(educationData.summary.id, /data sciences/i);
   assert.match(educationData.summary.en, /software engineering/i);
   assert.match(educationData.summary.en, /full-stack web development/i);
   assert.match(educationData.summary.en, /machine learning/i);
@@ -326,6 +330,7 @@ test("AboutProfile component renders approved editorial hierarchy and excludes l
   assert.match(profileFile, /\[01 \/\/ ABOUT\]/);
   assert.match(profileFile, /\[01 \/\/ TENTANG\]/);
   assert.match(profileFile, /<h1/);
+  assert.doesNotMatch(profileFile, /data\.subtag\[locale\]/);
 
   // Exclusions: No metadata table, no CTA, no skills/proficiency
   assert.doesNotMatch(profileFile, /<dl/);
@@ -367,7 +372,8 @@ test("AboutEducation component renders exact academic records, full thesis title
   assert.match(educationFile, /data\.bachelorCertificate\.assetPath/);
   assert.match(educationFile, /data\.bachelorCertificate\.alt\[locale\]/);
   assert.match(educationFile, /data\.bachelorCertificate\.inspectLabel\[locale\]/);
-  assert.match(educationFile, /data\.bachelorCertificate\.caption\[locale\]/);
+  assert.doesNotMatch(educationFile, /data\.bachelorCertificate\.caption\[locale\]/);
+  assert.doesNotMatch(educationFile, /data\.subtag\[locale\]/);
 
   // Accessible Dialog Modal & Semantics
   assert.match(educationFile, /role="dialog"/);
@@ -403,7 +409,7 @@ test("AboutCertificates component renders approved editorial archive grid, respo
   // Section tags & headings
   assert.match(certFile, /\[03 \/\/ CREDENTIALS\]/);
   assert.match(certFile, /\[03 \/\/ SERTIFIKASI\]/);
-  assert.match(certFile, /copy\.subtag\[locale\]/);
+  assert.doesNotMatch(certFile, /copy\.subtag\[locale\]/);
   assert.match(certFile, /copy\.title\[locale\]/);
   assert.match(certFile, /copy\.summary\[locale\]/);
 

@@ -193,7 +193,11 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
   );
   assert.equal(
     ukg.contributions.en[2],
-    "Tested and deployed the system for use in daily operations.",
+    "Performed manual testing and automated end-to-end testing with Playwright, then deployed the system to an Ubuntu VPS where it remains in active use.",
+  );
+  assert.equal(
+    ukg.contributions.id[2],
+    "Melakukan testing manual dan automated end-to-end testing menggunakan Playwright, lalu melakukan deployment ke VPS Ubuntu yang masih digunakan hingga saat ini.",
   );
   assert.equal(
     ukg.contributionLearning?.en,
@@ -210,7 +214,7 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     "Next.js",
     "NestJS",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Linux Ubuntu",
   ]);
   assert.deepEqual(ukg.techStack, [
@@ -218,7 +222,7 @@ test("maintains approved UKG System locked facts, bilingual copy, and content st
     "Next.js",
     "NestJS",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Linux Ubuntu",
   ]);
 

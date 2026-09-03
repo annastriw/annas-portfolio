@@ -41,7 +41,7 @@ test("Footer component renders approved identity, 3 full roles, and dynamic colo
   assert.match(footerFile, /new Date\(\)\.getFullYear\(\)/);
   assert.match(
     footerFile,
-    /Annas Tri Widagdo\. Drafted in grids, shipped in code\./,
+    /Annas Tri Widagdo\. Find the purpose\. Build the solution\./,
   );
 });
 

@@ -21,16 +21,10 @@ export function AboutProfile({ locale }: AboutProfileProps) {
           {/* Identity Block: Tag, Name, Full Roles Headline, Lead (Mobile order: 1, Desktop: Col 2 Row 1) */}
           <div className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 flex flex-col gap-5">
             <ScrollReveal className="flex flex-col gap-5 sm:gap-6">
-              {/* Section Tag & Subtag */}
+              {/* Section Tag */}
               <div className="section-header-meta flex items-center gap-3 font-mono text-xs text-(--color-muted)">
                 <span className="font-semibold text-(--color-accent)">
                   {isId ? "[01 // TENTANG]" : "[01 // ABOUT]"}
-                </span>
-                <span className="text-(--color-border)" aria-hidden="true">
-                  /
-                </span>
-                <span className="uppercase tracking-wider">
-                  {data.subtag[locale]}
                 </span>
               </div>
 

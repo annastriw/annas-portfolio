@@ -85,10 +85,6 @@ export function AboutEducation({ locale }: AboutEducationProps) {
             <span className="font-semibold text-(--color-accent)">
               {isId ? "[02 // PENDIDIKAN]" : "[02 // EDUCATION]"}
             </span>
-            <span className="text-(--color-border)" aria-hidden="true">
-              /
-            </span>
-            <span className="uppercase tracking-wider">{data.subtag[locale]}</span>
           </div>
           <h2 className="section-title font-serif text-3xl sm:text-4xl text-(--color-foreground) font-normal m-0 tracking-tight">
             {data.title[locale]}
@@ -186,10 +182,6 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                   </span>
                 </div>
               </button>
-
-              <figcaption className="font-mono text-[11px] text-(--color-muted) px-1">
-                {data.bachelorCertificate.caption[locale]}
-              </figcaption>
             </figure>
           </ScrollReveal>
         </div>

@@ -184,7 +184,7 @@ test("MobileNav component implements Table of Contents, dialog semantics, scroll
 
   // Bottom identity block with wordmark link and static colophon
   assert.match(mobileNavFile, /brand-wordmark[^>]*>\s*annastriwidagdo\.me/);
-  assert.match(mobileNavFile, /Drafted in grids, shipped in code\./);
+  assert.match(mobileNavFile, /Find the purpose\. Build the solution\./);
 
   // Professional roles removed from mobile nav only
   assert.doesNotMatch(mobileNavFile, /siteIdentity\.roles/);

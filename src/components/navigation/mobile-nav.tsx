@@ -287,7 +287,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                   </Link>
 
                   <div className="font-mono text-[11px] text-(--color-muted) select-none">
-                    Drafted in grids, shipped in code.
+                    Find the purpose. Build the solution.
                   </div>
                 </div>
               </div>
