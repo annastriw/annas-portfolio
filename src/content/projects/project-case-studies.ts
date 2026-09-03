@@ -178,6 +178,15 @@ export interface FootySystemScopeData {
   readonly groups: readonly FootyScopeGroup[];
 }
 
+export interface PanoramicScopeGroup {
+  readonly title: LocalizedProjectText;
+  readonly items: LocalizedProjectList;
+}
+
+export interface PanoramicSystemScopeData {
+  readonly groups: readonly PanoramicScopeGroup[];
+}
+
 export interface ProjectTechnicalMetadataItem {
   readonly value: string;
   readonly label: LocalizedProjectText;
@@ -233,6 +242,7 @@ export interface ProjectCaseStudy {
   readonly speechToTextScope?: SpeechToTextSystemScopeData;
   readonly thermalPrinterScope?: ThermalPrinterSystemScopeData;
   readonly footyScope?: FootySystemScopeData;
+  readonly panoramicScope?: PanoramicSystemScopeData;
   readonly technicalMetadata?: readonly ProjectTechnicalMetadataItem[];
   readonly optionalModule?: ProjectOptionalModule;
   readonly techStack: readonly string[];
@@ -271,7 +281,7 @@ const categoryLabels: Record<
   "web-app": { en: "Web Application", id: "Aplikasi Web" },
   ml: { en: "Machine Learning", id: "Machine Learning" },
   mobile: { en: "Mobile Application", id: "Aplikasi Mobile" },
-  other: { en: "Interactive Prototype", id: "Purwarupa Interaktif" },
+  other: { en: "Interactive Prototype", id: "Prototype Interaktif" },
 };
 
 export const projectCaseStudies: readonly ProjectCaseStudy[] = [
@@ -3187,76 +3197,375 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
     category: "other",
     categoryLabel: categoryLabels.other,
     title: { en: "Panoramic Virtual Tour", id: "Panoramic Virtual Tour" },
-    role: { en: "Junior Game Developer Intern", id: "Junior Game Developer Intern" },
-    period: { en: "8 July - 8 August 2024", id: "8 Juli - 8 Agustus 2024" },
-    status: { en: "Completed prototype", id: "Purwarupa selesai" },
-    overview: {
+    role: {
+      en: "Junior Game Developer Intern",
+      id: "Junior Game Developer Intern",
+    },
+    period: { en: "July–August 2024", id: "Juli–Agustus 2024" },
+    status: { en: "Completed Prototype", id: "Completed Prototype" },
+    programmingLanguage: "C#",
+    lead: {
+      en: "A Unity-based virtual tour prototype for exploring architectural spaces through 360° panoramas and hotspot navigation.",
+      id: "Prototype virtual tour berbasis Unity untuk menjelajahi ruang bangunan melalui panorama 360° dan navigasi hotspot.",
+    },
+    metadataRows: [
+      {
+        label: { en: "Role", id: "Peran" },
+        value: {
+          en: "Junior Game Developer Intern",
+          id: "Junior Game Developer Intern",
+        },
+      },
+      {
+        label: { en: "Period", id: "Periode" },
+        value: { en: "July–August 2024", id: "Juli–Agustus 2024" },
+      },
+      {
+        label: { en: "Status", id: "Status" },
+        value: {
+          en: "Completed Prototype",
+          id: "Completed Prototype",
+        },
+      },
+    ],
+    metaTitle: {
+      en: "Panoramic Virtual Tour — Unity Development Case Study | Annas Tri Widagdo",
+      id: "Panoramic Virtual Tour — Studi Kasus Unity Development | Annas Tri Widagdo",
+    },
+    metaDescription: {
+      en: "A Unity virtual tour prototype built from team-supplied 3D models, combining Lumion Pro panoramas, 360° viewing, hotspot navigation, and scene management.",
+      id: "Prototype virtual tour Unity yang dikembangkan dari model 3D buatan tim, dengan panorama Lumion Pro, tampilan 360°, navigasi hotspot, dan pengelolaan scene.",
+    },
+    keywords: {
       en: [
-        "This Unity panoramic-tour prototype was built during a one-month internship in the IT division of PT Duta Basis Dataprima.",
-        "It organizes 78 rendered panoramas into a navigable structure of up to 79 scenes using 360 View and hotspot-based movement.",
+        "Unity",
+        "C#",
+        "Lumion Pro",
+        "Physics Raycast",
+        "Scene Management",
+        "Junior Game Developer Intern",
+        "Virtual Tour",
+        "Interactive Prototype",
       ],
       id: [
-        "Purwarupa tur panorama Unity ini dibangun selama kerja praktik satu bulan di divisi IT PT Duta Basis Dataprima.",
-        "Purwarupa mengatur 78 panorama hasil render ke dalam struktur navigasi hingga 79 scene menggunakan 360 View dan perpindahan berbasis hotspot.",
+        "Unity",
+        "C#",
+        "Lumion Pro",
+        "Physics Raycast",
+        "Scene Management",
+        "Junior Game Developer Intern",
+        "Virtual Tour",
+        "Prototype Interaktif",
+      ],
+    },
+    projectLinks: [
+      {
+        label: {
+          en: "View Project Files",
+          id: "Lihat File Project",
+        },
+        url: "https://drive.google.com/drive/folders/1hi1Njtmg8O8_soigVc-wROw2rlwtnjpp?usp=sharing",
+      },
+    ],
+    overview: {
+      en: [
+        "I developed this prototype with a team during my internship in the IT Division of PT Duta Basis Dataprima. It was intended to support project presentations to clients, with the completed prototype demonstrated internally to the director.",
+        "Using 3D models created by other team members, I prepared and rendered panoramas in Lumion Pro, then built the viewing controls, hotspot navigation, and scene transitions in Unity.",
+      ],
+      id: [
+        "Saya mengembangkan prototype ini bersama tim selama magang di Divisi IT PT Duta Basis Dataprima. Project ini ditujukan untuk mendukung presentasi kepada klien, dan hasilnya telah dipresentasikan secara internal kepada direktur.",
+        "Menggunakan model 3D yang dibuat anggota tim lain, saya menyiapkan dan merender panorama di Lumion Pro, lalu membangun kontrol pandangan, navigasi hotspot, dan perpindahan scene di Unity.",
       ],
     },
     contributions: {
       en: [
-        "Prepared 78 panorama renders in Lumion for use inside Unity scenes.",
-        "Built reusable 360 View and hotspot-navigation behavior in C#.",
-        "Implemented mouse and touch selection through Physics Raycast and BoxCollider targets.",
-        "Added asynchronous scene loading and a persistent PlayerRig, then presented the completed prototype to the director.",
+        "Prepared panorama viewpoints, materials, and lighting in Lumion Pro using 3D models supplied by the team.",
+        "Rendered panoramas and integrated them into Unity for 360° viewing.",
+        "Built mouse and touch controls with reusable hotspot navigation in C#.",
+        "Implemented asynchronous scene transitions and a persistent PlayerRig.",
       ],
       id: [
-        "Menyiapkan 78 render panorama di Lumion untuk digunakan di dalam scene Unity.",
-        "Membangun perilaku 360 View dan navigasi hotspot yang reusable dengan C#.",
-        "Mengimplementasikan pemilihan melalui mouse dan touch menggunakan Physics Raycast serta target BoxCollider.",
-        "Menambahkan pemuatan scene asynchronous dan PlayerRig persisten, lalu mempresentasikan purwarupa selesai kepada direktur.",
+        "Menyiapkan titik panorama, material, dan pencahayaan di Lumion Pro menggunakan model 3D dari tim.",
+        "Merender panorama dan mengintegrasikannya ke Unity untuk tampilan 360°.",
+        "Membangun kontrol mouse dan touch serta navigasi hotspot yang reusable menggunakan C#.",
+        "Mengimplementasikan perpindahan scene secara asynchronous dan PlayerRig yang tetap aktif antar-scene.",
       ],
     },
-    technicalNotes: {
-      en: [
-        "The documented scene structure includes initialization, lobby, and Scene1 through Scene77.",
-        "Reusable hotspot objects connect panoramic locations through scene transitions.",
-        "Physics Raycast and BoxCollider provide a shared selection mechanism for mouse and touch input.",
-        "Asynchronous loading changes scenes while the PlayerRig persists between them.",
-      ],
-      id: [
-        "Struktur scene terdokumentasi mencakup initialization, lobby, serta Scene1 hingga Scene77.",
-        "Objek hotspot reusable menghubungkan lokasi panorama melalui perpindahan scene.",
-        "Physics Raycast dan BoxCollider menyediakan mekanisme pemilihan bersama untuk input mouse dan touch.",
-        "Pemuatan asynchronous mengganti scene sementara PlayerRig tetap persisten di antaranya.",
+    contributionLearning: {
+      en: "This project strengthened my experience in turning a team’s architectural visuals into an interactive experience in Unity.",
+      id: "Project ini memperkuat pengalaman saya dalam mengolah visual arsitektur dari tim menjadi pengalaman interaktif di Unity.",
+    },
+    personalTechStack: [
+      "Unity",
+      "C#",
+      "Lumion Pro",
+      "Physics Raycast",
+      "Scene Management",
+    ],
+    techStack: [
+      "Unity",
+      "C#",
+      "Lumion Pro",
+      "Physics Raycast",
+      "Scene Management",
+    ],
+    panoramicScope: {
+      groups: [
+        {
+          title: {
+            en: "Panorama Preparation",
+            id: "Persiapan Panorama",
+          },
+          items: {
+            en: [
+              "Team-supplied 3D architectural models.",
+              "Panorama viewpoints, materials, lighting, and reflections in Lumion Pro.",
+              "78 rendered panoramas.",
+            ],
+            id: [
+              "Model arsitektur 3D dari tim.",
+              "Titik panorama, material, pencahayaan, dan refleksi di Lumion Pro.",
+              "78 panorama hasil rendering.",
+            ],
+          },
+        },
+        {
+          title: {
+            en: "360° Exploration",
+            id: "Eksplorasi 360°",
+          },
+          items: {
+            en: [
+              "Panorama integration in Unity.",
+              "360° viewing controls.",
+              "Mouse and touch interaction.",
+            ],
+            id: [
+              "Integrasi panorama di Unity.",
+              "Kontrol pandangan 360°.",
+              "Interaksi menggunakan mouse dan touch.",
+            ],
+          },
+        },
+        {
+          title: {
+            en: "Hotspot Navigation & Scene Management",
+            id: "Navigasi Hotspot & Pengelolaan Scene",
+          },
+          items: {
+            en: [
+              "Reusable hotspots using C#, Physics Raycast, and BoxCollider.",
+              "Asynchronous transitions across a structure of up to 79 scenes.",
+              "Persistent PlayerRig between scenes.",
+            ],
+            id: [
+              "Hotspot reusable menggunakan C#, Physics Raycast, dan BoxCollider.",
+              "Perpindahan asynchronous dalam struktur hingga 79 scene.",
+              "PlayerRig yang tetap aktif antar-scene.",
+            ],
+          },
+        },
       ],
     },
-    techStack: ["Unity", "C#", "Lumion", "Physics Raycast", "Scene Management"],
     cover: {
       src: "/assets/projects/panoramic-virtual-tour/cover.webp",
-      alt: { en: "Opening scene of the Unity panoramic tour prototype", id: "Scene pembuka purwarupa tur panorama Unity" },
+      alt: {
+        en: "Panoramic Virtual Tour title screen and main menu over the 3D building facility landscape",
+        id: "Layar judul dan menu utama Panoramic Virtual Tour dengan pemandangan lanskap fasilitas bangunan 3D",
+      },
       position: "center",
+      caption: {
+        en: "Main menu interface displaying title and navigation controls against the 3D facility landscape.",
+        id: "Antarmuka menu utama yang menampilkan judul dan tombol navigasi dengan latar lanskap fasilitas 3D.",
+      },
     },
     evidence: [
       {
         id: "FIG.01",
-        src: "/assets/projects/panoramic-virtual-tour/documentation/01.webp",
+        src: "/assets/projects/panoramic-virtual-tour/cover.webp",
         format: "wide",
-        alt: { en: "Panoramic tour scene documentation", id: "Dokumentasi scene tur panorama" },
-        caption: { en: "Interactive 360-degree panoramic view rendered in Lumion Pro.", id: "Tampilan panorama 360 derajat interaktif yang dirender di Lumion Pro." },
+        alt: {
+          en: "Panoramic Virtual Tour title screen and main menu over the 3D building facility landscape",
+          id: "Layar judul dan menu utama Panoramic Virtual Tour dengan pemandangan lanskap fasilitas bangunan 3D",
+        },
+        caption: {
+          en: "Main menu interface displaying title and navigation controls against the 3D facility landscape.",
+          id: "Antarmuka menu utama yang menampilkan judul dan tombol navigasi dengan latar lanskap fasilitas 3D.",
+        },
       },
       {
         id: "FIG.02",
         src: "/assets/projects/panoramic-virtual-tour/documentation/02.webp",
         format: "wide",
-        alt: { en: "Panoramic tour hotspot navigation", id: "Navigasi hotspot tur panorama" },
-        caption: { en: "Hotspot navigation triggers connecting adjacent panoramic scenes in Unity.", id: "Trigger navigasi hotspot yang menghubungkan scene panorama berdekatan di Unity." },
+        alt: {
+          en: "Aerial top-down perspective view of the facility complex grounds and garden",
+          id: "Tampilan perspektif aerial dari atas kawasan kompleks fasilitas dan area taman",
+        },
+        caption: {
+          en: "High-angle overview showing building rooftops, courtyard circulation, and surrounding grounds.",
+          id: "Tampilan menyeluruh sudut tinggi yang memperlihatkan atap bangunan, sirkulasi halaman, dan area sekitar.",
+        },
       },
       {
         id: "FIG.03",
         src: "/assets/projects/panoramic-virtual-tour/documentation/03.webp",
         format: "wide",
-        alt: { en: "Unity panoramic environment documentation", id: "Dokumentasi lingkungan panorama Unity" },
-        caption: { en: "Architectural interior exploration scene with interactive camera rotation.", id: "Scene eksplorasi interior arsitektur dengan rotasi kamera interaktif." },
+        alt: {
+          en: "Facility entrance gate street view with interactive red navigation hotspot pins",
+          id: "Tampilan jalan di gerbang masuk fasilitas dengan pin hotspot navigasi interaktif berwarna merah",
+        },
+        caption: {
+          en: "Outdoor street entrance perspective with interactive hotspot pins connecting to adjacent viewpoints.",
+          id: "Perspektif gerbang masuk luar ruangan dengan pin hotspot interaktif menuju titik pandang berikutnya.",
+        },
+      },
+      {
+        id: "FIG.04",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "Facility garden courtyard view with palm trees, lawn, building exterior, and hotspot pin",
+          id: "Tampilan halaman taman fasilitas dengan pohon palem, rumput, eksterior bangunan, dan pin hotspot",
+        },
+        caption: {
+          en: "Courtyard garden panorama featuring landscaped greenery, building facade, and navigation hotspot.",
+          id: "Panorama taman halaman yang menampilkan area hijau tertata, fasad bangunan, dan hotspot navigasi.",
+        },
+      },
+      {
+        id: "FIG.05",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "Industrial factory warehouse interior with blue machinery units, avatars, and navigation hotspot",
+          id: "Interior gudang pabrik industri dengan unit mesin biru, avatar pekerja, dan hotspot navigasi",
+        },
+        caption: {
+          en: "Ground-level factory floor view showing industrial machinery layout, worker avatars, and movement trigger.",
+          id: "Tampilan lantai pabrik yang memperlihatkan tata letak mesin industri, avatar pekerja, dan trigger perpindahan.",
+        },
+      },
+      {
+        id: "FIG.06",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "Mezzanine perspective overlooking rows of manufacturing machinery on the factory floor",
+          id: "Perspektif mezzanine yang menghadap ke deretan mesin produksi di lantai pabrik",
+        },
+        caption: {
+          en: "Elevated vantage point overlooking production lines and overhead structural framework.",
+          id: "Sudut pandang dari atas yang memperlihatkan jalur produksi dan struktur rangka atap bangunan.",
+        },
+      },
+      {
+        id: "FIG.07",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/07.webp",
+        format: "wide",
+        alt: {
+          en: "Conference meeting room interior with conference table, chairs, laptop, and worker avatars",
+          id: "Interior ruang rapat dengan meja konferensi, kursi, laptop, dan avatar pekerja",
+        },
+        caption: {
+          en: "Office meeting room interior showing conference setup, interior materials, and exterior window views.",
+          id: "Interior ruang rapat kantor yang menampilkan tata ruang konferensi, material interior, dan jendela luar.",
+        },
       },
     ],
+    gallery: [
+      {
+        slide: "01",
+        src: "/assets/projects/panoramic-virtual-tour/cover.webp",
+        format: "cover",
+        alt: {
+          en: "Panoramic Virtual Tour title screen and main menu over the 3D building facility landscape",
+          id: "Layar judul dan menu utama Panoramic Virtual Tour dengan pemandangan lanskap fasilitas bangunan 3D",
+        },
+        caption: {
+          en: "Main menu interface displaying title and navigation controls against the 3D facility landscape.",
+          id: "Antarmuka menu utama yang menampilkan judul dan tombol navigasi dengan latar lanskap fasilitas 3D.",
+        },
+      },
+      {
+        slide: "02",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/02.webp",
+        format: "wide",
+        alt: {
+          en: "Aerial top-down perspective view of the facility complex grounds and garden",
+          id: "Tampilan perspektif aerial dari atas kawasan kompleks fasilitas dan area taman",
+        },
+        caption: {
+          en: "High-angle overview showing building rooftops, courtyard circulation, and surrounding grounds.",
+          id: "Tampilan menyeluruh sudut tinggi yang memperlihatkan atap bangunan, sirkulasi halaman, dan area sekitar.",
+        },
+      },
+      {
+        slide: "03",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/03.webp",
+        format: "wide",
+        alt: {
+          en: "Facility entrance gate street view with interactive red navigation hotspot pins",
+          id: "Tampilan jalan di gerbang masuk fasilitas dengan pin hotspot navigasi interaktif berwarna merah",
+        },
+        caption: {
+          en: "Outdoor street entrance perspective with interactive hotspot pins connecting to adjacent viewpoints.",
+          id: "Perspektif gerbang masuk luar ruangan dengan pin hotspot interaktif menuju titik pandang berikutnya.",
+        },
+      },
+      {
+        slide: "04",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/04.webp",
+        format: "wide",
+        alt: {
+          en: "Facility garden courtyard view with palm trees, lawn, building exterior, and hotspot pin",
+          id: "Tampilan halaman taman fasilitas dengan pohon palem, rumput, eksterior bangunan, dan pin hotspot",
+        },
+        caption: {
+          en: "Courtyard garden panorama featuring landscaped greenery, building facade, and navigation hotspot.",
+          id: "Panorama taman halaman yang menampilkan area hijau tertata, fasad bangunan, dan hotspot navigasi.",
+        },
+      },
+      {
+        slide: "05",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/05.webp",
+        format: "wide",
+        alt: {
+          en: "Industrial factory warehouse interior with blue machinery units, avatars, and navigation hotspot",
+          id: "Interior gudang pabrik industri dengan unit mesin biru, avatar pekerja, dan hotspot navigasi",
+        },
+        caption: {
+          en: "Ground-level factory floor view showing industrial machinery layout, worker avatars, and movement trigger.",
+          id: "Tampilan lantai pabrik yang memperlihatkan tata letak mesin industri, avatar pekerja, dan trigger perpindahan.",
+        },
+      },
+      {
+        slide: "06",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/06.webp",
+        format: "wide",
+        alt: {
+          en: "Mezzanine perspective overlooking rows of manufacturing machinery on the factory floor",
+          id: "Perspektif mezzanine yang menghadap ke deretan mesin produksi di lantai pabrik",
+        },
+        caption: {
+          en: "Elevated vantage point overlooking production lines and overhead structural framework.",
+          id: "Sudut pandang dari atas yang memperlihatkan jalur produksi dan struktur rangka atap bangunan.",
+        },
+      },
+      {
+        slide: "07",
+        src: "/assets/projects/panoramic-virtual-tour/documentation/07.webp",
+        format: "wide",
+        alt: {
+          en: "Conference meeting room interior with conference table, chairs, laptop, and worker avatars",
+          id: "Interior ruang rapat dengan meja konferensi, kursi, laptop, dan avatar pekerja",
+        },
+        caption: {
+          en: "Office meeting room interior showing conference setup, interior materials, and exterior window views.",
+          id: "Interior ruang rapat kantor yang menampilkan tata ruang konferensi, material interior, dan jendela luar.",
+        },
+      },
+    ],
+    galleryThumbnails: true,
   },
 ] as const;
 

@@ -208,21 +208,23 @@ test("Featured projects renders 4-row full-width editorial index with visible Ex
 
   // 04 Panoramic Virtual Tour synchronization
   assert.equal(homeSelectedProjects[3].title.en, "Panoramic Virtual Tour");
-  assert.equal(homeSelectedProjects[3].role.en, "Junior Game Developer");
+  assert.equal(
+    homeSelectedProjects[3].role.en,
+    "Junior Game Developer Intern",
+  );
   assert.equal(homeSelectedProjects[3].status.en, "Completed Prototype");
   assert.equal(
     homeSelectedProjects[3].summary.en,
-    "A Unity-based virtual tour developed during an internship at PT Duta Basis Dataprima, combining architectural panoramas with hotspot navigation.",
+    "A Unity-based prototype that turns architectural panoramas into an interactive virtual tour with 360° viewing and hotspot navigation.",
   );
   assert.equal(
     homeSelectedProjects[3].summary.id,
-    "Virtual tour berbasis Unity yang dikembangkan saat magang di PT Duta Basis Dataprima, menggabungkan panorama arsitektur dengan navigasi hotspot.",
+    "Prototype berbasis Unity yang mengolah panorama arsitektur menjadi virtual tour interaktif dengan tampilan 360° dan navigasi hotspot.",
   );
   assert.deepEqual(homeSelectedProjects[3].technologies, [
     "Unity",
     "C#",
     "Lumion Pro",
-    "360° Panorama",
     "Physics Raycast",
     "Scene Management",
   ]);

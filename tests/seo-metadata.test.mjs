@@ -321,7 +321,7 @@ test("Projects Hub metadata generates valid Section 10 metadata and OG cover", (
   assert.equal(metaId.alternates?.canonical, "https://annastriwidagdo.me/id/projects");
 });
 
-test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, Heart ML, Speech-to-Text, Thermal Printer Service, and Footy Standings", () => {
+test("generateProjectJsonLd accurately represents project facts, keywords, and live URLs for UKG, iHealth, Dialisis, Nusa Dakwah, SIMASTOK, Heart ML, Speech-to-Text, Thermal Printer Service, Footy Standings, and Panoramic Virtual Tour", () => {
   const ukg = projectCaseStudies.find((p) => p.slug === "ukg-system");
   assert.ok(ukg);
   const ukgSchema = generateProjectJsonLd(ukg, "en");
@@ -621,6 +621,63 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
     footyJsonString,
     /real[- ]?time scores|live score|instant sync|automatic refresh|polling|iOS|Play Store|Google Play/i,
   );
+
+  const pvt = projectCaseStudies.find(
+    (p) => p.slug === "panoramic-virtual-tour",
+  );
+  assert.ok(pvt);
+  const pvtSchemaEn = generateProjectJsonLd(pvt, "en");
+  assert.equal(pvtSchemaEn["@type"], "SoftwareSourceCode");
+  assert.equal(pvtSchemaEn.name, "Panoramic Virtual Tour");
+  assert.equal(
+    pvtSchemaEn.url,
+    "https://annastriwidagdo.me/en/projects/panoramic-virtual-tour",
+  );
+  assert.equal(pvtSchemaEn.codeRepository, undefined);
+  assert.equal(pvtSchemaEn.programmingLanguage, "C#");
+  assert.equal(pvtSchemaEn.relatedLink, undefined);
+  assert.ok(
+    pvtSchemaEn.image?.includes(
+      "/assets/projects/panoramic-virtual-tour/cover.webp",
+    ),
+  );
+  assert.deepEqual(pvtSchemaEn.keywords, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "Physics Raycast",
+    "Scene Management",
+    "Junior Game Developer Intern",
+    "Virtual Tour",
+    "Interactive Prototype",
+  ]);
+
+  const pvtSchemaId = generateProjectJsonLd(pvt, "id");
+  assert.equal(pvtSchemaId["@type"], "SoftwareSourceCode");
+  assert.equal(pvtSchemaId.name, "Panoramic Virtual Tour");
+  assert.equal(
+    pvtSchemaId.url,
+    "https://annastriwidagdo.me/id/projects/panoramic-virtual-tour",
+  );
+  assert.equal(pvtSchemaId.codeRepository, undefined);
+  assert.equal(pvtSchemaId.programmingLanguage, "C#");
+  assert.equal(pvtSchemaId.relatedLink, undefined);
+  assert.deepEqual(pvtSchemaId.keywords, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "Physics Raycast",
+    "Scene Management",
+    "Junior Game Developer Intern",
+    "Virtual Tour",
+    "Prototype Interaktif",
+  ]);
+
+  const pvtJsonString = JSON.stringify(pvtSchemaEn);
+  assert.doesNotMatch(
+    pvtJsonString,
+    /\bAR\b|\bVR\b|WebGL|client delivery|live website|production deployment/i,
+  );
 });
 
 test("Thermal Printer Service generates valid bilingual page metadata matching approved decision", () => {
@@ -738,6 +795,65 @@ test("Footy Standings generates valid bilingual page metadata matching approved 
     en: "https://annastriwidagdo.me/en/projects/footy-standings",
     id: "https://annastriwidagdo.me/id/projects/footy-standings",
     "x-default": "https://annastriwidagdo.me/en/projects/footy-standings",
+  });
+});
+
+test("Panoramic Virtual Tour generates valid bilingual page metadata matching approved decision", () => {
+  const pvt = projectCaseStudies.find((p) => p.slug === "panoramic-virtual-tour");
+  assert.ok(pvt);
+
+  const enMeta = createPageMetadata({
+    locale: "en",
+    path: `projects/${pvt.slug}`,
+    title: pvt.metaTitle.en,
+    description: pvt.metaDescription.en,
+    type: "article",
+    images: [{ url: pvt.cover.src, alt: pvt.cover.alt.en }],
+  });
+
+  assert.equal(
+    enMeta.title,
+    "Panoramic Virtual Tour — Unity Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    enMeta.description,
+    "A Unity virtual tour prototype built from team-supplied 3D models, combining Lumion Pro panoramas, 360° viewing, hotspot navigation, and scene management.",
+  );
+  assert.equal(
+    enMeta.alternates?.canonical,
+    "https://annastriwidagdo.me/en/projects/panoramic-virtual-tour",
+  );
+  assert.deepEqual(enMeta.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/projects/panoramic-virtual-tour",
+    id: "https://annastriwidagdo.me/id/projects/panoramic-virtual-tour",
+    "x-default": "https://annastriwidagdo.me/en/projects/panoramic-virtual-tour",
+  });
+
+  const idMeta = createPageMetadata({
+    locale: "id",
+    path: `projects/${pvt.slug}`,
+    title: pvt.metaTitle.id,
+    description: pvt.metaDescription.id,
+    type: "article",
+    images: [{ url: pvt.cover.src, alt: pvt.cover.alt.id }],
+  });
+
+  assert.equal(
+    idMeta.title,
+    "Panoramic Virtual Tour — Studi Kasus Unity Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    idMeta.description,
+    "Prototype virtual tour Unity yang dikembangkan dari model 3D buatan tim, dengan panorama Lumion Pro, tampilan 360°, navigasi hotspot, dan pengelolaan scene.",
+  );
+  assert.equal(
+    idMeta.alternates?.canonical,
+    "https://annastriwidagdo.me/id/projects/panoramic-virtual-tour",
+  );
+  assert.deepEqual(idMeta.alternates?.languages, {
+    en: "https://annastriwidagdo.me/en/projects/panoramic-virtual-tour",
+    id: "https://annastriwidagdo.me/id/projects/panoramic-virtual-tour",
+    "x-default": "https://annastriwidagdo.me/en/projects/panoramic-virtual-tour",
   });
 });
 

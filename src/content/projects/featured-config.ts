@@ -120,29 +120,28 @@ export const homeSelectedProjects: readonly HomeSelectedProject[] = [
       id: "Panoramic Virtual Tour",
     },
     role: {
-      en: "Junior Game Developer",
-      id: "Junior Game Developer",
+      en: "Junior Game Developer Intern",
+      id: "Junior Game Developer Intern",
     },
     status: {
       en: "Completed Prototype",
       id: "Completed Prototype",
     },
     summary: {
-      en: "A Unity-based virtual tour developed during an internship at PT Duta Basis Dataprima, combining architectural panoramas with hotspot navigation.",
-      id: "Virtual tour berbasis Unity yang dikembangkan saat magang di PT Duta Basis Dataprima, menggabungkan panorama arsitektur dengan navigasi hotspot.",
+      en: "A Unity-based prototype that turns architectural panoramas into an interactive virtual tour with 360° viewing and hotspot navigation.",
+      id: "Prototype berbasis Unity yang mengolah panorama arsitektur menjadi virtual tour interaktif dengan tampilan 360° dan navigasi hotspot.",
     },
     technologies: [
       "Unity",
       "C#",
       "Lumion Pro",
-      "360° Panorama",
       "Physics Raycast",
       "Scene Management",
     ],
     coverImage: "/assets/projects/panoramic-virtual-tour/cover.webp",
     coverAlt: {
-      en: "Panoramic Virtual Tour Unity prototype opening scene",
-      id: "Scene pembuka prototype Panoramic Virtual Tour Unity",
+      en: "Panoramic Virtual Tour title screen and main menu over the 3D building facility landscape",
+      id: "Layar judul dan menu utama Panoramic Virtual Tour dengan pemandangan lanskap fasilitas bangunan 3D",
     },
   },
 ] as const;

@@ -2380,6 +2380,306 @@ test("maintains approved Footy Standings locked facts, bilingual copy, compact s
   assert.doesNotMatch(stringifiedFooty, /Private Repository/i);
 });
 
+test("maintains approved Panoramic Virtual Tour locked facts, bilingual copy, compact scope, unique gallery, and factual boundaries", () => {
+  const pvt = getProjectCaseStudy("panoramic-virtual-tour");
+  assert.ok(pvt);
+
+  // Locked facts & metadata
+  assert.equal(pvt.index, "10");
+  assert.equal(pvt.slug, "panoramic-virtual-tour");
+  assert.equal(pvt.category, "other");
+  assert.equal(pvt.categoryLabel.en, "Interactive Prototype");
+  assert.equal(pvt.categoryLabel.id, "Prototype Interaktif");
+  assert.doesNotMatch(pvt.categoryLabel.id, /Purwarupa/i);
+  assert.equal(pvt.role.en, "Junior Game Developer Intern");
+  assert.equal(pvt.role.id, "Junior Game Developer Intern");
+  assert.equal(pvt.period?.en, "July–August 2024");
+  assert.equal(pvt.period?.id, "Juli–Agustus 2024");
+  assert.equal(pvt.status.en, "Completed Prototype");
+  assert.equal(pvt.status.id, "Completed Prototype");
+  assert.equal(pvt.programmingLanguage, "C#");
+  assert.equal(pvt.liveUrl, undefined);
+  assert.equal(pvt.githubUrl, undefined);
+  assert.equal(pvt.repositoryNotice, undefined);
+  assert.equal(pvt.client, undefined);
+  assert.equal(pvt.workingModel, undefined);
+
+  // MetadataRows display exactly Role, Period, Status (3 rows)
+  assert.ok(pvt.metadataRows);
+  assert.equal(pvt.metadataRows.length, 3);
+  assert.deepEqual(
+    pvt.metadataRows.map((r) => r.label.en),
+    ["Role", "Period", "Status"],
+  );
+  assert.deepEqual(
+    pvt.metadataRows.map((r) => r.label.id),
+    ["Peran", "Periode", "Status"],
+  );
+  assert.deepEqual(
+    pvt.metadataRows.map((r) => r.value.en),
+    [
+      "Junior Game Developer Intern",
+      "July–August 2024",
+      "Completed Prototype",
+    ],
+  );
+  assert.deepEqual(
+    pvt.metadataRows.map((r) => r.value.id),
+    [
+      "Junior Game Developer Intern",
+      "Juli–Agustus 2024",
+      "Completed Prototype",
+    ],
+  );
+
+  // Title and Lead
+  assert.equal(pvt.title.en, "Panoramic Virtual Tour");
+  assert.equal(pvt.title.id, "Panoramic Virtual Tour");
+  assert.equal(
+    pvt.lead?.en,
+    "A Unity-based virtual tour prototype for exploring architectural spaces through 360° panoramas and hotspot navigation.",
+  );
+  assert.equal(
+    pvt.lead?.id,
+    "Prototype virtual tour berbasis Unity untuk menjelajahi ruang bangunan melalui panorama 360° dan navigasi hotspot.",
+  );
+
+  // SEO & Meta
+  assert.equal(
+    pvt.metaTitle?.en,
+    "Panoramic Virtual Tour — Unity Development Case Study | Annas Tri Widagdo",
+  );
+  assert.equal(
+    pvt.metaTitle?.id,
+    "Panoramic Virtual Tour — Studi Kasus Unity Development | Annas Tri Widagdo",
+  );
+  assert.equal(
+    pvt.metaDescription?.en,
+    "A Unity virtual tour prototype built from team-supplied 3D models, combining Lumion Pro panoramas, 360° viewing, hotspot navigation, and scene management.",
+  );
+  assert.equal(
+    pvt.metaDescription?.id,
+    "Prototype virtual tour Unity yang dikembangkan dari model 3D buatan tim, dengan panorama Lumion Pro, tampilan 360°, navigasi hotspot, dan pengelolaan scene.",
+  );
+
+  // Keywords
+  assert.deepEqual(pvt.keywords?.en, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "Physics Raycast",
+    "Scene Management",
+    "Junior Game Developer Intern",
+    "Virtual Tour",
+    "Interactive Prototype",
+  ]);
+  assert.deepEqual(pvt.keywords?.id, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "Physics Raycast",
+    "Scene Management",
+    "Junior Game Developer Intern",
+    "Virtual Tour",
+    "Prototype Interaktif",
+  ]);
+  assert.doesNotMatch(JSON.stringify(pvt.keywords), /Purwarupa/i);
+
+  // Project External Action (Google Drive folder)
+  assert.ok(pvt.projectLinks);
+  assert.equal(pvt.projectLinks.length, 1);
+  assert.equal(pvt.projectLinks[0].label.en, "View Project Files");
+  assert.equal(pvt.projectLinks[0].label.id, "Lihat File Project");
+  assert.equal(
+    pvt.projectLinks[0].url,
+    "https://drive.google.com/drive/folders/1hi1Njtmg8O8_soigVc-wROw2rlwtnjpp?usp=sharing",
+  );
+
+  // Overview (exact 2 paragraphs)
+  assert.equal(pvt.overview.en.length, 2);
+  assert.equal(pvt.overview.id.length, 2);
+  assert.equal(
+    pvt.overview.en[0],
+    "I developed this prototype with a team during my internship in the IT Division of PT Duta Basis Dataprima. It was intended to support project presentations to clients, with the completed prototype demonstrated internally to the director.",
+  );
+  assert.equal(
+    pvt.overview.en[1],
+    "Using 3D models created by other team members, I prepared and rendered panoramas in Lumion Pro, then built the viewing controls, hotspot navigation, and scene transitions in Unity.",
+  );
+  assert.equal(
+    pvt.overview.id[0],
+    "Saya mengembangkan prototype ini bersama tim selama magang di Divisi IT PT Duta Basis Dataprima. Project ini ditujukan untuk mendukung presentasi kepada klien, dan hasilnya telah dipresentasikan secara internal kepada direktur.",
+  );
+  assert.equal(
+    pvt.overview.id[1],
+    "Menggunakan model 3D yang dibuat anggota tim lain, saya menyiapkan dan merender panorama di Lumion Pro, lalu membangun kontrol pandangan, navigasi hotspot, dan perpindahan scene di Unity.",
+  );
+
+  // Contributions (exact 4 items + closing learning statement)
+  assert.equal(pvt.contributions.en.length, 4);
+  assert.equal(pvt.contributions.id.length, 4);
+  assert.equal(
+    pvt.contributions.en[0],
+    "Prepared panorama viewpoints, materials, and lighting in Lumion Pro using 3D models supplied by the team.",
+  );
+  assert.equal(
+    pvt.contributions.en[1],
+    "Rendered panoramas and integrated them into Unity for 360° viewing.",
+  );
+  assert.equal(
+    pvt.contributions.en[2],
+    "Built mouse and touch controls with reusable hotspot navigation in C#.",
+  );
+  assert.equal(
+    pvt.contributions.en[3],
+    "Implemented asynchronous scene transitions and a persistent PlayerRig.",
+  );
+  assert.equal(
+    pvt.contributions.id[0],
+    "Menyiapkan titik panorama, material, dan pencahayaan di Lumion Pro menggunakan model 3D dari tim.",
+  );
+  assert.equal(
+    pvt.contributions.id[1],
+    "Merender panorama dan mengintegrasikannya ke Unity untuk tampilan 360°.",
+  );
+  assert.equal(
+    pvt.contributions.id[2],
+    "Membangun kontrol mouse dan touch serta navigasi hotspot yang reusable menggunakan C#.",
+  );
+  assert.equal(
+    pvt.contributions.id[3],
+    "Mengimplementasikan perpindahan scene secara asynchronous dan PlayerRig yang tetap aktif antar-scene.",
+  );
+  assert.equal(
+    pvt.contributionLearning?.en,
+    "This project strengthened my experience in turning a team’s architectural visuals into an interactive experience in Unity.",
+  );
+  assert.equal(
+    pvt.contributionLearning?.id,
+    "Project ini memperkuat pengalaman saya dalam mengolah visual arsitektur dari tim menjadi pengalaman interaktif di Unity.",
+  );
+
+  // Personal Tech Stack (exact 5 items in approved order)
+  assert.deepEqual(pvt.personalTechStack, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "Physics Raycast",
+    "Scene Management",
+  ]);
+  assert.deepEqual(pvt.techStack, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "Physics Raycast",
+    "Scene Management",
+  ]);
+
+  // System Scope: exactly 3 groups with 3 items each
+  assert.ok(pvt.panoramicScope);
+  assert.equal(pvt.panoramicScope.groups.length, 3);
+
+  const [pGroup1, pGroup2, pGroup3] = pvt.panoramicScope.groups;
+  assert.equal(pGroup1.title.en, "Panorama Preparation");
+  assert.equal(pGroup1.title.id, "Persiapan Panorama");
+  assert.deepEqual(pGroup1.items.en, [
+    "Team-supplied 3D architectural models.",
+    "Panorama viewpoints, materials, lighting, and reflections in Lumion Pro.",
+    "78 rendered panoramas.",
+  ]);
+  assert.deepEqual(pGroup1.items.id, [
+    "Model arsitektur 3D dari tim.",
+    "Titik panorama, material, pencahayaan, dan refleksi di Lumion Pro.",
+    "78 panorama hasil rendering.",
+  ]);
+
+  assert.equal(pGroup2.title.en, "360° Exploration");
+  assert.equal(pGroup2.title.id, "Eksplorasi 360°");
+  assert.deepEqual(pGroup2.items.en, [
+    "Panorama integration in Unity.",
+    "360° viewing controls.",
+    "Mouse and touch interaction.",
+  ]);
+  assert.deepEqual(pGroup2.items.id, [
+    "Integrasi panorama di Unity.",
+    "Kontrol pandangan 360°.",
+    "Interaksi menggunakan mouse dan touch.",
+  ]);
+
+  assert.equal(
+    pGroup3.title.en,
+    "Hotspot Navigation & Scene Management",
+  );
+  assert.equal(
+    pGroup3.title.id,
+    "Navigasi Hotspot & Pengelolaan Scene",
+  );
+  assert.deepEqual(pGroup3.items.en, [
+    "Reusable hotspots using C#, Physics Raycast, and BoxCollider.",
+    "Asynchronous transitions across a structure of up to 79 scenes.",
+    "Persistent PlayerRig between scenes.",
+  ]);
+  assert.deepEqual(pGroup3.items.id, [
+    "Hotspot reusable menggunakan C#, Physics Raycast, dan BoxCollider.",
+    "Perpindahan asynchronous dalam struktur hingga 79 scene.",
+    "PlayerRig yang tetap aktif antar-scene.",
+  ]);
+
+  // Distinct counts: "78 rendered panoramas" only in scope group 1, "up to 79 scenes" only in scope group 3
+  const stringifiedOverview = JSON.stringify(pvt.overview);
+  const stringifiedContrib = JSON.stringify(pvt.contributions);
+  assert.doesNotMatch(stringifiedOverview, /78|79/);
+  assert.doesNotMatch(stringifiedContrib, /78|79/);
+
+  // Gallery: exactly 7 unique slides in cover-first order
+  assert.equal(pvt.gallery?.length, 7);
+  assert.deepEqual(
+    pvt.gallery?.map((s) => s.src),
+    [
+      "/assets/projects/panoramic-virtual-tour/cover.webp",
+      "/assets/projects/panoramic-virtual-tour/documentation/02.webp",
+      "/assets/projects/panoramic-virtual-tour/documentation/03.webp",
+      "/assets/projects/panoramic-virtual-tour/documentation/04.webp",
+      "/assets/projects/panoramic-virtual-tour/documentation/05.webp",
+      "/assets/projects/panoramic-virtual-tour/documentation/06.webp",
+      "/assets/projects/panoramic-virtual-tour/documentation/07.webp",
+    ],
+  );
+  for (let i = 0; i < 7; i++) {
+    const slide = pvt.gallery?.[i];
+    assert.ok(slide);
+    assert.ok(existsSync(join(root, "public", slide.src)));
+    assert.doesNotMatch(slide.caption.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.caption.id, /^TODO_|^\[/);
+    assert.ok(slide.caption.en.length > 10);
+    assert.ok(slide.caption.id.length > 10);
+    assert.doesNotMatch(slide.alt.en, /^TODO_|^\[/);
+    assert.doesNotMatch(slide.alt.id, /^TODO_|^\[/);
+    assert.ok(slide.alt.en.length > 10);
+    assert.ok(slide.alt.id.length > 10);
+  }
+
+  // Evidence: exactly 7 figures FIG.01-FIG.07 matching gallery
+  assert.equal(pvt.evidence.length, 7);
+  for (let i = 0; i < 7; i++) {
+    assert.equal(pvt.evidence[i].id, `FIG.0${i + 1}`);
+  }
+
+  // No video or technical metadata strip
+  assert.equal(pvt.videoSrc, undefined);
+  assert.equal(pvt.technicalMetadata, undefined);
+
+  // Authorship & delivery boundaries: 3D modeling credited to team, demo internal to director
+  const stringifiedPVT = JSON.stringify(pvt);
+  assert.match(stringifiedPVT, /3D models created by other team members|model 3D yang dibuat anggota tim lain/i);
+  assert.match(stringifiedPVT, /demonstrated internally to the director|dipresentasikan secara internal kepada direktur/i);
+  assert.doesNotMatch(stringifiedPVT, /\bAR\b|\bVR\b|WebGL/i);
+  assert.doesNotMatch(stringifiedPVT, /client delivery|client adoption|client-facing deployment/i);
+  assert.doesNotMatch(stringifiedPVT, /live website|production deployment|public Windows release/i);
+  assert.doesNotMatch(stringifiedPVT, /downloads|active users|revenue/i);
+  assert.doesNotMatch(stringifiedPVT, /Private Repository/i);
+});
+
 test("keeps the project-specific factual boundaries explicit", () => {
   const stringify = (slug) => JSON.stringify(getProjectCaseStudy(slug));
 

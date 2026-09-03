@@ -253,6 +253,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       project.speechToTextScope ||
       project.thermalPrinterScope ||
       project.footyScope ||
+      project.panoramicScope ||
       (project.technicalMetadata && project.technicalMetadata.length > 0) ||
       (project.technicalNotes?.[locale] &&
         project.technicalNotes[locale].length > 0) ||
@@ -267,7 +268,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         project.slug !== "ml-for-heart-attack-risk-prediction" &&
         project.slug !== "speech-to-text-system" &&
         project.slug !== "thermal-printer-service" &&
-        project.slug !== "footy-standings"),
+        project.slug !== "footy-standings" &&
+        project.slug !== "panoramic-virtual-tour"),
   );
   const scopeIndex = hasScope
     ? String(++sectionCounter).padStart(2, "0")
@@ -1702,6 +1704,41 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   </div>
                 ) : null}
 
+                {/* Panoramic Virtual Tour 3-Group System Scope */}
+                {project.panoramicScope ? (
+                  <div className={styles.systemScopeGrid3Col}>
+                    {project.panoramicScope.groups.map((group, gIdx) => (
+                      <div key={group.title.en} className={styles.scopeGroup}>
+                        <div className={styles.scopeGroupHeader}>
+                          <span className={styles.scopeGroupHeaderTag}>■</span>
+                          <span>{`${String(gIdx + 1).padStart(2, "0")} // ${group.title[locale]}`}</span>
+                        </div>
+                        <div className={styles.scopeGroupBody}>
+                          <ul
+                            className={styles.contributionList}
+                            style={{ margin: 0 }}
+                          >
+                            {group.items[locale].map((item, itemIdx) => (
+                              <li
+                                key={itemIdx}
+                                className={styles.contributionItem}
+                              >
+                                <span
+                                  className={styles.contributionIndex}
+                                  aria-hidden="true"
+                                >
+                                  {String(itemIdx + 1).padStart(2, "0")}
+                                </span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
                 {/* Compact Technical Metadata */}
                 {project.technicalMetadata &&
                 project.technicalMetadata.length > 0 ? (
@@ -1735,6 +1772,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 !project.speechToTextScope &&
                 !project.thermalPrinterScope &&
                 !project.footyScope &&
+                !project.panoramicScope &&
                 !project.modules ? (
                   <div className={styles.scopeSubBlock}>
                     <div className={styles.subBlockHeader}>

@@ -54,7 +54,7 @@ const expectedRoles = [
   "Machine Learning Engineer",
   "Android Developer",
   "Android Developer",
-  "Junior Game Developer",
+  "Junior Game Developer Intern",
 ];
 
 const expectedStatuses = [
@@ -108,8 +108,8 @@ const expectedSummaries = {
     id: "Aplikasi Android berbasis Flutter yang menyajikan klasemen sepak bola, jadwal pertandingan, top scorer, dan detail klub menggunakan data dari REST API.",
   },
   "panoramic-virtual-tour": {
-    en: "A Unity-based virtual tour developed during an internship at PT Duta Basis Dataprima, combining architectural panoramas with hotspot navigation.",
-    id: "Virtual tour berbasis Unity yang dikembangkan saat magang di PT Duta Basis Dataprima, menggabungkan panorama arsitektur dengan navigasi hotspot.",
+    en: "A Unity-based prototype that turns architectural panoramas into an interactive virtual tour with 360° viewing and hotspot navigation.",
+    id: "Prototype berbasis Unity yang mengolah panorama arsitektur menjadi virtual tour interaktif dengan tampilan 360° dan navigasi hotspot.",
   },
 };
 
@@ -1162,6 +1162,137 @@ test("synchronizes Footy Standings Hub entry with exact facts, 6-item stack, and
   // Confirm other 9 Hub records remain intact and unchanged
   const otherNineSlugs = expectedSlugs.filter(
     (s) => s !== "footy-standings",
+  );
+  assert.equal(otherNineSlugs.length, 9);
+  for (const slug of otherNineSlugs) {
+    const p = projectArchive.find((proj) => proj.slug === slug);
+    assert.ok(p, `Project ${slug} must exist in archive`);
+    assert.equal(p.summary.en, expectedSummaries[slug].en);
+    assert.equal(p.summary.id, expectedSummaries[slug].id);
+  }
+});
+
+test("synchronizes Panoramic Virtual Tour Hub and Home entries with exact facts, 5-item stack, and 4th position on Home", () => {
+  const pvt = projectArchive.find((p) => p.slug === "panoramic-virtual-tour");
+  assert.ok(pvt, "Panoramic Virtual Tour must exist in projectArchive");
+
+  assert.equal(pvt.index, "10");
+  assert.equal(pvt.category, "other");
+  assert.equal(pvt.title.en, "Panoramic Virtual Tour");
+  assert.equal(pvt.title.id, "Panoramic Virtual Tour");
+  assert.equal(pvt.role.en, "Junior Game Developer Intern");
+  assert.equal(pvt.role.id, "Junior Game Developer Intern");
+  assert.equal(pvt.status.en, "Completed Prototype");
+  assert.equal(pvt.status.id, "Completed Prototype");
+  assert.equal(
+    pvt.coverImage,
+    "/assets/projects/panoramic-virtual-tour/cover.webp",
+  );
+  assert.equal(
+    pvt.coverAlt.en,
+    "Panoramic Virtual Tour title screen and main menu over the 3D building facility landscape",
+  );
+  assert.equal(
+    pvt.coverAlt.id,
+    "Layar judul dan menu utama Panoramic Virtual Tour dengan pemandangan lanskap fasilitas bangunan 3D",
+  );
+  assert.equal(pvt.coverPosition, "center");
+
+  assert.deepEqual(pvt.primaryTechnologies, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "Physics Raycast",
+    "Scene Management",
+  ]);
+
+  assert.equal(
+    pvt.summary.en,
+    "A Unity-based prototype that turns architectural panoramas into an interactive virtual tour with 360° viewing and hotspot navigation.",
+  );
+  assert.equal(
+    pvt.summary.id,
+    "Prototype berbasis Unity yang mengolah panorama arsitektur menjadi virtual tour interaktif dengan tampilan 360° dan navigasi hotspot.",
+  );
+
+  // Factual boundaries: no internship dates, no company name, no 78/79 counts, no external links in card
+  assert.doesNotMatch(pvt.summary.en, /PT Duta Basis Dataprima|July|August|78|79/i);
+  assert.doesNotMatch(pvt.summary.id, /PT Duta Basis Dataprima|Juli|Agustus|78|79/i);
+  assert.doesNotMatch(JSON.stringify(pvt), /drive\.google\.com|github\.com|liveUrl|githubUrl/i);
+  assert.equal("liveUrl" in pvt, false);
+  assert.equal("githubUrl" in pvt, false);
+
+  // All 10 Hub records and order preserved
+  assert.equal(projectArchive.length, 10);
+  assert.deepEqual(
+    projectArchive.map((p) => p.slug),
+    expectedSlugs,
+  );
+
+  // All category filters preserved
+  const counts = getProjectArchiveCategoryCounts(projectArchive);
+  assert.deepEqual(counts, {
+    all: 10,
+    "web-app": 5,
+    ml: 2,
+    mobile: 2,
+    other: 1,
+  });
+
+  // Home Selected Projects synchronization: Panoramic Virtual Tour is 4th selected project
+  assert.equal(homeSelectedProjects.length, 4);
+  assert.deepEqual(
+    homeSelectedProjects.map((p) => p.slug),
+    [
+      "ukg-system",
+      "ihealth-edu",
+      "ml-for-heart-attack-risk-prediction",
+      "panoramic-virtual-tour",
+    ],
+  );
+
+  const homePvt = homeSelectedProjects[3];
+  assert.equal(homePvt.index, "04");
+  assert.equal(homePvt.slug, "panoramic-virtual-tour");
+  assert.equal(homePvt.title.en, "Panoramic Virtual Tour");
+  assert.equal(homePvt.title.id, "Panoramic Virtual Tour");
+  assert.equal(homePvt.role.en, "Junior Game Developer Intern");
+  assert.equal(homePvt.role.id, "Junior Game Developer Intern");
+  assert.equal(homePvt.status.en, "Completed Prototype");
+  assert.equal(homePvt.status.id, "Completed Prototype");
+  assert.equal(
+    homePvt.summary.en,
+    "A Unity-based prototype that turns architectural panoramas into an interactive virtual tour with 360° viewing and hotspot navigation.",
+  );
+  assert.equal(
+    homePvt.summary.id,
+    "Prototype berbasis Unity yang mengolah panorama arsitektur menjadi virtual tour interaktif dengan tampilan 360° dan navigasi hotspot.",
+  );
+  assert.deepEqual(homePvt.technologies, [
+    "Unity",
+    "C#",
+    "Lumion Pro",
+    "Physics Raycast",
+    "Scene Management",
+  ]);
+  assert.equal(
+    homePvt.coverImage,
+    "/assets/projects/panoramic-virtual-tour/cover.webp",
+  );
+  assert.equal(
+    homePvt.coverAlt.en,
+    "Panoramic Virtual Tour title screen and main menu over the 3D building facility landscape",
+  );
+  assert.equal(
+    homePvt.coverAlt.id,
+    "Layar judul dan menu utama Panoramic Virtual Tour dengan pemandangan lanskap fasilitas bangunan 3D",
+  );
+
+  assert.equal(homeFeaturedConfig.slot4Slug, "panoramic-virtual-tour");
+
+  // Confirm other 9 Hub records remain intact and unchanged
+  const otherNineSlugs = expectedSlugs.filter(
+    (s) => s !== "panoramic-virtual-tour",
   );
   assert.equal(otherNineSlugs.length, 9);
   for (const slug of otherNineSlugs) {
