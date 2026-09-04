@@ -184,7 +184,7 @@ export const projectArchive: readonly ProjectArchiveItem[] = [
       en: "An inventory system used by SHR Jaya Motor to replace handwritten stock records with centralized stock tracking, transaction history, and reporting.",
       id: "Sistem inventory yang digunakan SHR Jaya Motor untuk menggantikan pencatatan manual dengan pemantauan stok, riwayat transaksi, dan laporan yang terpusat.",
     },
-    primaryTechnologies: ["Laravel", "PHP", "MySQL", "Katalon Studio", "Docker"],
+    primaryTechnologies: ["Laravel", "PHP", "MySQL", "Playwright", "Docker"],
     coverImage: "/assets/projects/simastok/cover.webp",
     coverAlt: {
       en: "SIMASTOK SHR Jaya Motor inventory system sign-in screen",

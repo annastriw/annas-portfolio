@@ -417,7 +417,7 @@ test("generateProjectJsonLd accurately represents project facts, keywords, and l
     "Laravel",
     "PHP",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Docker",
   ]);
 

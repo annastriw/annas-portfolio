@@ -152,7 +152,7 @@ export interface SpeechToTextSystemScopeData {
     readonly title: LocalizedProjectText;
     readonly items: LocalizedProjectList;
   };
-  readonly modelNote: LocalizedProjectText;
+  readonly modelNote?: LocalizedProjectText;
   readonly transcriptOutputs: {
     readonly title: LocalizedProjectText;
     readonly items: LocalizedProjectList;
@@ -752,10 +752,6 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
               "Informasi gaya hidup",
               "Informasi pendukung pasien",
             ],
-          },
-          note: {
-            en: "BMI is calculated from height and weight.",
-            id: "BMI dihitung dari tinggi dan berat badan.",
           },
         },
         {
@@ -1783,13 +1779,13 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
         "Gathered inventory requirements through interviews and iterative feedback with SHR Jaya Motor.",
         "Designed the inventory workflows and interfaces in Figma, then built the Laravel frontend and backend with MySQL.",
         "Implemented role-based access, master data, stock movements, insufficient-stock validation, transaction history, and reporting.",
-        "Performed manual and automated testing with Katalon Studio, then containerized and deployed the application with Docker.",
+        "Performed manual and automated testing with Playwright, then containerized and deployed the application with Docker.",
       ],
       id: [
         "Menggali kebutuhan inventory melalui wawancara dan feedback bertahap bersama SHR Jaya Motor.",
         "Merancang workflow inventory dan antarmuka di Figma, kemudian membangun frontend dan backend menggunakan Laravel serta MySQL.",
         "Mengimplementasikan akses berbasis role, master data, pergerakan stok, validasi stok tidak mencukupi, riwayat transaksi, dan laporan.",
-        "Melakukan manual dan automation testing menggunakan Katalon Studio, kemudian menjalankan containerization dan deployment aplikasi menggunakan Docker.",
+        "Melakukan manual dan automation testing menggunakan Playwright, kemudian menjalankan containerization dan deployment aplikasi menggunakan Docker.",
       ],
     },
     contributionLearning: {
@@ -1801,7 +1797,7 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       "Laravel",
       "PHP",
       "MySQL",
-      "Katalon Studio",
+      "Playwright",
       "Docker",
     ],
     techStack: [
@@ -1809,7 +1805,7 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
       "Laravel",
       "PHP",
       "MySQL",
-      "Katalon Studio",
+      "Playwright",
       "Docker",
     ],
     simastokScope: {
@@ -2502,10 +2498,6 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
           ],
         },
       },
-      modelNote: {
-        en: "This prototype uses a pretrained model without custom fine-tuning and does not include a WER or CER benchmark.",
-        id: "Prototype ini menggunakan pretrained model tanpa custom fine-tuning dan tidak mencakup benchmark WER maupun CER.",
-      },
       transcriptOutputs: {
         title: {
           en: "Transcript & Subtitle Outputs",
@@ -2758,36 +2750,6 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
         },
       ],
     },
-    technicalMetadata: [
-      {
-        value: "58 / 80 MM",
-        label: {
-          en: "Paper Configuration",
-          id: "Konfigurasi Kertas",
-        },
-      },
-      {
-        value: "203 DPI",
-        label: {
-          en: "Resolution Configuration",
-          id: "Resolusi Konfigurasi",
-        },
-      },
-      {
-        value: "1,024 BYTES",
-        label: {
-          en: "Max Transfer Chunk",
-          id: "Maksimum Chunk Transfer",
-        },
-      },
-      {
-        value: "04 ATTEMPTS",
-        label: {
-          en: "Connection Retry Sequence",
-          id: "Urutan Retry Koneksi",
-        },
-      },
-    ],
     cover: {
       src: "/assets/projects/thermal-printer-service/cover.webp",
       alt: {
@@ -3028,8 +2990,6 @@ export const projectCaseStudies: readonly ProjectCaseStudy[] = [
               "Detail klub",
             ],
           },
-          compactList:
-            "Premier League · La Liga · Bundesliga · Serie A · Ligue 1 · Primeira Liga",
         },
         {
           title: {

@@ -185,9 +185,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     contributionTitle:
       project.sectionTitles?.contribution?.[locale] ??
       (isId ? "Kontribusi Saya" : "My Contribution"),
-    personalStackTag: isId
-      ? "Stack Teknologi Personal"
-      : "Personal Technology Stack",
+    personalStackTag: "Tech Stack",
     scopeTitle:
       project.sectionTitles?.scope?.[locale] ??
       (isId ? "Cakupan Sistem" : "System Scope"),
@@ -207,8 +205,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       ? "04 // Integrasi Sistem"
       : "04 // System Integrations",
     architectureNote: isId
-      ? "Arsitektur mencakup integrasi IoT dan ML ke dalam antarmuka Next.js; pengembangan frontend dan integrasi UI merupakan lingkup kontribusi Annas."
-      : "Architecture includes backend, IoT, and ML services integrated into the Next.js interface; Annas's direct contribution focuses on UI/UX, frontend engineering, and client-level integrations.",
+      ? "Arsitektur sistem menghubungkan data IoT dan output machine learning dengan antarmuka Next.js. Kontribusi saya berfokus pada pengembangan frontend dan integrasi alur data tersebut ke dalam UI."
+      : "The architecture connects IoT data and machine learning outputs with the Next.js interface. My contribution focused on frontend development and integrating these data flows into the user interface.",
     techNotesSubtag: isId ? "Catatan Teknis Utama" : "Key Technical Notes",
     techStackSubtag: isId ? "Stack Teknologi" : "Technology Stack",
     videoDemo: isId ? "Demo Workflow Pencetakan" : "Print Workflow Demo",
@@ -1578,21 +1576,6 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                             </li>
                           ))}
                         </ul>
-
-                        {/* Model Boundary Note inside Scope right after ASR Inference */}
-                        <div className={styles.modelBoundaryNote}>
-                          <div className={styles.modelBoundaryTag}>
-                            <span aria-hidden="true">■</span>
-                            <span>
-                              {isId
-                                ? "[BATAS KLAIM // MODEL PRETRAINED]"
-                                : "[CLAIM BOUNDARY // PRETRAINED MODEL]"}
-                            </span>
-                          </div>
-                          <p className={styles.modelBoundaryText}>
-                            {project.speechToTextScope.modelNote[locale]}
-                          </p>
-                        </div>
                       </div>
                     </div>
 
@@ -1693,11 +1676,6 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                               </li>
                             ))}
                           </ul>
-                          {group.compactList ? (
-                            <div className={styles.footyCompetitionsList}>
-                              {group.compactList}
-                            </div>
-                          ) : null}
                         </div>
                       </div>
                     ))}

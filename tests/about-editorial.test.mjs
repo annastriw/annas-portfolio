@@ -383,6 +383,12 @@ test("AboutEducation component renders exact academic records, full thesis title
   assert.match(educationFile, /data\.bachelorCertificate\.badge\[locale\]/);
   assert.match(educationFile, /data\.bachelorCertificate\.closeLabel\[locale\]/);
 
+  // Scroll region accessibility and initial scrollTop reset
+  assert.match(educationFile, /className="cert-modal-image-wrapper"/);
+  assert.match(educationFile, /tabIndex=\{0\}/);
+  assert.match(educationFile, /role="region"/);
+  assert.match(educationFile, /imageWrapperRef\.current\.scrollTop\s*=\s*0/);
+
   // Keyboard accessibility and focus management
   assert.match(educationFile, /key === "Escape"/);
   assert.match(educationFile, /key === "Tab"/);
@@ -445,6 +451,12 @@ test("AboutCertificates component renders approved editorial archive grid, respo
   assert.match(certFile, /activeCertificate\.issuer/);
   assert.match(certFile, /activeCertificate\.title\[locale\]/);
   assert.match(certFile, /copy\.accessibility\.closeLabel\[locale\]/);
+
+  // Scroll region accessibility and initial scrollTop reset
+  assert.match(certFile, /className="cert-modal-image-wrapper"/);
+  assert.match(certFile, /tabIndex=\{0\}/);
+  assert.match(certFile, /role="region"/);
+  assert.match(certFile, /imageWrapperRef\.current\.scrollTop\s*=\s*0/);
 
   // Keyboard accessibility and focus management
   assert.match(certFile, /key === "Escape"/);

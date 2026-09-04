@@ -1025,7 +1025,7 @@ test("maintains approved SIMASTOK locked facts, bilingual copy, and content stru
   );
   assert.equal(
     simastok.contributions.en[3],
-    "Performed manual and automated testing with Katalon Studio, then containerized and deployed the application with Docker.",
+    "Performed manual and automated testing with Playwright, then containerized and deployed the application with Docker.",
   );
   assert.equal(
     simastok.contributions.id[0],
@@ -1041,7 +1041,7 @@ test("maintains approved SIMASTOK locked facts, bilingual copy, and content stru
   );
   assert.equal(
     simastok.contributions.id[3],
-    "Melakukan manual dan automation testing menggunakan Katalon Studio, kemudian menjalankan containerization dan deployment aplikasi menggunakan Docker.",
+    "Melakukan manual dan automation testing menggunakan Playwright, kemudian menjalankan containerization dan deployment aplikasi menggunakan Docker.",
   );
   assert.equal(
     simastok.contributionLearning?.en,
@@ -1058,7 +1058,7 @@ test("maintains approved SIMASTOK locked facts, bilingual copy, and content stru
     "Laravel",
     "PHP",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Docker",
   ]);
   assert.deepEqual(simastok.techStack, [
@@ -1066,7 +1066,7 @@ test("maintains approved SIMASTOK locked facts, bilingual copy, and content stru
     "Laravel",
     "PHP",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Docker",
   ]);
 
@@ -1725,15 +1725,8 @@ test("maintains approved Speech-to-Text System locked facts, bilingual copy, mod
     "Tanpa benchmark WER atau CER",
   ]);
 
-  // Model boundary note inside System Scope
-  assert.equal(
-    stt.speechToTextScope.modelNote.en,
-    "This prototype uses a pretrained model without custom fine-tuning and does not include a WER or CER benchmark.",
-  );
-  assert.equal(
-    stt.speechToTextScope.modelNote.id,
-    "Prototype ini menggunakan pretrained model tanpa custom fine-tuning dan tidak mencakup benchmark WER maupun CER.",
-  );
+  // Model boundary note inside System Scope has been removed from visitor-facing presentation
+  assert.equal(stt.speechToTextScope.modelNote, undefined);
 
   assert.equal(
     stt.speechToTextScope.transcriptOutputs.title.en,
@@ -2035,31 +2028,8 @@ test("maintains approved Thermal Printer Service locked facts, bilingual copy, c
     "Kalibrasi dan penanganan error",
   ]);
 
-  // Technical Metadata: exactly 4 static values
-  assert.ok(tps.technicalMetadata);
-  assert.equal(tps.technicalMetadata.length, 4);
-  assert.deepEqual(
-    tps.technicalMetadata.map((m) => m.value),
-    ["58 / 80 MM", "203 DPI", "1,024 BYTES", "04 ATTEMPTS"],
-  );
-  assert.deepEqual(
-    tps.technicalMetadata.map((m) => m.label.en),
-    [
-      "Paper Configuration",
-      "Resolution Configuration",
-      "Max Transfer Chunk",
-      "Connection Retry Sequence",
-    ],
-  );
-  assert.deepEqual(
-    tps.technicalMetadata.map((m) => m.label.id),
-    [
-      "Konfigurasi Kertas",
-      "Resolusi Konfigurasi",
-      "Maksimum Chunk Transfer",
-      "Urutan Retry Koneksi",
-    ],
-  );
+  // Technical Metadata has been removed per specification
+  assert.equal(tps.technicalMetadata, undefined);
 
   // Gallery: exactly 4 slides in cover-first order
   assert.equal(tps.gallery?.length, 4);
@@ -2310,10 +2280,8 @@ test("maintains approved Footy Standings locked facts, bilingual copy, compact s
     "Top scorer",
     "Detail klub",
   ]);
-  assert.equal(
-    fGroup1.compactList,
-    "Premier League · La Liga · Bundesliga · Serie A · Ligue 1 · Primeira Liga",
-  );
+  // compactList has been removed per specification
+  assert.equal(fGroup1.compactList, undefined);
 
   assert.equal(fGroup2.title.en, "API Integration");
   assert.equal(fGroup2.title.id, "Integrasi API");
@@ -3446,6 +3414,60 @@ test("Phase 06 — Project Detail System Hardening across all 10 projects and 20
   assert.match(css, /transition:\s*none\s*!important/);
   assert.match(css, /animation:\s*none\s*!important/);
 });
+
+test("Revision 08: verifies Tech Stack heading, iHealth copy, SIMASTOK Playwright, and removals", () => {
+  const detailViewCode = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
+    "utf8",
+  );
+
+  // 1. Tech Stack heading replaces Personal Technology Stack in EN and ID
+  assert.doesNotMatch(detailViewCode, /Personal Technology Stack/);
+  assert.doesNotMatch(detailViewCode, /Stack Teknologi Personal/);
+  assert.match(detailViewCode, /personalStackTag:\s*"Tech Stack"/);
+
+  // 2. iHealth Edu: BMI helper removed, architectureNote matches exact approved copy
+  assert.doesNotMatch(detailViewCode, /BMI dihitung dari tinggi dan berat badan/i);
+  assert.doesNotMatch(detailViewCode, /BMI is calculated from height and weight/i);
+  assert.match(
+    detailViewCode,
+    /Arsitektur sistem menghubungkan data IoT dan output machine learning dengan antarmuka Next\.js\. Kontribusi saya berfokus pada pengembangan frontend dan integrasi alur data tersebut ke dalam UI\./,
+  );
+  assert.match(
+    detailViewCode,
+    /The architecture connects IoT data and machine learning outputs with the Next\.js interface\. My contribution focused on frontend development and integrating these data flows into the user interface\./,
+  );
+
+  // 3. Speech-to-Text: model boundary note block removed from visitor-facing view
+  assert.doesNotMatch(detailViewCode, /\[BATAS KLAIM \/\/ MODEL PRETRAINED\]/);
+  assert.doesNotMatch(detailViewCode, /\[CLAIM BOUNDARY \/\/ PRETRAINED MODEL\]/);
+
+  // 4. Footy Standings: compactList block removed from visitor-facing view
+  assert.doesNotMatch(detailViewCode, /styles\.footyCompetitionsList/);
+
+  // 5. SIMASTOK: uses Playwright exclusively in case study data
+  const simastok = getProjectCaseStudy("simastok");
+  assert.ok(simastok);
+  assert.ok(simastok.personalTechStack?.includes("Playwright"));
+  assert.ok(!simastok.personalTechStack?.includes("Katalon Studio"));
+  assert.ok(simastok.techStack?.includes("Playwright"));
+  assert.ok(!simastok.techStack?.includes("Katalon Studio"));
+  assert.ok(simastok.contributions.en.some((c) => c.includes("Playwright")));
+  assert.ok(!simastok.contributions.en.some((c) => c.includes("Katalon Studio")));
+  assert.ok(simastok.contributions.id.some((c) => c.includes("Playwright")));
+  assert.ok(!simastok.contributions.id.some((c) => c.includes("Katalon Studio")));
+
+  // 6. Thermal Printer Service: technicalMetadata is removed
+  const tps = getProjectCaseStudy("thermal-printer-service");
+  assert.ok(tps);
+  assert.equal(tps.technicalMetadata, undefined);
+
+  // 7. Footy Standings: compactList is removed
+  const footy = getProjectCaseStudy("footy-standings");
+  assert.ok(footy);
+  assert.equal(footy.footyScope?.groups[0]?.compactList, undefined);
+});
+
 
 
 

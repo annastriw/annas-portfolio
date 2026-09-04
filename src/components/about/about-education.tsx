@@ -17,6 +17,7 @@ export function AboutEducation({ locale }: AboutEducationProps) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const imageWrapperRef = useRef<HTMLDivElement>(null);
 
   // Handle Escape key, focus trapping & body scroll lock for modal
   useEffect(() => {
@@ -24,6 +25,11 @@ export function AboutEducation({ locale }: AboutEducationProps) {
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    // Reset scroll position to top
+    if (imageWrapperRef.current) {
+      imageWrapperRef.current.scrollTop = 0;
+    }
 
     // Set initial focus to close button
     closeBtnRef.current?.focus();
@@ -228,7 +234,17 @@ export function AboutEducation({ locale }: AboutEducationProps) {
               </button>
             </div>
 
-            <div className="cert-modal-image-wrapper">
+            <div
+              ref={imageWrapperRef}
+              className="cert-modal-image-wrapper"
+              tabIndex={0}
+              role="region"
+              aria-label={
+                isId
+                  ? "Pratinjau sertifikat sarjana yang dapat digulir"
+                  : "Scrollable preview of bachelor certificate"
+              }
+            >
               <Image
                 src={data.bachelorCertificate.assetPath}
                 alt={data.bachelorCertificate.alt[locale]}

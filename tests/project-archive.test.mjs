@@ -248,7 +248,7 @@ test("enforces max 6 displayed technologies and exact approved stacks for UKG, i
     "Laravel",
     "PHP",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Docker",
   ]);
 
@@ -621,7 +621,7 @@ test("synchronizes SIMASTOK Hub entry with exact facts, 5-item stack, and absenc
     "Laravel",
     "PHP",
     "MySQL",
-    "Katalon Studio",
+    "Playwright",
     "Docker",
   ]);
 

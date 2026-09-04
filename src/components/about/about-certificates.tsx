@@ -25,6 +25,7 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
   const activeTriggerRef = useRef<HTMLButtonElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const imageWrapperRef = useRef<HTMLDivElement>(null);
 
   const isId = locale === "id";
   const copy = credentialSectionCopy;
@@ -56,6 +57,11 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    // Reset scroll position to top
+    if (imageWrapperRef.current) {
+      imageWrapperRef.current.scrollTop = 0;
+    }
 
     // Set initial focus to close button
     closeBtnRef.current?.focus();
@@ -334,7 +340,17 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
               </button>
             </div>
 
-            <div className="cert-modal-image-wrapper">
+            <div
+              ref={imageWrapperRef}
+              className="cert-modal-image-wrapper"
+              tabIndex={0}
+              role="region"
+              aria-label={
+                isId
+                  ? `Pratinjau sertifikat ${activeCertificate.title[locale]} yang dapat digulir`
+                  : `Scrollable preview of ${activeCertificate.title[locale]} certificate`
+              }
+            >
               <Image
                 src={activeCertificate.assetPath}
                 alt={

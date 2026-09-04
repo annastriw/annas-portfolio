@@ -984,10 +984,15 @@ html.dark .route-loader-pill {
   max-block-size: 65dvh;
   overflow: auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background: rgba(0, 0, 0, 0.04);
   padding: 1rem;
+}
+
+.cert-modal-image-wrapper:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 
 .cert-modal-img {
@@ -996,6 +1001,7 @@ html.dark .route-loader-pill {
   inline-size: auto;
   block-size: auto;
   object-fit: contain;
+  margin: auto;
 }
 
 /* ==========================================================================
