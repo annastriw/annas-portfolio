@@ -200,7 +200,6 @@ export function AboutEducation({ locale }: AboutEducationProps) {
           role="dialog"
           aria-modal="true"
           aria-labelledby="bachelor-cert-dialog-heading"
-          onClick={handleCloseModal}
         >
           <div
             ref={modalContentRef}
@@ -230,7 +229,8 @@ export function AboutEducation({ locale }: AboutEducationProps) {
                 onClick={handleCloseModal}
                 aria-label={data.bachelorCertificate.closeLabel[locale]}
               >
-                ✕
+                <span aria-hidden="true">✕</span>
+                <kbd aria-hidden="true" className="opacity-60 text-xs font-mono">ESC</kbd>
               </button>
             </div>
 

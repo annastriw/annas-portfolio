@@ -136,10 +136,20 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         },
       },
       {
+        slug: "php",
+        name: "PHP",
+        monogram: "PHP",
+        index: "02.03",
+        description: {
+          en: "A server-side programming language for building dynamic web applications, backend logic, and API services.",
+          id: "Bahasa pemrograman server-side untuk membangun aplikasi web dinamis, logika backend, dan layanan API.",
+        },
+      },
+      {
         slug: "flask",
         name: "Flask",
         monogram: "FK",
-        index: "02.03",
+        index: "02.04",
         description: {
           en: "A lightweight Python framework for building web services, APIs, and integrations with data or machine learning applications.",
           id: "Framework Python yang ringan untuk membangun web service, API, serta integrasi dengan aplikasi data atau machine learning.",
@@ -149,20 +159,10 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "node-js",
         name: "Node.js",
         monogram: "NODE",
-        index: "02.04",
+        index: "02.05",
         description: {
           en: "A JavaScript runtime for executing server-side application logic and building network-based services.",
           id: "Runtime JavaScript untuk menjalankan logika aplikasi di sisi server dan membangun layanan berbasis jaringan.",
-        },
-      },
-      {
-        slug: "rest-api",
-        name: "REST API",
-        monogram: "API",
-        index: "02.05",
-        description: {
-          en: "An API design approach for connecting applications through resource-based endpoints and standard HTTP operations.",
-          id: "Pendekatan desain API untuk menghubungkan aplikasi melalui endpoint berbasis resource dan operasi HTTP standar.",
         },
       },
       {
@@ -176,10 +176,20 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         },
       },
       {
+        slug: "rest-api",
+        name: "REST API",
+        monogram: "API",
+        index: "02.07",
+        description: {
+          en: "An API design approach for connecting applications through resource-based endpoints and standard HTTP operations.",
+          id: "Pendekatan desain API untuk menghubungkan aplikasi melalui endpoint berbasis resource dan operasi HTTP standar.",
+        },
+      },
+      {
         slug: "graphql",
         name: "GraphQL",
         monogram: "GQL",
-        index: "02.07",
+        index: "02.08",
         description: {
           en: "A query language and API runtime that allows clients to request the specific data required by an application.",
           id: "Query language dan runtime API yang memungkinkan client meminta data spesifik sesuai kebutuhan aplikasi.",
@@ -189,7 +199,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "websockets",
         name: "WebSockets",
         monogram: "WS",
-        index: "02.08",
+        index: "02.09",
         description: {
           en: "A communication protocol for maintaining two-way, real-time connections between clients and servers.",
           id: "Protokol komunikasi untuk mempertahankan koneksi real-time dua arah antara client dan server.",
@@ -199,7 +209,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "swagger",
         name: "Swagger",
         monogram: "SWG",
-        index: "02.09",
+        index: "02.10",
         description: {
           en: "A set of tools based on the OpenAPI specification for documenting, exploring, and testing web APIs.",
           id: "Kumpulan tools berbasis spesifikasi OpenAPI untuk mendokumentasikan, mengeksplorasi, dan menguji API web.",
@@ -250,7 +260,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
     id: "database-cloud-services",
     code: "04 // DATABASE",
     index: "04",
-    title: "Database & Cloud Services",
+    title: "Database, Cache & Cloud Services",
     isFundamental: false,
     items: [
       {
@@ -294,10 +304,20 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         },
       },
       {
+        slug: "redis",
+        name: "Redis",
+        monogram: "RDS",
+        index: "04.05",
+        description: {
+          en: "An in-memory data store used for caching, session management, and fast access to frequently requested data.",
+          id: "Penyimpanan data berbasis in-memory untuk caching, pengelolaan session, dan akses cepat ke data yang sering digunakan.",
+        },
+      },
+      {
         slug: "firebase",
         name: "Firebase",
         monogram: "FB",
-        index: "04.05",
+        index: "04.06",
         description: {
           en: "A cloud application platform providing managed services such as databases, authentication, hosting, and real-time data synchronization.",
           id: "Platform aplikasi berbasis cloud yang menyediakan layanan terkelola seperti database, authentication, hosting, dan sinkronisasi data secara real-time.",
@@ -307,7 +327,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "aws",
         name: "AWS",
         monogram: "AWS",
-        index: "04.06",
+        index: "04.07",
         description: {
           en: "A cloud platform offering infrastructure and managed services for hosting, storing, deploying, and operating applications.",
           id: "Platform cloud yang menyediakan infrastruktur dan layanan terkelola untuk hosting, penyimpanan, deployment, dan pengoperasian aplikasi.",
@@ -355,10 +375,10 @@ export const capabilitiesCategories: CapabilityCategory[] = [
     ],
   },
   {
-    id: "machine-learning-data",
+    id: "machine-learning-data-science",
     code: "06 // ML & DATA",
     index: "06",
-    title: "Machine Learning & Data",
+    title: "Machine Learning & Data Science",
     isFundamental: false,
     items: [
       {
@@ -382,70 +402,30 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         },
       },
       {
-        slug: "scikit-learn",
-        name: "Scikit-learn",
-        monogram: "SK",
-        index: "06.03",
-        description: {
-          en: "A Python machine learning library providing tools for preprocessing, model training, evaluation, and predictive analysis.",
-          id: "Library machine learning Python yang menyediakan tools untuk preprocessing, training model, evaluasi, dan analisis prediktif.",
-        },
-      },
-      {
         slug: "pandas",
         name: "Pandas",
         monogram: "PD",
-        index: "06.04",
+        index: "06.03",
         description: {
           en: "A Python library for cleaning, transforming, analyzing, and organizing structured data.",
           id: "Library Python untuk membersihkan, mentransformasi, menganalisis, dan mengelola data terstruktur.",
         },
       },
       {
-        slug: "xgboost",
-        name: "XGBoost",
-        monogram: "XGB",
-        index: "06.05",
+        slug: "scikit-learn",
+        name: "Scikit-learn",
+        monogram: "SK",
+        index: "06.04",
         description: {
-          en: "A gradient-boosting framework for building efficient predictive models, particularly with structured or tabular data.",
-          id: "Framework gradient boosting untuk membangun model prediktif yang efisien, terutama pada data terstruktur atau tabular.",
-        },
-      },
-      {
-        slug: "smote",
-        name: "SMOTE",
-        monogram: "SM",
-        index: "06.06",
-        description: {
-          en: "A data-resampling technique for improving class balance by generating synthetic samples for underrepresented classes.",
-          id: "Teknik resampling data untuk memperbaiki keseimbangan kelas dengan menghasilkan sampel sintetis bagi kelas yang kurang terwakili.",
-        },
-      },
-      {
-        slug: "hugging-face-transformers",
-        name: "Hugging Face Transformers",
-        monogram: "HF",
-        index: "06.07",
-        description: {
-          en: "A library and model ecosystem for working with transformer-based machine learning across text, audio, and other data formats.",
-          id: "Library dan ekosistem model untuk menggunakan transformer-based machine learning pada teks, audio, dan format data lainnya.",
-        },
-      },
-      {
-        slug: "wav2vec2",
-        name: "Wav2Vec2",
-        monogram: "W2V",
-        index: "06.08",
-        description: {
-          en: "A transformer-based model architecture for learning speech representations and supporting automatic speech recognition.",
-          id: "Arsitektur model berbasis transformer untuk mempelajari representasi suara dan mendukung automatic speech recognition.",
+          en: "A Python machine learning library providing tools for preprocessing, model training, evaluation, and predictive analysis.",
+          id: "Library machine learning Python yang menyediakan tools untuk preprocessing, training model, evaluasi, dan analisis prediktif.",
         },
       },
       {
         slug: "pytorch",
         name: "PyTorch",
         monogram: "TORCH",
-        index: "06.09",
+        index: "06.05",
         description: {
           en: "A machine learning framework for developing, training, and experimenting with deep learning models.",
           id: "Framework machine learning untuk mengembangkan, melakukan training, dan bereksperimen dengan model deep learning.",
@@ -455,42 +435,62 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "tensorflow",
         name: "TensorFlow",
         monogram: "TF",
-        index: "06.10",
+        index: "06.06",
         description: {
           en: "A machine learning framework for building, training, and deploying models across different computing environments.",
           id: "Framework machine learning untuk membangun, melakukan training, dan men-deploy model pada berbagai environment komputasi.",
         },
       },
+      {
+        name: "Data Preprocessing & Feature Engineering",
+        monogram: "DP",
+        index: "06.07",
+        description: {
+          en: "The process of cleaning and transforming raw data, then preparing or creating features that make it suitable for machine learning.",
+          id: "Proses membersihkan dan mentransformasi data mentah, kemudian menyiapkan atau membentuk feature agar dapat digunakan dalam machine learning.",
+        },
+      },
+      {
+        name: "Supervised & Unsupervised Learning",
+        monogram: "ML",
+        index: "06.08",
+        description: {
+          en: "Machine learning approaches that learn from labeled data or identify patterns and structures within unlabeled data.",
+          id: "Pendekatan machine learning yang mempelajari data berlabel atau menemukan pola dan struktur pada data tanpa label.",
+        },
+      },
+      {
+        name: "Statistical Analysis & Model Evaluation",
+        monogram: "STAT",
+        index: "06.09",
+        description: {
+          en: "The use of statistical reasoning and evaluation metrics to examine data and assess a model’s performance, reliability, and limitations.",
+          id: "Penggunaan analisis statistik dan evaluation metrics untuk memahami data serta menilai performa, reliability, dan keterbatasan model.",
+        },
+      },
+      {
+        name: "Natural Language & Speech Processing",
+        monogram: "NLP",
+        index: "06.10",
+        description: {
+          en: "Methods for processing human language and speech, including text analysis, audio transcription, and language-based machine learning tasks.",
+          id: "Metode untuk memproses bahasa dan ucapan manusia, termasuk analisis teks, transkripsi audio, dan berbagai task machine learning berbasis bahasa.",
+        },
+      },
     ],
   },
   {
-    id: "machine-learning-fundamentals",
-    code: "07 // ML FUNDAMENTALS",
+    id: "quality-assurance-testing",
+    code: "07 // QA & TESTING",
     index: "07",
-    title: "Machine Learning Fundamentals",
-    isFundamental: true,
-    items: [
-      { name: "Data Preprocessing", index: "07.01", isFundamental: true },
-      { name: "Feature Engineering", index: "07.02", isFundamental: true },
-      { name: "Supervised Learning", index: "07.03", isFundamental: true },
-      { name: "Model Evaluation", index: "07.04", isFundamental: true },
-      { name: "Imbalanced Data Handling", index: "07.05", isFundamental: true },
-      { name: "NLP & Speech Processing", index: "07.06", isFundamental: true },
-      { name: "Model Serving & API Integration", index: "07.07", isFundamental: true },
-    ],
-  },
-  {
-    id: "quality-development-tools",
-    code: "08 // TOOLS & QA",
-    index: "08",
-    title: "Quality & Development Tools",
+    title: "Quality Assurance & Testing",
     isFundamental: false,
     items: [
       {
         slug: "katalon-studio",
         name: "Katalon Studio",
         monogram: "KS",
-        index: "08.01",
+        index: "07.01",
         description: {
           en: "A testing platform for creating and running automated tests across web applications, APIs, and other application workflows.",
           id: "Platform testing untuk membuat dan menjalankan automated test pada aplikasi web, API, dan berbagai workflow aplikasi.",
@@ -500,7 +500,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "playwright",
         name: "Playwright",
         monogram: "PW",
-        index: "08.02",
+        index: "07.02",
         description: {
           en: "A browser automation framework for testing web applications across modern browsers and responsive environments.",
           id: "Framework browser automation untuk menguji aplikasi web pada berbagai browser modern dan environment responsive.",
@@ -510,28 +510,38 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "postman",
         name: "Postman",
         monogram: "PM",
-        index: "08.03",
+        index: "07.03",
         description: {
           en: "An API platform for sending requests, inspecting responses, organizing collections, and validating endpoints during development.",
           id: "Platform API untuk mengirim request, memeriksa response, mengelola collection, dan memvalidasi endpoint selama pengembangan.",
         },
       },
       {
-        slug: "github",
-        name: "GitHub",
-        monogram: "GH",
-        index: "08.04",
+        slug: "jmeter",
+        name: "JMeter",
+        monogram: "JM",
+        index: "07.04",
         description: {
-          en: "A development platform for hosting Git repositories, managing source code, reviewing changes, and supporting team collaboration.",
-          id: "Platform development untuk menyimpan Git repository, mengelola source code, meninjau perubahan, dan mendukung kolaborasi tim.",
+          en: "A performance testing tool for measuring how APIs and web applications behave under different levels of load.",
+          id: "Tool performance testing untuk mengukur respons API dan aplikasi web pada berbagai tingkat beban.",
+        },
+      },
+      {
+        slug: "lighthouse",
+        name: "Lighthouse",
+        monogram: "LH",
+        index: "07.05",
+        description: {
+          en: "An automated auditing tool for evaluating web performance, accessibility, best practices, and SEO.",
+          id: "Tool audit otomatis untuk mengevaluasi performance, accessibility, best practices, dan SEO pada website.",
         },
       },
     ],
   },
   {
     id: "deployment-infrastructure",
-    code: "09 // DEPLOYMENT",
-    index: "09",
+    code: "08 // DEPLOYMENT",
+    index: "08",
     title: "Deployment & Infrastructure",
     isFundamental: false,
     items: [
@@ -539,7 +549,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "docker",
         name: "Docker",
         monogram: "DK",
-        index: "09.01",
+        index: "08.01",
         description: {
           en: "A containerization platform for packaging applications and their dependencies into consistent, portable environments.",
           id: "Platform containerization untuk mengemas aplikasi beserta dependency-nya ke dalam environment yang konsisten dan portabel.",
@@ -547,9 +557,9 @@ export const capabilitiesCategories: CapabilityCategory[] = [
       },
       {
         slug: "linux-ubuntu",
-        name: "Linux Ubuntu",
+        name: "Linux (Ubuntu)",
         monogram: "LX",
-        index: "09.02",
+        index: "08.02",
         description: {
           en: "A Linux-based operating system commonly used for application servers, development environments, and production deployment.",
           id: "Sistem operasi berbasis Linux yang umum digunakan untuk application server, development environment, dan deployment ke production.",
@@ -559,7 +569,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "nginx",
         name: "Nginx",
         monogram: "NGX",
-        index: "09.03",
+        index: "08.03",
         description: {
           en: "A web server and reverse proxy for serving applications, routing traffic, and managing connections between clients and backend services.",
           id: "Web server dan reverse proxy untuk menyajikan aplikasi, mengatur traffic, dan mengelola koneksi antara client dan backend service.",
@@ -569,7 +579,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "kubernetes",
         name: "Kubernetes",
         monogram: "K8S",
-        index: "09.04",
+        index: "08.04",
         description: {
           en: "A container orchestration platform for deploying, scaling, and managing containerized applications across computing environments.",
           id: "Platform container orchestration untuk men-deploy, melakukan scaling, dan mengelola aplikasi berbasis container pada berbagai environment komputasi.",
@@ -579,18 +589,38 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "cloudflare",
         name: "Cloudflare",
         monogram: "CF",
-        index: "09.05",
+        index: "08.05",
         description: {
           en: "A cloud connectivity platform providing DNS, content delivery, traffic protection, and application performance services.",
           id: "Platform cloud connectivity yang menyediakan layanan DNS, content delivery, perlindungan traffic, dan peningkatan performa aplikasi.",
+        },
+      },
+      {
+        slug: "vercel",
+        name: "Vercel",
+        monogram: "VC",
+        index: "08.06",
+        description: {
+          en: "A cloud platform for deploying, previewing, and hosting web applications through an integrated development workflow.",
+          id: "Platform cloud untuk men-deploy, melakukan preview, dan meng-host aplikasi web melalui workflow development yang terintegrasi.",
+        },
+      },
+      {
+        slug: "github",
+        name: "GitHub",
+        monogram: "GH",
+        index: "08.07",
+        description: {
+          en: "A development platform for hosting Git repositories, managing source code, reviewing changes, and supporting team collaboration.",
+          id: "Platform development untuk menyimpan Git repository, mengelola source code, meninjau perubahan, dan mendukung kolaborasi tim.",
         },
       },
     ],
   },
   {
     id: "design-interactive-development",
-    code: "10 // DESIGN & INTERACTION",
-    index: "10",
+    code: "09 // DESIGN & INTERACTION",
+    index: "09",
     title: "Design & Interactive Development",
     isFundamental: false,
     items: [
@@ -598,7 +628,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "figma",
         name: "Figma",
         monogram: "FG",
-        index: "10.01",
+        index: "09.01",
         description: {
           en: "A collaborative interface design tool for creating wireframes, visual systems, interactive prototypes, and developer handoff specifications.",
           id: "Tool kolaboratif untuk merancang antarmuka, wireframe, visual system, interactive prototype, dan spesifikasi handoff kepada developer.",
@@ -608,7 +638,7 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "unity",
         name: "Unity",
         monogram: "UN",
-        index: "10.02",
+        index: "09.02",
         description: {
           en: "A real-time development platform for building interactive applications, games, simulations, and immersive experiences.",
           id: "Platform real-time development untuk membangun aplikasi interaktif, game, simulasi, dan immersive experience.",
@@ -618,31 +648,12 @@ export const capabilitiesCategories: CapabilityCategory[] = [
         slug: "lumion-pro",
         name: "Lumion Pro",
         monogram: "LM",
-        index: "10.03",
+        index: "09.03",
         description: {
           en: "A visualization tool for producing architectural scenes and panoramic media used in interactive presentations.",
           id: "Tool visualisasi untuk menghasilkan scene arsitektur dan media panorama yang digunakan dalam presentasi interaktif.",
         },
       },
-    ],
-  },
-  {
-    id: "software-engineering-fundamentals",
-    code: "11 // SE FUNDAMENTALS",
-    index: "11",
-    title: "Software Engineering Fundamentals",
-    isFundamental: true,
-    items: [
-      { name: "API Design", index: "11.01", isFundamental: true },
-      { name: "Database Design", index: "11.02", isFundamental: true },
-      { name: "System Design", index: "11.03", isFundamental: true },
-      { name: "Responsive Web Design", index: "11.04", isFundamental: true },
-      { name: "Web Accessibility", index: "11.05", isFundamental: true },
-      { name: "Performance Optimization", index: "11.06", isFundamental: true },
-      { name: "Unit & Integration Testing", index: "11.07", isFundamental: true },
-      { name: "CI/CD Fundamentals", index: "11.08", isFundamental: true },
-      { name: "Cloud Fundamentals", index: "11.09", isFundamental: true },
-      { name: "Software Documentation", index: "11.10", isFundamental: true },
     ],
   },
 ];

@@ -396,6 +396,13 @@ test("AboutEducation component renders exact academic records, full thesis title
   assert.match(educationFile, /closeBtnRef\.current\?\.focus\(\)/);
   assert.match(educationFile, /document\.body\.style\.overflow\s*=\s*"hidden"/);
 
+  // Modal control consistency: x and ESC hint, backdrop click does NOT close
+  assert.match(educationFile, /<span aria-hidden="true">✕<\/span>/);
+  assert.match(educationFile, /<kbd aria-hidden="true"[^>]*>ESC<\/kbd>/);
+  assert.doesNotMatch(educationFile, /cert-modal-backdrop[^>]*onClick/);
+  assert.doesNotMatch(educationFile, /Close Dialog/);
+  assert.doesNotMatch(educationFile, /Tutup Dialog/);
+
   // Exclusions in component
   assert.doesNotMatch(educationFile, /Semarang/i);
   assert.doesNotMatch(educationFile, /Cum\s*Laude/i);
@@ -464,6 +471,13 @@ test("AboutCertificates component renders approved editorial archive grid, respo
   assert.match(certFile, /activeTriggerRef\.current\?\.focus\(\)/);
   assert.match(certFile, /closeBtnRef\.current\?\.focus\(\)/);
   assert.match(certFile, /document\.body\.style\.overflow\s*=\s*"hidden"/);
+
+  // Modal control consistency: x and ESC hint, backdrop click does NOT close
+  assert.match(certFile, /<span aria-hidden="true">✕<\/span>/);
+  assert.match(certFile, /<kbd aria-hidden="true"[^>]*>ESC<\/kbd>/);
+  assert.doesNotMatch(certFile, /cert-modal-backdrop[^>]*onClick/);
+  assert.doesNotMatch(certFile, /Close Dialog/);
+  assert.doesNotMatch(certFile, /Tutup Dialog/);
 
   // Prohibited claims & elements absent from component
   assert.doesNotMatch(certFile, /CISCO VERIFIED/i);

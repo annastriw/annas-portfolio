@@ -3468,6 +3468,47 @@ test("Revision 08: verifies Tech Stack heading, iHealth copy, SIMASTOK Playwrigh
   assert.equal(footy.footyScope?.groups[0]?.compactList, undefined);
 });
 
+test("Revision 09: verifies gallery copy Enlarge Image / Perbesar Gambar, accessible copy, and lightbox modal consistency", () => {
+  const detailViewCode = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
+    "utf8",
+  );
+
+  // 1. Visitor-facing copy: Enlarge Image / Perbesar Gambar
+  assert.match(
+    detailViewCode,
+    /inspect:\s*isId\s*\?\s*"Perbesar Gambar"\s*:\s*"Enlarge Image"/,
+  );
+  assert.doesNotMatch(detailViewCode, /Perbesar Bukti/);
+  assert.doesNotMatch(detailViewCode, /Inspect Figure/);
+  assert.doesNotMatch(detailViewCode, /Enlarge Evidence/);
+
+  // 2. Accessible label includes caption context
+  assert.match(
+    detailViewCode,
+    /isId\s*\?\s*`Perbesar gambar:\s*\$\{currentSlide\.caption\[locale\]\}`\s*:\s*`Enlarge image:\s*\$\{currentSlide\.caption\[locale\]\}`/,
+  );
+  assert.match(
+    detailViewCode,
+    /isId\s*\?\s*`Perbesar gambar:\s*\[\$\{currentSlide\.slide\}\]\s*\$\{currentSlide\.caption\[locale\]\}`/,
+  );
+
+  // 3. Lightbox modal consistency: x and ESC hint, no backdrop click close, no visual Close/Tutup text
+  assert.doesNotMatch(
+    detailViewCode,
+    /lightboxOverlay[\s\S]*?onClick=\{\(e\)\s*=>[\s\S]*?handleCloseLightbox\(\)/,
+  );
+  assert.match(detailViewCode, /<span aria-hidden="true">✕<\/span>/);
+  assert.match(detailViewCode, /<kbd aria-hidden="true"[^>]*>ESC<\/kbd>/);
+  assert.doesNotMatch(detailViewCode, /<span>✕\s*\{copy\.closeLightbox\}<\/span>/);
+
+  // 4. Keyboard Escape and Tab handling remains intact
+  assert.match(detailViewCode, /e\.key === "Escape"/);
+  assert.match(detailViewCode, /e\.key === "Tab"/);
+  assert.match(detailViewCode, /document\.body\.style\.overflow = "hidden"/);
+});
+
+
 
 
 

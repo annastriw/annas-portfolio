@@ -174,7 +174,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     nextSlide: isId
       ? "Slide berikutnya (Panah Kanan)"
       : "Next slide (Right Arrow)",
-    inspect: isId ? "Perbesar Bukti" : "Inspect Figure",
+    inspect: isId ? "Perbesar Gambar" : "Enlarge Image",
     closeLightbox: isId ? "Tutup" : "Close",
     overviewTitle:
       project.sectionTitles?.overview?.[locale] ??
@@ -626,7 +626,11 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                     }
                     tabIndex={0}
                     role="button"
-                    aria-label={`${copy.inspect}: Slide ${currentSlide.slide} — ${currentSlide.alt[locale]}`}
+                    aria-label={
+                      isId
+                        ? `Perbesar gambar: ${currentSlide.caption[locale]}`
+                        : `Enlarge image: ${currentSlide.caption[locale]}`
+                    }
                     aria-roledescription={
                       slides.length > 1 ? "slide" : undefined
                     }
@@ -1903,12 +1907,11 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
           className={styles.lightboxOverlay}
           role="dialog"
           aria-modal="true"
-          aria-label={`${copy.inspect}: [${currentSlide.slide}] ${currentSlide.caption[locale]}`}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              handleCloseLightbox();
-            }
-          }}
+          aria-label={
+            isId
+              ? `Perbesar gambar: [${currentSlide.slide}] ${currentSlide.caption[locale]}`
+              : `Enlarge image: [${currentSlide.slide}] ${currentSlide.caption[locale]}`
+          }
         >
           <div className={styles.lightboxHeader}>
             <div className="flex items-center gap-2">
@@ -1926,8 +1929,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
               className={styles.lightboxCloseBtn}
               aria-label={copy.closeLightbox}
             >
-              <span>✕ {copy.closeLightbox}</span>
-              <kbd className="opacity-60 text-xs">[ESC]</kbd>
+              <span aria-hidden="true">✕</span>
+              <kbd aria-hidden="true" className="opacity-60 text-xs font-mono">ESC</kbd>
             </button>
           </div>
 

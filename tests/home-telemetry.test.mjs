@@ -345,27 +345,25 @@ test("GitHub Signal component renders minimal editorial signal, 2-year selector,
   assert.match(componentFile, /GitHub activity is temporarily unavailable/);
 });
 
-test("Technical Capabilities directory renders 11 categories, 68 capabilities (51 interactive, 17 fundamentals), master-detail/accordion, and derived metadata", async () => {
+test("Technical Capabilities directory renders exact 9 categories, 56 capabilities, responsive layouts, consistent modal controls, and derived metadata", async () => {
   const moduleUrl = new URL(
     "../src/content/capabilities/capabilities-data.ts",
     import.meta.url,
   );
   const { capabilitiesCategories } = await import(moduleUrl.href);
 
-  // Exact 11 categories in order
-  assert.equal(capabilitiesCategories.length, 11);
+  // Exact 9 categories in order
+  assert.equal(capabilitiesCategories.length, 9);
   const expectedCategoryTitles = [
     "Frontend Engineering",
     "Backend & API Engineering",
     "Authentication & Application Security",
-    "Database & Cloud Services",
+    "Database, Cache & Cloud Services",
     "Mobile Development",
-    "Machine Learning & Data",
-    "Machine Learning Fundamentals",
-    "Quality & Development Tools",
+    "Machine Learning & Data Science",
+    "Quality Assurance & Testing",
     "Deployment & Infrastructure",
     "Design & Interactive Development",
-    "Software Engineering Fundamentals",
   ];
   assert.deepEqual(
     capabilitiesCategories.map((c) => c.title),
@@ -373,29 +371,31 @@ test("Technical Capabilities directory renders 11 categories, 68 capabilities (5
   );
   assert.deepEqual(
     capabilitiesCategories.map((c) => c.index),
-    ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"],
+    ["01", "02", "03", "04", "05", "06", "07", "08", "09"],
   );
 
-  // Exact counts per category
+  // Exact counts per category: 8 + 10 + 3 + 7 + 3 + 10 + 5 + 7 + 3 = 56
   const counts = capabilitiesCategories.map((c) => c.items.length);
-  assert.deepEqual(counts, [8, 9, 3, 6, 3, 10, 7, 4, 5, 3, 10]);
+  assert.deepEqual(counts, [8, 10, 3, 7, 3, 10, 5, 7, 3]);
 
-  // Total count = 68, interactive = 51, fundamentals = 17
   const totalItems = capabilitiesCategories.reduce((acc, c) => acc + c.items.length, 0);
-  assert.equal(totalItems, 68);
+  assert.equal(totalItems, 56);
 
-  const fundamentalCategories = capabilitiesCategories.filter((c) => c.isFundamental);
-  assert.equal(fundamentalCategories.length, 2);
-  assert.equal(fundamentalCategories[0].index, "07");
-  assert.equal(fundamentalCategories[1].index, "11");
-  const totalFundamentals = fundamentalCategories.reduce((acc, c) => acc + c.items.length, 0);
-  assert.equal(totalFundamentals, 17);
+  // Verify old categories are deleted
+  const oldCategoryTitles = [
+    "Machine Learning Fundamentals",
+    "Software Engineering Fundamentals",
+    "Quality & Development Tools",
+    "Machine Learning & Data",
+  ];
+  for (const oldTitle of oldCategoryTitles) {
+    assert.ok(
+      !capabilitiesCategories.some((c) => c.title === oldTitle),
+      `Old category "${oldTitle}" must not exist`,
+    );
+  }
 
-  const interactiveCategories = capabilitiesCategories.filter((c) => !c.isFundamental);
-  const totalInteractive = interactiveCategories.reduce((acc, c) => acc + c.items.length, 0);
-  assert.equal(totalInteractive, 51);
-
-  // Validate duplicate Laravel in 01 and 02 with exact distinct functional copy
+  // Validate duplicate Laravel in 01 and 02 with distinct functional copy
   const cat01 = capabilitiesCategories[0];
   const cat02 = capabilitiesCategories[1];
   const laravel01 = cat01.items.find((i) => i.name === "Laravel");
@@ -412,24 +412,114 @@ test("Technical Capabilities directory renders 11 categories, 68 capabilities (5
     "A PHP framework for building backend services, application logic, database operations, and web APIs.",
   );
 
-  // Validate all 51 interactive items have valid SVG files in public directory
-  for (const cat of interactiveCategories) {
-    for (const item of cat.items) {
-      assert.ok(item.slug, `Item ${item.name} (${item.index}) missing slug`);
-      assert.ok(item.monogram, `Item ${item.name} (${item.index}) missing monogram`);
-      assert.ok(item.description?.en, `Item ${item.name} missing EN description`);
-      assert.ok(item.description?.id, `Item ${item.name} missing ID description`);
-      const svgPath = join(root, "public", "assets", "technologies", item.slug, "logo.svg");
-      assert.ok(existsSync(svgPath), `SVG not found for ${item.slug}: ${svgPath}`);
-    }
+  // PHP only appears in 02 Backend
+  const allPhp = capabilitiesCategories.flatMap((c) => c.items).filter((i) => i.name === "PHP");
+  assert.equal(allPhp.length, 1);
+  assert.equal(allPhp[0].index, "02.03");
+  assert.equal(
+    allPhp[0].description?.en,
+    "A server-side programming language for building dynamic web applications, backend logic, and API services.",
+  );
+  assert.equal(
+    allPhp[0].description?.id,
+    "Bahasa pemrograman server-side untuk membangun aplikasi web dinamis, logika backend, dan layanan API.",
+  );
+
+  // Swagger in 02.10 (not OpenAPI / Swagger)
+  const swagger = cat02.items.find((i) => i.name === "Swagger");
+  assert.ok(swagger);
+  assert.equal(swagger.index, "02.10");
+
+  // Database 04: Redis is in 04.05 after MongoDB (04.04)
+  const cat04 = capabilitiesCategories[3];
+  const mongo = cat04.items.find((i) => i.name === "MongoDB");
+  const redis = cat04.items.find((i) => i.name === "Redis");
+  assert.ok(mongo && redis);
+  assert.equal(mongo.index, "04.04");
+  assert.equal(redis.index, "04.05");
+  assert.equal(
+    redis.description?.en,
+    "An in-memory data store used for caching, session management, and fast access to frequently requested data.",
+  );
+  assert.equal(
+    redis.description?.id,
+    "Penyimpanan data berbasis in-memory untuk caching, pengelolaan session, dan akses cepat ke data yang sering digunakan.",
+  );
+
+  // QA 07: Postman (07.03), JMeter (07.04), Lighthouse (07.05)
+  const cat07 = capabilitiesCategories[6];
+  const postman = cat07.items.find((i) => i.name === "Postman");
+  const jmeter = cat07.items.find((i) => i.name === "JMeter");
+  const lighthouse = cat07.items.find((i) => i.name === "Lighthouse");
+  assert.ok(postman && jmeter && lighthouse);
+  assert.equal(postman.index, "07.03");
+  assert.equal(jmeter.index, "07.04");
+  assert.equal(lighthouse.index, "07.05");
+  assert.equal(
+    jmeter.description?.en,
+    "A performance testing tool for measuring how APIs and web applications behave under different levels of load.",
+  );
+  assert.equal(
+    lighthouse.description?.en,
+    "An automated auditing tool for evaluating web performance, accessibility, best practices, and SEO.",
+  );
+
+  // Deployment 08: Linux (Ubuntu) (08.02), Vercel (08.06), GitHub (08.07)
+  const cat08 = capabilitiesCategories[7];
+  const linux = cat08.items.find((i) => i.name === "Linux (Ubuntu)");
+  const vercel = cat08.items.find((i) => i.name === "Vercel");
+  const github = cat08.items.find((i) => i.name === "GitHub");
+  assert.ok(linux && vercel && github);
+  assert.equal(linux.index, "08.02");
+  assert.equal(vercel.index, "08.06");
+  assert.equal(github.index, "08.07");
+  assert.equal(
+    vercel.description?.en,
+    "A cloud platform for deploying, previewing, and hosting web applications through an integrated development workflow.",
+  );
+
+  // Excluded items must not exist in home inventory
+  const allNames = capabilitiesCategories.flatMap((c) => c.items.map((i) => i.name));
+  assert.ok(!allNames.includes("SQL"));
+  assert.ok(!allNames.includes("Docker Compose"));
+  assert.ok(!allNames.includes("XGBoost"));
+  assert.ok(!allNames.includes("SMOTE"));
+  assert.ok(!allNames.includes("Hugging Face Transformers"));
+  assert.ok(!allNames.includes("Wav2Vec2"));
+
+  // Category 06 ML Concept entries have no fake vendor logos and have full descriptions
+  const cat06 = capabilitiesCategories[5];
+  const conceptNames = [
+    "Data Preprocessing & Feature Engineering",
+    "Supervised & Unsupervised Learning",
+    "Statistical Analysis & Model Evaluation",
+    "Natural Language & Speech Processing",
+  ];
+  for (const cName of conceptNames) {
+    const item = cat06.items.find((i) => i.name === cName);
+    assert.ok(item, `Concept item "${cName}" missing in category 06`);
+    assert.equal(item.slug, undefined, `Concept item "${cName}" must not have a vendor logo slug`);
+    assert.ok(item.monogram, `Concept item "${cName}" must have a monogram fallback`);
+    assert.ok(item.description?.en, `Concept item "${cName}" missing EN description`);
+    assert.ok(item.description?.id, `Concept item "${cName}" missing ID description`);
   }
 
-  // Validate fundamentals have no slug or dialog description
-  for (const cat of fundamentalCategories) {
+  // All 52 tool items have valid SVG files in public/assets/technologies/
+  const toolItems = capabilitiesCategories.flatMap((c) => c.items).filter((i) => i.slug);
+  assert.equal(toolItems.length, 52);
+  for (const item of toolItems) {
+    assert.ok(item.monogram, `Item ${item.name} (${item.index}) missing monogram`);
+    assert.ok(item.description?.en, `Item ${item.name} missing EN description`);
+    assert.ok(item.description?.id, `Item ${item.name} missing ID description`);
+    const svgPath = join(root, "public", "assets", "technologies", item.slug, "logo.svg");
+    assert.ok(existsSync(svgPath), `SVG not found for ${item.slug}: ${svgPath}`);
+  }
+
+  // All 56 items have valid bilingual descriptions
+  for (const cat of capabilitiesCategories) {
     for (const item of cat.items) {
-      assert.equal(item.slug, undefined);
-      assert.equal(item.description, undefined);
-      assert.ok(item.isFundamental);
+      assert.ok(item.description?.en, `Item ${item.name} missing EN description`);
+      assert.ok(item.description?.id, `Item ${item.name} missing ID description`);
     }
   }
 
@@ -443,7 +533,7 @@ test("Technical Capabilities directory renders 11 categories, 68 capabilities (5
   assert.match(sectionFile, /Kapabilitas Teknis/);
   assert.match(sectionFile, /Technical Capabilities/);
 
-  // Component structure checks
+  // Component structure & modal consistency checks
   const dirFile = readFileSync(
     join(root, "src", "components", "home", "tech-directory", "tech-directory.tsx"),
     "utf8",
@@ -452,14 +542,11 @@ test("Technical Capabilities directory renders 11 categories, 68 capabilities (5
     join(root, "src", "components", "home", "tech-directory", "tech-item.tsx"),
     "utf8",
   );
-  const logoFile = readFileSync(
-    join(root, "src", "components", "home", "tech-directory", "tech-logo.tsx"),
-    "utf8",
-  );
 
   // Responsive layouts
   assert.match(dirFile, /annas-home-capability-category/); // LocalStorage key
   assert.match(dirFile, /lg:grid lg:grid-cols-/); // Desktop master-detail
+  assert.match(dirFile, /xl:grid-cols-3/); // Desktop 3-column grid
   assert.match(dirFile, /hidden md:flex lg:hidden/); // Tablet horizontal navigator
   assert.match(dirFile, /flex md:hidden flex-col/); // Mobile accordion
   assert.match(dirFile, /createPortal/);
@@ -470,11 +557,20 @@ test("Technical Capabilities directory renders 11 categories, 68 capabilities (5
   assert.match(dirFile, /document\.body\.style\.overflow = "hidden"/);
   assert.match(dirFile, /Escape/);
 
-  // TechItem button & dialog trigger
+  // Modal controls consistency: x icon and ESC kbd hint, backdrop does not close, no Close Dialog text
+  assert.match(dirFile, /<span aria-hidden="true">✕<\/span>/);
+  assert.match(dirFile, /<kbd aria-hidden="true"[^>]*>ESC<\/kbd>/);
+  assert.doesNotMatch(dirFile, /tech-dialog-overlay[^>]*onClick/); // Backdrop click does NOT close
+  assert.doesNotMatch(dirFile, /Tutup Dialog/); // No visible Tutup Dialog
+  assert.doesNotMatch(dirFile, /Close Record/); // No visible Close Record
+  assert.doesNotMatch(dirFile, /Close Dialog/); // No visible Close Dialog
+
+  // TechItem: no truncate, natural word wrapping, 44px+ touch target
   assert.match(itemFile, /tech-directory-row/);
   assert.match(itemFile, /aria-haspopup="dialog"/);
   assert.match(itemFile, /item\.index/);
-  assert.match(logoFile, /\/assets\/technologies\/\$\{slug\}\/logo\.svg/);
+  assert.match(itemFile, /leading-snug break-words/);
+  assert.doesNotMatch(itemFile, /truncate/);
 });
 
 test("Header and Navigation maintain 5 numbered routes, locale switcher, and theme toggle", () => {

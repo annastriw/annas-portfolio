@@ -309,7 +309,6 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
           role="dialog"
           aria-modal="true"
           aria-labelledby={`cert-dialog-heading-${activeCertificate.id}`}
-          onClick={handleCloseModal}
         >
           <div
             ref={modalContentRef}
@@ -336,7 +335,8 @@ export function AboutCertificates({ locale }: AboutCertificatesProps) {
                 onClick={handleCloseModal}
                 aria-label={copy.accessibility.closeLabel[locale]}
               >
-                ✕
+                <span aria-hidden="true">✕</span>
+                <kbd aria-hidden="true" className="opacity-60 text-xs font-mono">ESC</kbd>
               </button>
             </div>
 

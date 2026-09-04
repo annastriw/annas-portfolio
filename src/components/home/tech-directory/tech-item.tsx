@@ -23,7 +23,7 @@ export function TechItem({ item, locale = "en", onSelect }: TechItemProps) {
           : `View technical record for ${item.name}`
       }
     >
-      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
         <span
           className="font-mono text-[11px] sm:text-xs text-(--color-accent) font-semibold shrink-0"
           aria-hidden="true"
@@ -35,13 +35,13 @@ export function TechItem({ item, locale = "en", onSelect }: TechItemProps) {
           name={item.name}
           monogram={item.monogram ?? ""}
         />
-        <span className="font-mono text-xs sm:text-sm font-medium text-(--color-foreground) group-hover:text-(--color-accent) transition-colors duration-150 truncate">
+        <span className="font-mono text-xs sm:text-sm font-medium text-(--color-foreground) group-hover:text-(--color-accent) transition-colors duration-150 leading-snug break-words">
           {item.name}
         </span>
       </div>
 
       <span
-        className="font-mono text-xs text-(--color-muted) group-hover:text-(--color-accent) transition-transform duration-150 group-hover:translate-x-0.5 select-none shrink-0 motion-reduce:transform-none"
+        className="font-mono text-xs text-(--color-muted) group-hover:text-(--color-accent) transition-transform duration-150 group-hover:translate-x-0.5 select-none shrink-0 motion-reduce:transform-none ml-1.5"
         aria-hidden="true"
       >
         ↗
@@ -49,4 +49,3 @@ export function TechItem({ item, locale = "en", onSelect }: TechItemProps) {
     </button>
   );
 }
-
