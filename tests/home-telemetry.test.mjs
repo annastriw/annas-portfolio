@@ -131,21 +131,109 @@ test("Experience section renders connected timeline following exact approved hie
   );
   const { experiencesData } = await import(moduleUrl.href);
 
-  assert.equal(experiencesData.length, 3);
+  const { getExperienceLogoPathIfPresent } = await import(
+    new URL("../src/lib/assets/logo-detector.ts", import.meta.url).href
+  );
+
+  // Exact 4 verified records in chronological archive order
+  assert.equal(experiencesData.length, 4);
+
+  // Unique IDs across all entries
+  const ids = experiencesData.map((e) => e.id);
+  assert.equal(new Set(ids).size, 4);
+
+  // 1. UKG
   assert.equal(experiencesData[0].id, "cv-universal-kharisma-globalindo");
-  assert.match(experiencesData[0].organization.en, /Universal Kharisma Globalindo/);
-  assert.match(experiencesData[0].role.en, /Full-Stack Web Developer/);
+  assert.equal(experiencesData[0].period, "JAN 2026 – APR 2026");
+  assert.equal(experiencesData[0].organization.en, "CV Universal Kharisma Globalindo");
+  assert.equal(experiencesData[0].organization.id, "CV Universal Kharisma Globalindo");
+  assert.equal(experiencesData[0].role.en, "Full-Stack Web Developer");
+  assert.equal(experiencesData[0].role.id, "Full-Stack Web Developer");
+  assert.equal(experiencesData[0].location.en, "Klaten, Central Java, Indonesia");
+  assert.equal(experiencesData[0].location.id, "Klaten, Jawa Tengah, Indonesia");
   assert.equal(experiencesData[0].logoPlaceholder, "UKG");
+  assert.equal(experiencesData[0].highlights.en.length, 3);
+  assert.equal(experiencesData[0].highlights.id.length, 3);
 
-  assert.equal(experiencesData[1].id, "intern-ft-undip");
-  assert.match(experiencesData[1].organization.en, /Faculty of Engineering, Diponegoro University/);
-  assert.match(experiencesData[1].role.en, /UI\/UX Designer Intern/);
-  assert.equal(experiencesData[1].logoPlaceholder, "FT");
+  // 2. PT Wahana Mitra Indonesia (WMI)
+  const wmi = experiencesData[1];
+  assert.equal(wmi.id, "pt-wahana-mitra-indonesia");
+  assert.equal(wmi.period, "NOV 2025 – DEC 2025");
+  assert.equal(wmi.role.en, "Full-Stack Web Developer");
+  assert.equal(wmi.role.id, "Full-Stack Web Developer");
+  assert.equal(wmi.organization.en, "PT Wahana Mitra Indonesia");
+  assert.equal(wmi.organization.id, "PT Wahana Mitra Indonesia");
+  assert.equal(wmi.location.en, "Lampung, Indonesia");
+  assert.equal(wmi.location.id, "Lampung, Indonesia");
+  assert.equal(wmi.type, "FREELANCE // FULL-STACK DEVELOPMENT");
+  assert.equal(wmi.logoFolder, "pt-wahana-mitra-indonesia");
+  assert.equal(wmi.logoPlaceholder, "WMI");
+  assert.equal(
+    wmi.description.en,
+    "Developed WMI Management System to support excavator rental and towing operations.",
+  );
+  assert.equal(
+    wmi.description.id,
+    "Mengembangkan WMI Management System untuk mendukung operasional penyewaan excavator dan layanan towing.",
+  );
+  assert.equal(wmi.highlights.en.length, 3);
+  assert.equal(wmi.highlights.id.length, 3);
+  assert.deepEqual(wmi.highlights.en, [
+    "Developed WMI Management System to support excavator rental and towing operations.",
+    "Handled requirements discussions, feature planning, and user flows, then developed the frontend with Next.js and the backend with Go and MySQL.",
+    "Centralized unit, customer, order, scheduling, transaction, invoice, and owner reporting management, followed by manual testing and system handover.",
+  ]);
+  assert.deepEqual(wmi.highlights.id, [
+    "Mengembangkan WMI Management System untuk mendukung operasional penyewaan excavator dan layanan towing.",
+    "Menangani diskusi kebutuhan, perencanaan fitur, dan user flow, kemudian mengembangkan frontend dengan Next.js serta backend dengan Go dan MySQL.",
+    "Memusatkan pengelolaan unit, pelanggan, pesanan, penjadwalan, transaksi, invoice, dan laporan owner, dilanjutkan dengan manual testing dan serah terima sistem.",
+  ]);
+  assert.deepEqual(wmi.technologies, ["Next.js", "Go", "MySQL"]);
 
-  assert.equal(experiencesData[2].id, "intern-duta-basis-dataprima");
-  assert.match(experiencesData[2].organization.en, /PT Duta Basis Dataprima/);
-  assert.match(experiencesData[2].role.en, /Junior Game Developer Intern/);
-  assert.equal(experiencesData[2].logoPlaceholder, "DBD");
+  // Logo asset detection for WMI
+  assert.equal(
+    getExperienceLogoPathIfPresent(wmi.logoFolder),
+    "/assets/organizations/pt-wahana-mitra-indonesia/logo.svg",
+  );
+  assert.ok(
+    existsSync(
+      join(
+        root,
+        "public",
+        "assets",
+        "organizations",
+        "pt-wahana-mitra-indonesia",
+        "logo.svg",
+      ),
+    ),
+    "WMI logo SVG file must exist",
+  );
+
+  // 3. FT Undip
+  assert.equal(experiencesData[2].id, "intern-ft-undip");
+  assert.equal(experiencesData[2].period, "AUG 2025 – SEP 2025");
+  assert.equal(experiencesData[2].organization.en, "Faculty of Engineering, Diponegoro University");
+  assert.equal(experiencesData[2].organization.id, "Fakultas Teknik, Universitas Diponegoro");
+  assert.equal(experiencesData[2].role.en, "UI/UX Designer Intern");
+  assert.equal(experiencesData[2].role.id, "UI/UX Designer Intern");
+  assert.equal(experiencesData[2].location.en, "Semarang, Central Java, Indonesia");
+  assert.equal(experiencesData[2].location.id, "Semarang, Jawa Tengah, Indonesia");
+  assert.equal(experiencesData[2].logoPlaceholder, "FT");
+  assert.equal(experiencesData[2].highlights.en.length, 3);
+  assert.equal(experiencesData[2].highlights.id.length, 3);
+
+  // 4. PT Duta Basis Dataprima (DBD)
+  assert.equal(experiencesData[3].id, "intern-duta-basis-dataprima");
+  assert.equal(experiencesData[3].period, "JUL 2024 – AUG 2024");
+  assert.equal(experiencesData[3].organization.en, "PT Duta Basis Dataprima");
+  assert.equal(experiencesData[3].organization.id, "PT Duta Basis Dataprima");
+  assert.equal(experiencesData[3].role.en, "Junior Game Developer Intern");
+  assert.equal(experiencesData[3].role.id, "Junior Game Developer Intern");
+  assert.equal(experiencesData[3].location.en, "Bandung, West Java, Indonesia");
+  assert.equal(experiencesData[3].location.id, "Bandung, Jawa Barat, Indonesia");
+  assert.equal(experiencesData[3].logoPlaceholder, "DBD");
+  assert.equal(experiencesData[3].highlights.en.length, 3);
+  assert.equal(experiencesData[3].highlights.id.length, 3);
 
   const itemFile = readFileSync(
     join(root, "src", "components", "home", "experience", "experience-item.tsx"),

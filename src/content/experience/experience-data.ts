@@ -59,6 +59,42 @@ export const experiencesData: ExperienceItem[] = [
     ],
   },
   {
+    id: "pt-wahana-mitra-indonesia",
+    period: "NOV 2025 – DEC 2025",
+    role: {
+      en: "Full-Stack Web Developer",
+      id: "Full-Stack Web Developer",
+    },
+    organization: {
+      en: "PT Wahana Mitra Indonesia",
+      id: "PT Wahana Mitra Indonesia",
+    },
+    location: {
+      en: "Lampung, Indonesia",
+      id: "Lampung, Indonesia",
+    },
+    type: "FREELANCE // FULL-STACK DEVELOPMENT",
+    logoFolder: "pt-wahana-mitra-indonesia",
+    logoPlaceholder: "WMI",
+    description: {
+      en: "Developed WMI Management System to support excavator rental and towing operations.",
+      id: "Mengembangkan WMI Management System untuk mendukung operasional penyewaan excavator dan layanan towing.",
+    },
+    highlights: {
+      en: [
+        "Developed WMI Management System to support excavator rental and towing operations.",
+        "Handled requirements discussions, feature planning, and user flows, then developed the frontend with Next.js and the backend with Go and MySQL.",
+        "Centralized unit, customer, order, scheduling, transaction, invoice, and owner reporting management, followed by manual testing and system handover.",
+      ],
+      id: [
+        "Mengembangkan WMI Management System untuk mendukung operasional penyewaan excavator dan layanan towing.",
+        "Menangani diskusi kebutuhan, perencanaan fitur, dan user flow, kemudian mengembangkan frontend dengan Next.js serta backend dengan Go dan MySQL.",
+        "Memusatkan pengelolaan unit, pelanggan, pesanan, penjadwalan, transaksi, invoice, dan laporan owner, dilanjutkan dengan manual testing dan serah terima sistem.",
+      ],
+    },
+    technologies: ["Next.js", "Go", "MySQL"],
+  },
+  {
     id: "intern-ft-undip",
     period: "AUG 2025 – SEP 2025",
     role: {

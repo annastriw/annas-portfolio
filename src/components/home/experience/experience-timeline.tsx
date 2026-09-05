@@ -15,7 +15,7 @@ export function ExperienceTimeline({
     <div
       className="experience-3card-timeline flex flex-col pt-2"
       role="list"
-      aria-label="3-Entry Connected Professional Timeline"
+      aria-label={`${experiences.length}-Entry Connected Professional Timeline`}
     >
       {experiences.map((exp, idx) => (
         <ExperienceItem
