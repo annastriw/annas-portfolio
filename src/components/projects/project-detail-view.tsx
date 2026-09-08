@@ -41,15 +41,11 @@ export function isSharedProjectDetail(project: ProjectCaseStudy): boolean {
 }
 
 /**
- * Resolves gallery slides for a project from explicit gallery definition
- * or authentic visual evidence figures.
+ * Resolves gallery slides directly from authentic project visual evidence figures.
  */
 export function getProjectGallerySlides(
   project: ProjectCaseStudy,
 ): readonly ProjectGallerySlide[] {
-  if (project.gallery && project.gallery.length > 0) {
-    return project.gallery;
-  }
   if (project.evidence && project.evidence.length > 0) {
     return project.evidence.map((item, index) => ({
       slide: String(index + 1).padStart(2, "0"),
@@ -798,7 +794,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                       <video
                         controls
                         preload="metadata"
-                        poster={project.cover.src}
+                        poster={slides[0]?.src ?? project.evidence[0]?.src}
                         className={styles.videoPlayer}
                       >
                         <source src={project.videoSrc} type="video/webm" />
