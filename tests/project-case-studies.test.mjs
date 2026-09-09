@@ -1351,7 +1351,7 @@ test("Phase 03 — Shared Gallery, Autoplay, Lightbox, and single-image fallback
 
   // 4. Touch swipe navigation on both main frame and lightbox
   assert.match(detailComponent, /onTouchStart=\{slides\.length > 1 \? handleTouchStart : undefined\}/, "Main frame handles touch swipe");
-  assert.match(detailComponent, /className=\{styles\.lightboxMediaWrapper\}[^>]*onTouchStart=\{slides\.length > 1 \? handleTouchStart : undefined\}/, "Lightbox handles touch swipe");
+  assert.match(detailComponent, /onTouchStart=\{handleLightboxTouchStart\}/, "Lightbox handles touch swipe and pan");
 
   // 5. Single-image fallback
   assert.match(detailComponent, /\{slides\.length > 1 \? \(/, "Multi-slide track branches on slide count");
@@ -1524,3 +1524,66 @@ test("Revision 09: verifies gallery copy Enlarge Image / Perbesar Gambar, access
   assert.match(detailViewCode, /e\.key === "Tab"/);
   assert.match(detailViewCode, /document\.body\.style\.overflow = "hidden"/);
 });
+
+test("Gallery Responsive Fix: verifies 1-col tablet layout, format-based aspect ratios, touch cue, lightbox zoom/pan, and single-image isolation", () => {
+  const detailViewCode = readFileSync(
+    join(root, "src", "components", "projects", "project-detail-view.tsx"),
+    "utf8",
+  );
+  const css = readFileSync(
+    join(root, "src", "components", "projects", "project-detail.module.css"),
+    "utf8",
+  );
+
+  // 1. Single source of truth: evidence figures strictly map to documentation/01.webp-0x.webp
+  for (const project of projectCaseStudies) {
+    const slides = getProjectGallerySlides(project);
+    assert.equal(slides.length, project.evidence.length);
+    for (let i = 0; i < slides.length; i++) {
+      const slide = slides[i];
+      const expectedNum = String(i + 1).padStart(2, "0");
+      assert.equal(slide.slide, expectedNum);
+      assert.ok(slide.src.endsWith(`/documentation/${expectedNum}.webp`));
+      assert.doesNotMatch(slide.src, /cover\.webp/);
+      assert.ok(["wide", "mobile"].includes(slide.format));
+    }
+  }
+
+  // 2. Section 01 layout: gallerySection applies 1-column on tablet and mobile (< 1280px / 80rem)
+  assert.match(detailViewCode, /styles\.gallerySection/);
+  assert.match(css, /\.gallerySection\s*\{[^}]*grid-template-columns:\s*1fr/);
+  assert.match(css, /@media\s*\(min-width:\s*80rem\)\s*\{[^}]*\.gallerySection/);
+
+  // 3. Frame aspect-ratio adaptiveness based on format (wide vs mobile)
+  assert.match(detailViewCode, /isMobileFormat\s*\?\s*styles\.galleryFrameMobile\s*:\s*styles\.galleryFrameWide/);
+  assert.match(css, /\.galleryFrameWide\s*\{[^}]*aspect-ratio:\s*16\s*\/\s*9/);
+  assert.match(css, /\.galleryFrameMobile\s*\{[^}]*aspect-ratio:\s*3\s*\/\s*4/);
+  assert.match(css, /@media\s*\(min-width:\s*48rem\)\s*\{[^}]*\.galleryFrameMobile\s*\{[^}]*aspect-ratio:\s*4\s*\/\s*3/);
+
+  // 4. Persistent touch expand indicator on coarse pointer / hover:none devices
+  assert.match(detailViewCode, /styles\.galleryTouchInspectCue/);
+  assert.match(css, /\.galleryTouchInspectCue/);
+  assert.match(css, /@media\s*\(hover:\s*none\)\s*or\s*\(pointer:\s*coarse\)\s*\{[^}]*\.galleryTouchInspectCue\s*\{[^}]*display:\s*inline-flex/);
+
+  // 5. Lightbox Zoom (1x vs 2x), Pan, and Overlay Navigation Arrows
+  assert.match(detailViewCode, /styles\.lightboxZoomBtn/);
+  assert.match(detailViewCode, /styles\.lightboxNavBtnPrev/);
+  assert.match(detailViewCode, /styles\.lightboxNavBtnNext/);
+  assert.match(detailViewCode, /styles\.lightboxImageContainer/);
+  assert.match(detailViewCode, /zoomScale/);
+  assert.match(detailViewCode, /panOffset/);
+  assert.match(detailViewCode, /toggleZoom/);
+  assert.match(detailViewCode, /resetZoom/);
+  assert.match(css, /\.lightboxNavBtn\s*\{[^}]*position:\s*absolute/);
+  assert.match(css, /\.lightboxNavBtnPrev\s*\{[^}]*left:/);
+  assert.match(css, /\.lightboxNavBtnNext\s*\{[^}]*right:/);
+  assert.match(css, /\.lightboxImageContainer/);
+  assert.match(css, /\.lightboxZoomed/);
+
+  // 6. Thumbnail auto-scroll ref and mobile simplification
+  assert.match(detailViewCode, /thumbnailRailRef/);
+  assert.match(detailViewCode, /data-active=/);
+  assert.match(css, /\.thumbnailMediaWrapperMobile/);
+  assert.match(css, /\.galleryNav\s*\{\s*display:\s*none;/);
+});
+

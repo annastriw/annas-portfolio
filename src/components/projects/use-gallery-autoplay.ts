@@ -61,6 +61,9 @@ export function useGalleryAutoplay({
   const [isFocused, setIsFocused] = useState(false);
   const [timerKey, setTimerKey] = useState(0);
 
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const userInteractionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const isReducedMotion = useSyncExternalStore(
@@ -75,6 +78,17 @@ export function useGalleryAutoplay({
     getVisibilityServerSnapshot,
   );
 
+  // Pause autoplay temporarily when user manually interacts
+  const pauseOnInteraction = useCallback((durationMs = 8000) => {
+    setIsUserInteracting(true);
+    if (userInteractionTimeoutRef.current) {
+      clearTimeout(userInteractionTimeoutRef.current);
+    }
+    userInteractionTimeoutRef.current = setTimeout(() => {
+      setIsUserInteracting(false);
+    }, durationMs);
+  }, []);
+
   // Restart timer function for manual navigation
   const restartTimer = useCallback(() => {
     setTimerKey((prev) => prev + 1);
@@ -82,6 +96,7 @@ export function useGalleryAutoplay({
 
   const goToNext = useCallback(() => {
     if (slideCount <= 1) return;
+    pauseOnInteraction();
     setIsTransitioning(true);
     setTrackIndex((prev) => {
       const currentBase = prev === slideCount + 1 ? 1 : prev === 0 ? slideCount : prev;
@@ -91,10 +106,11 @@ export function useGalleryAutoplay({
       return next;
     });
     restartTimer();
-  }, [slideCount, restartTimer]);
+  }, [slideCount, restartTimer, pauseOnInteraction]);
 
   const goToPrev = useCallback(() => {
     if (slideCount <= 1) return;
+    pauseOnInteraction();
     setIsTransitioning(true);
     setTrackIndex((prev) => {
       const currentBase = prev === 0 ? slideCount : prev === slideCount + 1 ? 1 : prev;
@@ -104,18 +120,19 @@ export function useGalleryAutoplay({
       return next;
     });
     restartTimer();
-  }, [slideCount, restartTimer]);
+  }, [slideCount, restartTimer, pauseOnInteraction]);
 
   const goToIndex = useCallback(
     (index: number) => {
       if (index >= 0 && index < slideCount) {
+        pauseOnInteraction();
         setIsTransitioning(true);
         setActiveIndex(index);
         setTrackIndex(index + 1);
         restartTimer();
       }
     },
-    [slideCount, restartTimer],
+    [slideCount, restartTimer, pauseOnInteraction],
   );
 
   // Handle transitionend to loop seamlessly without reverse jump
@@ -139,11 +156,19 @@ export function useGalleryAutoplay({
       isLightboxOpen ||
       isHovered ||
       isFocused ||
+      isUserInteracting ||
       !isDocumentVisible ||
       slideCount <= 1
     ) {
       return;
     }
+
+    // Adapt interval on coarse pointer / touch devices (approx 7 seconds)
+    const isCoarsePointer =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(pointer: coarse)").matches;
+    const effectiveInterval = isCoarsePointer ? Math.max(intervalMs, 7000) : intervalMs;
 
     const timer = setInterval(() => {
       setIsTransitioning(true);
@@ -154,7 +179,7 @@ export function useGalleryAutoplay({
         setActiveIndex(computedActive);
         return next;
       });
-    }, intervalMs);
+    }, effectiveInterval);
 
     return () => {
       clearInterval(timer);
@@ -164,6 +189,7 @@ export function useGalleryAutoplay({
     isLightboxOpen,
     isHovered,
     isFocused,
+    isUserInteracting,
     isDocumentVisible,
     slideCount,
     intervalMs,

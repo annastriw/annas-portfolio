@@ -125,16 +125,23 @@ function getProjectMetaEntries(
 
 export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [zoomScale, setZoomScale] = useState<1 | 2>(1);
+  const [panOffset, setPanOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   const activeTriggerRef = useRef<HTMLElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
+  const lightboxMediaRef = useRef<HTMLDivElement>(null);
+  const thumbnailRailRef = useRef<HTMLDivElement | null>(null);
 
-  // Touch tracking refs for mobile swipe gestures without hijacking vertical scroll
-  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(
-    null,
-  );
+  // Drag and touch tracking refs
+  const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
   const isSwipingRef = useRef(false);
+  const lastTapTimeRef = useRef<number>(0);
+  const touchStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const hasMovedMuchRef = useRef<boolean>(false);
 
   const isId = locale === "id";
   const projectsHref = `/${locale}/projects`;
@@ -172,6 +179,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       : "Next slide (Right Arrow)",
     inspect: isId ? "Perbesar Gambar" : "Enlarge Image",
     closeLightbox: isId ? "Tutup" : "Close",
+    zoomIn: isId ? "Perbesar 2× (Double klik/tap)" : "Zoom in 2× (Double click/tap)",
+    zoomOut: isId ? "Reset zoom 1×" : "Reset zoom 1×",
     overviewTitle:
       project.sectionTitles?.overview?.[locale] ??
       (isId ? "Gambaran Proyek" : "Project Overview"),
@@ -284,7 +293,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     ? String(++sectionCounter).padStart(2, "0")
     : null;
 
-  // Shared 4-second horizontal auto-swipe with hover/focus/lightbox pause, and reduced motion safety
+  // Shared horizontal auto-swipe with hover/focus/lightbox pause, and reduced motion safety
   const {
     activeIndex,
     trackIndex,
@@ -302,12 +311,46 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
   });
 
   const currentSlide = slides[activeIndex] ?? slides[0];
+  const isMobileFormat = currentSlide?.format === "mobile";
   const trackSlides =
     slides.length > 1
       ? [slides[slides.length - 1], ...slides, slides[0]]
       : slides;
 
-  // Touch handlers for mobile swipe navigation
+  // Reset zoom helper
+  const resetZoom = useCallback(() => {
+    setZoomScale(1);
+    setPanOffset({ x: 0, y: 0 });
+    setIsDragging(false);
+  }, []);
+
+  const toggleZoom = useCallback(() => {
+    setZoomScale((prev) => {
+      if (prev === 1) {
+        return 2;
+      } else {
+        setPanOffset({ x: 0, y: 0 });
+        return 1;
+      }
+    });
+  }, []);
+
+  // Auto-scroll active thumbnail into view
+  useEffect(() => {
+    if (!thumbnailRailRef.current) return;
+    const activeBtn = thumbnailRailRef.current.querySelector<HTMLElement>(
+      `[data-active="true"]`,
+    );
+    if (activeBtn) {
+      activeBtn.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [activeIndex]);
+
+  // Touch handlers for main page carousel swipe navigation
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
     touchStartRef.current = {
@@ -349,8 +392,103 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     }, 60);
   };
 
+  // Lightbox touch handlers: swipe when 1x, pan when 2x, double-tap to toggle zoom
+  const handleLightboxTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
+    hasMovedMuchRef.current = false;
+
+    if (zoomScale > 1) {
+      setIsDragging(true);
+      dragStartRef.current = {
+        x: touch.clientX - panOffset.x,
+        y: touch.clientY - panOffset.y,
+      };
+    } else if (slides.length > 1) {
+      handleTouchStart(e);
+    }
+  };
+
+  const handleLightboxTouchMove = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    const moveX = Math.abs(touch.clientX - touchStartPosRef.current.x);
+    const moveY = Math.abs(touch.clientY - touchStartPosRef.current.y);
+    if (moveX > 8 || moveY > 8) {
+      hasMovedMuchRef.current = true;
+    }
+
+    if (zoomScale > 1 && isDragging) {
+      const container = lightboxMediaRef.current;
+      const boundsX = container ? (container.clientWidth * (zoomScale - 1)) / 2 + 100 : 250;
+      const boundsY = container ? (container.clientHeight * (zoomScale - 1)) / 2 + 100 : 250;
+      const newX = touch.clientX - dragStartRef.current.x;
+      const newY = touch.clientY - dragStartRef.current.y;
+      setPanOffset({
+        x: Math.max(-boundsX, Math.min(boundsX, newX)),
+        y: Math.max(-boundsY, Math.min(boundsY, newY)),
+      });
+    } else if (zoomScale === 1 && slides.length > 1) {
+      handleTouchMove(e);
+    }
+  };
+
+  const handleLightboxTouchEnd = (e: React.TouchEvent) => {
+    const now = Date.now();
+    const DOUBLE_TAP_TIME = 300;
+
+    if (zoomScale > 1) {
+      setIsDragging(false);
+    }
+
+    // Detect double-tap to toggle zoom
+    if (
+      now - lastTapTimeRef.current < DOUBLE_TAP_TIME &&
+      !hasMovedMuchRef.current
+    ) {
+      toggleZoom();
+      lastTapTimeRef.current = 0;
+      return;
+    }
+    lastTapTimeRef.current = now;
+
+    if (zoomScale === 1 && slides.length > 1) {
+      handleTouchEnd(e);
+    }
+  };
+
+  // Lightbox mouse drag handlers for 2x desktop pan
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (zoomScale <= 1) return;
+    e.preventDefault();
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.clientX - panOffset.x,
+      y: e.clientY - panOffset.y,
+    };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || zoomScale <= 1) return;
+    const container = lightboxMediaRef.current;
+    const boundsX = container ? (container.clientWidth * (zoomScale - 1)) / 2 + 150 : 300;
+    const boundsY = container ? (container.clientHeight * (zoomScale - 1)) / 2 + 150 : 300;
+    const newX = e.clientX - dragStartRef.current.x;
+    const newY = e.clientY - dragStartRef.current.y;
+    setPanOffset({
+      x: Math.max(-boundsX, Math.min(boundsX, newX)),
+      y: Math.max(-boundsY, Math.min(boundsY, newY)),
+    });
+  };
+
+  const handleMouseUp = () => {
+    if (zoomScale > 1) {
+      setIsDragging(false);
+    }
+  };
+
   const handleFrameClick = (e: React.MouseEvent<HTMLElement>) => {
     if (isSwipingRef.current) return;
+    resetZoom();
     activeTriggerRef.current = e.currentTarget;
     setIsLightboxOpen(true);
   };
@@ -364,15 +502,17 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       goToNext();
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
+      resetZoom();
       activeTriggerRef.current = e.currentTarget as HTMLElement;
       setIsLightboxOpen(true);
     }
   };
 
   const handleCloseLightbox = useCallback(() => {
+    resetZoom();
     setIsLightboxOpen(false);
     activeTriggerRef.current?.focus();
-  }, []);
+  }, [resetZoom]);
 
   // Lightbox keyboard accessibility, focus trap, and background scroll handling
   useEffect(() => {
@@ -391,12 +531,14 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
 
       if (e.key === "ArrowLeft") {
         e.preventDefault();
+        resetZoom();
         goToPrev();
         return;
       }
 
       if (e.key === "ArrowRight") {
         e.preventDefault();
+        resetZoom();
         goToNext();
         return;
       }
@@ -431,7 +573,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isLightboxOpen, handleCloseLightbox, goToNext, goToPrev]);
+  }, [isLightboxOpen, handleCloseLightbox, goToNext, goToPrev, resetZoom]);
 
   const metaEntries = getProjectMetaEntries(project, locale);
 
@@ -579,7 +721,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
         {hasGallery && currentSlide ? (
           <ScrollReveal animationClass="animate-editorial-fade">
             <section
-              className={styles.section}
+              className={`${styles.section} ${styles.gallerySection}`}
               aria-labelledby="section-gallery-title"
             >
               <div className={styles.sectionHeader}>
@@ -606,20 +748,16 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 >
                   {/* Stable Responsive Display Frame with Horizontal Auto-Swipe Track */}
                   <div
-                    className={styles.galleryFrame}
+                    className={`${styles.galleryFrame} ${
+                      isMobileFormat
+                        ? styles.galleryFrameMobile
+                        : styles.galleryFrameWide
+                    }`}
                     onClick={handleFrameClick}
-                    onKeyDown={
-                      slides.length > 1 ? handleCarouselKeyDown : undefined
-                    }
-                    onTouchStart={
-                      slides.length > 1 ? handleTouchStart : undefined
-                    }
-                    onTouchMove={
-                      slides.length > 1 ? handleTouchMove : undefined
-                    }
-                    onTouchEnd={
-                      slides.length > 1 ? handleTouchEnd : undefined
-                    }
+                    onKeyDown={slides.length > 1 ? handleCarouselKeyDown : undefined}
+                    onTouchStart={slides.length > 1 ? handleTouchStart : undefined}
+                    onTouchMove={slides.length > 1 ? handleTouchMove : undefined}
+                    onTouchEnd={slides.length > 1 ? handleTouchEnd : undefined}
                     tabIndex={0}
                     role="button"
                     aria-label={
@@ -631,6 +769,30 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                       slides.length > 1 ? "slide" : undefined
                     }
                   >
+                    {/* Persistent touch expand indicator on hover:none devices */}
+                    <div
+                      className={styles.galleryTouchInspectCue}
+                      aria-hidden="true"
+                    >
+                      <svg
+                        width="11"
+                        height="11"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="shrink-0"
+                      >
+                        <polyline points="15 3 21 3 21 9" />
+                        <polyline points="9 21 3 21 3 15" />
+                        <line x1="21" y1="3" x2="14" y2="10" />
+                        <line x1="3" y1="21" x2="10" y2="14" />
+                      </svg>
+                      <span>{copy.inspect}</span>
+                    </div>
+
                     {slides.length > 1 ? (
                       <div
                         className={`${styles.galleryTrack} ${
@@ -664,7 +826,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                                 alt={slide.alt[locale]}
                                 fill
                                 priority={index === 1}
-                                sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
+                                sizes="(max-width: 767px) 100vw, (max-width: 1279px) 100vw, 1200px"
                                 className={styles.galleryImage}
                               />
                             </div>
@@ -678,17 +840,35 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                           alt={slides[0].alt[locale]}
                           fill
                           priority
-                          sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1536px) calc(100vw - 4rem), 1440px"
+                          sizes="(max-width: 767px) 100vw, (max-width: 1279px) 100vw, 1200px"
                           className={styles.galleryImage}
                         />
                       </div>
                     )}
+
+                    {/* Desktop Hover Inspect Overlay */}
                     <div
                       className={styles.galleryInspectOverlay}
                       aria-hidden="true"
                     >
                       <span className={styles.inspectBadge}>
-                        🔍 {copy.inspect}
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="shrink-0"
+                        >
+                          <circle cx="11" cy="11" r="8" />
+                          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                          <line x1="11" y1="8" x2="11" y2="14" />
+                          <line x1="8" y1="11" x2="14" y2="11" />
+                        </svg>
+                        {copy.inspect}
                       </span>
                     </div>
                   </div>
@@ -697,16 +877,19 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   {slides.length > 1 ? (
                     <div
                       className={styles.thumbnailRail}
+                      ref={thumbnailRailRef}
                       role="tablist"
                       aria-label={copy.thumbnailRailAria}
                     >
                       {slides.map((slide, index) => {
                         const isActive = index === activeIndex;
+                        const isSlideMobile = slide.format === "mobile";
                         return (
                           <button
                             key={slide.slide}
                             type="button"
                             role="tab"
+                            data-active={isActive ? "true" : undefined}
                             aria-selected={isActive}
                             aria-current={isActive ? "true" : undefined}
                             aria-label={`${isId ? "Lihat slide" : "View slide"} ${slide.slide} — ${slide.alt[locale]}`}
@@ -715,12 +898,18 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                               isActive ? styles.thumbnailActive : ""
                             }`}
                           >
-                            <div className={styles.thumbnailMediaWrapper}>
+                            <div
+                              className={`${styles.thumbnailMediaWrapper} ${
+                                isSlideMobile
+                                  ? styles.thumbnailMediaWrapperMobile
+                                  : ""
+                              }`}
+                            >
                               <Image
                                 src={slide.src}
                                 alt=""
                                 fill
-                                sizes="(max-width: 767px) 80px, 140px"
+                                sizes="(max-width: 767px) 70px, 140px"
                                 className={styles.thumbnailImage}
                               />
                               <span className={styles.thumbnailNumber}>
@@ -1910,7 +2099,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
           }
         >
           <div className={styles.lightboxHeader}>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-w-0">
               <span className={styles.lightboxBadge}>
                 [{currentSlide.slide}]
               </span>
@@ -1918,24 +2107,64 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 {project.title[locale]}
               </span>
             </div>
-            <button
-              ref={closeBtnRef}
-              type="button"
-              onClick={handleCloseLightbox}
-              className={styles.lightboxCloseBtn}
-              aria-label={copy.closeLightbox}
-            >
-              <span aria-hidden="true">✕</span>
-              <kbd aria-hidden="true" className="opacity-60 text-xs font-mono">ESC</kbd>
-            </button>
+            <div className={styles.lightboxHeaderActions}>
+              <button
+                type="button"
+                onClick={toggleZoom}
+                className={styles.lightboxZoomBtn}
+                aria-label={zoomScale === 1 ? copy.zoomIn : copy.zoomOut}
+                aria-pressed={zoomScale > 1}
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  {zoomScale === 1 ? (
+                    <>
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      <line x1="11" y1="8" x2="11" y2="14" />
+                      <line x1="8" y1="11" x2="14" y2="11" />
+                    </>
+                  ) : (
+                    <>
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      <line x1="8" y1="11" x2="14" y2="11" />
+                    </>
+                  )}
+                </svg>
+                <span className={styles.zoomBtnLabel}>{zoomScale === 1 ? "2×" : "1×"}</span>
+              </button>
+              <button
+                ref={closeBtnRef}
+                type="button"
+                onClick={handleCloseLightbox}
+                className={styles.lightboxCloseBtn}
+                aria-label={copy.closeLightbox}
+              >
+                <span aria-hidden="true">✕</span>
+                <kbd aria-hidden="true" className="opacity-60 text-xs font-mono">ESC</kbd>
+              </button>
+            </div>
           </div>
 
           <div className={styles.lightboxMain}>
             {slides.length > 1 ? (
               <button
                 type="button"
-                onClick={goToPrev}
-                className={styles.lightboxNavBtn}
+                onClick={() => {
+                  resetZoom();
+                  goToPrev();
+                }}
+                className={`${styles.lightboxNavBtn} ${styles.lightboxNavBtnPrev}`}
                 aria-label={copy.prevSlide}
               >
                 ←
@@ -1943,26 +2172,53 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
             ) : null}
 
             <div
-              className={styles.lightboxMediaWrapper}
-              onTouchStart={slides.length > 1 ? handleTouchStart : undefined}
-              onTouchMove={slides.length > 1 ? handleTouchMove : undefined}
-              onTouchEnd={slides.length > 1 ? handleTouchEnd : undefined}
+              ref={lightboxMediaRef}
+              className={`${styles.lightboxMediaWrapper} ${
+                isMobileFormat ? styles.lightboxMediaWrapperMobile : ""
+              }`}
+              onTouchStart={handleLightboxTouchStart}
+              onTouchMove={handleLightboxTouchMove}
+              onTouchEnd={handleLightboxTouchEnd}
             >
-              <Image
-                src={currentSlide.src}
-                alt={currentSlide.alt[locale]}
-                fill
-                priority
-                className={styles.lightboxImage}
-                sizes="90vw"
-              />
+              <div
+                className={`${styles.lightboxImageContainer} ${
+                  zoomScale > 1 ? styles.lightboxZoomed : ""
+                }`}
+                style={{
+                  transform: `scale(${zoomScale}) translate(${panOffset.x / zoomScale}px, ${panOffset.y / zoomScale}px)`,
+                  cursor:
+                    zoomScale > 1
+                      ? isDragging
+                        ? "grabbing"
+                        : "grab"
+                      : "zoom-in",
+                }}
+                onDoubleClick={toggleZoom}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+              >
+                <Image
+                  src={currentSlide.src}
+                  alt={currentSlide.alt[locale]}
+                  fill
+                  priority
+                  className={styles.lightboxImage}
+                  sizes="(max-width: 1024px) 100vw, 95vw"
+                  draggable={false}
+                />
+              </div>
             </div>
 
             {slides.length > 1 ? (
               <button
                 type="button"
-                onClick={goToNext}
-                className={styles.lightboxNavBtn}
+                onClick={() => {
+                  resetZoom();
+                  goToNext();
+                }}
+                className={`${styles.lightboxNavBtn} ${styles.lightboxNavBtnNext}`}
                 aria-label={copy.nextSlide}
               >
                 →
