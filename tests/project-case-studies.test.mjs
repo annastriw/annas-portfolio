@@ -1525,7 +1525,7 @@ test("Revision 09: verifies gallery copy Enlarge Image / Perbesar Gambar, access
   assert.match(detailViewCode, /document\.body\.style\.overflow = "hidden"/);
 });
 
-test("Gallery Responsive Fix: verifies 1-col tablet layout, format-based aspect ratios, touch cue, lightbox zoom/pan, and single-image isolation", () => {
+test("Unified Gallery Frame & Lightbox Swipe: verifies unified 16:9 frame design, hidden mobile/tablet lightbox arrows, touch swipe navigation, and swipe hint", () => {
   const detailViewCode = readFileSync(
     join(root, "src", "components", "projects", "project-detail-view.tsx"),
     "utf8",
@@ -1554,36 +1554,46 @@ test("Gallery Responsive Fix: verifies 1-col tablet layout, format-based aspect 
   assert.match(css, /\.gallerySection\s*\{[^}]*grid-template-columns:\s*1fr/);
   assert.match(css, /@media\s*\(min-width:\s*80rem\)\s*\{[^}]*\.gallerySection/);
 
-  // 3. Frame aspect-ratio adaptiveness based on format (wide vs mobile)
-  assert.match(detailViewCode, /isMobileFormat\s*\?\s*styles\.galleryFrameMobile\s*:\s*styles\.galleryFrameWide/);
+  // 3. Unified 16:9 frame aspect-ratio across all projects (mobile format does not change frame ratio)
+  assert.match(detailViewCode, /styles\.galleryFrame/);
+  assert.doesNotMatch(detailViewCode, /isMobileFormat\s*\?\s*styles\.galleryFrameMobile/);
+  assert.match(css, /\.galleryFrame\s*\{[^}]*aspect-ratio:\s*16\s*\/\s*9/);
   assert.match(css, /\.galleryFrameWide\s*\{[^}]*aspect-ratio:\s*16\s*\/\s*9/);
-  assert.match(css, /\.galleryFrameMobile\s*\{[^}]*aspect-ratio:\s*3\s*\/\s*4/);
-  assert.match(css, /@media\s*\(min-width:\s*48rem\)\s*\{[^}]*\.galleryFrameMobile\s*\{[^}]*aspect-ratio:\s*4\s*\/\s*3/);
+  assert.match(css, /\.galleryFrameMobile\s*\{[^}]*aspect-ratio:\s*16\s*\/\s*9/);
+  assert.doesNotMatch(css, /\.galleryFrameMobile\s*\{[^}]*aspect-ratio:\s*3\s*\/\s*4/);
+  assert.doesNotMatch(css, /\.galleryFrameMobile\s*\{[^}]*aspect-ratio:\s*4\s*\/\s*3/);
 
   // 4. Persistent touch expand indicator on coarse pointer / hover:none devices
   assert.match(detailViewCode, /styles\.galleryTouchInspectCue/);
   assert.match(css, /\.galleryTouchInspectCue/);
   assert.match(css, /@media\s*\(hover:\s*none\)\s*or\s*\(pointer:\s*coarse\)\s*\{[^}]*\.galleryTouchInspectCue\s*\{[^}]*display:\s*inline-flex/);
 
-  // 5. Lightbox Zoom (1x vs 2x), Pan, and Overlay Navigation Arrows
+  // 5. Lightbox Nav Arrows hidden on mobile/tablet and only available on desktop wide with fine pointer
+  assert.match(css, /\.lightboxNavBtn\s*\{[^}]*display:\s*none/);
+  assert.match(css, /@media\s*\(min-width:\s*80rem\)\s*and\s*\(hover:\s*hover\)\s*and\s*\(pointer:\s*fine\)\s*\{[^}]*\.lightboxNavBtn\s*\{[^}]*display:\s*inline-flex/);
+
+  // 6. Lightbox Swipe & Drag Gesture Cue and Swipe Navigation
+  assert.match(detailViewCode, /swipeHint:\s*isId\s*\?\s*"Geser ke kiri atau kanan"\s*:\s*"Swipe left or right"/);
+  assert.match(detailViewCode, /dragHint:\s*isId\s*\?\s*"Seret untuk melihat detail"\s*:\s*"Drag to inspect details"/);
+  assert.match(detailViewCode, /styles\.lightboxSwipeHint/);
+  assert.match(css, /\.lightboxSwipeHint\s*\{[^}]*position:\s*absolute/);
+  assert.match(css, /@media\s*\(min-width:\s*80rem\)\s*and\s*\(hover:\s*hover\)\s*and\s*\(pointer:\s*fine\)\s*\{[^}]*\.lightboxSwipeHint\s*\{[^}]*display:\s*none/);
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.lightboxSwipeHint/);
+
+  // 7. Lightbox Zoom (1x vs 2x), Pan, and Reset Zoom
   assert.match(detailViewCode, /styles\.lightboxZoomBtn/);
-  assert.match(detailViewCode, /styles\.lightboxNavBtnPrev/);
-  assert.match(detailViewCode, /styles\.lightboxNavBtnNext/);
   assert.match(detailViewCode, /styles\.lightboxImageContainer/);
   assert.match(detailViewCode, /zoomScale/);
   assert.match(detailViewCode, /panOffset/);
   assert.match(detailViewCode, /toggleZoom/);
   assert.match(detailViewCode, /resetZoom/);
-  assert.match(css, /\.lightboxNavBtn\s*\{[^}]*position:\s*absolute/);
-  assert.match(css, /\.lightboxNavBtnPrev\s*\{[^}]*left:/);
-  assert.match(css, /\.lightboxNavBtnNext\s*\{[^}]*right:/);
   assert.match(css, /\.lightboxImageContainer/);
   assert.match(css, /\.lightboxZoomed/);
 
-  // 6. Thumbnail auto-scroll ref and mobile simplification
+  // 8. Thumbnail auto-scroll ref, uniform 16:9 thumbnail ratio, and mobile bar simplification
   assert.match(detailViewCode, /thumbnailRailRef/);
   assert.match(detailViewCode, /data-active=/);
-  assert.match(css, /\.thumbnailMediaWrapperMobile/);
+  assert.match(css, /\.thumbnailMediaWrapper\s*\{[^}]*aspect-ratio:\s*16\s*\/\s*9/);
   assert.match(css, /\.galleryNav\s*\{\s*display:\s*none;/);
 });
 

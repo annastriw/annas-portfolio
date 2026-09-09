@@ -128,12 +128,15 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
   const [zoomScale, setZoomScale] = useState<1 | 2>(1);
   const [panOffset, setPanOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
 
   const activeTriggerRef = useRef<HTMLElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
   const lightboxMediaRef = useRef<HTMLDivElement>(null);
   const thumbnailRailRef = useRef<HTMLDivElement | null>(null);
+  const hasSeenLightboxHintRef = useRef(false);
+  const swipeHintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Drag and touch tracking refs
   const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -181,6 +184,8 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     closeLightbox: isId ? "Tutup" : "Close",
     zoomIn: isId ? "Perbesar 2× (Double klik/tap)" : "Zoom in 2× (Double click/tap)",
     zoomOut: isId ? "Reset zoom 1×" : "Reset zoom 1×",
+    swipeHint: isId ? "Geser ke kiri atau kanan" : "Swipe left or right",
+    dragHint: isId ? "Seret untuk melihat detail" : "Drag to inspect details",
     overviewTitle:
       project.sectionTitles?.overview?.[locale] ??
       (isId ? "Gambaran Proyek" : "Project Overview"),
@@ -311,7 +316,6 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
   });
 
   const currentSlide = slides[activeIndex] ?? slides[0];
-  const isMobileFormat = currentSlide?.format === "mobile";
   const trackSlides =
     slides.length > 1
       ? [slides[slides.length - 1], ...slides, slides[0]]
@@ -452,7 +456,31 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     lastTapTimeRef.current = now;
 
     if (zoomScale === 1 && slides.length > 1) {
-      handleTouchEnd(e);
+      if (!touchStartRef.current) return;
+      const touch = e.changedTouches[0];
+      const deltaX = touch.clientX - touchStartRef.current.x;
+      const deltaY = touch.clientY - touchStartRef.current.y;
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+
+      if (absX > 40 && absX > absY) {
+        // Dismiss swipe hint immediately on successful swipe
+        setShowSwipeHint(false);
+        if (swipeHintTimeoutRef.current) {
+          clearTimeout(swipeHintTimeoutRef.current);
+        }
+        resetZoom();
+        if (deltaX < 0) {
+          goToNext();
+        } else {
+          goToPrev();
+        }
+      }
+
+      setTimeout(() => {
+        isSwipingRef.current = false;
+        touchStartRef.current = null;
+      }, 60);
     }
   };
 
@@ -486,11 +514,30 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
     }
   };
 
+  const openLightbox = useCallback(
+    (triggerElement?: HTMLElement) => {
+      resetZoom();
+      if (triggerElement) {
+        activeTriggerRef.current = triggerElement;
+      }
+      setIsLightboxOpen(true);
+      if (!hasSeenLightboxHintRef.current && slides.length > 1) {
+        hasSeenLightboxHintRef.current = true;
+        setShowSwipeHint(true);
+        if (swipeHintTimeoutRef.current) {
+          clearTimeout(swipeHintTimeoutRef.current);
+        }
+        swipeHintTimeoutRef.current = setTimeout(() => {
+          setShowSwipeHint(false);
+        }, 2800);
+      }
+    },
+    [resetZoom, slides.length],
+  );
+
   const handleFrameClick = (e: React.MouseEvent<HTMLElement>) => {
     if (isSwipingRef.current) return;
-    resetZoom();
-    activeTriggerRef.current = e.currentTarget;
-    setIsLightboxOpen(true);
+    openLightbox(e.currentTarget);
   };
 
   const handleCarouselKeyDown = (e: React.KeyboardEvent) => {
@@ -502,13 +549,15 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
       goToNext();
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      resetZoom();
-      activeTriggerRef.current = e.currentTarget as HTMLElement;
-      setIsLightboxOpen(true);
+      openLightbox(e.currentTarget as HTMLElement);
     }
   };
 
   const handleCloseLightbox = useCallback(() => {
+    if (swipeHintTimeoutRef.current) {
+      clearTimeout(swipeHintTimeoutRef.current);
+    }
+    setShowSwipeHint(false);
     resetZoom();
     setIsLightboxOpen(false);
     activeTriggerRef.current?.focus();
@@ -748,11 +797,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                 >
                   {/* Stable Responsive Display Frame with Horizontal Auto-Swipe Track */}
                   <div
-                    className={`${styles.galleryFrame} ${
-                      isMobileFormat
-                        ? styles.galleryFrameMobile
-                        : styles.galleryFrameWide
-                    }`}
+                    className={`${styles.galleryFrame} ${styles.galleryFrameWide}`}
                     onClick={handleFrameClick}
                     onKeyDown={slides.length > 1 ? handleCarouselKeyDown : undefined}
                     onTouchStart={slides.length > 1 ? handleTouchStart : undefined}
@@ -883,7 +928,6 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                     >
                       {slides.map((slide, index) => {
                         const isActive = index === activeIndex;
-                        const isSlideMobile = slide.format === "mobile";
                         return (
                           <button
                             key={slide.slide}
@@ -898,13 +942,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                               isActive ? styles.thumbnailActive : ""
                             }`}
                           >
-                            <div
-                              className={`${styles.thumbnailMediaWrapper} ${
-                                isSlideMobile
-                                  ? styles.thumbnailMediaWrapperMobile
-                                  : ""
-                              }`}
-                            >
+                            <div className={styles.thumbnailMediaWrapper}>
                               <Image
                                 src={slide.src}
                                 alt=""
@@ -2173,9 +2211,7 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
 
             <div
               ref={lightboxMediaRef}
-              className={`${styles.lightboxMediaWrapper} ${
-                isMobileFormat ? styles.lightboxMediaWrapperMobile : ""
-              }`}
+              className={styles.lightboxMediaWrapper}
               onTouchStart={handleLightboxTouchStart}
               onTouchMove={handleLightboxTouchMove}
               onTouchEnd={handleLightboxTouchEnd}
@@ -2209,6 +2245,61 @@ export function ProjectDetailView({ project, locale }: ProjectDetailViewProps) {
                   draggable={false}
                 />
               </div>
+
+              {/* Mobile & Tablet Gesture Cue (Swipe when 1x, Drag when 2x) */}
+              {(slides.length > 1 && showSwipeHint) || zoomScale > 1 ? (
+                <div
+                  className={styles.lightboxSwipeHint}
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  {zoomScale > 1 ? (
+                    <>
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="shrink-0"
+                        aria-hidden="true"
+                      >
+                        <polyline points="5 9 2 12 5 15" />
+                        <polyline points="9 5 12 2 15 5" />
+                        <polyline points="15 19 12 22 9 19" />
+                        <polyline points="19 9 22 12 19 15" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <line x1="12" y1="2" x2="12" y2="22" />
+                      </svg>
+                      <span>{copy.dragHint}</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="shrink-0"
+                        aria-hidden="true"
+                      >
+                        <polyline points="7 16 3 12 7 8" />
+                        <polyline points="17 8 21 12 17 16" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                      </svg>
+                      <span>{copy.swipeHint}</span>
+                    </>
+                  )}
+                </div>
+              ) : null}
             </div>
 
             {slides.length > 1 ? (
