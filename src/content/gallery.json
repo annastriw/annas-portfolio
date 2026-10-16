@@ -1,0 +1,562 @@
+{
+  "/assets/projects/ukg-system/documentation/01.webp": {
+    "alt": {
+      "en": "UKG System administrator dashboard displaying monthly revenue and expense graphs alongside operational summary metrics.",
+      "id": "Dashboard admin UKG System menampilkan grafik omzet dan biaya bulanan serta ringkasan metrik operasional."
+    },
+    "caption": {
+      "en": "Admin dashboard presenting monthly financial charts and key store operational metrics.",
+      "id": "Dashboard admin menyajikan grafik keuangan bulanan dan ringkasan metrik operasional toko."
+    }
+  },
+  "/assets/projects/ukg-system/documentation/02.webp": {
+    "alt": {
+      "en": "Point-of-sale cashier interface with item search, pricing breakdown, discount controls, and payment methods.",
+      "id": "Antarmuka kasir penjualan dengan pencarian barang, rincian harga, potongan diskon, dan pilihan metode pembayaran."
+    },
+    "caption": {
+      "en": "Point-of-sale interface facilitating sales transaction entry, discount calculation, and payment method selection.",
+      "id": "Antarmuka kasir memudahkan pencatatan transaksi penjualan, perhitungan diskon, dan pemilihan metode pembayaran."
+    }
+  },
+  "/assets/projects/ukg-system/documentation/03.webp": {
+    "alt": {
+      "en": "Digital receipt preview modal detailing purchased items, subtotal calculation, branch origin, and print action.",
+      "id": "Modal pratinjau nota digital yang merinci daftar barang belanja, subtotal, cabang toko, dan opsi cetak nota."
+    },
+    "caption": {
+      "en": "Digital receipt preview displaying itemized order lines, store branch information, and receipt printing action.",
+      "id": "Pratinjau nota digital menampilkan rincian barang belanjaan, cabang toko, dan opsi cetak struk transaksi."
+    }
+  },
+  "/assets/projects/ukg-system/documentation/04.webp": {
+    "alt": {
+      "en": "Sales transaction report table with store branch filters, date-range selector, and Excel export button.",
+      "id": "Tabel laporan transaksi penjualan dengan filter cabang toko, rentang tanggal, dan tombol ekspor data Excel."
+    },
+    "caption": {
+      "en": "Sales report module providing branch and date-range filters to export transaction records to Excel.",
+      "id": "Modul laporan penjualan menyediakan filter cabang dan periode untuk pengunduhan data transaksi format Excel."
+    }
+  },
+  "/assets/projects/ukg-system/documentation/05.webp": {
+    "alt": {
+      "en": "Financial analytics dashboard visualizing gross profit trends, total turnover, and operational cost breakdowns.",
+      "id": "Dashboard analitik keuangan yang memvisualisasikan tren laba kotor, total omzet, dan rincian biaya operasional."
+    },
+    "caption": {
+      "en": "Financial statistics visualizes comparisons between sales revenue, operational expenses, and daily gross profit.",
+      "id": "Statistik keuangan memvisualisasikan perbandingan omzet penjualan, biaya operasional, dan laba kotor harian."
+    }
+  },
+  "/assets/projects/ukg-system/documentation/06.webp": {
+    "alt": {
+      "en": "Employee attendance management table with map-based location verification and radius check coordinates.",
+      "id": "Tabel presensi pegawai dengan verifikasi radius lokasi berbasis peta digital dan koordinat absensi."
+    },
+    "caption": {
+      "en": "Employee attendance feature integrating map-based geolocation verification and attendance validation workflows.",
+      "id": "Fitur presensi karyawan mengintegrasikan verifikasi lokasi berbasis peta digital dan alur validasi absensi."
+    }
+  },
+  "/assets/projects/ukg-system/documentation/07.webp": {
+    "alt": {
+      "en": "Interactive geographical map displaying retail store branch pins and active operational statuses across regions.",
+      "id": "Peta digital interaktif yang menampilkan sebaran titik cabang toko dan status keaktifan operasional wilayah."
+    },
+    "caption": {
+      "en": "Branch distribution map displaying operational store locations and their active status across regions.",
+      "id": "Peta persebaran cabang menampilkan lokasi gerai operasional beserta status keaktifan masing-masing toko."
+    }
+  },
+  "/assets/projects/ukg-system/documentation/08.webp": {
+    "alt": {
+      "en": "Inter-branch stock order request form with destination warehouse dropdown and quantity input fields.",
+      "id": "Formulir permohonan order stok barang antar-cabang dengan pilihan gudang tujuan dan kolom input jumlah."
+    },
+    "caption": {
+      "en": "Stock order form facilitating inter-branch item requests sent directly to the central warehouse.",
+      "id": "Formulir order stok memfasilitasi pengajuan kebutuhan barang antar-cabang menuju gudang pusat."
+    }
+  },
+  "/assets/projects/ukg-system/documentation/09.webp": {
+    "alt": {
+      "en": "Warehouse master stock table showing multi-branch inventory levels, unit quantities, and low stock warning badges.",
+      "id": "Tabel master inventaris gudang yang menunjukkan jumlah stok multi-cabang dan label peringatan persediaan."
+    },
+    "caption": {
+      "en": "Master warehouse inventory table presenting stock levels per branch alongside availability status badges.",
+      "id": "Tabel master stok gudang menampilkan kuantitas persediaan per cabang lengkap dengan indikator status ketersediaan barang."
+    }
+  },
+  "/assets/projects/ihealth-edu/documentation/01.webp": {
+    "alt": {
+      "en": "iHealth Edu public landing page featuring primary healthcare services and educational program overview for Puskesmas Padangsari.",
+      "id": "Halaman beranda publik iHealth Edu yang memuat layanan kesehatan primer dan informasi program edukasi Puskesmas Padangsari."
+    },
+    "caption": {
+      "en": "The iHealth Edu homepage introducing the integrated primary healthcare education platform for Puskesmas Padangsari.",
+      "id": "Halaman beranda iHealth Edu menyajikan pengenalan platform edukasi kesehatan terintegrasi Puskesmas Padangsari."
+    }
+  },
+  "/assets/projects/ihealth-edu/documentation/02.webp": {
+    "alt": {
+      "en": "User authentication screen showing one-time password OTP input verification modal.",
+      "id": "Layar autentikasi pengguna yang menampilkan modal verifikasi kode one-time password OTP melalui email."
+    },
+    "caption": {
+      "en": "User authentication flow equipped with email-based OTP verification for secure account access.",
+      "id": "Alur autentikasi pengguna dilengkapi verifikasi kode OTP berbasis email untuk keamanan akses akun."
+    }
+  },
+  "/assets/projects/ihealth-edu/documentation/03.webp": {
+    "alt": {
+      "en": "Interactive healthcare educational module reader displaying embedded video and downloadable digital booklets.",
+      "id": "Tampilan modul edukasi kesehatan interaktif dengan pemutar video terintegrasi dan booklet digital."
+    },
+    "caption": {
+      "en": "Educational module presenting interactive health lessons through embedded video and a digital booklet viewer.",
+      "id": "Modul edukasi menyajikan materi kesehatan interaktif melalui video terintegrasi dan penampil booklet digital."
+    }
+  },
+  "/assets/projects/ihealth-edu/documentation/04.webp": {
+    "alt": {
+      "en": "Health assessment questionnaire evaluation results screen displaying self-management scores and response breakdown.",
+      "id": "Tampilan hasil evaluasi kuesioner asesmen kesehatan yang memuat skor manajemen mandiri dan rincian jawaban."
+    },
+    "caption": {
+      "en": "Questionnaire assessment results presenting patient self-management evaluation scores and detailed response items.",
+      "id": "Hasil asesmen kuesioner menyajikan skor evaluasi manajemen mandiri pasien dan rincian tanggapan instrumen."
+    }
+  },
+  "/assets/projects/ihealth-edu/documentation/05.webp": {
+    "alt": {
+      "en": "Patient and health worker community forum thread showing health-related questions and verified replies.",
+      "id": "Forum komunitas diskusi antara pasien dan tenaga kesehatan yang memuat pertanyaan kesehatan dan tanggapan terverifikasi."
+    },
+    "caption": {
+      "en": "Community forum facilitating healthcare Q&A threads between patients and verified healthcare workers.",
+      "id": "Forum komunitas memfasilitasi tanya jawab seputar kesehatan antara pengguna dan tenaga kesehatan terverifikasi."
+    }
+  },
+  "/assets/projects/ihealth-edu/documentation/06.webp": {
+    "alt": {
+      "en": "Clinical measurement input form for recording patient biometrics from connected IoT hardware or manual entry.",
+      "id": "Formulir pencatatan hasil pemeriksaan klinis untuk merekam biometrik pasien dari perangkat IoT maupun input manual."
+    },
+    "caption": {
+      "en": "Health examination form capturing patient clinical measurements from IoT devices or manual entry.",
+      "id": "Formulir input pemeriksaan mencatat data klinis pasien yang terhubung dengan perangkat IoT maupun masukan manual."
+    }
+  },
+  "/assets/projects/ihealth-edu/documentation/07.webp": {
+    "alt": {
+      "en": "Patient biometric examination history chart plotting blood pressure, blood glucose, and cholesterol over time.",
+      "id": "Grafik riwayat pemeriksaan biometrik pasien yang memetakan tekanan darah, gula darah, dan kolesterol dari waktu ke waktu."
+    },
+    "caption": {
+      "en": "Examination history charts displaying patient blood pressure and blood glucose trends over time.",
+      "id": "Grafik riwayat pemeriksaan menampilkan tren tekanan darah dan kadar gula darah pasien secara berkala."
+    }
+  },
+  "/assets/projects/ihealth-edu/documentation/08.webp": {
+    "alt": {
+      "en": "Geographic patient distribution map supporting community health monitoring across Puskesmas Padangsari coverage areas.",
+      "id": "Peta persebaran geografis pasien untuk mendukung monitoring kesehatan masyarakat di wilayah kerja Puskesmas Padangsari."
+    },
+    "caption": {
+      "en": "Geographic distribution map charting patient locations to support Puskesmas Padangsari regional monitoring.",
+      "id": "Peta persebaran geografis memetakan distribusi lokasi pasien untuk mendukung monitoring wilayah Puskesmas Padangsari."
+    }
+  },
+  "/assets/projects/dialisis-connect-edu/documentation/01.webp": {
+    "alt": {
+      "en": "Dialisis Connect Edu platform landing page introducing kidney therapy educational resources and hemodialysis community support.",
+      "id": "Halaman beranda Dialisis Connect Edu yang memperkenalkan materi edukasi terapi ginjal dan komunitas hemodialisis."
+    },
+    "caption": {
+      "en": "Dialisis Connect Edu landing page introducing the renal therapy education and hemodialysis community platform.",
+      "id": "Halaman awal Dialisis Connect Edu memperkenalkan platform edukasi terapi ginjal dan komunitas hemodialisis."
+    }
+  },
+  "/assets/projects/dialisis-connect-edu/documentation/02.webp": {
+    "alt": {
+      "en": "User account registration page with structured profile input fields for kidney patients and caregivers.",
+      "id": "Halaman pendaftaran akun pengguna dengan formulir data diri terstruktur untuk pasien ginjal dan pendamping."
+    },
+    "caption": {
+      "en": "Account registration page providing a structured sign-up form for educational platform users.",
+      "id": "Halaman registrasi akun menyediakan formulir pendaftaran terstruktur bagi pengguna platform edukasi."
+    }
+  },
+  "/assets/projects/dialisis-connect-edu/documentation/03.webp": {
+    "alt": {
+      "en": "Chronic kidney disease self-care assessment screening catalog displaying available educational questionnaires.",
+      "id": "Katalog asesmen perawatan mandiri penyakit ginjal kronis yang menampilkan modul kuesioner evaluasi."
+    },
+    "caption": {
+      "en": "Screening catalog presenting self-care assessment modules for patients living with chronic kidney disease.",
+      "id": "Katalog screening menyajikan daftar modul asesmen perawatan mandiri pasien penyakit ginjal kronis."
+    }
+  },
+  "/assets/projects/dialisis-connect-edu/documentation/04.webp": {
+    "alt": {
+      "en": "Educational lesson viewer displaying dietary guidance and interactive dialysis care video materials.",
+      "id": "Halaman materi pembelajaran yang menampilkan panduan diet ginjal dan video edukasi dialisis interaktif."
+    },
+    "caption": {
+      "en": "Educational lesson page presenting nutrition and dialysis care guidelines through interactive video materials.",
+      "id": "Halaman materi edukasi menyajikan panduan nutrisi dan perawatan dialisis melalui video pembelajaran interaktif."
+    }
+  },
+  "/assets/projects/dialisis-connect-edu/documentation/05.webp": {
+    "alt": {
+      "en": "Healthcare consultation appointment scheduling calendar and time slot selection interface.",
+      "id": "Antarmuka kalender jadwal konsultasi kesehatan dan pemilihan sesi pendampingan edukasi."
+    },
+    "caption": {
+      "en": "Consultation booking feature managing appointment schedules and educational guidance for users.",
+      "id": "Fitur booking konsultasi mengelola jadwal pertemuan dan pendampingan edukasi kesehatan bagi pengguna."
+    }
+  },
+  "/assets/projects/dialisis-connect-edu/documentation/06.webp": {
+    "alt": {
+      "en": "Patient educational history view presenting completed screening records and self-care assessment outcomes.",
+      "id": "Tampilan riwayat pembelajaran pasien yang menyajikan rekaman pengerjaan screening dan evaluasi mandiri."
+    },
+    "caption": {
+      "en": "History page recording patient screening results and structured learning progress over time.",
+      "id": "Halaman riwayat mencatat hasil pengerjaan screening dan evaluasi pembelajaran pasien secara terstruktur."
+    }
+  },
+  "/assets/projects/dialisis-connect-edu/documentation/07.webp": {
+    "alt": {
+      "en": "Administrator content management console for publishing lessons, YouTube video links, and PDF booklets.",
+      "id": "Konsol manajemen konten admin untuk menerbitkan materi pembelajaran, video YouTube, dan booklet PDF."
+    },
+    "caption": {
+      "en": "Admin console facilitating publication of new educational lessons with video links and PDF booklet attachments.",
+      "id": "Konsol admin memfasilitasi publikasi materi edukasi baru lengkap dengan tautan video dan dokumen booklet PDF."
+    }
+  },
+  "/assets/projects/nusa-dakwah/documentation/01.webp": {
+    "alt": {
+      "en": "Nusa Dakwah mobile home interface displaying search bar, hero banner, and featured Islamic learning modules.",
+      "id": "Tampilan mobile beranda Nusa Dakwah dengan bilah pencarian, banner utama, dan daftar modul dakwah unggulan."
+    },
+    "caption": {
+      "en": "Nusa Dakwah landing page featuring module search and an introduction to the digital Islamic learning platform.",
+      "id": "Tampilan beranda Nusa Dakwah menyajikan pencarian modul dan pengenalan platform pembelajaran dakwah digital."
+    }
+  },
+  "/assets/projects/nusa-dakwah/documentation/02.webp": {
+    "alt": {
+      "en": "Mobile login interface with email and password input fields for student and administrator authentication.",
+      "id": "Antarmuka masuk mobile dengan kolom input email dan kata sandi untuk autentikasi santri dan administrator."
+    },
+    "caption": {
+      "en": "User authentication interface providing a secure sign-in form to access learning materials.",
+      "id": "Antarmuka autentikasi pengguna menyediakan formulir masuk yang aman untuk mengakses materi pembelajaran."
+    }
+  },
+  "/assets/projects/nusa-dakwah/documentation/03.webp": {
+    "alt": {
+      "en": "Learning lesson view on mobile integrating embedded YouTube lecture video with accompanying article text.",
+      "id": "Tampilan materi pembelajaran mobile yang mengintegrasikan pemutar video YouTube dengan naskah artikel kajian."
+    },
+    "caption": {
+      "en": "Module detail page integrating embedded YouTube lecture videos with accompanying lesson articles.",
+      "id": "Halaman detail modul mengintegrasikan video kajian berbasis YouTube dan naskah artikel pembelajaran."
+    }
+  },
+  "/assets/projects/nusa-dakwah/documentation/04.webp": {
+    "alt": {
+      "en": "Lesson discussion thread on mobile displaying user comments and nested reply interactions.",
+      "id": "Utas forum diskusi materi pada tampilan mobile yang menampilkan komentar pengguna dan balasan berjenjang."
+    },
+    "caption": {
+      "en": "Lesson-attached discussion forum facilitating Q&A interactions and multi-level nested replies.",
+      "id": "Forum diskusi pada setiap modul memfasilitasi interaksi tanya jawab dan balasan komentar bertingkat."
+    }
+  },
+  "/assets/projects/nusa-dakwah/documentation/05.webp": {
+    "alt": {
+      "en": "Admin console on mobile displaying structured module, submodule, and lesson material catalog.",
+      "id": "Konsol admin pada tampilan mobile yang menampilkan katalog hierarki modul, submodul, dan materi dakwah."
+    },
+    "caption": {
+      "en": "Admin dashboard presenting the content catalog organized by module and submodule hierarchies.",
+      "id": "Dashboard admin menyajikan daftar inventaris konten materi berdasarkan struktur modul dan submodul."
+    }
+  },
+  "/assets/projects/nusa-dakwah/documentation/06.webp": {
+    "alt": {
+      "en": "Content editing form on mobile for managing module hierarchy, lesson text, and video toggle settings.",
+      "id": "Formulir edit materi pada tampilan mobile untuk mengatur hierarki modul, isi naskah, dan opsi video tersemat."
+    },
+    "caption": {
+      "en": "Content editing form enabling administrators to manage lesson titles, submodule links, and multimedia toggles.",
+      "id": "Formulir edit materi memungkinkan admin mengelola judul, relasi submodul, serta integrasi video dan artikel."
+    }
+  },
+  "/assets/projects/simastok/documentation/01.webp": {
+    "alt": {
+      "en": "SIMASTOK login modal with automotive workshop branding and secure authentication inputs.",
+      "id": "Modal login SIMASTOK bertema bengkel otomotif dengan input autentikasi email dan kata sandi."
+    },
+    "caption": {
+      "en": "SIMASTOK sign-in page providing a secure user authentication portal styled with an automotive workshop theme.",
+      "id": "Halaman masuk SIMASTOK menyediakan portal autentikasi pengguna dengan antarmuka bertema bengkel otomotif."
+    }
+  },
+  "/assets/projects/simastok/documentation/02.webp": {
+    "alt": {
+      "en": "SIMASTOK administrator dashboard with inventory count summary cards and monthly stock movement chart.",
+      "id": "Dashboard admin SIMASTOK dengan kartu ringkasan total barang dan grafik batang pergerakan stok bulanan."
+    },
+    "caption": {
+      "en": "Inventory dashboard presenting item counts, total stock in hand, and 6-month parts movement bar charts.",
+      "id": "Dashboard inventaris menampilkan ringkasan jumlah barang, total persediaan, dan grafik pergerakan stok suku cadang."
+    }
+  },
+  "/assets/projects/simastok/documentation/03.webp": {
+    "alt": {
+      "en": "SIMASTOK inventory table displaying spare parts list, categories, suppliers, stock counts, and action buttons.",
+      "id": "Tabel inventaris SIMASTOK menampilkan daftar suku cadang, kategori, pemasok, jumlah stok, dan tombol aksi."
+    },
+    "caption": {
+      "en": "Parts catalog table managing spare part inventory, category classifications, suppliers, and unit prices.",
+      "id": "Tabel data barang mengelola master persediaan suku cadang, klasifikasi kategori, supplier, dan harga satuan."
+    }
+  },
+  "/assets/projects/simastok/documentation/04.webp": {
+    "alt": {
+      "en": "SIMASTOK outgoing parts form with dropdown selector, quantity validation, and transaction date input.",
+      "id": "Formulir barang keluar SIMASTOK dengan pilihan suku cadang, validasi jumlah stok, dan tanggal pengeluaran."
+    },
+    "caption": {
+      "en": "Outgoing parts form facilitating structured stock reduction transactions for workshop operations.",
+      "id": "Formulir pencatatan barang keluar memfasilitasi transaksi pengurangan stok suku cadang secara terstruktur."
+    }
+  },
+  "/assets/projects/simastok/documentation/05.webp": {
+    "alt": {
+      "en": "SIMASTOK stock movement report page showing date-range filter, total incoming and outgoing cards, and PDF export.",
+      "id": "Halaman laporan pergerakan stok SIMASTOK dengan filter tanggal, total keluar masuk barang, dan ekspor PDF."
+    },
+    "caption": {
+      "en": "Stock movement report providing date-range filters, turnover summaries, and PDF export functionality.",
+      "id": "Laporan pergerakan barang menyajikan filter rentang tanggal, ringkasan perputaran stok, dan opsi ekspor ke format PDF."
+    }
+  },
+  "/assets/projects/simastok/documentation/06.webp": {
+    "alt": {
+      "en": "SIMASTOK user profile settings page with personal information and password update forms.",
+      "id": "Halaman pengaturan profil pengguna SIMASTOK dengan formulir data pribadi dan pembaruan kata sandi."
+    },
+    "caption": {
+      "en": "User profile page managing account identity details and self-service password updates.",
+      "id": "Halaman profil akun mengelola data identitas pengguna dan pembaruan kata sandi secara mandiri."
+    }
+  },
+  "/assets/projects/ml-for-heart-attack-risk-prediction/documentation/01.webp": {
+    "alt": {
+      "en": "Terminal view displaying 21 clinical, demographic, and lifestyle feature inputs prior to model inference.",
+      "id": "Tampilan terminal yang menampilkan 21 input fitur klinis, demografis, dan pola hidup sebelum inferensi model."
+    },
+    "caption": {
+      "en": "Structured patient input parameters comprising 21 demographic, clinical, and lifestyle variables prior to model inference.",
+      "id": "Struktur input data pasien memuat 21 parameter demografis, klinis, dan gaya hidup sebelum proses inferensi model."
+    }
+  },
+  "/assets/projects/ml-for-heart-attack-risk-prediction/documentation/02.webp": {
+    "alt": {
+      "en": "Terminal inference response showing low-risk prediction, estimated probability, supporting factors, and top 5 feature weights.",
+      "id": "Respons inferensi terminal yang menampilkan hasil prediksi risiko rendah, estimasi probabilitas, faktor pendukung, dan 5 bobot fitur teratas."
+    },
+    "caption": {
+      "en": "Inference output presenting estimated risk probability, supporting factor evaluations, and key influential feature information.",
+      "id": "Output inferensi menyajikan estimasi probabilitas risiko, evaluasi faktor pendukung, dan informasi fitur paling berpengaruh."
+    }
+  },
+  "/assets/projects/speech-to-text-system/documentation/01.webp": {
+    "alt": {
+      "en": "Side-by-side visual comparison between original source video and final processed video with burned-in uppercase subtitles.",
+      "id": "Perbandingan visual berdampingan antara video sumber asli dan video hasil pemrosesan dengan subtitle huruf kapital tertanam."
+    },
+    "caption": {
+      "en": "Side-by-side comparison displaying the original video and the final output with permanently burned-in automated subtitles.",
+      "id": "Perbandingan berdampingan menampilkan video asli dan video akhir dengan subtitle otomatis yang tertanam secara permanen."
+    }
+  },
+  "/assets/projects/thermal-printer-service/documentation/01.webp": {
+    "alt": {
+      "en": "High-resolution Android application launcher icon for Thermal Printer Service with receipt printer illustration.",
+      "id": "Ikon aplikasi Android resolusi tinggi untuk Thermal Printer Service dengan ilustrasi printer struk."
+    },
+    "caption": {
+      "en": "Thermal Printer Service Android application icon for Bluetooth hardware printing integration.",
+      "id": "Ikon aplikasi Android Thermal Printer Service untuk integrasi pencetakan perangkat Bluetooth."
+    }
+  },
+  "/assets/projects/thermal-printer-service/documentation/02.webp": {
+    "alt": {
+      "en": "Thermal Printer Service main screen displaying print service toggle, active profile info, and test print button.",
+      "id": "Layar utama Thermal Printer Service yang menampilkan status print service, profil aktif, dan tombol uji cetak."
+    },
+    "caption": {
+      "en": "Main application interface providing access to Android system print settings and active printer test printing.",
+      "id": "Antarmuka utama aplikasi menyediakan akses ke pengaturan layanan cetak sistem Android dan pengujian printer aktif."
+    }
+  },
+  "/assets/projects/thermal-printer-service/documentation/03.webp": {
+    "alt": {
+      "en": "Configured thermal printer profile manager displaying Bluetooth MAC address, paper width, and offset settings.",
+      "id": "Pengelola profil printer termal yang menampilkan alamat MAC Bluetooth, lebar kertas, dan pengaturan offset."
+    },
+    "caption": {
+      "en": "Printer profile manager configuring paper widths, margin calibration, and active printer selection.",
+      "id": "Daftar profil printer mengelola konfigurasi ukuran kertas, kalibrasi margin, dan status printer aktif."
+    }
+  },
+  "/assets/projects/thermal-printer-service/documentation/04.webp": {
+    "alt": {
+      "en": "Bluetooth device discovery and paired printer selection interface in Thermal Printer Service.",
+      "id": "Antarmuka pemindaian perangkat Bluetooth dan pemilihan printer termal yang telah dipasangkan pada Thermal Printer Service."
+    },
+    "caption": {
+      "en": "Bluetooth device selection step scanning and connecting paired thermal printer hardware.",
+      "id": "Langkah pemilihan perangkat Bluetooth memindai dan menghubungkan printer thermal yang telah dipasangkan."
+    }
+  },
+  "/assets/projects/thermal-printer-service/documentation/05.webp": {
+    "alt": {
+      "en": "Printer parameter configuration screen for choosing 58mm or 80mm paper width and print margin calibration.",
+      "id": "Layar pengaturan parameter printer untuk memilih lebar kertas 58 mm atau 80 mm serta kalibrasi margin cetak."
+    },
+    "caption": {
+      "en": "Print parameter settings allowing adjustment of 58mm or 80mm paper widths and margin calibration.",
+      "id": "Pengaturan parameter cetak memungkinkan penyesuaian lebar kertas 58 mm atau 80 mm serta kalibrasi margin."
+    }
+  },
+  "/assets/projects/thermal-printer-service/documentation/06.webp": {
+    "alt": {
+      "en": "Android system print preview forwarding document rendering to configured Bluetooth thermal printer.",
+      "id": "Pratinjau cetak sistem Android yang meneruskan dokumen cetak menuju printer termal Bluetooth terkonfigurasi."
+    },
+    "caption": {
+      "en": "Android system print preview forwarding rendered documents to the configured Bluetooth thermal printer.",
+      "id": "Pratinjau cetak sistem Android meneruskan dokumen menuju printer thermal Bluetooth yang telah dikonfigurasi."
+    }
+  },
+  "/assets/projects/footy-standings/documentation/01.webp": {
+    "alt": {
+      "en": "Footy Standings mobile league table displaying club rankings, played matches, goal differences, and points.",
+      "id": "Tabel klasemen liga mobile Footy Standings yang menampilkan posisi klub, jumlah laga, selisih gol, dan poin."
+    },
+    "caption": {
+      "en": "League standings table presenting team rankings alongside club crests, match records, and point totals.",
+      "id": "Klasemen liga menyajikan urutan peringkat tim lengkap dengan logo klub, statistik pertandingan, dan perolehan poin."
+    }
+  },
+  "/assets/projects/footy-standings/documentation/02.webp": {
+    "alt": {
+      "en": "Upcoming league match fixtures schedule on mobile with club pairings, dates, and local kickoff times.",
+      "id": "Jadwal pertandingan mendatang pada tampilan mobile dengan informasi pasangan klub, tanggal, dan waktu tanding."
+    },
+    "caption": {
+      "en": "Upcoming fixtures screen displaying scheduled match information with dates and kickoff times.",
+      "id": "Jadwal pertandingan mendatang menampilkan informasi laga yang akan berlangsung lengkap dengan tanggal dan waktu kick-off."
+    }
+  },
+  "/assets/projects/footy-standings/documentation/03.webp": {
+    "alt": {
+      "en": "Top goalscorers ranking list on mobile displaying player names, clubs, and total league goals scored.",
+      "id": "Daftar peringkat top scorer pada tampilan mobile yang menampilkan nama pemain, klub, dan perolehan gol liga."
+    },
+    "caption": {
+      "en": "Top scorers list presenting player rankings and total goal tallies across league competitions.",
+      "id": "Daftar pencetak gol terbanyak menyajikan peringkat pemain dan jumlah gol yang diperoleh dalam kompetisi liga."
+    }
+  },
+  "/assets/projects/footy-standings/documentation/04.webp": {
+    "alt": {
+      "en": "Football club profile details screen on mobile with club crest, founding year, stadium name, and website link.",
+      "id": "Layar detail profil klub sepak bola pada tampilan mobile dengan logo, tahun pendirian, stadion, dan website resmi."
+    },
+    "caption": {
+      "en": "Club details screen presenting team profiles, founding year, home stadium, and official website links.",
+      "id": "Halaman detail klub menyajikan informasi profil tim, tahun berdiri, stadion kandang, dan tautan website resmi."
+    }
+  },
+  "/assets/projects/panoramic-virtual-tour/documentation/01.webp": {
+    "alt": {
+      "en": "Panoramic Virtual Tour title screen and main menu over the 3D building facility landscape.",
+      "id": "Layar judul dan menu utama Panoramic Virtual Tour dengan latar pemandangan lanskap fasilitas 3D."
+    },
+    "caption": {
+      "en": "Main menu title screen providing initial access to start interactive virtual exploration of the building facility.",
+      "id": "Layar menu utama menyajikan akses awal untuk memulai eksplorasi virtual tour interaktif fasilitas bangunan."
+    }
+  },
+  "/assets/projects/panoramic-virtual-tour/documentation/02.webp": {
+    "alt": {
+      "en": "Aerial bird-eye panorama showing the industrial building complex layout, roof structures, and open courtyard.",
+      "id": "Panorama aerial sudut tinggi yang memperlihatkan tata letak kawasan industri, struktur atap, dan halaman terbuka."
+    },
+    "caption": {
+      "en": "Aerial vantage point showing the industrial complex layout, building roof structures, and open landscaped grounds.",
+      "id": "Sudut pandang udara memperlihatkan tata letak kawasan industri, struktur atap bangunan, dan area lanskap terbuka."
+    }
+  },
+  "/assets/projects/panoramic-virtual-tour/documentation/03.webp": {
+    "alt": {
+      "en": "Facility entrance gate perimeter panorama equipped with interactive navigation hotspot pins.",
+      "id": "Panorama area luar gerbang fasilitas yang dilengkapi pin hotspot navigasi interaktif untuk perpindahan sudut pandang."
+    },
+    "caption": {
+      "en": "Exterior perimeter panorama equipped with interactive navigation hotspot pins for scene transitions.",
+      "id": "Panorama area luar gerbang fasilitas dilengkapi titik hotspot navigasi interaktif untuk perpindahan scene."
+    }
+  },
+  "/assets/projects/panoramic-virtual-tour/documentation/04.webp": {
+    "alt": {
+      "en": "Courtyard garden panorama featuring landscaped greenery, building facade, and virtual navigation pins.",
+      "id": "Panorama halaman taman fasilitas yang menampilkan area hijau tertata, fasad gedung, dan penanda navigasi virtual."
+    },
+    "caption": {
+      "en": "Courtyard garden viewpoint displaying landscape vegetation, operational building facades, and virtual navigation pins.",
+      "id": "Sudut pandang halaman taman menampilkan vegetasi lanskap, fasad gedung operasional, dan penanda navigasi virtual."
+    }
+  },
+  "/assets/projects/panoramic-virtual-tour/documentation/05.webp": {
+    "alt": {
+      "en": "Factory production floor interior displaying machinery lines and navigation hotspot markers.",
+      "id": "Interior lantai produksi pabrik yang menampilkan jajaran mesin industri dan penanda hotspot navigasi."
+    },
+    "caption": {
+      "en": "Factory production floor area presenting rows of industrial machinery and hotspot markers for workspace navigation.",
+      "id": "Area lantai produksi pabrik menyajikan jajaran mesin industri dan penanda hotspot untuk navigasi antar area kerja."
+    }
+  },
+  "/assets/projects/panoramic-virtual-tour/documentation/06.webp": {
+    "alt": {
+      "en": "Mezzanine platform view overlooking the manufacturing machinery and overhead building structure.",
+      "id": "Sudut pandang anjungan mezzanine yang menghadap ke area mesin manufaktur dan struktur bangunan pabrik."
+    },
+    "caption": {
+      "en": "Elevated mezzanine perspective overlooking the entire layout of manufacturing machine lines inside the factory.",
+      "id": "Perspektif dari anjungan atas memperlihatkan keseluruhan tata letak jalur mesin manufaktur di dalam pabrik."
+    }
+  },
+  "/assets/projects/panoramic-virtual-tour/documentation/07.webp": {
+    "alt": {
+      "en": "Office meeting room interior showing conference table layout, interior finishes, and window exterior views.",
+      "id": "Interior ruang rapat kantor yang memperlihatkan tata letak meja pertemuan, material ruangan, dan jendela pandang."
+    },
+    "caption": {
+      "en": "Office meeting room interior displaying meeting table layout, interior materials, and outdoor viewing windows.",
+      "id": "Interior ruang rapat kantor memperlihatkan tata letak meja konferensi, material ruangan, dan jendela pandang luar."
+    }
+  }
+}

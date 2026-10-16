@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+.project-local/
+.env*
+*.md
+*.mdx
+*.tsbuildinfo
+next-env.d.ts
+*.log
+.vercel/
+coverage/
+playwright-report/
+test-results/
