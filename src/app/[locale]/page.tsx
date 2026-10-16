@@ -148,25 +148,27 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
               : 'Experience designing, developing, and delivering usable software.'}
           </p>
         </div>
-        <div className="experience-list">
+        <ol className="experience-timeline">
           {experience.map((e, i) => (
-            <article className="experience-row" key={e.role}>
-              <div>
-                <span className="eyebrow">0{i + 1}</span>
-                <p className="small-text">{e.period[locale]}</p>
-                <p className="small-text muted">{e.location[locale]}</p>
+            <li className="timeline-item" key={e.role}>
+              <div className="timeline-marker" aria-hidden="true">
+                0{i + 1}
               </div>
-              <div>
+              <div className="timeline-meta">
+                <p className="timeline-period">{e.period[locale]}</p>
+                <p className="timeline-location">{e.location[locale]}</p>
+              </div>
+              <article className="timeline-entry">
                 <h3>{e.role}</h3>
                 <p className="organization">{e.organization[locale]}</p>
-              </div>
-              <div>
-                <p>{e.description[locale]}</p>
-                {e.extra && <p>{e.extra[locale]}</p>}
-              </div>
-            </article>
+                <div className="timeline-description">
+                  <p>{e.description[locale]}</p>
+                  {e.extra && <p>{e.extra[locale]}</p>}
+                </div>
+              </article>
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
       <section className="section container capabilities" aria-labelledby="capabilities-heading">
         <div className="section-label">

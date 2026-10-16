@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
-import { Splash } from '@/components/splash';
 import { PageMotion } from '@/components/page-motion';
 import { isLocale, locales } from '@/lib/i18n';
 import { siteUrl } from '@/lib/metadata';
@@ -50,7 +49,6 @@ export default async function LocaleLayout({
         <a href="#main" className="skip-link">
           {locale === 'id' ? 'Langsung ke konten' : 'Skip to content'}
         </a>
-        <Splash />
         <PageMotion />
         <SiteHeader locale={locale} />
         <main id="main" tabIndex={-1}>
