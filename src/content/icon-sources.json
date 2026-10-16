@@ -1,0 +1,248 @@
+{
+  "react": {
+    "name": "React",
+    "source": "https://thesvg.org/icons/react/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "javascript": {
+    "name": "JavaScript",
+    "source": "https://thesvg.org/icons/javascript/mono.svg",
+    "license": "MIT",
+    "mono": true
+  },
+  "nextdotjs": {
+    "name": "Next.js",
+    "source": "https://thesvg.org/icons/nextdotjs/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "typescript": {
+    "name": "TypeScript",
+    "source": "https://thesvg.org/icons/typescript/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "nodedotjs": {
+    "name": "Node.js",
+    "source": "https://thesvg.org/icons/nodedotjs/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "nestjs": {
+    "name": "NestJS",
+    "source": "https://thesvg.org/icons/nestjs/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "laravel": {
+    "name": "Laravel",
+    "source": "https://thesvg.org/icons/laravel/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "mysql": {
+    "name": "MySQL",
+    "source": "https://thesvg.org/icons/mysql/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "python": {
+    "name": "Python",
+    "source": "https://thesvg.org/icons/python/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "numpy": {
+    "name": "NumPy",
+    "source": "https://thesvg.org/icons/numpy/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "pandas": {
+    "name": "pandas",
+    "source": "https://thesvg.org/icons/pandas/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "scikit-learn": {
+    "name": "scikit-learn",
+    "source": "https://thesvg.org/icons/scikit-learn/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "flask": {
+    "name": "Flask",
+    "source": "https://thesvg.org/icons/flask/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "hugging-face": {
+    "name": "Hugging Face",
+    "source": "https://thesvg.org/icons/hugging-face/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "prisma": {
+    "name": "Prisma",
+    "source": "https://thesvg.org/icons/prisma/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "playwright": {
+    "name": "Playwright",
+    "source": "https://thesvg.org/icons/playwright/default.svg",
+    "license": "MIT",
+    "mono": false
+  },
+  "jest": {
+    "name": "Jest",
+    "source": "https://thesvg.org/icons/jest/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "vitest": {
+    "name": "Vitest",
+    "source": "https://thesvg.org/icons/vitest/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "postman": {
+    "name": "Postman",
+    "source": "https://thesvg.org/icons/postman/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "github-actions": {
+    "name": "GitHub Actions",
+    "source": "https://thesvg.org/icons/github-actions/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "docker": {
+    "name": "Docker",
+    "source": "https://thesvg.org/icons/docker/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "ubuntu": {
+    "name": "Ubuntu",
+    "source": "https://thesvg.org/icons/ubuntu/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "nginx": {
+    "name": "NGINX",
+    "source": "https://thesvg.org/icons/nginx/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "vercel": {
+    "name": "Vercel",
+    "source": "https://thesvg.org/icons/vercel/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "figma": {
+    "name": "Figma",
+    "source": "https://thesvg.org/icons/figma/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "tailwind-css": {
+    "name": "Tailwind CSS",
+    "source": "https://thesvg.org/icons/tailwind-css/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "shadcn-ui": {
+    "name": "shadcn/ui",
+    "source": "https://thesvg.org/icons/shadcn-ui/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "flutter": {
+    "name": "Flutter",
+    "source": "https://thesvg.org/icons/flutter/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "dart": {
+    "name": "Dart",
+    "source": "https://thesvg.org/icons/dart/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "unity": {
+    "name": "Unity",
+    "source": "https://thesvg.org/icons/unity/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "csharp": {
+    "name": "C#",
+    "source": "https://thesvg.org/icons/csharp/default.svg",
+    "license": "MIT",
+    "mono": false
+  },
+  "katalon": {
+    "name": "Katalon",
+    "source": "https://thesvg.org/icons/katalon/default.svg",
+    "license": "brand-use",
+    "mono": false
+  },
+  "google-colab": {
+    "name": "Google Colab",
+    "source": "https://thesvg.org/icons/google-colab/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "minio": {
+    "name": "MinIO",
+    "source": "https://thesvg.org/icons/minio/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "git": {
+    "name": "Git",
+    "source": "https://thesvg.org/icons/git/mono.svg",
+    "license": "CC-BY-3.0",
+    "mono": true
+  },
+  "php": {
+    "name": "PHP",
+    "source": "https://thesvg.org/icons/php/mono.svg",
+    "license": "CC-BY-SA-4.0",
+    "mono": true
+  },
+  "kotlin": {
+    "name": "Kotlin",
+    "source": "https://thesvg.org/icons/kotlin/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "android": {
+    "name": "Android",
+    "source": "https://thesvg.org/icons/android/mono.svg",
+    "license": "CC-BY-3.0",
+    "mono": true
+  },
+  "ffmpeg": {
+    "name": "FFmpeg",
+    "source": "https://thesvg.org/icons/ffmpeg/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "json-web-tokens": {
+    "name": "JSON Web Tokens",
+    "source": "https://thesvg.org/icons/json-web-tokens/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  },
+  "json": {
+    "name": "JSON",
+    "source": "https://thesvg.org/icons/json/mono.svg",
+    "license": "CC0-1.0",
+    "mono": true
+  }
+}

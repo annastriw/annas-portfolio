@@ -4,6 +4,9 @@ import { ArrowRightIcon, ArrowUpRightIcon, MapPinIcon } from '@phosphor-icons/re
 import { identity, experience, capabilities } from '@/content/site';
 import { featuredProjects } from '@/content/projects';
 import { GitHubActivity } from '@/components/github-activity';
+import { TechBadge } from '@/components/tech-badge';
+import { TechReel } from '@/components/tech-reel';
+import { capabilityTechnologies } from '@/content/technologies';
 import { pageMetadata, siteUrl } from '@/lib/metadata';
 import { isLocale, type Locale } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
@@ -26,7 +29,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       jobTitle: identity.role,
       url: siteUrl,
       sameAs: [identity.github, identity.linkedin],
-      image: `${siteUrl}/assets/photos/about.webp`,
+      image: `${siteUrl}/assets/photos/about.jpg`,
     },
   };
   return (
@@ -37,12 +40,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       />
       <section className="hero" aria-labelledby="hero-name">
         <picture className="hero-photo">
-          <source media="(max-width: 700px)" srcSet="/assets/photos/hero-mobile.webp" />
+          <source media="(max-width: 700px)" srcSet="/assets/photos/hero-mobile.jpg" />
           <img
-            src="/assets/photos/hero.webp"
+            src="/assets/photos/hero.jpg"
             alt=""
-            width="1600"
-            height="2400"
+            width="3504"
+            height="2336"
             fetchPriority="high"
           />
         </picture>
@@ -192,26 +195,13 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </div>
           </details>
         ))}
-        <div
-          className="brand-strip"
-          aria-label={
-            id ? 'Beberapa teknologi yang digunakan' : 'A selection of technologies I use'
-          }
-        >
-          {[
-            ['nextjs', 'Next.js'],
-            ['react-mono', 'React'],
-            ['typescript-mono', 'TypeScript'],
-            ['python-mono', 'Python'],
-            ['github-mono', 'GitHub'],
-            ['vercel-mono', 'Vercel'],
-          ].map(([file, name]) => (
-            <span key={file}>
-              <Image src={`/assets/icons/${file}.svg`} width={23} height={23} alt="" />
-              {name}
-            </span>
+        <TechReel locale={locale}>
+          {capabilityTechnologies.map((name) => (
+            <li key={name}>
+              <TechBadge name={name} />
+            </li>
           ))}
-        </div>
+        </TechReel>
       </section>
       <GitHubActivity locale={locale} />
     </>

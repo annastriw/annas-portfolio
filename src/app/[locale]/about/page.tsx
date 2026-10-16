@@ -4,6 +4,7 @@ import { ArrowUpRightIcon } from '@phosphor-icons/react/dist/ssr';
 import { biography, certificates, thesis } from '@/content/site';
 import { isLocale, type Locale } from '@/lib/i18n';
 import { pageMetadata } from '@/lib/metadata';
+import { CertificateGallery } from '@/components/certificate-gallery';
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   return pageMetadata(
@@ -11,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     'about',
     locale === 'id' ? 'Tentang Saya' : 'About',
     biography[0][locale],
-    '/assets/photos/about.webp',
+    '/assets/photos/about.jpg',
   );
 }
 export default async function About({ params }: { params: Promise<{ locale: string }> }) {
@@ -27,9 +28,9 @@ export default async function About({ params }: { params: Promise<{ locale: stri
       <section className="about-intro">
         <div className="about-photo">
           <Image
-            src="/assets/photos/about.webp"
-            width={960}
-            height={1440}
+            src="/assets/photos/about.jpg"
+            width={2336}
+            height={3504}
             sizes="(max-width: 700px) 92vw, 37vw"
             alt={
               id
@@ -78,36 +79,7 @@ export default async function About({ params }: { params: Promise<{ locale: stri
           <h2 className="eyebrow">02 / {id ? 'Sertifikat Pelatihan' : 'Training Certificates'}</h2>
           <span className="eyebrow">08</span>
         </div>
-        <div className="certificate-grid">
-          {certificates.map(([title, issuer, year, file]) => (
-            <a
-              className="certificate"
-              key={file}
-              href={`/assets/certificates/${file}.webp`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div className="certificate-image">
-                <Image
-                  src={`/assets/certificates/thumb-${file}.webp`}
-                  width={640}
-                  height={450}
-                  sizes="(max-width: 700px) 90vw, (max-width: 1000px) 43vw, 28vw"
-                  alt={id ? `Sertifikat ${title}` : `${title} certificate`}
-                />
-              </div>
-              <div className="certificate-copy">
-                <p className="eyebrow">
-                  {issuer} · {year}
-                </p>
-                <h3>
-                  {title}
-                  <ArrowUpRightIcon size={20} />
-                </h3>
-              </div>
-            </a>
-          ))}
-        </div>
+        <CertificateGallery items={certificates} locale={locale} />
       </section>
     </div>
   );

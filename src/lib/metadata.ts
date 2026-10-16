@@ -6,7 +6,7 @@ export function pageMetadata(
   path: string,
   title: string,
   description: string,
-  image = '/assets/photos/hero.webp',
+  image = '/assets/photos/hero.jpg',
 ): Metadata {
   const suffix = path ? `${path}/` : '';
   const url = `${siteUrl}/${locale}/${suffix}`;

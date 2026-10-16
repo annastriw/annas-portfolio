@@ -6,13 +6,20 @@ export function Splash() {
   useEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     try {
-      if (sessionStorage.getItem('portfolio-intro')) return;
-      sessionStorage.setItem('portfolio-intro', 'seen');
+      if (sessionStorage.getItem('portfolio-intro-v2')) return;
     } catch {
       return;
     }
-    const show = requestAnimationFrame(() => setVisible(true));
-    const hide = setTimeout(() => setVisible(false), 780);
+    let hide: ReturnType<typeof setTimeout>;
+    const show = requestAnimationFrame(() => {
+      try {
+        sessionStorage.setItem('portfolio-intro-v2', 'seen');
+      } catch {
+        return;
+      }
+      setVisible(true);
+      hide = setTimeout(() => setVisible(false), 980);
+    });
     return () => {
       cancelAnimationFrame(show);
       clearTimeout(hide);
@@ -20,8 +27,15 @@ export function Splash() {
   }, []);
   return visible ? (
     <div className="splash" aria-hidden="true">
-      <span>Annas Tri Widagdo</span>
-      <small>Software Engineer</small>
+      <div className="splash-signature">
+        <span>A</span>
+        <span>T</span>
+        <span>W</span>
+      </div>
+      <div className="splash-rule" />
+      <small>
+        Annas Tri Widagdo <span>Software Engineer</span>
+      </small>
     </div>
   ) : null;
 }

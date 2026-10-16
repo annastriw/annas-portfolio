@@ -12,6 +12,7 @@ const types = {
   '.xml': 'application/xml',
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
+  '.jpg': 'image/jpeg',
   '.ttf': 'font/ttf',
   '.ico': 'image/x-icon',
 };

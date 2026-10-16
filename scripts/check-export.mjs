@@ -62,7 +62,15 @@ for (const locale of ['en', 'id'])
     );
   }
 const forbidden = files.filter(
-  (f) => /\.(?:md|mdx|env|jpg|jpeg|webm)$/i.test(f) || f.includes('.project-local'),
+  (f) =>
+    /\.(?:md|mdx|env|webm)$/i.test(f) ||
+    f.includes('.project-local') ||
+    (/\.jpe?g$/i.test(f) &&
+      ![
+        'assets/photos/hero.jpg',
+        'assets/photos/hero-mobile.jpg',
+        'assets/photos/about.jpg',
+      ].includes(relative(root, f).split(sep).join('/'))),
 );
 assert.equal(
   forbidden.length,

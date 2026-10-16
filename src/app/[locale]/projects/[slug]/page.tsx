@@ -1,10 +1,10 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowUpRightIcon, CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
 import { projects } from '@/content/projects';
 import { Gallery, type GalleryCaption } from '@/components/gallery';
 import galleryCaptions from '@/content/gallery.json';
+import { TechBadge } from '@/components/tech-badge';
 import { isLocale, type Locale } from '@/lib/i18n';
 import { pageMetadata, siteUrl } from '@/lib/metadata';
 export const dynamicParams = false;
@@ -103,16 +103,6 @@ export default async function ProjectDetail({
           ))}
         </div>
       </div>
-      <div className="detail-cover">
-        <Image
-          src={p.cover}
-          width={1600}
-          height={1067}
-          sizes="(max-width: 700px) 92vw, 88vw"
-          alt={`${p.title} — ${id ? 'pratinjau aplikasi' : 'application preview'}`}
-          preload
-        />
-      </div>
       <section className="detail-story">
         <div>
           <h2>{id ? 'Yang saya kerjakan' : 'My contribution'}</h2>
@@ -126,7 +116,9 @@ export default async function ProjectDetail({
           <h2>{id ? 'Teknologi' : 'Built with'}</h2>
           <ul className="tag-list">
             {p.technologies.map((t) => (
-              <li key={t}>{t}</li>
+              <li key={t}>
+                <TechBadge name={t} />
+              </li>
             ))}
           </ul>
           {p.note && <p className="project-note">{p.note[locale]}</p>}
