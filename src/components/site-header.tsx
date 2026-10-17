@@ -6,6 +6,9 @@ import { useLayoutEffect, useRef } from 'react';
 import { ListIcon, XIcon, SunIcon, MoonIcon, MonitorIcon } from '@phosphor-icons/react';
 import { localizePath, type Locale } from '@/lib/i18n';
 
+import { navigationCurrent } from '@/lib/navigation';
+import { clearArchiveNavigation, queueReturn, settleArchiveEntry } from '@/lib/archive-navigation';
+
 type Theme = 'system' | 'light' | 'dark';
 export function SiteHeader({ locale }: { locale: Locale }) {
   useLayoutEffect(() => {
@@ -28,6 +31,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
       : ['Home', 'About', 'Projects', 'Contact'];
   const paths = ['', 'about/', 'projects/', 'contact/'];
   function navigateToTop() {
+    clearArchiveNavigation();
     try {
       sessionStorage.setItem('portfolio-scroll-top', 'true');
     } catch {
@@ -46,6 +50,13 @@ export function SiteHeader({ locale }: { locale: Locale }) {
     }
     document.documentElement.dataset.theme = next;
   }
+  function changeLanguage(next: Locale) {
+    const visit = /^\/(en|id)\/projects\/[^/]+\/?$/.test(path)
+      ? settleArchiveEntry(`${path.replace(/\/$/, '')}/`)
+      : null;
+    navigateToTop();
+    if (visit) queueReturn(localizePath(path, next), visit);
+  }
   const controls = (
     <div className="header-controls">
       <div className="locale-switch" aria-label={locale === 'id' ? 'Bahasa' : 'Language'}>
@@ -54,7 +65,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             key={l}
             href={localizePath(path, l)}
             scroll={false}
-            onNavigate={navigateToTop}
+            onNavigate={() => changeLanguage(l)}
             hrefLang={l}
             lang={l}
             aria-current={locale === l ? 'true' : undefined}
@@ -98,11 +109,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
               scroll={false}
               onNavigate={navigateToTop}
               key={p}
-              aria-current={
-                path === `/${locale}/${p}` || path === `/${locale}/${p}`.replace(/\/$/, '')
-                  ? 'page'
-                  : undefined
-              }
+              aria-current={navigationCurrent(path, `/${locale}/${p}`)}
             >
               {labels[i]}
             </Link>
@@ -141,7 +148,13 @@ export function SiteHeader({ locale }: { locale: Locale }) {
         </div>
         <nav aria-label={locale === 'id' ? 'Navigasi mobile' : 'Mobile navigation'}>
           {paths.map((p, i) => (
-            <Link href={`/${locale}/${p}`} scroll={false} onNavigate={navigateToTop} key={p}>
+            <Link
+              href={`/${locale}/${p}`}
+              scroll={false}
+              onNavigate={navigateToTop}
+              key={p}
+              aria-current={navigationCurrent(path, `/${locale}/${p}`)}
+            >
               <span className="eyebrow">0{i + 1}</span>
               {labels[i]}
             </Link>

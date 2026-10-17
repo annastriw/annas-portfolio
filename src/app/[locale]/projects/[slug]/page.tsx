@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { ProjectReturnLink } from '@/components/project-return-link';
 import { notFound } from 'next/navigation';
 import { ArrowUpRightIcon, CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
 import { projects } from '@/content/projects';
@@ -56,7 +56,7 @@ export default async function ProjectDetail({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }}
       />
       <nav className="breadcrumb" aria-label="Breadcrumb">
-        <Link href={`/${locale}/projects/`}>{id ? 'Proyek' : 'Projects'}</Link>
+        <ProjectReturnLink locale={locale} slug={slug} />
         <CaretRightIcon size={13} />
         <span aria-current="page">{p.title}</span>
       </nav>

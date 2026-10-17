@@ -2,10 +2,22 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useState, useSyncExternalStore } from 'react';
+import { archiveSnapshot, captureArchive, settleArchiveEntry } from '@/lib/archive-navigation';
+import type { ArchiveVisit } from '@/lib/navigation';
 import { ArrowUpRightIcon } from '@phosphor-icons/react';
 import type { Category, Project } from '@/content/projects';
 import type { Locale } from '@/lib/i18n';
+
+const subscribe = (notify: () => void) => {
+  window.addEventListener('popstate', notify);
+  window.addEventListener('portfolio-archive-reset', notify);
+  return () => {
+    window.removeEventListener('popstate', notify);
+    window.removeEventListener('portfolio-archive-reset', notify);
+  };
+};
+const serverSnapshot = () => '';
 
 export function ProjectArchive({
   locale,
@@ -14,7 +26,43 @@ export function ProjectArchive({
   locale: Locale;
   items: Pick<Project, 'slug' | 'title' | 'category' | 'role' | 'tagline' | 'cover'>[];
 }) {
-  const [filter, setFilter] = useState<Category | 'all'>('all');
+  const path = `/${locale}/projects/`;
+  const snapshot = useSyncExternalStore(subscribe, () => archiveSnapshot(path), serverSnapshot);
+  const restored: ArchiveVisit | null = snapshot ? JSON.parse(snapshot) : null;
+  const [selected, setFilter] = useState<Category | 'all' | null>(null);
+  useEffect(() => {
+    const reset = () => setFilter(null);
+    window.addEventListener('portfolio-archive-reset', reset);
+    return () => window.removeEventListener('portfolio-archive-reset', reset);
+  }, []);
+  const valid =
+    restored &&
+    projects.some(
+      (p) =>
+        p.slug === restored.slug && (restored.filter === 'all' || p.category === restored.filter),
+    );
+  const filter: Category | 'all' = selected ?? (valid ? restored.filter : 'all');
+  useLayoutEffect(() => {
+    const visit = settleArchiveEntry(path);
+    if (!visit) return;
+    const card = document.getElementById(`project-${visit.slug}`);
+    if (!card) return;
+    // Use the card's new layout position rather than an old absolute scroll value.
+    const offset = Math.min(Math.max(visit.offset, 100), window.innerHeight * 0.45);
+    window.scrollTo({
+      top: window.scrollY + card.getBoundingClientRect().top - offset,
+      behavior: 'instant',
+    });
+  }, [path, snapshot]);
+  function remember(slug: string) {
+    const card = document.getElementById(`project-${slug}`);
+    if (card)
+      captureArchive(path, `${path}${slug}/`, {
+        filter,
+        slug,
+        offset: card.getBoundingClientRect().top,
+      });
+  }
   const categories = [
     ['all', locale === 'id' ? 'Semua' : 'All'],
     ['web', 'Web'],
@@ -48,8 +96,12 @@ export function ProjectArchive({
       </div>
       <div className="project-grid">
         {visible.map((p) => (
-          <article className="project-card" key={p.slug}>
-            <Link href={`/${locale}/projects/${p.slug}/`} className="project-image">
+          <article className="project-card" key={p.slug} id={`project-${p.slug}`}>
+            <Link
+              href={`/${locale}/projects/${p.slug}/`}
+              onNavigate={() => remember(p.slug)}
+              className="project-image"
+            >
               <Image
                 src={p.cover}
                 alt={`${p.title} — ${locale === 'id' ? 'pratinjau aplikasi' : 'application preview'}`}
@@ -72,7 +124,9 @@ export function ProjectArchive({
               </span>
             </div>
             <h2>
-              <Link href={`/${locale}/projects/${p.slug}/`}>{p.title}</Link>
+              <Link href={`/${locale}/projects/${p.slug}/`} onNavigate={() => remember(p.slug)}>
+                {p.title}
+              </Link>
             </h2>
             <p>{p.tagline[locale]}</p>
           </article>

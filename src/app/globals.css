@@ -237,7 +237,7 @@ main:focus {
   transition: right 0.2s;
 }
 .desktop-navigation a:hover::after,
-.desktop-navigation a[aria-current='page']::after {
+.desktop-navigation a[aria-current]::after {
   right: 0;
 }
 .header-controls {
@@ -2787,4 +2787,13 @@ body:has(.contact-page) .footer-meta {
 .gallery-viewport:focus-within,
 .certificate:focus-visible .certificate-image {
   clip-path: none !important;
+}
+
+/* One active section cue across both navigation layouts. */
+.mobile-menu nav a[aria-current] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.mobile-menu nav a[aria-current] .eyebrow::after {
+  content: ' /';
 }
