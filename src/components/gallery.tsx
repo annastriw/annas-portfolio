@@ -120,6 +120,7 @@ export function Gallery({
                 />
                 <span className="enlarge">
                   <ArrowsOutIcon size={22} />
+                  <span>{id ? 'Perbesar' : 'Enlarge'}</span>
                 </span>
               </button>
             </div>

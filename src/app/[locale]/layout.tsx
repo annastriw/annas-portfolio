@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { PageMotion } from '@/components/page-motion';
+import { openingBootstrap } from '@/lib/opening';
 import { isLocale, locales } from '@/lib/i18n';
 import { siteUrl } from '@/lib/metadata';
 import '../globals.css';
@@ -30,6 +31,7 @@ export default async function LocaleLayout({
     <html lang={locale} data-theme="system" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: openingBootstrap }} />
         <link
           rel="preload"
           href="/assets/fonts/geist-regular.ttf"

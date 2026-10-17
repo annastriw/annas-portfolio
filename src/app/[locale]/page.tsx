@@ -185,6 +185,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
               : 'From the interface to the systems behind it.'}
           </p>
         </div>
+        <p className="interaction-hint">
+          {id
+            ? 'Pilih bidang untuk melihat pendekatan dan teknologi yang saya gunakan.'
+            : 'Select an area to explore my approach and technologies.'}
+        </p>
         <CapabilityExplorer
           locale={locale}
           items={capabilities.map((c) => ({

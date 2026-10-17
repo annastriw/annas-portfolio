@@ -19,7 +19,6 @@ export function CertificateGallery({ items, locale }: { items: string[][]; local
             className="certificate"
             type="button"
             key={file}
-            aria-label={`${locale === 'id' ? 'Lihat sertifikat' : 'View certificate'}: ${title}`}
             onClick={(event) => {
               trigger.current = event.currentTarget;
               setSelected(index);
@@ -39,9 +38,10 @@ export function CertificateGallery({ items, locale }: { items: string[][]; local
               <span className="eyebrow">
                 {issuer} · {year}
               </span>
-              <span className="certificate-title">
-                {title}
-                <ArrowsOutIcon size={20} />
+              <span className="certificate-title">{title}</span>
+              <span className="certificate-action">
+                {locale === 'id' ? 'Buka pratinjau' : 'Open preview'}
+                <ArrowsOutIcon size={18} />
               </span>
             </span>
           </button>

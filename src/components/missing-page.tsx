@@ -19,9 +19,17 @@ export function MissingPage() {
     }
   }, [id]);
   const home = id ? '/id/' : '/en/';
+  function returnHome() {
+    try {
+      sessionStorage.setItem('portfolio-replay-opening', 'true');
+      sessionStorage.setItem('portfolio-scroll-top', 'true');
+    } catch {
+      /* An unavailable storage also makes home treat this as a fresh visit. */
+    }
+  }
   return (
     <main className="container missing-page">
-      <a className="wordmark" href={home}>
+      <a className="wordmark" href={home} onClick={returnHome}>
         annastriwidagdo.me<span className="brand-dot">.</span>
       </a>
       <p className="eyebrow">404 / {id ? 'Halaman tidak ditemukan' : 'Page not found'}</p>
@@ -32,7 +40,7 @@ export function MissingPage() {
           : 'This page isn’t here. There’s still plenty to explore back at home.'}
       </p>
       <div className="missing-actions">
-        <a className="text-link" href={home}>
+        <a className="text-link" href={home} onClick={returnHome}>
           <ArrowLeftIcon size={20} />
           {id ? 'Kembali ke Beranda' : 'Back to Home'}
         </a>
