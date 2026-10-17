@@ -1,14 +1,41 @@
+# Dependencies and generated output
 node_modules/
 .next/
 out/
-.project-local/
-.env*
-*.md
-*.mdx
 *.tsbuildinfo
 next-env.d.ts
 *.log
-.vercel/
 coverage/
 playwright-report/
 test-results/
+
+# Local documentation and private working files
+.project-local/
+*.md
+*.mdx
+/docs/
+/documentation/
+/content/projects/
+/originals/
+/backups/
+/tmp/
+/temp/
+
+# Credentials and machine-specific configuration
+.env*
+.vercel/
+*.pem
+*.key
+*.p12
+*.pfx
+.idea/
+.vscode/
+
+# OS and editor leftovers
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*.tmp
+*.bak
