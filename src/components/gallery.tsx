@@ -1,19 +1,13 @@
 'use client';
-
 import Image from 'next/image';
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type PointerEvent,
-} from 'react';
-import { ArrowLeftIcon, ArrowRightIcon, ArrowsOutIcon, XIcon } from '@phosphor-icons/react';
+import dynamic from 'next/dynamic';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import { ArrowLeftIcon, ArrowRightIcon, ArrowsOutIcon } from '@phosphor-icons/react';
 import type { Locale, Bilingual } from '@/lib/i18n';
 import { swipeStep } from '@/lib/gallery-gesture';
+const MediaLightbox = dynamic(() => import('./media-lightbox'), { ssr: false });
 export type GalleryCaption = { alt: Bilingual; caption: Bilingual };
-
 export function Gallery({
   images,
   title,
@@ -26,218 +20,151 @@ export function Gallery({
   captions: Record<string, GalleryCaption>;
 }) {
   const [index, setIndex] = useState(0);
-  const dialog = useRef<HTMLDialogElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [viewport, carousel] = useEmblaCarousel({ loop: false, duration: 28, dragThreshold: 5 });
   const root = useRef<HTMLDivElement>(null);
-  const pointer = useRef<{ id: number; x: number; y: number; stage: HTMLElement } | null>(null);
-  const suppressClick = useRef(false);
-  const direction = useRef(1);
-  const firstRender = useRef(true);
-  const description = captions[images[index]];
-  const change = useCallback(
-    (step: number) => {
-      direction.current = step;
-      setIndex((current) => (current + step + images.length) % images.length);
+  const trigger = useRef<HTMLButtonElement | null>(null);
+  const id = locale === 'id';
+  const go = useCallback(
+    (next: number) => {
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      carousel?.scrollTo(next, reduced);
     },
-    [images.length],
+    [carousel],
   );
-  function resetDrag() {
-    if (pointer.current) {
-      pointer.current.stage.style.removeProperty('--gallery-drag');
-      delete pointer.current.stage.dataset.dragging;
-    }
-    pointer.current = null;
-  }
-  const gestures = {
-    onPointerDown(event: PointerEvent<HTMLDivElement>) {
-      if (!event.isPrimary || event.button !== 0 || images.length < 2) return;
-      suppressClick.current = false;
-      pointer.current = {
-        id: event.pointerId,
-        x: event.clientX,
-        y: event.clientY,
-        stage: event.currentTarget,
-      };
-      const capture = (event.target as Element).closest('button') ?? event.currentTarget;
-      try {
-        capture.setPointerCapture(event.pointerId);
-      } catch {
-        /* A cancelled pointer may no longer be active. */
-      }
-    },
-    onPointerMove(event: PointerEvent<HTMLDivElement>) {
-      const start = pointer.current;
-      if (!start || start.id !== event.pointerId) return;
-      const dx = event.clientX - start.x,
-        dy = event.clientY - start.y;
-      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) suppressClick.current = true;
-      if (Math.abs(dx) > Math.abs(dy) * 1.4) {
-        const limit = start.stage.clientWidth * 0.3;
-        start.stage.style.setProperty(
-          '--gallery-drag',
-          `${Math.max(-limit, Math.min(limit, dx))}px`,
-        );
-        start.stage.dataset.dragging = 'true';
-      }
-    },
-    onPointerUp(event: PointerEvent<HTMLDivElement>) {
-      const start = pointer.current;
-      if (!start || start.id !== event.pointerId) return;
-      const dx = event.clientX - start.x,
-        dy = event.clientY - start.y;
-      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) suppressClick.current = true;
-      const step = swipeStep(dx, dy, start.stage.clientWidth);
-      resetDrag();
-      if (step) change(step);
-    },
-    onPointerCancel() {
-      resetDrag();
-    },
-  };
-  useLayoutEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const animations = Array.from(root.current?.querySelectorAll('.gallery-visual') ?? [])
-      .filter((element) => element.getClientRects().length)
-      .map((element) =>
-        element.animate(
-          [
-            { opacity: 0.5, transform: `translateX(${direction.current > 0 ? 24 : -24}px)` },
-            { opacity: 1, transform: 'translateX(0)' },
-          ],
-          { duration: 260, easing: 'cubic-bezier(.22,1,.36,1)' },
-        ),
-      );
-    return () => animations.forEach((animation) => animation.cancel());
-  }, [index]);
   useEffect(() => {
-    const stages = Array.from(root.current?.querySelectorAll<HTMLElement>('.gallery-stage') ?? []);
-    let accumulated = 0,
-      lastEvent = 0,
-      lastSlide = 0;
-    const wheel = (event: WheelEvent) => {
-      if (event.ctrlKey || Math.abs(event.deltaX) <= Math.abs(event.deltaY) * 1.4) return;
-      event.preventDefault();
+    if (!carousel) return;
+    const select = () => setIndex(carousel.selectedScrollSnap());
+    carousel.on('select', select).on('reInit', select);
+    return () => {
+      carousel.off('select', select).off('reInit', select);
+    };
+  }, [carousel]);
+  useEffect(() => {
+    const element = root.current?.querySelector('.gallery-viewport');
+    if (!element || !carousel) return;
+    let total = 0,
+      last = 0,
+      changed = 0;
+    const wheel = (event: Event) => {
+      const e = event as WheelEvent;
+      if (e.ctrlKey || Math.abs(e.deltaX) <= Math.abs(e.deltaY) * 1.4) return;
+      e.preventDefault();
       const now = Date.now();
-      if (now - lastSlide < 450) return;
-      if (now - lastEvent > 180) accumulated = 0;
-      lastEvent = now;
-      accumulated += event.deltaX;
-      if (Math.abs(accumulated) > 55) {
-        change(accumulated > 0 ? 1 : -1);
-        accumulated = 0;
-        lastSlide = now;
+      if (now - changed < 380) return;
+      if (now - last > 160) total = 0;
+      last = now;
+      total += e.deltaX;
+      const step = swipeStep(-total, 0, element.clientWidth);
+      if (step) {
+        go(carousel.selectedScrollSnap() + step);
+        total = 0;
+        changed = now;
       }
     };
-    stages.forEach((stage) => stage.addEventListener('wheel', wheel, { passive: false }));
-    return () => stages.forEach((stage) => stage.removeEventListener('wheel', wheel));
-  }, [change]);
-  const controls = (
-    <div className="gallery-controls">
-      <p className="eyebrow" aria-live="polite">
-        {locale === 'id' ? 'Tampilan' : 'View'} {String(index + 1).padStart(2, '0')} /{' '}
-        {String(images.length).padStart(2, '0')}
-      </p>
-      <div>
-        <button
-          className="icon-button"
-          disabled={images.length < 2}
-          aria-label={locale === 'id' ? 'Gambar sebelumnya' : 'Previous image'}
-          onClick={() => change(-1)}
-        >
-          <ArrowLeftIcon size={23} />
-        </button>
-        <button
-          className="icon-button"
-          disabled={images.length < 2}
-          aria-label={locale === 'id' ? 'Gambar berikutnya' : 'Next image'}
-          onClick={() => change(1)}
-        >
-          <ArrowRightIcon size={23} />
-        </button>
-      </div>
-    </div>
-  );
+    element.addEventListener('wheel', wheel, { passive: false });
+    return () => element.removeEventListener('wheel', wheel);
+  }, [carousel, go]);
+  const hint = id
+    ? 'Cubit atau ketuk dua kali untuk zoom · Drag saat diperbesar'
+    : 'Pinch or double-tap to zoom · Drag to pan when enlarged';
   return (
     <div
       className="gallery"
       ref={root}
       role="region"
       aria-roledescription="carousel"
-      aria-label={`${title} ${locale === 'id' ? 'galeri' : 'gallery'}`}
+      aria-label={`${title} ${id ? 'galeri' : 'gallery'}`}
       tabIndex={0}
       onKeyDown={(event) => {
-        if (event.key === 'ArrowLeft') {
+        const next =
+          event.key === 'ArrowLeft'
+            ? index - 1
+            : event.key === 'ArrowRight'
+              ? index + 1
+              : event.key === 'Home'
+                ? 0
+                : event.key === 'End'
+                  ? images.length - 1
+                  : null;
+        if (next !== null) {
           event.preventDefault();
-          change(-1);
-        }
-        if (event.key === 'ArrowRight') {
-          event.preventDefault();
-          change(1);
-        }
-        if (event.key === 'Home') {
-          event.preventDefault();
-          direction.current = -1;
-          setIndex(0);
-        }
-        if (event.key === 'End') {
-          event.preventDefault();
-          direction.current = 1;
-          setIndex(images.length - 1);
+          go(next);
         }
       }}
     >
-      <div className="gallery-stage" {...gestures}>
-        <button
-          ref={trigger}
-          className="gallery-main"
-          onClick={() => {
-            if (suppressClick.current) {
-              suppressClick.current = false;
-              return;
-            }
-            dialog.current?.showModal();
-          }}
-          aria-label={locale === 'id' ? 'Perbesar gambar' : 'Enlarge image'}
-        >
-          <Image
-            className="gallery-visual"
-            draggable={false}
-            onDragStart={(event) => event.preventDefault()}
-            src={images[index]}
-            width={1600}
-            height={1000}
-            sizes="(max-width: 700px) 92vw, 88vw"
-            alt={description?.alt[locale] ?? `${title} — ${index + 1}`}
-          />
-          <span className="enlarge">
-            <ArrowsOutIcon size={22} />
-          </span>
-        </button>
+      <div className="gallery-viewport" ref={viewport}>
+        <div className="gallery-track">
+          {images.map((src, i) => (
+            <div className="gallery-slide" key={src} aria-hidden={i !== index}>
+              <button
+                className="gallery-main"
+                tabIndex={i === index ? 0 : -1}
+                onClick={(event) => {
+                  trigger.current = event.currentTarget;
+                  setLoaded(true);
+                  setOpen(true);
+                }}
+                aria-label={id ? 'Perbesar gambar' : 'Enlarge image'}
+              >
+                <Image
+                  className="gallery-visual"
+                  draggable={false}
+                  src={src}
+                  width={1600}
+                  height={1000}
+                  sizes="(max-width: 700px) 92vw, 88vw"
+                  alt={captions[src]?.alt[locale] ?? `${title} · ${i + 1}`}
+                  loading="lazy"
+                />
+                <span className="enlarge">
+                  <ArrowsOutIcon size={22} />
+                </span>
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-      {description && <p className="gallery-caption">{description.caption[locale]}</p>}
-      {controls}
+      {captions[images[index]] && (
+        <p className="gallery-caption">{captions[images[index]].caption[locale]}</p>
+      )}
+      <div className="gallery-controls">
+        <p className="eyebrow" aria-live="polite">
+          {id ? 'Tampilan' : 'View'} {String(index + 1).padStart(2, '0')} /{' '}
+          {String(images.length).padStart(2, '0')}
+        </p>
+        <div>
+          <button
+            className="icon-button"
+            disabled={index === 0}
+            aria-label={id ? 'Gambar sebelumnya' : 'Previous image'}
+            onClick={() => go(index - 1)}
+          >
+            <ArrowLeftIcon size={23} />
+          </button>
+          <button
+            className="icon-button"
+            disabled={index === images.length - 1}
+            aria-label={id ? 'Gambar berikutnya' : 'Next image'}
+            onClick={() => go(index + 1)}
+          >
+            <ArrowRightIcon size={23} />
+          </button>
+        </div>
+      </div>
       <p className="gallery-hint">
-        {locale === 'id'
+        {id
           ? 'Geser atau drag gambar · Klik untuk memperbesar'
           : 'Swipe or drag the image · Click to enlarge'}
       </p>
-      <div
-        className="gallery-thumbnails"
-        aria-label={locale === 'id' ? 'Pilih tampilan' : 'Choose a view'}
-      >
+      <div className="gallery-thumbnails" aria-label={id ? 'Pilih tampilan' : 'Choose a view'}>
         {images.map((src, i) => (
           <button
             key={src}
-            aria-label={`${locale === 'id' ? 'Tampilkan gambar' : 'Show image'} ${i + 1}`}
+            aria-label={`${id ? 'Tampilkan gambar' : 'Show image'} ${i + 1}`}
             aria-pressed={i === index}
-            onClick={() => {
-              direction.current = i > index ? 1 : -1;
-              setIndex(i);
-            }}
+            onClick={() => go(i)}
           >
             <Image
               src={src.replace('/documentation/', '/thumbnails/')}
@@ -250,47 +177,27 @@ export function Gallery({
           </button>
         ))}
       </div>
-      <dialog
-        ref={dialog}
-        className="image-dialog"
-        aria-label={`${title} ${locale === 'id' ? 'galeri' : 'gallery'}`}
-        onClose={() => {
-          resetDrag();
-          trigger.current?.focus();
-        }}
-        onClick={(e) => {
-          if (e.target === e.currentTarget) dialog.current?.close();
-        }}
-      >
-        <div className="lightbox-top">
-          <span>{title}</span>
-          <button
-            className="icon-button"
-            onClick={() => dialog.current?.close()}
-            aria-label={locale === 'id' ? 'Tutup gambar' : 'Close image'}
-          >
-            <XIcon size={26} />
-          </button>
-        </div>
-        <div className="gallery-stage lightbox-stage" {...gestures}>
-          <Image
-            className="gallery-visual"
-            draggable={false}
-            onDragStart={(event) => event.preventDefault()}
-            src={images[index]}
-            width={1920}
-            height={1200}
-            alt={description?.alt[locale] ?? `${title} — ${index + 1}`}
-            sizes="95vw"
-          />
-        </div>
-        {controls}
-        <p className="gallery-hint">
-          {locale === 'id'
-            ? 'Geser gambar, drag, atau gunakan tombol panah.'
-            : 'Swipe, drag, or use the arrow keys.'}
-        </p>
-      </dialog>
+      {loaded && (
+        <MediaLightbox
+          open={open}
+          close={() => setOpen(false)}
+          index={index}
+          locale={locale}
+          slides={images.map((src, i) => ({
+            src,
+            alt: captions[src]?.alt[locale] ?? `${title} · ${i + 1}`,
+            title: `${title} · ${i + 1} / ${images.length}`,
+            description: hint,
+          }))}
+          onView={go}
+          onExited={() => {
+            const current = root.current?.querySelector<HTMLButtonElement>(
+              '.gallery-slide[aria-hidden="false"] .gallery-main',
+            );
+            (current ?? trigger.current)?.focus({ preventScroll: true });
+          }}
+        />
+      )}
     </div>
   );
 }

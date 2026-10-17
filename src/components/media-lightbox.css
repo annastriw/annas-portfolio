@@ -1,0 +1,58 @@
+.portfolio-lightbox {
+  --yarl__color_backdrop: var(--bg);
+  --yarl__color_button: var(--fg);
+  --yarl__color_button_active: var(--accent);
+  --yarl__color_button_disabled: var(--muted);
+  --yarl__button_filter: none;
+  --yarl__slide_captions_container_background: var(--bg);
+  --yarl__slide_captions_container_color: var(--fg);
+  --yarl__slide_title_color: var(--fg);
+  --yarl__slide_title_font_size: 15px;
+  --yarl__slide_description_font_size: 12px;
+  --yarl__slide_description_color: var(--muted);
+  --yarl__slide_captions_container_padding: 16px 24px;
+  --yarl__slide_captions_container_text_align: center;
+}
+.portfolio-lightbox .yarl__toolbar {
+  gap: 6px;
+  padding: 12px;
+}
+.portfolio-lightbox .yarl__button {
+  min-width: 44px;
+  min-height: 44px;
+  transition:
+    color 200ms,
+    background 200ms;
+}
+.portfolio-lightbox .yarl__button:hover {
+  background: var(--surface);
+}
+.portfolio-lightbox .yarl__slide_image {
+  box-shadow: 0 8px 50px #0002;
+}
+.portfolio-lightbox .yarl__slide {
+  padding-block: 72px 112px;
+}
+@media (max-width: 700px) {
+  .portfolio-lightbox .yarl__navigation_prev {
+    left: 0;
+  }
+  .portfolio-lightbox .yarl__navigation_next {
+    right: 0;
+  }
+  .portfolio-lightbox .yarl__slide {
+    padding-inline: 8px;
+  }
+  .portfolio-lightbox .yarl__slide_title {
+    font-size: 13px;
+  }
+  .portfolio-lightbox .yarl__slide_description {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-lightbox * {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}

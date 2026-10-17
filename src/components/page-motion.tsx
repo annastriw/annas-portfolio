@@ -1,10 +1,20 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 export function PageMotion() {
   const path = usePathname();
   const home = /^\/(en|id)\/?$/.test(path);
+  useLayoutEffect(() => {
+    try {
+      if (sessionStorage.getItem('portfolio-scroll-top')) {
+        sessionStorage.removeItem('portfolio-scroll-top');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    } catch {
+      /* Browsers with blocked storage keep native navigation. */
+    }
+  }, [path]);
   useEffect(() => {
     const media = matchMedia('(prefers-reduced-motion: reduce)');
     const curtain = document.querySelector<HTMLElement>('.opening-curtain');
@@ -26,7 +36,7 @@ export function PageMotion() {
     // One opening sequence: curtain clears, photograph settles, name leads, copy follows.
     // Never reset the opacity of content that is already visible during scrolling.
     if (home && window.scrollY < 80) {
-      const start = firstVisit ? 400 : 0;
+      const start = firstVisit ? 950 : 0;
       play(
         document.querySelector('.hero-photo img'),
         [{ transform: 'scale(1.025)' }, { transform: 'scale(1)' }],
@@ -57,21 +67,36 @@ export function PageMotion() {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           observer.unobserve(entry.target);
-          if (entry.target.classList.contains('timeline-item')) {
-            (entry.target as HTMLElement).dataset.seen = 'true';
-          } else {
+          const element = entry.target as HTMLElement;
+          element.dataset.motionSeen = 'true';
+          if (element.classList.contains('timeline-item')) {
+            element.dataset.seen = 'true';
+          } else if (element.matches('.featured-image,.about-photo')) {
             play(
-              entry.target.querySelector('.featured-image img'),
-              [{ transform: 'scale(1.025)' }, { transform: 'scale(1)' }],
-              1000,
+              element,
+              [
+                { clipPath: 'inset(0 0 0 100%)', transform: 'translateX(28px)' },
+                { clipPath: 'inset(0)', transform: 'translateX(0)' },
+              ],
+              950,
             );
+            play(
+              element.querySelector('img'),
+              [{ transform: 'scale(1.035)' }, { transform: 'scale(1)' }],
+              1150,
+            );
+          } else {
+            // Content stays opaque; small spatial cues preserve readability and prevent flicker.
+            play(element, [{ transform: 'translateY(18px)' }, { transform: 'translateY(0)' }], 700);
           }
         });
       },
-      { threshold: 0.08 },
+      { threshold: 0, rootMargin: '0px 0px 40px 0px' },
     );
     document
-      .querySelectorAll('.featured-project,.timeline-item')
+      .querySelectorAll(
+        '.page-heading,.detail-heading,.section-label,.section-intro,.featured-copy,.featured-image,.project-card,.about-photo,.about-biography,.education-heading,.thesis,.certificate,.detail-story>div,.project-facts,.detail-gallery,.contact-socials,.contact-email,.footer-invite,.timeline-item',
+      )
       .forEach((element) => observer.observe(element));
     const stop = () => {
       if (media.matches) {

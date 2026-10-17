@@ -27,6 +27,15 @@ export function SiteHeader({ locale }: { locale: Locale }) {
       ? ['Beranda', 'Tentang Saya', 'Proyek', 'Kontak']
       : ['Home', 'About', 'Projects', 'Contact'];
   const paths = ['', 'about/', 'projects/', 'contact/'];
+  function navigateToTop() {
+    try {
+      sessionStorage.setItem('portfolio-scroll-top', 'true');
+    } catch {
+      /* Scroll still resets in this document. */
+    }
+    dialog.current?.close();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
   function cycleTheme() {
     const current = document.documentElement.dataset.theme as Theme;
     const next: Theme = current === 'system' ? 'light' : current === 'light' ? 'dark' : 'system';
@@ -44,6 +53,8 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           <Link
             key={l}
             href={localizePath(path, l)}
+            scroll={false}
+            onNavigate={navigateToTop}
             hrefLang={l}
             lang={l}
             aria-current={locale === l ? 'true' : undefined}
@@ -71,7 +82,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
   return (
     <>
       <header className="site-header">
-        <Link className="wordmark" href={`/${locale}/`}>
+        <Link className="wordmark" href={`/${locale}/`} scroll={false} onNavigate={navigateToTop}>
           annastriwidagdo.me
           <span className="brand-dot" aria-hidden="true">
             .
@@ -84,6 +95,8 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           {paths.map((p, i) => (
             <Link
               href={`/${locale}/${p}`}
+              scroll={false}
+              onNavigate={navigateToTop}
               key={p}
               aria-current={
                 path === `/${locale}/${p}` || path === `/${locale}/${p}`.replace(/\/$/, '')
@@ -111,7 +124,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
         onClick={(e) => {
           if (e.target === e.currentTarget) dialog.current?.close();
         }}
-        onClose={() => menuButton.current?.focus()}
+        onClose={() => menuButton.current?.focus({ preventScroll: true })}
         aria-labelledby="menu-heading"
       >
         <div className="menu-top">
@@ -128,7 +141,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
         </div>
         <nav aria-label={locale === 'id' ? 'Navigasi mobile' : 'Mobile navigation'}>
           {paths.map((p, i) => (
-            <Link href={`/${locale}/${p}`} key={p} onClick={() => dialog.current?.close()}>
+            <Link href={`/${locale}/${p}`} scroll={false} onNavigate={navigateToTop} key={p}>
               <span className="eyebrow">0{i + 1}</span>
               {labels[i]}
             </Link>

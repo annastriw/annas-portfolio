@@ -1,12 +1,14 @@
 'use client';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
-import { ArrowsOutIcon, XIcon } from '@phosphor-icons/react';
+import dynamic from 'next/dynamic';
+import { ArrowsOutIcon } from '@phosphor-icons/react';
 import type { Locale } from '@/lib/i18n';
 
+const MediaLightbox = dynamic(() => import('./media-lightbox'), { ssr: false });
 export function CertificateGallery({ items, locale }: { items: string[][]; locale: Locale }) {
   const [selected, setSelected] = useState<number | null>(null);
-  const dialog = useRef<HTMLDialogElement>(null);
+  const [open, setOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement | null>(null);
   const certificate = selected === null ? null : items[selected];
   return (
@@ -21,7 +23,7 @@ export function CertificateGallery({ items, locale }: { items: string[][]; local
             onClick={(event) => {
               trigger.current = event.currentTarget;
               setSelected(index);
-              dialog.current?.showModal();
+              setOpen(true);
             }}
           >
             <span className="certificate-image">
@@ -45,46 +47,26 @@ export function CertificateGallery({ items, locale }: { items: string[][]; local
           </button>
         ))}
       </div>
-      <dialog
-        ref={dialog}
-        className="image-dialog certificate-dialog"
-        aria-labelledby="certificate-dialog-title"
-        onClick={(event) => {
-          if (event.target === event.currentTarget) dialog.current?.close();
-        }}
-        onClose={() => {
-          setSelected(null);
-          trigger.current?.focus();
-        }}
-      >
-        <div className="lightbox-top">
-          <h3 id="certificate-dialog-title">
-            {certificate?.[0] ?? (locale === 'id' ? 'Sertifikat' : 'Certificate')}
-          </h3>
-          <button
-            className="icon-button"
-            onClick={() => dialog.current?.close()}
-            aria-label={locale === 'id' ? 'Tutup sertifikat' : 'Close certificate'}
-          >
-            <XIcon size={26} />
-          </button>
-        </div>
-        {certificate && (
-          <>
-            <Image
-              src={`/assets/certificates/${certificate[3]}.webp`}
-              width={1600}
-              height={1100}
-              sizes="95vw"
-              alt={`${locale === 'id' ? 'Sertifikat' : 'Certificate'} ${certificate[0]}`}
-              loading="eager"
-            />
-            <p className="small-text">
-              {certificate[1]} · {certificate[2]}
-            </p>
-          </>
-        )}
-      </dialog>
+      {certificate && (
+        <MediaLightbox
+          open={open}
+          close={() => setOpen(false)}
+          index={0}
+          locale={locale}
+          slides={[
+            {
+              src: `/assets/certificates/${certificate[3]}.webp`,
+              alt: certificate[0],
+              title: certificate[0],
+              description: `${certificate[1]} · ${certificate[2]} · ${locale === 'id' ? 'Cubit / ketuk dua kali untuk zoom' : 'Pinch / double-tap to zoom'}`,
+            },
+          ]}
+          onExited={() => {
+            setSelected(null);
+            trigger.current?.focus({ preventScroll: true });
+          }}
+        />
+      )}
     </>
   );
 }

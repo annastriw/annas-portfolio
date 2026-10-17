@@ -26,6 +26,7 @@ const failures = [];
 const checked = new Set();
 for (const file of html) {
   const contents = await readFile(file, 'utf8');
+  assert.ok(!contents.includes('\uFFFD'), `Invalid replacement character in ${file}`);
   for (const [, url] of contents.matchAll(/(?:href|src)="([^"#]+)"/g)) {
     if (!url.startsWith('/') || url.startsWith('//')) continue;
     const path = decodeURIComponent(url.split(/[?#]/)[0].replaceAll('&amp;', '&'));
@@ -61,6 +62,10 @@ for (const locale of ['en', 'id'])
       `Expected one main heading: ${locale}/${route}`,
     );
   }
+const missingPage = await readFile(join(root, '404.html'), 'utf8');
+assert.ok(missingPage.includes('A little off the path.'), 'Missing branded 404 page');
+assert.ok(missingPage.includes('Back to Home'), '404 must offer a way home');
+assert.ok(!missingPage.includes('http-equiv="refresh"'), '404 must not silently redirect');
 const forbidden = files.filter(
   (f) =>
     /\.(?:md|mdx|env|webm)$/i.test(f) ||
