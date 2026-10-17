@@ -33,6 +33,8 @@ const frontend = (url: string) => ({
   url,
 });
 
+const backend = (url: string) => ({ label: text('View Backend Code', 'Lihat Kode Backend'), url });
+
 export const projects: Project[] = [
   {
     slug: 'ukg-system',
@@ -99,6 +101,7 @@ export const projects: Project[] = [
     links: [
       live('https://www.ihealthedu.site/'),
       frontend('https://github.com/annastriw/frontend-ihealth'),
+      backend('https://github.com/annastriw/backend-ihealth'),
     ],
   },
   {
@@ -137,6 +140,7 @@ export const projects: Project[] = [
     links: [
       live('https://dialisisconnectedu.vercel.app/'),
       frontend('https://github.com/annastriw/fe-dialisis'),
+      backend('https://github.com/annastriw/be-dialisis'),
     ],
   },
   {
