@@ -44,7 +44,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <source
             media="(max-width: 700px)"
             sizes="100vw"
-            srcSet="/assets/photos/hero-mobile-640.jpg 640w, /assets/photos/hero-mobile-960.jpg 960w, /assets/photos/hero-mobile.jpg 2336w"
+            srcSet="/assets/photos/hero-mobile-640.jpg 640w, /assets/photos/hero-mobile-960.jpg 960w, /assets/photos/hero-mobile-1280.jpg 1280w, /assets/photos/hero-mobile-1600.jpg 1600w, /assets/photos/hero-mobile.jpg 2336w"
           />
           <img
             src="/assets/photos/hero.jpg"

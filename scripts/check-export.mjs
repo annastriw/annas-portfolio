@@ -27,7 +27,11 @@ const checked = new Set();
 for (const file of html) {
   const contents = await readFile(file, 'utf8');
   assert.ok(!contents.includes('\uFFFD'), `Invalid replacement character in ${file}`);
-  for (const [, url] of contents.matchAll(/(?:href|src)="([^"#]+)"/g)) {
+  const urls = [...contents.matchAll(/(?:href|src)="([^"#]+)"/g)].map((match) => match[1]);
+  for (const [, candidates] of contents.matchAll(/\bsrcset="([^"]+)"/gi)) {
+    urls.push(...candidates.split(',').map((candidate) => candidate.trim().split(/\s+/)[0]));
+  }
+  for (const url of urls) {
     if (!url.startsWith('/') || url.startsWith('//')) continue;
     const path = decodeURIComponent(url.split(/[?#]/)[0].replaceAll('&amp;', '&'));
     if (checked.has(path)) continue;
@@ -79,8 +83,12 @@ const forbidden = files.filter(
         'assets/photos/hero-1920.jpg',
         'assets/photos/hero-mobile-640.jpg',
         'assets/photos/hero-mobile-960.jpg',
+        'assets/photos/hero-mobile-1280.jpg',
+        'assets/photos/hero-mobile-1600.jpg',
         'assets/photos/about-640.jpg',
         'assets/photos/about-960.jpg',
+        'assets/photos/about-1280.jpg',
+        'assets/photos/about-1600.jpg',
       ].includes(relative(root, f).split(sep).join('/'))),
 );
 assert.equal(
