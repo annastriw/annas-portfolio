@@ -6,6 +6,7 @@ import { featuredProjects } from '@/content/projects';
 import { GitHubActivity } from '@/components/github-activity';
 import { TechBadge } from '@/components/tech-badge';
 import { TechReel } from '@/components/tech-reel';
+import { CapabilityExplorer } from '@/components/capability-explorer';
 import { capabilityTechnologies } from '@/content/technologies';
 import { pageMetadata, siteUrl } from '@/lib/metadata';
 import { isLocale, type Locale } from '@/lib/i18n';
@@ -184,19 +185,14 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
               : 'From the interface to the systems behind it.'}
           </p>
         </div>
-        {capabilities.map((c, i) => (
-          <details className="capability" key={c.title} open={i === 0}>
-            <summary>
-              <span className="eyebrow">0{i + 1}</span>
-              <h3>{c.title}</h3>
-              <span className="expand-symbol" aria-hidden="true" />
-            </summary>
-            <div className="capability-content">
-              <p>{c.description[locale]}</p>
-              <p className="tool-list">{c.tools}</p>
-            </div>
-          </details>
-        ))}
+        <CapabilityExplorer
+          locale={locale}
+          items={capabilities.map((c) => ({
+            title: c.title,
+            description: c.description[locale],
+            tools: c.tools.split('\u00b7').map((tool) => tool.trim()),
+          }))}
+        />
         <TechReel locale={locale}>
           {capabilityTechnologies.map((name) => (
             <li key={name}>

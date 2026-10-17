@@ -1,10 +1,12 @@
 import snapshot from '@/content/github.json';
+import { ContributionCalendar } from './contribution-calendar';
+import type { ContributionDay } from '@/lib/github-contributions';
 import { ArrowUpRightIcon } from '@phosphor-icons/react/dist/ssr';
 import { identity } from '@/content/site';
 import type { Locale } from '@/lib/i18n';
 
 export function GitHubActivity({ locale }: { locale: Locale }) {
-  const days = snapshot.days as { date: string; level: number }[];
+  const days = snapshot.days as ContributionDay[];
   const events = snapshot.events as { type: string; repo: string; date: string; url: string }[];
   return (
     <section className="section container github-section" aria-labelledby="github-heading">
@@ -27,28 +29,7 @@ export function GitHubActivity({ locale }: { locale: Locale }) {
       </div>
       {days.length > 0 ? (
         <>
-          <div
-            className="contribution-scroll"
-            role="img"
-            aria-label={
-              locale === 'id'
-                ? 'Grafik aktivitas kontribusi GitHub setahun terakhir. Detail tersedia di profil GitHub.'
-                : 'GitHub contribution activity for the last year. Details available on the GitHub profile.'
-            }
-          >
-            <div className="contribution-grid" aria-hidden="true">
-              {Array.from({ length: new Date(`${days[0].date}T12:00:00Z`).getUTCDay() }, (_, i) => (
-                <span key={`empty${i}`} className="contribution-empty" />
-              ))}
-              {days.map((day) => (
-                <span
-                  key={day.date}
-                  data-level={day.level}
-                  title={`${day.date} · ${locale === 'id' ? 'tingkat aktivitas' : 'activity level'} ${day.level}/4`}
-                />
-              ))}
-            </div>
-          </div>
+          <ContributionCalendar days={days} locale={locale} />
           <div className="github-legend">
             <p>
               {locale === 'id'

@@ -1,4 +1,5 @@
 import { readFile, writeFile } from 'node:fs/promises';
+import { parseContributions } from '../src/lib/github-contributions.ts';
 
 const file = new URL('../src/content/github.json', import.meta.url);
 const previous = JSON.parse(await readFile(file, 'utf8'));
@@ -20,13 +21,7 @@ const results = await Promise.allSettled([
 let days = previous.days,
   events = previous.events.filter((e) => !e.repo.endsWith('/employee-attendance-system'));
 if (results[0].status === 'fulfilled') {
-  const tags = results[0].value.match(/<td\b[^>]*data-date=[^>]+>/g) ?? [];
-  const parsed = tags
-    .map((tag) => ({
-      date: tag.match(/data-date="([^"]+)"/)?.[1],
-      level: Number(tag.match(/data-level="(\d)"/)?.[1] ?? 0),
-    }))
-    .filter((day) => day.date);
+  const parsed = parseContributions(results[0].value);
   if (parsed.length) days = parsed.sort((a, b) => a.date.localeCompare(b.date));
 }
 if (results[1].status === 'fulfilled') {
