@@ -75,6 +75,12 @@ const forbidden = files.filter(
         'assets/photos/hero.jpg',
         'assets/photos/hero-mobile.jpg',
         'assets/photos/about.jpg',
+        'assets/photos/hero-1280.jpg',
+        'assets/photos/hero-1920.jpg',
+        'assets/photos/hero-mobile-640.jpg',
+        'assets/photos/hero-mobile-960.jpg',
+        'assets/photos/about-640.jpg',
+        'assets/photos/about-960.jpg',
       ].includes(relative(root, f).split(sep).join('/'))),
 );
 assert.equal(

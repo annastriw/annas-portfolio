@@ -28,18 +28,25 @@ export default async function About({ params }: { params: Promise<{ locale: stri
       <section className="about-intro">
         <div className="about-photo">
           <div className="about-photo-frame">
-            <Image
-              src="/assets/photos/about.jpg"
-              width={2336}
-              height={3504}
-              sizes="(max-width: 700px) 92vw, 37vw"
-              alt={
-                id
-                  ? 'Annas Tri Widagdo di Universitas Diponegoro'
-                  : 'Annas Tri Widagdo at Diponegoro University'
-              }
-              preload
-            />
+            <picture>
+              <source
+                srcSet="/assets/photos/about-640.jpg 640w, /assets/photos/about-960.jpg 960w, /assets/photos/about.jpg 2336w"
+                sizes="(max-width: 700px) 92vw, 37vw"
+              />
+              <Image
+                src="/assets/photos/about.jpg"
+                width={2336}
+                height={3504}
+                sizes="(max-width: 700px) 92vw, 37vw"
+                alt={
+                  id
+                    ? 'Annas Tri Widagdo di Universitas Diponegoro'
+                    : 'Annas Tri Widagdo at Diponegoro University'
+                }
+                loading="eager"
+                fetchPriority="high"
+              />
+            </picture>
           </div>
           <span className="eyebrow">Annas Tri Widagdo / Jakarta, ID</span>
         </div>

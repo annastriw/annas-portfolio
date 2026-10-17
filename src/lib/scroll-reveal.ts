@@ -10,9 +10,7 @@ export function mountRevealFallback() {
     CSS.supports('animation-range: entry 0% entry 100%')
   )
     return () => {};
-  const elements = document.querySelectorAll<HTMLElement>(
-    '.featured-image,.project-image,.about-photo-frame,.certificate-image,.gallery-viewport',
-  );
+  const elements = document.querySelectorAll<HTMLElement>('[data-motion="wipe"]');
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {

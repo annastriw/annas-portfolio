@@ -41,9 +41,15 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       />
       <section className="hero" aria-labelledby="hero-name">
         <picture className="hero-photo">
-          <source media="(max-width: 700px)" srcSet="/assets/photos/hero-mobile.jpg" />
+          <source
+            media="(max-width: 700px)"
+            sizes="100vw"
+            srcSet="/assets/photos/hero-mobile-640.jpg 640w, /assets/photos/hero-mobile-960.jpg 960w, /assets/photos/hero-mobile.jpg 2336w"
+          />
           <img
             src="/assets/photos/hero.jpg"
+            srcSet="/assets/photos/hero-1280.jpg 1280w, /assets/photos/hero-1920.jpg 1920w, /assets/photos/hero.jpg 3504w"
+            sizes="100vw"
             alt=""
             width="3504"
             height="2336"
@@ -104,6 +110,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </div>
             <Link
               className="featured-image"
+              data-motion={['wipe', 'depth', 'frame'][i]}
               href={`/${locale}/projects/${p.slug}/`}
               aria-label={`${id ? 'Jelajahi' : 'Explore'} ${p.title}`}
             >
