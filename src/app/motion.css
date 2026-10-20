@@ -305,6 +305,27 @@
     object-position: center 65%;
   }
 }
+/* Tablet portraits use the available space deliberately, rather than drifting left. */
+@media (min-width: 701px) and (max-width: 820px) and (min-height: 601px) {
+  .about-photo,
+  .about-biography {
+    margin-inline: auto;
+  }
+  .about-biography {
+    width: 100%;
+  }
+}
+@media (min-width: 821px) and (max-width: 1000px) and (min-height: 601px) {
+  .about-intro {
+    grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr);
+    gap: var(--layout-gap);
+    align-items: start;
+  }
+  .about-photo {
+    width: 100%;
+  }
+}
+
 /* Mobile puts the response beside the choice, without moving the page on selection. */
 @media (max-width: 700px) {
   .capability-explorer {

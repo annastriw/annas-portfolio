@@ -2958,6 +2958,52 @@ body:has(.contact-page) .footer-meta {
   }
 }
 
+/* Tablet keeps a reading column without fixing the height of translated copy. */
+@media (min-width: 701px) and (max-width: 1000px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-12);
+    height: auto;
+    min-height: 42rem;
+    padding: var(--space-8) var(--content-inset) var(--space-6);
+  }
+  .hero-content {
+    position: relative;
+    width: 56%;
+    padding: 0;
+  }
+  .hero-photo img {
+    object-position: 15% 45%;
+  }
+  .hero-scrim {
+    background:
+      linear-gradient(90deg, #101510bd, #10151080 46%, transparent 80%),
+      linear-gradient(0deg, #101510b3, transparent 40%);
+  }
+  .hero-statement {
+    font-size: clamp(1.875rem, 3.7vw, 2.25rem);
+    text-wrap: balance;
+  }
+  .hero-actions {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3) var(--space-6);
+  }
+  .hero-location {
+    max-width: none;
+  }
+  .hero-name {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    font-size: 12.5vw;
+    line-height: 1.14;
+    padding-bottom: 0.1em;
+  }
+}
+
 /* Desktop hero: one reading column and a separate, descender-safe name baseline. */
 @media (min-width: 1001px) {
   .hero {

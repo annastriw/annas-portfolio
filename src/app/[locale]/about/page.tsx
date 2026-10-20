@@ -31,13 +31,13 @@ export default async function About({ params }: { params: Promise<{ locale: stri
             <picture>
               <source
                 srcSet="/assets/photos/about-640.jpg 640w, /assets/photos/about-960.jpg 960w, /assets/photos/about-1280.jpg 1280w, /assets/photos/about-1600.jpg 1600w, /assets/photos/about.jpg 2336w"
-                sizes="(max-height: 600px) and (orientation: landscape) 36vw, (max-width: 490px) 90vw, (max-width: 900px) 440px, (min-width: 1600px) 564px, 36vw"
+                sizes="(max-height: 600px) and (orientation: landscape) 36vw, (max-width: 490px) 90vw, (min-width: 701px) and (max-width: 820px) 440px, (min-width: 821px) and (max-width: 1000px) 31vw, (max-width: 900px) 440px, (min-width: 1600px) 564px, 36vw"
               />
               <Image
                 src="/assets/photos/about.jpg"
                 width={2336}
                 height={3504}
-                sizes="(max-height: 600px) and (orientation: landscape) 36vw, (max-width: 490px) 90vw, (max-width: 900px) 440px, (min-width: 1600px) 564px, 36vw"
+                sizes="(max-height: 600px) and (orientation: landscape) 36vw, (max-width: 490px) 90vw, (min-width: 701px) and (max-width: 820px) 440px, (min-width: 821px) and (max-width: 1000px) 31vw, (max-width: 900px) 440px, (min-width: 1600px) 564px, 36vw"
                 alt={
                   id
                     ? 'Annas Tri Widagdo di Universitas Diponegoro'
