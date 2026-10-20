@@ -10,6 +10,7 @@ export function ContributionCalendar({
   locale: Locale;
 }) {
   const root = useRef<HTMLDivElement>(null);
+  const input = useRef<'pointer' | 'keyboard' | null>('pointer');
   const tooltipId = useId();
   const [active, setActive] = useState(days.length - 1);
   const [tooltip, setTooltip] = useState<{ index: number; x: number; y: number } | null>(null);
@@ -34,22 +35,50 @@ export function ContributionCalendar({
     if (!root.current) return;
     const parent = root.current.getBoundingClientRect(),
       cell = element.getBoundingClientRect();
-    setTooltip({
+    const next = {
       index,
       x: Math.max(112, Math.min(parent.width - 112, cell.left - parent.left + cell.width / 2)),
       y: cell.top - parent.top - 12,
-    });
+    };
+    setTooltip((current) =>
+      current?.index === index &&
+      Math.abs(current.x - next.x) < 0.5 &&
+      Math.abs(current.y - next.y) < 0.5
+        ? current
+        : next,
+    );
   }
   return (
     <div
       className="contribution-calendar"
       ref={root}
-      onMouseLeave={() => setTooltip(null)}
+      onMouseLeave={() => {
+        if (input.current === 'pointer') setTooltip(null);
+      }}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') setTooltip(null);
+        if (event.key === 'Escape') {
+          input.current = null;
+          setTooltip(null);
+        }
       }}
     >
-      <div className="contribution-scroll" onScroll={() => setTooltip(null)}>
+      <div
+        className="contribution-scroll"
+        onScroll={(event) => {
+          // Keyboard focus can scroll the calendar after onFocus has positioned its tooltip.
+          const cell = event.currentTarget.querySelector<HTMLButtonElement>('button:focus-visible');
+          if (cell && input.current === 'keyboard') {
+            const view = event.currentTarget.getBoundingClientRect();
+            const bounds = cell.getBoundingClientRect();
+            const center = (bounds.left + bounds.right) / 2;
+            if (center >= view.left && center <= view.right) {
+              show(active, cell);
+              return;
+            }
+          }
+          setTooltip(null);
+        }}
+      >
         <div
           className="contribution-grid"
           role="group"
@@ -70,13 +99,28 @@ export function ContributionCalendar({
               tabIndex={active === index ? 0 : -1}
               aria-label={labels[index]}
               aria-describedby={tooltip?.index === index ? tooltipId : undefined}
-              onPointerEnter={(event) => show(index, event.currentTarget)}
+              onPointerEnter={(event) => {
+                if (input.current === 'pointer') show(index, event.currentTarget);
+              }}
+              onPointerMove={(event) => {
+                if (input.current !== 'pointer' || tooltip?.index !== index) {
+                  input.current = 'pointer';
+                  show(index, event.currentTarget);
+                }
+              }}
               onFocus={(event) => {
+                input.current = 'keyboard';
                 setActive(index);
                 show(index, event.currentTarget);
               }}
-              onBlur={() => setTooltip(null)}
-              onClick={(event) => show(index, event.currentTarget)}
+              onBlur={() => {
+                input.current = null;
+                setTooltip(null);
+              }}
+              onClick={(event) => {
+                input.current = 'pointer';
+                show(index, event.currentTarget);
+              }}
               onKeyDown={(event) => {
                 const delta =
                   event.key === 'ArrowLeft'
@@ -98,9 +142,12 @@ export function ContributionCalendar({
                         : null;
                 if (next !== null) {
                   event.preventDefault();
-                  root.current
-                    ?.querySelectorAll<HTMLButtonElement>('.contribution-grid button')
-                    [next]?.focus({ preventScroll: false });
+                  input.current = 'keyboard';
+                  const cell = root.current?.querySelectorAll<HTMLButtonElement>(
+                    '.contribution-grid button',
+                  )[next];
+                  cell?.focus({ preventScroll: false });
+                  if (cell) show(next, cell);
                 }
               }}
             />

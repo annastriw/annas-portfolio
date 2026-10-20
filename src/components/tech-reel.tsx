@@ -10,6 +10,8 @@ export function TechReel({ children, locale }: { children: React.ReactNode; loca
   useEffect(() => {
     const element = root.current;
     if (!element) return;
+    // Leave the original, horizontally scrollable lists available without this API.
+    if (typeof IntersectionObserver === 'undefined') return;
     let inView = false;
     const sync = () => {
       element.dataset.inView = String(inView && document.visibilityState === 'visible');

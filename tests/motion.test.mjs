@@ -85,6 +85,7 @@ test('work and tall timeline fallbacks reverse scroll, batch frames and clean up
   const values = new Map();
   const experienceValues = new Map();
   const titleValues = new Map();
+  const evidenceValues = new Map();
   const listeners = new Map();
   const frames = new Map();
   let serial = 0;
@@ -127,6 +128,13 @@ test('work and tall timeline fallbacks reverse scroll, batch frames and clean up
       removeProperty: (key) => titleValues.delete(key),
     },
   };
+  const evidence = {
+    getBoundingClientRect: () => ({ top, height: 80 }),
+    style: {
+      setProperty: (key, value) => evidenceValues.set(key, value),
+      removeProperty: (key) => evidenceValues.delete(key),
+    },
+  };
   const flush = () => {
     const pending = [...frames.values()];
     frames.clear();
@@ -146,7 +154,9 @@ test('work and tall timeline fallbacks reverse scroll, batch frames and clean up
               ? [title]
               : selector === '[data-motion="work"]'
                 ? [scene]
-                : [],
+                : selector === '[data-motion="evidence"]'
+                  ? [evidence]
+                  : [],
       },
       window: events,
       innerHeight: 1000,
@@ -163,6 +173,7 @@ test('work and tall timeline fallbacks reverse scroll, batch frames and clean up
     assert.equal(values.get('--work-progress'), '0');
     assert.equal(experienceValues.get('--experience-progress'), '0');
     assert.equal(titleValues.get('--title-progress'), '0');
+    assert.equal(evidenceValues.get('--evidence-progress'), '0');
     assert.ok(order.lastIndexOf('read') < order.indexOf('write'));
     top = 530;
     listeners.get('scroll')();
@@ -171,11 +182,17 @@ test('work and tall timeline fallbacks reverse scroll, batch frames and clean up
     flush();
     assert.equal(values.get('--work-progress'), '1');
     assert.equal(Number(experienceValues.get('--experience-progress')), 370 / 540);
+    assert.equal(Number(evidenceValues.get('--evidence-progress')), 370 / 540);
     top = 700;
     listeners.get('scroll')();
     flush();
     assert.equal(Number(values.get('--work-progress')), 240 / 410);
     assert.equal(Number(experienceValues.get('--experience-progress')), 200 / 540);
+    assert.equal(Number(evidenceValues.get('--evidence-progress')), 200 / 540);
+    listeners.get('toggle')();
+    listeners.get('transitionend')();
+    assert.equal(frames.size, 1);
+    flush();
     assert.ok(
       Number(titleValues.get('--title-progress')) > 0 &&
         Number(titleValues.get('--title-progress')) < 1,
@@ -198,6 +215,7 @@ test('work and tall timeline fallbacks reverse scroll, batch frames and clean up
     assert.equal(values.size, 0);
     assert.equal(experienceValues.size, 0);
     assert.equal(titleValues.size, 0);
+    assert.equal(evidenceValues.size, 0);
     assert.equal(scene.style.clipPath, undefined);
     Object.defineProperty(globalThis, 'CSS', {
       value: { supports: () => true },
@@ -214,6 +232,7 @@ test('work and tall timeline fallbacks reverse scroll, batch frames and clean up
     flush();
     assert.equal(Number(values.get('--work-progress')), 240 / 410);
     assert.equal(experienceValues.size, 0);
+    assert.equal(evidenceValues.size, 0);
     releasePartial();
     Object.defineProperty(globalThis, 'matchMedia', {
       value: () => ({ matches: true }),

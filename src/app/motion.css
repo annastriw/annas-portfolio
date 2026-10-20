@@ -680,3 +680,153 @@
     }
   }
 }
+
+/* Evidence chapters share the reading window; body copy and input frames stay still. */
+:is(.capabilities, .github-section) .section-intro h2 {
+  animation: none;
+  translate: none;
+}
+@keyframes evidence-panel {
+  from {
+    transform: translateX(18px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes evidence-number {
+  from {
+    transform: translateY(4px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes capability-choice {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .capability-stage {
+    transform: translateX(calc((1 - var(--evidence-progress, 1)) * 18px));
+  }
+  .capability-disclosure .capability-number {
+    transform: translateY(calc((1 - var(--evidence-progress, 1)) * 4px));
+  }
+  :is(
+      .capability-stage .capability-panel:not([hidden]),
+      .capability-disclosure[open] .capability-panel
+    )
+    :is(h3, .capability-large-number, .capability-tools) {
+    animation: capability-choice var(--motion-panel) var(--motion-ease) backwards;
+  }
+  .capability-panel:not([hidden]) h3 {
+    animation-delay: var(--motion-stagger);
+  }
+  .capability-panel:not([hidden]) .capability-tools {
+    animation-delay: calc(var(--motion-stagger) * 2);
+  }
+}
+@supports (animation-timeline: view()) and (animation-range: entry 0px entry 41vh) and
+  (view-timeline-inset: 0 6%) {
+  @media (prefers-reduced-motion: no-preference) {
+    .evidence-scene {
+      view-timeline: --evidence-position block;
+      view-timeline-inset: 0 10%;
+    }
+    .capability-stage {
+      animation: evidence-panel linear both;
+    }
+    .capability-disclosure .capability-number {
+      animation: evidence-number linear both;
+    }
+    :is(.capability-stage, .capability-disclosure .capability-number) {
+      animation-timeline: --evidence-position;
+      animation-range: entry 0px entry 54vh;
+    }
+  }
+}
+/* Native details remains usable when intrinsic-size transitions are unavailable. */
+@supports (interpolate-size: allow-keywords) and (transition-behavior: allow-discrete) and
+  selector(::details-content) {
+  @media (max-width: 700px) and (prefers-reduced-motion: no-preference) {
+    .capability-disclosure {
+      interpolate-size: allow-keywords;
+    }
+    .capability-disclosure::details-content {
+      height: 0;
+      overflow: clip;
+      transition:
+        height 260ms var(--motion-ease),
+        content-visibility 260ms allow-discrete;
+    }
+    .capability-disclosure[open]::details-content {
+      height: auto;
+    }
+  }
+}
+
+/* Only translation around the calendar: tooltip coordinates and cell hit targets stay accurate. */
+@keyframes evidence-calendar {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes evidence-rule {
+  from {
+    transform: scaleX(0.2);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes evidence-meta {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .github-calendar-stage {
+    transform: translateY(calc((1 - var(--evidence-progress, 1)) * 12px));
+  }
+  .github-evidence::before {
+    transform: scaleX(calc(0.2 + 0.8 * var(--evidence-progress, 1)));
+  }
+  .github-activity-meta {
+    --meta-progress: clamp(0, calc((var(--evidence-progress, 1) - 0.12) / 0.88), 1);
+    transform: translateY(calc((1 - var(--meta-progress)) * 8px));
+  }
+}
+@supports (animation-timeline: view()) and (animation-range: entry 0px entry 41vh) and
+  (view-timeline-inset: 0 6%) {
+  @media (prefers-reduced-motion: no-preference) {
+    .github-calendar-stage {
+      animation: evidence-calendar linear both;
+    }
+    .github-evidence::before {
+      animation: evidence-rule linear both;
+    }
+    .github-activity-meta {
+      animation: evidence-meta linear both;
+    }
+    .github-calendar-stage,
+    .github-evidence::before,
+    .github-activity-meta {
+      animation-timeline: --evidence-position;
+      animation-range: entry 0px entry 54vh;
+    }
+    .github-activity-meta {
+      animation-range: entry 6.48vh entry 54vh;
+    }
+  }
+}

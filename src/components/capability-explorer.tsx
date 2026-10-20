@@ -8,7 +8,7 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
   const tabs = useRef<HTMLDivElement>(null);
   return (
     <>
-      <div className="capability-explorer">
+      <div className="capability-explorer evidence-scene" data-motion="evidence">
         <div
           className="capability-index"
           role="tablist"
@@ -88,7 +88,18 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
       </div>
       <div className="capability-mobile">
         {items.map((item, i) => (
-          <details className="capability-disclosure" key={item.title}>
+          <details
+            className="capability-disclosure evidence-scene"
+            data-motion="evidence"
+            key={item.title}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape' && event.currentTarget.open) {
+                event.preventDefault();
+                event.currentTarget.open = false;
+                event.currentTarget.querySelector('summary')?.focus({ preventScroll: true });
+              }
+            }}
+          >
             <summary>
               <span className="capability-number">0{i + 1}</span>
               <span>{item.title}</span>
@@ -110,6 +121,11 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
           </details>
         ))}
       </div>
+      <noscript>
+        <style>{`.capability-explorer{display:none}.capability-mobile{display:block}
+          .capability-disclosure summary{padding:16px 0}
+          .capability-disclosure .capability-panel{min-height:0;padding:12px 0 24px}`}</style>
+      </noscript>
     </>
   );
 }

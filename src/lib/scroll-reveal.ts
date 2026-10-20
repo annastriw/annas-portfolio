@@ -53,6 +53,9 @@ export function mountRevealFallback() {
     document
       .querySelectorAll<HTMLElement>('.timeline-item')
       .forEach((scene) => scenes.push({ scene, target: scene, property: '--experience-progress' }));
+    document
+      .querySelectorAll<HTMLElement>('[data-motion="evidence"]')
+      .forEach((scene) => scenes.push({ scene, target: scene, property: '--evidence-progress' }));
   }
   if (!scenes.length) return () => {};
   let frame = 0;
@@ -87,6 +90,8 @@ export function mountRevealFallback() {
   window.addEventListener('pageshow', schedule);
   document.addEventListener('visibilitychange', visibility);
   document.addEventListener('load', schedule, true);
+  document.addEventListener('toggle', schedule, true);
+  document.addEventListener('transitionend', schedule, true);
   document.fonts?.ready.then(schedule);
   schedule();
   return () => {
@@ -97,6 +102,8 @@ export function mountRevealFallback() {
     window.removeEventListener('pageshow', schedule);
     document.removeEventListener('visibilitychange', visibility);
     document.removeEventListener('load', schedule, true);
+    document.removeEventListener('toggle', schedule, true);
+    document.removeEventListener('transitionend', schedule, true);
     scenes.forEach(({ scene, property }) => scene.style.removeProperty(property));
   };
 }

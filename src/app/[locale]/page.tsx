@@ -202,8 +202,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <span className="eyebrow">03 / {id ? 'Keahlian' : 'Capabilities'}</span>
         </div>
         <div className="section-intro">
-          <h2 id="capabilities-heading">
-            {id ? 'Bagian-bagian yang saya hubungkan.' : 'The pieces I bring together.'}
+          <h2 id="capabilities-heading" className="scroll-title">
+            <MotionWords
+              text={id ? 'Bagian-bagian yang saya hubungkan.' : 'The pieces I bring together.'}
+            />
           </h2>
           <p>
             {id

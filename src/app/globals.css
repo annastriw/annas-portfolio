@@ -757,7 +757,7 @@ dialog::backdrop {
 }
 .contribution-scroll {
   overflow-x: auto;
-  padding: 8px 0 14px;
+  padding: 8px 2px 14px;
 }
 .contribution-grid {
   display: grid;
@@ -2582,7 +2582,7 @@ body:has(.contact-page) .footer-meta {
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--motion-panel) var(--motion-ease);
 }
 .capability-index button[aria-selected='true']::before {
   transform: scaleX(1);
@@ -2613,7 +2613,6 @@ body:has(.contact-page) .footer-meta {
   display: flex;
   flex-direction: column;
   min-height: 405px;
-  animation: capability-arrival var(--motion-panel) var(--motion-ease);
 }
 .capability-panel[hidden] {
   display: none;
@@ -2663,16 +2662,6 @@ body:has(.contact-page) .footer-meta {
   color: var(--muted);
   padding-bottom: 5px;
   border-bottom: 1px solid var(--line);
-}
-@keyframes capability-arrival {
-  from {
-    opacity: 0.75;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 .contribution-calendar {
   position: relative;
@@ -3352,4 +3341,43 @@ html:has(.mobile-menu[open]) {
 }
 .featured-copy h3 a:is(:hover, :focus-visible) {
   color: var(--accent);
+}
+
+/* The selected label responds independently of the scroll-owned presentation layer. */
+.capability-index button > span:nth-child(2) {
+  transition: translate var(--motion-panel) var(--motion-ease);
+}
+.capability-index button[aria-selected='true'] > span:nth-child(2) {
+  translate: 6px 0;
+}
+.capability-disclosure summary {
+  transition: color var(--motion-hover) ease;
+}
+.capability-disclosure summary:is(:hover, :focus-visible),
+.capability-disclosure[open] summary {
+  color: var(--fg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .capability-index button > span:nth-child(2) {
+    transition: none;
+    translate: none;
+  }
+}
+
+.github-evidence {
+  position: relative;
+  padding-top: 20px;
+}
+.github-evidence::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--accent);
+  transform-origin: left;
+  pointer-events: none;
+}
+.github-calendar-stage,
+.github-activity-meta {
+  min-width: 0;
 }
