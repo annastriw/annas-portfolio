@@ -67,7 +67,13 @@
   --accent: #9b6819;
   --motion-press: 100ms;
   --motion-hover: 200ms;
-  --motion-panel: 380ms;
+  --motion-panel: 320ms;
+  --motion-menu: 320ms;
+  --motion-opening-lead: 1450ms;
+  --motion-identity: 900ms;
+  --motion-arrival: 780ms;
+  --motion-support: 740ms;
+  --motion-stagger: 36ms;
   --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --header: rgba(245, 242, 235, 0.97);
   --heat0: #e3e0d6;
@@ -2296,10 +2302,10 @@ body:has(.contact-page) .footer-meta {
   margin-top: 12px;
 }
 .mobile-menu[open] {
-  animation: menu-enter 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: menu-enter var(--motion-menu) var(--motion-ease) both;
 }
 .mobile-menu[open]::backdrop {
-  animation: backdrop-enter 0.2s both;
+  animation: backdrop-enter var(--motion-menu) ease both;
 }
 @keyframes menu-enter {
   from {
@@ -2360,7 +2366,7 @@ body:has(.contact-page) .footer-meta {
 }
 @keyframes opening-curtain {
   0%,
-  60% {
+  68% {
     clip-path: inset(0);
   }
   100% {
@@ -2377,7 +2383,7 @@ body:has(.contact-page) .footer-meta {
 /* Header gestures share the same small, deliberate cadence. */
 .wordmark {
   position: relative;
-  transition: color 240ms ease;
+  transition: color var(--motion-hover) ease;
 }
 .wordmark::after {
   content: '';
@@ -2387,7 +2393,7 @@ body:has(.contact-page) .footer-meta {
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--motion-panel) var(--motion-ease);
 }
 .wordmark:hover::after,
 .wordmark:focus-visible::after {
@@ -2396,7 +2402,7 @@ body:has(.contact-page) .footer-meta {
 }
 .brand-dot {
   display: inline-block;
-  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--motion-panel) var(--motion-ease);
 }
 .wordmark:hover .brand-dot {
   transform: translateY(-3px);
@@ -2404,8 +2410,8 @@ body:has(.contact-page) .footer-meta {
 .locale-switch a {
   position: relative;
   transition:
-    color 220ms ease,
-    transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    color var(--motion-hover) ease,
+    transform var(--motion-panel) var(--motion-ease);
   text-decoration: none !important;
 }
 .locale-switch a::after {
@@ -2416,7 +2422,7 @@ body:has(.contact-page) .footer-meta {
   height: 1px;
   background: var(--accent);
   transform: scaleX(0);
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--motion-panel) var(--motion-ease);
 }
 .locale-switch a[aria-current='true']::after,
 .locale-switch a:hover::after,
@@ -2428,7 +2434,7 @@ body:has(.contact-page) .footer-meta {
   transform: translateY(-2px);
 }
 .theme-button svg {
-  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--motion-panel) var(--motion-ease);
   transform-origin: center;
 }
 .theme-button:hover svg,
@@ -2526,8 +2532,8 @@ body:has(.contact-page) .footer-meta {
 /* A readable greeting, then one continuous handover to the hero. */
 .site-header .brand-dot {
   font-size: 0;
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   margin-left: 4px;
   background: var(--accent);
   vertical-align: baseline;
@@ -2559,7 +2565,7 @@ body:has(.contact-page) .footer-meta {
   font-size: clamp(18px, 1.7vw, 25px);
   line-height: 1.25;
   color: var(--muted);
-  transition: color 240ms ease;
+  transition: color var(--motion-hover) ease;
 }
 .capability-index button:last-child {
   border-bottom: 1px solid var(--line);
@@ -2586,7 +2592,7 @@ body:has(.contact-page) .footer-meta {
 .capability-index button > svg {
   color: var(--accent);
   transform: rotate(45deg);
-  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--motion-panel) var(--motion-ease);
 }
 .capability-index button[aria-selected='true'] > svg {
   transform: rotate(0);
@@ -2708,8 +2714,8 @@ body:has(.contact-page) .footer-meta {
 }
 .contribution-tooltip::after {
   content: '';
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   position: absolute;
   bottom: -3px;
   left: calc(50% - 3px);
@@ -3225,4 +3231,86 @@ body:has(.contact-page) .footer-meta {
   .featured-project {
     min-height: 0;
   }
+}
+
+/* Shared shell: a short panel gesture; navigation never waits for its exit. */
+.mobile-navigation-static {
+  display: none;
+}
+@media (max-width: 850px) {
+  .mobile-navigation-static {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    padding: 12px var(--page-gutter);
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-navigation-static a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .mobile-navigation-static a[aria-current] {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+}
+@keyframes menu-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+@keyframes menu-item-enter {
+  from {
+    opacity: 0.7;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes opening-signature {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  18%,
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-menu[open] nav a {
+    animation: menu-item-enter var(--motion-panel) var(--motion-ease) backwards;
+    animation-delay: calc(var(--motion-stagger) * 2);
+  }
+  .mobile-menu[open] nav a:nth-child(2) {
+    animation-delay: calc(var(--motion-stagger) * 3);
+  }
+  .mobile-menu[open] nav a:nth-child(3) {
+    animation-delay: calc(var(--motion-stagger) * 4);
+  }
+  .mobile-menu[open] nav a:nth-child(4) {
+    animation-delay: calc(var(--motion-stagger) * 5);
+  }
+  .mobile-menu[open][data-closing] {
+    animation: menu-exit var(--motion-menu) ease both;
+  }
+  .mobile-menu[open][data-closing]::backdrop {
+    animation: backdrop-enter var(--motion-menu) ease reverse both;
+  }
+  :root[data-opening='playing'] .opening-signature {
+    animation: opening-signature 2000ms var(--motion-ease) both;
+  }
+}
+
+html:has(.mobile-menu[open]) {
+  overflow: hidden;
 }

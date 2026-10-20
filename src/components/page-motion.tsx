@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { needsOpening } from '@/lib/opening';
+import { needsOpening, OPENING_DURATION } from '@/lib/opening';
 import { mountRevealFallback } from '@/lib/scroll-reveal';
+import { motionMilliseconds } from '@/lib/motion-timing';
 
 export function PageMotion() {
   const path = usePathname();
@@ -37,7 +38,13 @@ export function PageMotion() {
         /* The greeting still completes without storage. */
       }
     } else delete root.dataset.opening;
+    // CSS normally finishes the curtain. Also release it when animationend is lost.
+    const timer = window.setTimeout(() => {
+      opening.current = false;
+      delete root.dataset.opening;
+    }, OPENING_DURATION);
     return () => {
+      window.clearTimeout(timer);
       delete root.dataset.opening;
     };
   }, [path, home]);
@@ -47,35 +54,40 @@ export function PageMotion() {
     let arrived = false;
     const sync = () => {
       release();
-      if (media.matches) {
+      if (media.matches || document.hidden) {
+        opening.current = false;
         delete document.documentElement.dataset.opening;
         return;
       }
+      const styles = getComputedStyle(document.documentElement);
+      const timing = (name: string, fallback: number) =>
+        motionMilliseconds(styles.getPropertyValue(`--motion-${name}`), fallback);
+      const easing = styles.getPropertyValue('--motion-ease').trim();
       const animations: Animation[] = [];
       const play = (element: Element | null, frames: Keyframe[], duration: number, delay = 0) => {
-        if (element)
+        if (element && typeof element.animate === 'function')
           animations.push(
             element.animate(frames, {
               duration,
               delay,
-              easing: 'cubic-bezier(.22,1,.36,1)',
+              easing: easing || 'cubic-bezier(.22,1,.36,1)',
               fill: 'backwards',
             }),
           );
       };
       // Only the arrival is time-based. Page media and sections use reversible view timelines.
       if (!arrived && home && window.scrollY < 80) {
-        const start = opening.current ? 1500 : 0;
+        const start = opening.current ? timing('opening-lead', 1450) : 0;
         play(
           document.querySelector('.hero-photo img'),
           [{ transform: 'scale(1.06)' }, { transform: 'scale(1)' }],
-          1000,
+          timing('identity', 900),
           start,
         );
         play(
           document.querySelector('.hero-name'),
           [{ transform: 'translateY(48px)' }, { transform: 'translateY(0)' }],
-          900,
+          timing('identity', 900),
           start,
         );
         document
@@ -84,8 +96,8 @@ export function PageMotion() {
             play(
               element,
               [{ transform: 'translateY(24px)' }, { transform: 'translateY(0)' }],
-              750,
-              start + 80 + i * 85,
+              timing('support', 740),
+              start + 90 + i * 70,
             ),
           );
         document
@@ -94,8 +106,8 @@ export function PageMotion() {
             play(
               word,
               [{ transform: 'translateY(115%)' }, { transform: 'translateY(0)' }],
-              800,
-              start + 60 + i * 35,
+              timing('arrival', 780),
+              start + 80 + i * timing('stagger', 36),
             ),
           );
       }
@@ -109,8 +121,8 @@ export function PageMotion() {
                 { opacity: 0.8, transform: 'translateY(10px)' },
                 { opacity: 1, transform: 'translateY(0)' },
               ],
-              700,
-              i * 55,
+              timing('arrival', 780),
+              i * timing('stagger', 36),
             ),
           );
       }
@@ -123,9 +135,11 @@ export function PageMotion() {
     };
     sync();
     media.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
     return () => {
       release();
       media.removeEventListener('change', sync);
+      document.removeEventListener('visibilitychange', sync);
     };
   }, [path, home]);
   return home ? (

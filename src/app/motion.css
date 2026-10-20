@@ -1,4 +1,15 @@
-/* Motion follows the job of the content. Reading surfaces stay still and visible. */
+/* Viewport windows mirror scroll-reveal.ts and the accepted pilot.
+   Arrival owns child transforms; reversible scroll owns their presentation parents. */
+:root {
+  --media-window: 41vh;
+  --title-window: 30vh;
+}
+@media (max-width: 700px) {
+  :root {
+    --media-window: 38vh;
+    --title-window: 29vh;
+  }
+}
 @keyframes work-depth {
   from {
     transform: translateY(var(--work-depth)) scale(0.94);
@@ -233,15 +244,15 @@
     transform: translateY(calc((1 - var(--work-progress, 1)) * -3px));
   }
 }
-@supports (animation-timeline: view()) and (animation-range: entry 0% entry 100%) and
-  (timeline-scope: --work-position) {
+@supports (animation-timeline: view()) and (animation-range: entry 0px entry 41vh) and
+  (view-timeline-inset: 0 6%) and (timeline-scope: --work-position) {
   @media (prefers-reduced-motion: no-preference) {
     .featured-project {
       timeline-scope: --work-position;
     }
     .featured-image {
       view-timeline: --work-position block;
-      view-timeline-inset: 10% 10%;
+      view-timeline-inset: 0 6%;
     }
     .featured-image img {
       animation: work-depth linear both;
@@ -256,7 +267,7 @@
     .featured-project::after,
     .featured-index {
       animation-timeline: --work-position;
-      animation-range: entry 0% entry 100%;
+      animation-range: entry 0px entry var(--media-window);
     }
   }
 }
@@ -306,7 +317,8 @@
   }
 }
 /* No opacity reset: reversing the scroll never makes evidence disappear. */
-@supports (animation-timeline: view()) and (animation-range: entry 0% entry 100%) {
+@supports (animation-timeline: view()) and (animation-range: entry 0px entry 41vh) and
+  (view-timeline-inset: 0 6%) {
   @media (prefers-reduced-motion: no-preference) {
     .about-photo-frame img {
       animation: portrait-settle linear both;
@@ -368,21 +380,21 @@
     .hero-photo {
       animation: hero-depth linear both;
       animation-timeline: --hero-position;
-      animation-range: exit 0% exit 75%;
+      animation-range: exit 0% exit 80%;
     }
     .hero-name-stage {
       animation: hero-name-exit linear both;
       animation-timeline: --hero-position;
-      animation-range: exit 0% exit 75%;
+      animation-range: exit 0% exit 80%;
     }
     .hero-content {
       animation: hero-copy-exit linear both;
       animation-timeline: --hero-position;
-      animation-range: exit 0% exit 75%;
+      animation-range: exit 0% exit 80%;
     }
     .timeline-item {
       view-timeline: --experience-step block;
-      view-timeline-inset: 10% 10%;
+      view-timeline-inset: 0 10%;
     }
     .timeline-item::after {
       animation: timeline-progress linear both;
@@ -401,7 +413,7 @@
     .timeline-marker::after,
     .timeline-number {
       animation-timeline: --experience-step;
-      animation-range: entry 0% entry 100%;
+      animation-range: entry 0px entry 54vh;
     }
   }
 }
@@ -545,11 +557,7 @@
     transform: translateY(calc(-1 * var(--hero-exit-progress, 0) * var(--hero-copy-travel)));
   }
   .scroll-title .motion-word-inner {
-    --word-progress: clamp(
-      0,
-      calc((var(--title-progress, 1) - var(--word-order) * 0.25) * 1.34),
-      1
-    );
+    --word-progress: clamp(0, calc(var(--title-progress, 1) * 1.42 - var(--word-order) * 0.42), 1);
     transform: translateY(calc((1 - var(--word-progress)) * 115%));
   }
   .featured-copy > .eyebrow,
@@ -559,34 +567,43 @@
     opacity: calc(0.65 + 0.35 * var(--copy-phase));
   }
   .featured-copy > .eyebrow {
-    --copy-phase: clamp(0, calc(var(--copy-progress, 1) * 1.82), 1);
+    --copy-phase: clamp(0, calc(var(--copy-progress, 1) / 0.55), 1);
   }
   .featured-copy .featured-tagline {
-    --copy-phase: clamp(0, calc((var(--copy-progress, 1) - 0.1) * 1.43), 1);
+    --copy-phase: clamp(0, calc((var(--copy-progress, 1) - 0.1) / 0.7), 1);
   }
   .featured-copy .text-link {
-    --copy-phase: clamp(0, calc((var(--copy-progress, 1) - 0.3) * 1.43), 1);
+    --copy-phase: clamp(0, calc((var(--copy-progress, 1) - 0.3) / 0.7), 1);
   }
   .timeline-meta,
   .timeline-entry .organization {
-    transform: translateY(calc((1 - var(--experience-progress, 1)) * 24px));
-    opacity: calc(0.65 + 0.35 * var(--experience-progress, 1));
+    transform: translateY(calc((1 - var(--experience-phase)) * var(--group-travel, 24px)));
+    opacity: calc(0.65 + 0.35 * var(--experience-phase));
+  }
+  .timeline-meta {
+    --experience-phase: clamp(0, calc(var(--experience-progress, 1) / 0.55), 1);
+  }
+  .timeline-entry .organization {
+    --group-travel: 12px;
+    --experience-phase: clamp(0, calc((var(--experience-progress, 1) - 0.05) / 0.65), 1);
   }
 }
-@supports (animation-timeline: view()) and (animation-range: entry 0% entry 100%) {
+@supports (animation-timeline: view()) and (animation-range: entry 0px entry 41vh) and
+  (view-timeline-inset: 0 6%) {
   @media (prefers-reduced-motion: no-preference) {
     .scroll-title {
       view-timeline: --title-position block;
-      view-timeline-inset: 10% 10%;
+      view-timeline-inset: 0 10%;
     }
     .scroll-title .motion-word-inner {
       animation: word-rise linear both;
       animation-timeline: --title-position;
-      animation-range: entry calc(var(--word-order) * 60%) cover calc(22% + var(--word-order) * 12%);
+      animation-range: entry calc(var(--title-window) * var(--word-order) * 0.29577465) entry
+        calc(var(--title-window) * (0.70422535 + var(--word-order) * 0.29577465));
     }
     .featured-copy {
       view-timeline: --work-copy-position block;
-      view-timeline-inset: 10% 10%;
+      view-timeline-inset: 0 10%;
     }
     .featured-copy > .eyebrow,
     .featured-copy .featured-tagline,
@@ -595,13 +612,13 @@
       animation-timeline: --work-copy-position;
     }
     .featured-copy > .eyebrow {
-      animation-range: entry 0% entry 55%;
+      animation-range: entry 0px entry 29.7vh;
     }
     .featured-copy .featured-tagline {
-      animation-range: entry 10% entry 80%;
+      animation-range: entry 5.4vh entry 43.2vh;
     }
     .featured-copy .text-link {
-      animation-range: entry 30% entry 100%;
+      animation-range: entry 16.2vh entry 54vh;
     }
     .timeline-meta,
     .timeline-entry .organization {
@@ -609,11 +626,20 @@
       animation-timeline: --experience-step;
     }
     .timeline-meta {
-      animation-range: entry 0% entry 55%;
+      animation-range: entry 0px entry 29.7vh;
     }
     .timeline-entry .organization {
       --group-travel: 12px;
-      animation-range: entry 5% entry 70%;
+      animation-range: entry 2.7vh entry 37.8vh;
+    }
+  }
+}
+
+@supports (animation-timeline: view()) and (animation-range: entry 0px entry 41vh) and
+  (view-timeline-inset: 0 6%) {
+  @media (max-width: 700px) and (prefers-reduced-motion: no-preference) {
+    .scroll-title {
+      view-timeline-inset: 0 7%;
     }
   }
 }
