@@ -539,6 +539,7 @@ dialog::backdrop {
   padding-block: var(--space-16);
 }
 .hero-name-stage {
+  order: 1;
   width: 100%;
   min-width: 0;
   transform-origin: left center;
@@ -579,7 +580,7 @@ dialog::backdrop {
 }
 .featured-copy h3 {
   font-family: var(--font-display);
-  font-size: clamp(2.375rem, 4.2vw, 4rem);
+  font-size: clamp(2.75rem, 4.7vw, 4.5rem);
   font-weight: 400;
   letter-spacing: -0.045em;
   line-height: var(--leading-heading);
@@ -615,13 +616,12 @@ dialog::backdrop {
 }
 @media (min-width: 1001px) {
   .featured-project {
-    min-height: clamp(620px, 80svh, 860px);
+    min-height: clamp(560px, 70svh, 760px);
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
     gap: var(--layout-gap);
   }
   .featured-copy {
-    position: sticky;
-    top: clamp(32px, 12svh, 120px);
+    position: static;
     align-self: start;
   }
   .featured-project:nth-of-type(even) {
@@ -672,8 +672,8 @@ dialog::backdrop {
 .selected-work .image-arrow {
   opacity: 1;
   transform: none;
-  background: #21271f;
-  color: #f5f2eb;
+  background: var(--bg);
+  color: var(--fg);
   border: 1px solid var(--line);
   padding: 10px;
   right: var(--space-6);
@@ -2083,11 +2083,13 @@ body:has(.contact-page) .footer-meta {
   align-items: center;
   justify-content: center;
   align-self: start;
+  border: 1px solid var(--line);
+  background: var(--bg);
   color: var(--accent);
 }
 .timeline-number {
   font-family: var(--font-display);
-  font-size: 48px;
+  font-size: 52px;
   line-height: 1;
   letter-spacing: -0.04em;
 }
@@ -3048,11 +3050,17 @@ body:has(.contact-page) .footer-meta {
   padding: 48px var(--content-inset) 24px;
 }
 .hero-content {
+  order: 0;
   position: relative;
   inset: auto;
   width: 48%;
   max-width: 540px;
   padding: 0;
+}
+/* Overscan covers the reversible photo travel without exposing the hero background. */
+.hero-photo {
+  inset: -8% -2%;
+  transform-origin: 65% 45%;
 }
 .hero-photo img {
   object-position: 50% 45%;
@@ -3120,9 +3128,9 @@ body:has(.contact-page) .footer-meta {
   inset: auto;
   width: 100%;
   max-width: none;
-  font-size: clamp(80px, 12.4vw, 186px);
-  line-height: 1.12;
-  padding-bottom: 0.1em;
+  font-size: clamp(80px, 14.2vw, 212px);
+  line-height: 1.16;
+  padding-bottom: 0.14em;
   letter-spacing: -0.045em;
   white-space: nowrap;
 }
@@ -3158,8 +3166,10 @@ body:has(.contact-page) .footer-meta {
     padding: 24px var(--content-inset) 32px;
     gap: 0;
   }
-  .hero-name {
+  .hero-name-stage {
     order: 0;
+  }
+  .hero-name {
     font-size: clamp(50px, 12.9vw, 84px);
     white-space: normal;
     text-wrap: balance;
@@ -3169,10 +3179,10 @@ body:has(.contact-page) .footer-meta {
     order: 1;
     width: 100%;
     max-width: none;
-    margin-top: clamp(160px, 46vw, 270px);
+    margin-top: clamp(220px, 60vw, 300px);
   }
   .hero-photo {
-    top: -48px;
+    inset: -48px -2% -8%;
   }
   .hero-photo img {
     object-position: 50% 42%;
@@ -3313,4 +3323,33 @@ body:has(.contact-page) .footer-meta {
 
 html:has(.mobile-menu[open]) {
   overflow: hidden;
+}
+
+/* Short landscape remains a normal document, with no forced full-screen scene. */
+@media (max-height: 600px) and (min-width: 701px) {
+  .hero {
+    min-height: 0;
+    gap: 24px;
+    padding-block: 28px 16px;
+  }
+  .hero-content {
+    width: 58%;
+  }
+  .hero-statement {
+    font-size: clamp(24px, 2.65vw, 34px);
+  }
+  .hero-name {
+    font-size: clamp(64px, 11.4vw, 150px);
+  }
+}
+
+/* Hover belongs to the frame/action, never to the scroll-owned image transform. */
+.selected-work .featured-image {
+  transition: border-color var(--motion-hover) ease;
+}
+.selected-work .featured-image:is(:hover, :focus-visible) {
+  border-color: var(--accent);
+}
+.featured-copy h3 a:is(:hover, :focus-visible) {
+  color: var(--accent);
 }

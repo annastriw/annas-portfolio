@@ -57,7 +57,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             fetchPriority="high"
           />
         </picture>
-        <div className="hero-scrim" />
+        <div className="hero-scrim" aria-hidden="true" />
+        <div className="hero-name-stage">
+          <h1 id="hero-name" className="hero-name">
+            Annas Tri Widagdo
+          </h1>
+        </div>
         <div className="hero-content">
           <p className="hero-greeting">Software Engineer</p>
           <p className="hero-statement">
@@ -81,11 +86,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             {id ? 'Terbuka untuk kolaborasi' : 'Open to collaboration'}
           </p>
         </div>
-        <div className="hero-name-stage">
-          <h1 id="hero-name" className="hero-name">
-            Annas Tri Widagdo
-          </h1>
-        </div>
       </section>
       <section className="section selected-work" aria-labelledby="work-heading">
         <div className="container">
@@ -96,13 +96,19 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             <span className="eyebrow">2025 — 2026</span>
           </div>
           {featuredProjects.map((p, i) => (
-            <article key={p.slug} className="featured-project" data-motion="work">
+            <article
+              key={p.slug}
+              className="featured-project"
+              data-motion="work"
+              data-work-motion={['rise', 'focus', 'tilt'][i]}
+              aria-labelledby={`featured-${p.slug}`}
+            >
               <div className="featured-copy">
                 <p className="eyebrow">
                   <span className="featured-index">0{i + 1}</span>
                   <span>{p.role}</span>
                 </p>
-                <h3 className="scroll-title">
+                <h3 id={`featured-${p.slug}`} className="scroll-title">
                   <Link href={`/${locale}/projects/${p.slug}/`}>
                     <MotionWords text={p.title} />
                   </Link>

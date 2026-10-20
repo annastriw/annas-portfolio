@@ -12,10 +12,10 @@
 }
 @keyframes work-depth {
   from {
-    transform: translateY(var(--work-depth)) scale(0.94);
+    transform: translateY(var(--work-depth)) rotate(var(--work-tilt)) scale(var(--work-scale));
   }
   to {
-    transform: translateY(0) scale(1);
+    transform: translateY(0) rotate(0deg) scale(1);
   }
 }
 @keyframes work-rule {
@@ -124,7 +124,7 @@
   }
   to {
     transform: translateY(calc(-1 * var(--hero-name-travel))) scale(0.96);
-    opacity: 0.35;
+    opacity: 0.68;
   }
 }
 @keyframes hero-copy-exit {
@@ -170,7 +170,7 @@
 }
 @keyframes timeline-progress {
   from {
-    transform: scaleY(0.12);
+    transform: scaleY(0.04);
   }
   to {
     transform: scaleY(1);
@@ -186,37 +186,61 @@
 }
 @keyframes timeline-number {
   from {
-    transform: translateY(6px);
+    transform: translateY(8px) scale(0.92);
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 @keyframes timeline-diamond {
   from {
-    transform: rotate(45deg);
+    transform: rotate(45deg) scale(0.6);
   }
   to {
-    transform: rotate(135deg);
+    transform: rotate(135deg) scale(1);
+  }
+}
+@keyframes timeline-meta-in {
+  from {
+    transform: translateX(-12px);
+    opacity: 0.75;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 @media (prefers-reduced-motion: no-preference) {
   .timeline-item::after {
-    transform: scaleY(calc(0.12 + 0.88 * var(--experience-progress, 1)));
+    transform: scaleY(calc(0.04 + 0.96 * var(--experience-progress, 1)));
   }
   .timeline-marker::before {
     transform: scaleX(calc(0.25 + 0.75 * var(--experience-progress, 1)));
   }
   .timeline-number {
-    transform: translateY(calc((1 - var(--experience-progress, 1)) * 6px));
+    transform: translateY(calc((1 - var(--experience-progress, 1)) * 8px))
+      scale(calc(0.92 + 0.08 * var(--experience-progress, 1)));
   }
   .timeline-marker::after {
-    transform: rotate(calc(45deg + 90deg * var(--experience-progress, 1)));
+    transform: rotate(calc(45deg + 90deg * var(--experience-progress, 1)))
+      scale(calc(0.6 + 0.4 * var(--experience-progress, 1)));
   }
 }
 /* One media position coordinates the image, number and rule. Text/link boxes stay still. */
+/* Same viewport anchor, three media gestures: rise, pull back, then settle square. */
 .featured-project {
   --work-depth: 28px;
+  --work-scale: 0.94;
+  --work-tilt: 0deg;
+}
+.featured-project[data-work-motion='focus'] {
+  --work-depth: -12px;
+  --work-scale: 1.035;
+}
+.featured-project[data-work-motion='tilt'] {
+  --work-depth: 18px;
+  --work-scale: 0.97;
+  --work-tilt: -0.7deg;
 }
 .featured-project::after {
   content: '';
@@ -231,11 +255,21 @@
   .featured-project {
     --work-depth: 16px;
   }
+  .featured-project[data-work-motion='focus'] {
+    --work-depth: -6px;
+    --work-scale: 1.02;
+  }
+  .featured-project[data-work-motion='tilt'] {
+    --work-depth: 10px;
+    --work-scale: 0.98;
+    --work-tilt: -0.35deg;
+  }
 }
 @media (prefers-reduced-motion: no-preference) {
   .featured-image img {
     transform: translateY(calc((1 - var(--work-progress, 1)) * var(--work-depth)))
-      scale(calc(0.94 + 0.06 * var(--work-progress, 1)));
+      rotate(calc((1 - var(--work-progress, 1)) * var(--work-tilt)))
+      scale(calc(var(--work-scale) + (1 - var(--work-scale)) * var(--work-progress, 1)));
   }
   .featured-project::after {
     transform: scaleX(calc(0.35 + 0.65 * var(--work-progress, 1)));
@@ -525,9 +559,9 @@
 }
 
 .hero {
-  --hero-photo-travel: 72px;
-  --hero-name-travel: 96px;
-  --hero-copy-travel: 36px;
+  --hero-photo-travel: 45px;
+  --hero-name-travel: 40px;
+  --hero-copy-travel: 24px;
 }
 .experience-section .section-intro h2 {
   animation: none;
@@ -535,9 +569,9 @@
 }
 @media (max-width: 700px) {
   .hero {
-    --hero-photo-travel: 36px;
-    --hero-name-travel: 24px;
-    --hero-copy-travel: 12px;
+    --hero-photo-travel: 24px;
+    --hero-name-travel: 14px;
+    --hero-copy-travel: 8px;
   }
   .featured-copy {
     --group-travel: 16px;
@@ -551,7 +585,7 @@
   .hero-name-stage {
     transform: translateY(calc(-1 * var(--hero-exit-progress, 0) * var(--hero-name-travel)))
       scale(calc(1 - 0.04 * var(--hero-exit-progress, 0)));
-    opacity: calc(1 - 0.65 * var(--hero-exit-progress, 0));
+    opacity: calc(1 - 0.32 * var(--hero-exit-progress, 0));
   }
   .hero-content {
     transform: translateY(calc(-1 * var(--hero-exit-progress, 0) * var(--hero-copy-travel)));
@@ -582,6 +616,8 @@
   }
   .timeline-meta {
     --experience-phase: clamp(0, calc(var(--experience-progress, 1) / 0.55), 1);
+    transform: translateX(calc((1 - var(--experience-phase)) * -12px));
+    opacity: calc(0.75 + 0.25 * var(--experience-phase));
   }
   .timeline-entry .organization {
     --group-travel: 12px;
@@ -626,6 +662,7 @@
       animation-timeline: --experience-step;
     }
     .timeline-meta {
+      animation-name: timeline-meta-in;
       animation-range: entry 0px entry 29.7vh;
     }
     .timeline-entry .organization {
