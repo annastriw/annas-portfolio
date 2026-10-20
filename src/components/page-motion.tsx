@@ -68,26 +68,34 @@ export function PageMotion() {
         const start = opening.current ? 1500 : 0;
         play(
           document.querySelector('.hero-photo img'),
-          [{ transform: 'scale(1.025)' }, { transform: 'scale(1)' }],
+          [{ transform: 'scale(1.06)' }, { transform: 'scale(1)' }],
           1000,
           start,
         );
         play(
           document.querySelector('.hero-name'),
-          [{ transform: 'translateY(10px)' }, { transform: 'translateY(0)' }],
-          750,
+          [{ transform: 'translateY(48px)' }, { transform: 'translateY(0)' }],
+          900,
           start,
         );
         document
-          .querySelectorAll(
-            '.hero-greeting,.hero-statement,.hero-description,.hero-actions,.hero-location',
-          )
+          .querySelectorAll('.hero-greeting,.hero-description,.hero-actions,.hero-location')
           .forEach((element, i) =>
             play(
               element,
-              [{ transform: 'translateY(10px)' }, { transform: 'translateY(0)' }],
-              650,
-              start + 55 + i * 55,
+              [{ transform: 'translateY(24px)' }, { transform: 'translateY(0)' }],
+              750,
+              start + 80 + i * 85,
+            ),
+          );
+        document
+          .querySelectorAll('.hero-statement .motion-word-inner')
+          .forEach((word, i) =>
+            play(
+              word,
+              [{ transform: 'translateY(115%)' }, { transform: 'translateY(0)' }],
+              800,
+              start + 60 + i * 35,
             ),
           );
       }
@@ -108,19 +116,7 @@ export function PageMotion() {
       }
       arrived = true;
       const releaseFallback = mountRevealFallback();
-      const timeline = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            (entry.target as HTMLElement).dataset.seen = 'true';
-            timeline.unobserve(entry.target);
-          });
-        },
-        { threshold: 0.25, rootMargin: '0px 0px -10% 0px' },
-      );
-      document.querySelectorAll('.timeline-item').forEach((element) => timeline.observe(element));
       release = () => {
-        timeline.disconnect();
         releaseFallback();
         animations.forEach((a) => a.cancel());
       };

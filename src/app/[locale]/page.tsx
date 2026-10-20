@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRightIcon, ArrowUpRightIcon, MapPinIcon } from '@phosphor-icons/react/dist/ssr';
 import { identity, experience, capabilities } from '@/content/site';
 import { featuredProjects } from '@/content/projects';
+import { MotionWords } from '@/components/motion-words';
 import { GitHubActivity } from '@/components/github-activity';
 import { TechBadge } from '@/components/tech-badge';
 import { TechReel } from '@/components/tech-reel';
@@ -59,7 +60,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <div className="hero-scrim" />
         <div className="hero-content">
           <p className="hero-greeting">Software Engineer</p>
-          <p className="hero-statement">{identity.headline[locale]}</p>
+          <p className="hero-statement">
+            <MotionWords text={identity.headline[locale]} />
+          </p>
           <p className="hero-description">{identity.supporting[locale]}</p>
           <div className="hero-actions">
             <Link className="button hero-primary" href={`/${locale}/projects/`}>
@@ -78,15 +81,18 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             {id ? 'Terbuka untuk kolaborasi' : 'Open to collaboration'}
           </p>
         </div>
-        <h1 id="hero-name" className="hero-name">
-          Annas Tri Widagdo
-        </h1>
+        <div className="hero-name-stage">
+          <h1 id="hero-name" className="hero-name">
+            Annas Tri Widagdo
+          </h1>
+        </div>
       </section>
       <section className="section selected-work" aria-labelledby="work-heading">
         <div className="container">
           <div className="section-label">
-            <p className="eyebrow">01 / {id ? 'Karya Pilihan' : 'Selected Work'}</p>
-            <h2 id="work-heading">{id ? 'Software, dalam praktik.' : 'Software, in practice.'}</h2>
+            <h2 id="work-heading" className="eyebrow">
+              01 / {id ? 'Karya Pilihan' : 'Selected Work'}
+            </h2>
             <span className="eyebrow">2025 — 2026</span>
           </div>
           {featuredProjects.map((p, i) => (
@@ -96,8 +102,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                   <span className="featured-index">0{i + 1}</span>
                   <span>{p.role}</span>
                 </p>
-                <h3>
-                  <Link href={`/${locale}/projects/${p.slug}/`}>{p.title}</Link>
+                <h3 className="scroll-title">
+                  <Link href={`/${locale}/projects/${p.slug}/`}>
+                    <MotionWords text={p.title} />
+                  </Link>
                 </h3>
                 <p className="featured-tagline">{p.tagline[locale]}</p>
                 <p>{p.intro[locale]}</p>
@@ -137,7 +145,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </div>
         </div>
       </section>
-      <section className="section container" aria-labelledby="experience-heading">
+      <section
+        className="section container experience-section"
+        aria-labelledby="experience-heading"
+      >
         <div className="section-label">
           <span className="eyebrow">02 / {id ? 'Pengalaman' : 'Experience'}</span>
           <Link href={`/${locale}/about/`} className="small-link">
@@ -145,8 +156,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </Link>
         </div>
         <div className="section-intro">
-          <h2 id="experience-heading">
-            {id ? 'Dari kebutuhan, menjadi solusi.' : 'From understanding to building.'}
+          <h2 id="experience-heading" className="scroll-title">
+            <MotionWords
+              text={id ? 'Dari kebutuhan, menjadi solusi.' : 'From understanding to building.'}
+            />
           </h2>
           <p>
             {id
@@ -158,14 +171,16 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           {experience.map((e, i) => (
             <li className="timeline-item" key={e.role}>
               <div className="timeline-marker" aria-hidden="true">
-                0{i + 1}
+                <span className="timeline-number">0{i + 1}</span>
               </div>
               <div className="timeline-meta">
                 <p className="timeline-period">{e.period[locale]}</p>
                 <p className="timeline-location">{e.location[locale]}</p>
               </div>
               <article className="timeline-entry">
-                <h3>{e.role}</h3>
+                <h3 className="scroll-title">
+                  <MotionWords text={e.role} />
+                </h3>
                 <p className="organization">{e.organization[locale]}</p>
                 <div className="timeline-description">
                   <p>{e.description[locale]}</p>
