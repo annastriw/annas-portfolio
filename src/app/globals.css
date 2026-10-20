@@ -2865,3 +2865,61 @@ body:has(.contact-page) .footer-meta {
 .mobile-menu nav a[aria-current] .eyebrow::after {
   content: ' /';
 }
+
+/* Desktop hero: one reading column and a separate, descender-safe name baseline. */
+@media (min-width: 1001px) {
+  .hero {
+    height: clamp(42rem, 52vw, 52rem);
+  }
+  .hero-photo img {
+    object-position: 50% 45%;
+  }
+  .hero-scrim {
+    background:
+      linear-gradient(90deg, #101510c7, #1015109e 44%, #10151014 65%, transparent 78%),
+      linear-gradient(0deg, #101510c2, transparent 42%);
+  }
+  .hero-content {
+    position: absolute;
+    top: clamp(2.5rem, 3.4vw, 4rem);
+    left: var(--content-inset);
+    width: min(38vw, 34rem);
+    padding: 0;
+  }
+  .hero-greeting br {
+    display: none;
+  }
+  .hero-greeting span {
+    margin-left: var(--space-2);
+    padding-bottom: 0;
+  }
+  .hero-greeting span::after {
+    bottom: -10px;
+    width: 40px;
+  }
+  .hero-statement {
+    margin-top: var(--space-8);
+    text-wrap: balance;
+  }
+  .hero-description {
+    max-width: min(100%, 40ch);
+    margin-top: var(--space-4);
+    font-size: clamp(1rem, 1.25vw, 1.125rem);
+    line-height: 1.65;
+  }
+  .hero-actions {
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+  .hero-location {
+    margin-top: var(--space-4);
+  }
+  .hero-name {
+    left: var(--content-inset);
+    right: var(--content-inset);
+    bottom: var(--space-6);
+    font-size: clamp(6.25rem, 12.6vw, 13.75rem);
+    line-height: 1.14;
+    padding-bottom: 0.1em;
+  }
+}
