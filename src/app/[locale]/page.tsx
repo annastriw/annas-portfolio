@@ -96,7 +96,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <article key={p.slug} className="featured-project">
             <div className="featured-copy">
               <p className="eyebrow">
-                0{i + 1} / {p.role}
+                <span className="featured-index">0{i + 1}</span>
+                <span>{p.role}</span>
               </p>
               <h3>
                 <Link href={`/${locale}/projects/${p.slug}/`}>{p.title}</Link>
@@ -119,7 +120,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 width={1105}
                 height={737}
                 sizes="(max-width: 700px) 92vw, 58vw"
-                alt={`${p.title} — ${id ? 'pratinjau aplikasi' : 'application preview'}`}
+                alt={`${p.title} — ${id ? 'pratinjau proyek dalam mockup laptop' : 'project preview in a laptop mockup'}`}
               />
               <span className="image-arrow">
                 <ArrowUpRightIcon size={26} />

@@ -536,9 +536,11 @@ dialog::backdrop {
   font-family: var(--font-display);
   font-size: var(--type-feature);
   letter-spacing: -0.045em;
+  line-height: var(--leading-heading);
+  text-wrap: balance;
   margin: var(--space-4) 0 var(--space-6);
 }
-.featured-copy > p:not(.eyebrow) {
+.featured-copy > p:not(.eyebrow, .featured-tagline) {
   color: var(--muted);
   font-size: var(--type-body);
   line-height: var(--leading-body);
@@ -546,10 +548,41 @@ dialog::backdrop {
   max-width: var(--measure-intro);
 }
 .featured-copy .featured-tagline {
-  color: var(--fg) !important;
-  font-size: 21px !important;
-  line-height: 1.35;
+  color: var(--fg);
+  font-size: var(--type-lead);
+  line-height: 1.45;
+  max-width: var(--measure-intro);
   margin-bottom: var(--space-4);
+}
+.featured-copy .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.featured-index {
+  flex: none;
+  border-top: 1px solid var(--accent);
+  padding-top: var(--space-2);
+  color: var(--accent);
+  font-size: var(--type-caption);
+  line-height: 1;
+}
+@media (min-width: 1001px) {
+  .featured-project {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+    gap: var(--layout-gap);
+  }
+  .featured-project:nth-of-type(even) {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.85fr);
+  }
+  .featured-project:nth-of-type(even) .featured-copy {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .featured-project:nth-of-type(even) .featured-image {
+    grid-column: 1;
+    grid-row: 1;
+  }
 }
 .text-link {
   display: inline-flex;
@@ -1263,10 +1296,7 @@ body:has(.contact-page) .footer-meta {
   .featured-copy h3 {
     font-size: var(--type-feature);
   }
-  .featured-copy .featured-tagline {
-    font-size: 18px !important;
-  }
-  .featured-copy > p:not(.eyebrow) {
+  .featured-copy > p:not(.eyebrow, .featured-tagline) {
     font-size: var(--type-body);
     line-height: var(--leading-body);
   }
@@ -1517,10 +1547,9 @@ body:has(.contact-page) .footer-meta {
     margin: var(--space-4) 0;
   }
   .featured-copy .featured-tagline {
-    font-size: 20px !important;
     max-width: 420px;
   }
-  .featured-copy > p:not(.eyebrow) {
+  .featured-copy > p:not(.eyebrow, .featured-tagline) {
     font-size: var(--type-body);
     line-height: var(--leading-body);
   }
