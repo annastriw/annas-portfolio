@@ -2866,6 +2866,69 @@ body:has(.contact-page) .footer-meta {
   content: ' /';
 }
 
+/* Mobile hero grows with its copy; the portrait has its own breathing room. */
+@media (max-width: 700px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    padding: var(--space-6) var(--content-inset) var(--space-8);
+  }
+  .hero-name {
+    position: relative;
+    inset: auto;
+    order: 0;
+    width: 100%;
+    max-width: none;
+    font-size: clamp(3.5rem, 13vw, 5.5rem);
+    line-height: 1.08;
+    padding-bottom: 0.1em;
+    text-wrap: balance;
+  }
+  .hero-content {
+    position: relative;
+    inset: auto;
+    order: 1;
+    width: 100%;
+    margin-top: clamp(10rem, 48vw, 19rem);
+    padding: 0;
+  }
+  .hero-photo {
+    top: calc(-1 * var(--space-section));
+  }
+  .hero-photo img {
+    object-position: 50% 42%;
+  }
+  .hero-scrim {
+    background: linear-gradient(
+      180deg,
+      #1015108c,
+      #10151014 25%,
+      #10151014 40%,
+      #101510d9 65%,
+      #101510f5
+    );
+  }
+  .hero-statement {
+    margin-top: var(--space-4);
+    font-size: clamp(1.625rem, 6.6vw, 2.25rem);
+    text-wrap: balance;
+  }
+  .hero-description {
+    margin-top: var(--space-4);
+    max-width: var(--measure-copy);
+  }
+  .hero-actions {
+    gap: var(--space-3) var(--space-6);
+    margin-top: var(--space-6);
+  }
+  .hero-location {
+    margin-top: var(--space-6);
+  }
+}
+
 /* Desktop hero: one reading column and a separate, descender-safe name baseline. */
 @media (min-width: 1001px) {
   .hero {
