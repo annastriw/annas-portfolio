@@ -3,7 +3,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLayoutEffect, useRef } from 'react';
-import { ListIcon, XIcon, SunIcon, MoonIcon, MonitorIcon } from '@phosphor-icons/react';
+import {
+  ListIcon,
+  XIcon,
+  SunIcon,
+  MoonIcon,
+  MonitorIcon,
+  ArrowUpRightIcon,
+} from '@phosphor-icons/react';
 import { localizePath, type Locale } from '@/lib/i18n';
 
 import { navigationCurrent } from '@/lib/navigation';
@@ -109,9 +116,11 @@ export function SiteHeader({ locale }: { locale: Locale }) {
               scroll={false}
               onNavigate={navigateToTop}
               key={p}
+              className={p === 'contact/' ? 'navigation-contact' : undefined}
               aria-current={navigationCurrent(path, `/${locale}/${p}`)}
             >
               {labels[i]}
+              {p === 'contact/' && <ArrowUpRightIcon size={16} aria-hidden="true" />}
             </Link>
           ))}
         </nav>

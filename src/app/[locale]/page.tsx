@@ -58,20 +58,17 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         </picture>
         <div className="hero-scrim" />
         <div className="hero-content">
-          <p className="hero-greeting">
-            {id ? 'Halo, saya' : 'Hello, I’m'}
-            <br />
-            <span>Software Engineer</span>
-          </p>
+          <p className="hero-greeting">Software Engineer</p>
           <p className="hero-statement">{identity.headline[locale]}</p>
           <p className="hero-description">{identity.supporting[locale]}</p>
           <div className="hero-actions">
-            <Link className="button button-dark" href={`/${locale}/projects/`}>
+            <Link className="button hero-primary" href={`/${locale}/projects/`}>
               {id ? 'Jelajahi Karya' : 'Explore My Work'}
-              <ArrowRightIcon size={21} />
+              <ArrowUpRightIcon size={21} />
             </Link>
             <Link className="hero-contact" href={`/${locale}/contact/`}>
               {id ? 'Mulai Percakapan' : 'Start a Conversation'}
+              <ArrowUpRightIcon size={16} />
             </Link>
           </div>
           <p className="hero-location">

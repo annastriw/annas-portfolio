@@ -65,18 +65,18 @@ export function PageMotion() {
       };
       // Only the arrival is time-based. Page media and sections use reversible view timelines.
       if (!arrived && home && window.scrollY < 80) {
-        const start = opening.current ? 1200 : 0;
+        const start = opening.current ? 1500 : 0;
         play(
           document.querySelector('.hero-photo img'),
           [{ transform: 'scale(1.025)' }, { transform: 'scale(1)' }],
-          1250,
+          1000,
           start,
         );
         play(
           document.querySelector('.hero-name'),
-          [{ transform: 'translateY(18px)' }, { transform: 'translateY(0)' }],
-          850,
-          start + 100,
+          [{ transform: 'translateY(10px)' }, { transform: 'translateY(0)' }],
+          750,
+          start,
         );
         document
           .querySelectorAll(
@@ -85,9 +85,9 @@ export function PageMotion() {
           .forEach((element, i) =>
             play(
               element,
-              [{ transform: 'translateY(12px)' }, { transform: 'translateY(0)' }],
-              750,
-              start + 180 + i * 75,
+              [{ transform: 'translateY(10px)' }, { transform: 'translateY(0)' }],
+              650,
+              start + 55 + i * 55,
             ),
           );
       }
