@@ -6,28 +6,42 @@ export function revealProgress(top: number, height: number, viewport: number) {
 }
 export function mountRevealFallback() {
   if (
-    CSS.supports('animation-timeline: view()') &&
-    CSS.supports('animation-range: entry 0% entry 100%')
+    matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    (CSS.supports('animation-timeline: view()') &&
+      CSS.supports('animation-range: entry 0% entry 100%') &&
+      CSS.supports('timeline-scope: --work-position'))
   )
     return () => {};
-  const elements = document.querySelectorAll<HTMLElement>('[data-motion="wipe"]');
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const element = entry.target as HTMLElement;
-        const progress = revealProgress(
-          entry.boundingClientRect.top,
-          entry.boundingClientRect.height,
-          innerHeight,
-        );
-        element.style.clipPath = `inset(0 0 0 ${(1 - progress) * 100}%)`;
-      });
-    },
-    { threshold: Array.from({ length: 101 }, (_, i) => i / 100) },
-  );
-  elements.forEach((element) => observer.observe(element));
+  const scenes = Array.from(document.querySelectorAll<HTMLElement>('[data-motion="work"]'))
+    .map((scene) => ({ scene, media: scene.querySelector<HTMLElement>('.featured-image') }))
+    .filter((item) => item.media !== null);
+  if (!scenes.length) return () => {};
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    // Batch geometry reads before writes; at most three featured images, no React renders.
+    const progress = scenes.map(({ media }) => {
+      const bounds = media!.getBoundingClientRect();
+      return revealProgress(bounds.top, bounds.height, innerHeight);
+    });
+    scenes.forEach(({ scene }, index) =>
+      scene.style.setProperty('--work-progress', String(progress[index])),
+    );
+  };
+  const schedule = () => {
+    if (!frame && !document.hidden) frame = requestAnimationFrame(update);
+  };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  window.addEventListener('pageshow', schedule);
+  document.addEventListener('visibilitychange', schedule);
+  schedule();
   return () => {
-    observer.disconnect();
-    elements.forEach((element) => element.style.removeProperty('clip-path'));
+    cancelAnimationFrame(frame);
+    window.removeEventListener('scroll', schedule);
+    window.removeEventListener('resize', schedule);
+    window.removeEventListener('pageshow', schedule);
+    document.removeEventListener('visibilitychange', schedule);
+    scenes.forEach(({ scene }) => scene.style.removeProperty('--work-progress'));
   };
 }

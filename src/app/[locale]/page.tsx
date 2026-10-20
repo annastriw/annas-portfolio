@@ -82,59 +82,59 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           Annas Tri Widagdo
         </h1>
       </section>
-      <section className="section container selected-work" aria-labelledby="work-heading">
-        <div className="section-label">
-          <h2 className="eyebrow" id="work-heading">
-            01 / {id ? 'Karya Pilihan' : 'Selected Work'}
-          </h2>
-          <span className="eyebrow">2025 — 2026</span>
-        </div>
-        {featuredProjects.map((p, i) => (
-          <article key={p.slug} className="featured-project">
-            <div className="featured-copy">
-              <p className="eyebrow">
-                <span className="featured-index">0{i + 1}</span>
-                <span>{p.role}</span>
-              </p>
-              <h3>
-                <Link href={`/${locale}/projects/${p.slug}/`}>{p.title}</Link>
-              </h3>
-              <p className="featured-tagline">{p.tagline[locale]}</p>
-              <p>{p.intro[locale]}</p>
-              <Link className="text-link" href={`/${locale}/projects/${p.slug}/`}>
-                {id ? 'Jelajahi Proyek' : 'Explore Project'}
-                <ArrowRightIcon size={21} />
+      <section className="section selected-work" aria-labelledby="work-heading">
+        <div className="container">
+          <div className="section-label">
+            <p className="eyebrow">01 / {id ? 'Karya Pilihan' : 'Selected Work'}</p>
+            <h2 id="work-heading">{id ? 'Software, dalam praktik.' : 'Software, in practice.'}</h2>
+            <span className="eyebrow">2025 — 2026</span>
+          </div>
+          {featuredProjects.map((p, i) => (
+            <article key={p.slug} className="featured-project" data-motion="work">
+              <div className="featured-copy">
+                <p className="eyebrow">
+                  <span className="featured-index">0{i + 1}</span>
+                  <span>{p.role}</span>
+                </p>
+                <h3>
+                  <Link href={`/${locale}/projects/${p.slug}/`}>{p.title}</Link>
+                </h3>
+                <p className="featured-tagline">{p.tagline[locale]}</p>
+                <p>{p.intro[locale]}</p>
+                <Link className="text-link" href={`/${locale}/projects/${p.slug}/`}>
+                  {id ? 'Jelajahi Proyek' : 'Explore Project'}
+                  <ArrowRightIcon size={21} />
+                </Link>
+              </div>
+              <Link
+                className="featured-image"
+                href={`/${locale}/projects/${p.slug}/`}
+                aria-label={`${id ? 'Jelajahi' : 'Explore'} ${p.title}`}
+              >
+                <Image
+                  src={p.cover}
+                  width={1105}
+                  height={737}
+                  sizes="(max-width: 700px) 90vw, (max-width: 1000px) 54vw, 760px"
+                  alt={`${p.title} — ${id ? 'pratinjau proyek dalam mockup laptop' : 'project preview in a laptop mockup'}`}
+                />
+                <span className="image-arrow" aria-hidden="true">
+                  <ArrowUpRightIcon size={26} />
+                </span>
               </Link>
-            </div>
-            <Link
-              className="featured-image"
-              data-motion={['wipe', 'depth', 'frame'][i]}
-              href={`/${locale}/projects/${p.slug}/`}
-              aria-label={`${id ? 'Jelajahi' : 'Explore'} ${p.title}`}
-            >
-              <Image
-                src={p.cover}
-                width={1105}
-                height={737}
-                sizes="(max-width: 700px) 92vw, 58vw"
-                alt={`${p.title} — ${id ? 'pratinjau proyek dalam mockup laptop' : 'project preview in a laptop mockup'}`}
-              />
-              <span className="image-arrow">
-                <ArrowUpRightIcon size={26} />
-              </span>
+            </article>
+          ))}
+          <div className="section-end">
+            <span>
+              {id
+                ? 'Sepuluh proyek. Beragam persoalan.'
+                : 'Ten projects. Different problems to solve.'}
+            </span>
+            <Link className="text-link" href={`/${locale}/projects/`}>
+              {id ? 'Lihat Semua Proyek' : 'View All Projects'}
+              <ArrowRightIcon size={22} />
             </Link>
-          </article>
-        ))}
-        <div className="section-end">
-          <span>
-            {id
-              ? 'Sepuluh proyek. Beragam persoalan.'
-              : 'Ten projects. Different problems to solve.'}
-          </span>
-          <Link className="text-link" href={`/${locale}/projects/`}>
-            {id ? 'Lihat Semua Proyek' : 'View All Projects'}
-            <ArrowRightIcon size={22} />
-          </Link>
+          </div>
         </div>
       </section>
       <section className="section container" aria-labelledby="experience-heading">

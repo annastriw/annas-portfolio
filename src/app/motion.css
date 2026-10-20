@@ -1,18 +1,26 @@
 /* Motion follows the job of the content. Reading surfaces stay still and visible. */
-@keyframes work-wipe {
-  from {
-    clip-path: inset(0 0 0 100%);
-  }
-  to {
-    clip-path: inset(0);
-  }
-}
 @keyframes work-depth {
   from {
-    transform: translateY(18px) scale(0.985);
+    transform: translateY(var(--work-depth)) scale(0.99);
   }
   to {
     transform: translateY(0) scale(1);
+  }
+}
+@keyframes work-rule {
+  from {
+    transform: scaleX(0.35);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes work-number {
+  from {
+    transform: translateY(-3px);
+  }
+  to {
+    transform: translateY(0);
   }
 }
 @keyframes portrait-settle {
@@ -25,16 +33,6 @@
   }
   100% {
     transform: translateY(-6px) scale(1.035);
-  }
-}
-@keyframes frame-open {
-  from {
-    transform: scaleX(0.88);
-    opacity: 0.25;
-  }
-  to {
-    transform: scaleX(1);
-    opacity: 1;
   }
 }
 @keyframes card-settle {
@@ -133,12 +131,62 @@
     transform: scaleY(1);
   }
 }
-.featured-image[data-motion='frame']::after {
+/* One media position coordinates the image, number and rule. Text/link boxes stay still. */
+.featured-project {
+  --work-depth: 12px;
+}
+.featured-project::after {
   content: '';
   position: absolute;
-  inset: 0;
-  border: 1px solid var(--accent);
+  inset: auto 0 0;
+  height: 1px;
+  background: var(--accent);
+  transform-origin: left;
   pointer-events: none;
+}
+@media (max-width: 700px) {
+  .featured-project {
+    --work-depth: 8px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .featured-image img {
+    transform: translateY(calc((1 - var(--work-progress, 1)) * var(--work-depth)))
+      scale(calc(0.99 + 0.01 * var(--work-progress, 1)));
+  }
+  .featured-project::after {
+    transform: scaleX(calc(0.35 + 0.65 * var(--work-progress, 1)));
+  }
+  .featured-index {
+    transform: translateY(calc((1 - var(--work-progress, 1)) * -3px));
+  }
+}
+@supports (animation-timeline: view()) and (animation-range: entry 0% entry 100%) and
+  (timeline-scope: --work-position) {
+  @media (prefers-reduced-motion: no-preference) {
+    .featured-project {
+      timeline-scope: --work-position;
+    }
+    .featured-image {
+      view-timeline: --work-position block;
+      view-timeline-inset: 10% 10%;
+    }
+    .featured-image img {
+      animation: work-depth linear both;
+    }
+    .featured-project::after {
+      animation: work-rule linear both;
+    }
+    .featured-index {
+      animation: work-number linear both;
+    }
+    .featured-image img,
+    .featured-project::after,
+    .featured-index {
+      animation-timeline: --work-position;
+      animation-range: entry 0% entry 100%;
+    }
+  }
 }
 .about-photo-frame {
   view-timeline-name: --portrait-position;
@@ -188,25 +236,6 @@
 /* No opacity reset: reversing the scroll never makes evidence disappear. */
 @supports (animation-timeline: view()) and (animation-range: entry 0% entry 100%) {
   @media (prefers-reduced-motion: no-preference) {
-    [data-motion='wipe'] {
-      animation: work-wipe linear both;
-      animation-timeline: view(block 10% 10%);
-      animation-range: entry 0% entry 100%;
-    }
-    [data-motion='depth'] {
-      animation: work-depth linear both;
-      animation-timeline: view(block 10% 10%);
-      animation-range: entry 0% entry 90%;
-    }
-    [data-motion='frame'] {
-      view-timeline-name: --frame-position;
-      view-timeline-axis: block;
-    }
-    [data-motion='frame']::after {
-      animation: frame-open linear both;
-      animation-timeline: --frame-position;
-      animation-range: entry 0% entry 100%;
-    }
     .about-photo-frame img {
       animation: portrait-settle linear both;
       animation-timeline: --portrait-position;
