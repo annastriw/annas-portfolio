@@ -901,7 +901,7 @@ dialog::backdrop {
 .project-links .text-link {
   font-size: var(--type-caption);
   gap: 10px;
-  min-height: 36px;
+  min-height: 44px;
 }
 .status-dot {
   display: inline-block;
@@ -1136,12 +1136,14 @@ dialog::backdrop {
   font-size: clamp(25px, 3.6vw, 54px);
   letter-spacing: -0.035em;
   display: inline-flex;
+  min-height: 44px;
   gap: 15px;
   align-items: center;
   overflow-wrap: anywhere;
   margin: var(--space-4) 0 var(--space-6);
 }
 .contact-email svg {
+  flex: none;
   width: 35px;
   height: 35px;
 }
@@ -2893,6 +2895,24 @@ body:has(.contact-page) .footer-meta {
 }
 .mobile-menu nav a[aria-current] .eyebrow::after {
   content: ' /';
+}
+
+/* Short screens keep navigation compact while retaining scroll access. */
+@media (max-height: 600px) {
+  .mobile-menu {
+    padding: var(--space-4);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .mobile-menu nav {
+    margin-block: var(--space-6);
+  }
+  .mobile-menu nav a {
+    min-height: 44px;
+    padding-block: var(--space-2);
+    font-size: 2rem;
+    line-height: 1.2;
+  }
 }
 
 /* Mobile hero grows with its copy; the portrait has its own breathing room. */
