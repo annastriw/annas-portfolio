@@ -11,6 +11,7 @@ import '../motion.css';
 import '../editorial.css';
 import '../interaction.css';
 import '../shell.css';
+import '../home-interactions.css';
 
 export const dynamicParams = false;
 export function generateStaticParams() {

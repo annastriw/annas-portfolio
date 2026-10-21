@@ -1,11 +1,34 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { ArrowUpRightIcon, CaretDownIcon } from '@phosphor-icons/react';
 import type { Locale } from '@/lib/i18n';
 type Capability = { title: string; description: string; tools: string[] };
 export function CapabilityExplorer({ items, locale }: { items: Capability[]; locale: Locale }) {
   const [selected, setSelected] = useState(0);
   const tabs = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const group = tabs.current;
+    if (!group) return;
+    let mounted = true;
+    const measure = () => {
+      if (!mounted) return;
+      const tab = group.querySelector<HTMLElement>('[aria-selected="true"]');
+      if (!tab || !group.offsetHeight) return;
+      group.style.setProperty('--capability-y', `${tab.offsetTop}px`);
+      group.style.setProperty('--capability-height', `${tab.offsetHeight}px`);
+      group.dataset.indicatorReady = 'true';
+    };
+    measure();
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
+    observer?.observe(group);
+    if (!observer) window.addEventListener('resize', measure);
+    document.fonts?.ready.then(measure);
+    return () => {
+      mounted = false;
+      observer?.disconnect();
+      if (!observer) window.removeEventListener('resize', measure);
+    };
+  }, [selected]);
   return (
     <>
       <div className="capability-explorer">
@@ -16,6 +39,7 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
           aria-label={locale === 'id' ? 'Bidang keahlian' : 'Areas of expertise'}
           ref={tabs}
         >
+          <span className="capability-indicator" aria-hidden="true" />
           {items.map((item, i) => (
             <button
               key={item.title}
@@ -57,8 +81,10 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
               role="tabpanel"
               id={`capability-panel-${i}`}
               aria-labelledby={`capability-tab-${i}`}
-              hidden={i !== selected}
-              tabIndex={0}
+              data-active={i === selected}
+              aria-hidden={i !== selected}
+              inert={i !== selected}
+              tabIndex={i === selected ? 0 : -1}
             >
               <h3>{item.title}</h3>
               <p className="capability-description">{item.description}</p>

@@ -177,10 +177,6 @@
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .capability-panel:not([hidden]) > :is(h3, .capability-description, .capability-tools),
-  .capability-disclosure[open] .capability-panel {
-    animation: panel-response 280ms var(--motion-ease) backwards;
-  }
   .project-grid[data-filtering='true'] .project-card-meta {
     animation: panel-response 220ms var(--motion-ease) backwards;
   }

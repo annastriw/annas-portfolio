@@ -1,0 +1,139 @@
+/* Home state owns the frame/panel; motion.css alone owns scroll media transforms. */
+.selected-work .featured-image {
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: outline-color var(--motion-hover) var(--motion-ease-color);
+}
+.selected-work .image-arrow {
+  transition:
+    background-color var(--motion-hover) var(--motion-ease-color),
+    border-color var(--motion-hover) var(--motion-ease-color);
+}
+.selected-work .featured-image:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.selected-work .featured-image:is(:focus-visible, :active) .image-arrow {
+  background: var(--surface);
+  border-color: var(--accent);
+}
+.selected-work .featured-copy h3 a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+.selected-work .featured-copy h3 a:focus-visible {
+  text-decoration-line: underline;
+}
+.experience-timeline .timeline-number {
+  opacity: calc(0.65 + 0.35 * var(--scene-lead, 1));
+}
+
+/* A single measured rail follows selection. All panels reserve the tallest height;
+   inactive content is inert and aria-hidden immediately, including during its exit. */
+.capability-index {
+  position: relative;
+}
+.capability-indicator {
+  position: absolute;
+  inset: 0 auto auto -12px;
+  width: 2px;
+  height: var(--capability-height, 0px);
+  translate: 0 var(--capability-y, 0px);
+  background: var(--accent);
+  pointer-events: none;
+}
+.capability-index[data-indicator-ready='true'] .capability-indicator {
+  transition:
+    translate var(--motion-panel) var(--motion-ease),
+    height var(--motion-panel) var(--motion-ease);
+}
+.capability-stage {
+  display: grid;
+}
+.capability-stage > .capability-panel {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 140ms var(--motion-ease-color),
+    visibility 0s 140ms;
+}
+.capability-stage > .capability-panel[data-active='true'] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity var(--motion-state) var(--motion-ease-color),
+    visibility 0s;
+}
+.capability-index button > span:nth-child(2) {
+  transition: translate var(--motion-state) var(--motion-ease);
+}
+.capability-index button[aria-selected='true'] > span:nth-child(2) {
+  translate: 4px 0;
+}
+.capability-disclosure summary > svg {
+  transition: transform var(--motion-state) var(--motion-ease);
+}
+.capability-disclosure summary:focus-visible {
+  outline-offset: 4px;
+}
+.tech-reel:focus-within .marquee-group {
+  animation-play-state: paused;
+}
+
+/* Keep one tooltip mounted while browsing days; only its composited position moves. */
+.contribution-tooltip {
+  top: 0;
+  left: 0;
+  width: 220px;
+  max-width: calc(100% - 16px);
+  transition: translate var(--motion-hover) var(--motion-ease);
+}
+.contribution-tooltip::after {
+  left: calc(50% - 4.5px + var(--tooltip-arrow, 0px));
+  transition: left var(--motion-hover) var(--motion-ease);
+}
+.contribution-grid button:active {
+  transform: scale(1.1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .contribution-grid button:hover {
+    transform: scale(1.25);
+    border-color: var(--fg);
+    z-index: 1;
+  }
+  .capability-disclosure summary:hover {
+    color: var(--fg);
+  }
+  .selected-work .featured-image:hover {
+    outline-color: var(--line);
+  }
+  .selected-work .featured-image:hover .image-arrow {
+    background: var(--surface);
+    border-color: var(--accent);
+  }
+  .selected-work .featured-copy h3 a:hover {
+    text-decoration-line: underline;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .capability-index[data-indicator-ready='true'] .capability-indicator,
+  .capability-index button > span:nth-child(2),
+  .capability-disclosure summary > svg,
+  .capability-stage > .capability-panel[data-active],
+  .contribution-tooltip,
+  .contribution-tooltip::after {
+    transition: none;
+  }
+  .capability-index button[aria-selected='true'] > span:nth-child(2) {
+    translate: none;
+  }
+  .contribution-grid button:is(:hover, :focus-visible, :active) {
+    transform: none;
+  }
+  .experience-timeline .timeline-number {
+    opacity: 1;
+  }
+}

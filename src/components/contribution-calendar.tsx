@@ -1,5 +1,6 @@
 'use client';
-import { useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { contributionAnchor } from '@/lib/contribution-anchor';
 import type { Locale } from '@/lib/i18n';
 import type { ContributionDay } from '@/lib/github-contributions';
 export function ContributionCalendar({
@@ -13,7 +14,17 @@ export function ContributionCalendar({
   const input = useRef<'pointer' | 'keyboard' | null>('pointer');
   const tooltipId = useId();
   const [active, setActive] = useState(days.length - 1);
-  const [tooltip, setTooltip] = useState<{ index: number; x: number; y: number } | null>(null);
+  const [tooltip, setTooltip] = useState<{
+    index: number;
+    x: number;
+    y: number;
+    arrow: number;
+  } | null>(null);
+  useEffect(() => {
+    const dismiss = () => setTooltip(null);
+    window.addEventListener('resize', dismiss);
+    return () => window.removeEventListener('resize', dismiss);
+  }, []);
   const labels = useMemo(() => {
     const format = new Intl.DateTimeFormat(locale === 'id' ? 'id-ID' : 'en-US', {
       day: 'numeric',
@@ -37,7 +48,7 @@ export function ContributionCalendar({
       cell = element.getBoundingClientRect();
     const next = {
       index,
-      x: Math.max(112, Math.min(parent.width - 112, cell.left - parent.left + cell.width / 2)),
+      ...contributionAnchor(parent.width, cell.left - parent.left + cell.width / 2),
       y: cell.top - parent.top - 12,
     };
     setTooltip((current) =>
@@ -156,11 +167,15 @@ export function ContributionCalendar({
       </div>
       {tooltip && (
         <div
-          key={tooltip.index}
           className="contribution-tooltip"
           role="tooltip"
           id={tooltipId}
-          style={{ left: tooltip.x, top: tooltip.y }}
+          style={
+            {
+              translate: `${tooltip.x}px ${tooltip.y}px`,
+              '--tooltip-arrow': `${tooltip.arrow}px`,
+            } as CSSProperties
+          }
         >
           {labels[tooltip.index]}
         </div>

@@ -1848,23 +1848,7 @@ body:has(.contact-page) .footer-meta {
 .capability-index button:last-child {
   border-bottom: 1px solid var(--line);
 }
-.capability-index button::before {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--motion-panel) var(--motion-ease);
-}
-.capability-index button[aria-selected='true']::before {
-  transform: scaleX(1);
-}
-.capability-index button[aria-selected='true'],
-.capability-index button:hover {
+.capability-index button[aria-selected='true'] {
   color: var(--fg);
 }
 .capability-index button > svg {
@@ -1936,7 +1920,6 @@ body:has(.contact-page) .footer-meta {
     border-color 180ms ease;
   position: relative;
 }
-.contribution-grid button:hover,
 .contribution-grid button:focus-visible {
   transform: scale(1.25);
   border-color: var(--fg);
@@ -2106,8 +2089,8 @@ body:has(.contact-page) .footer-meta {
   .gallery-main:hover .enlarge svg {
     transform: scale(1.1);
   }
-  .capability-index button:hover::before {
-    transform: scaleX(1);
+  .capability-index button:hover {
+    color: var(--fg);
   }
   .capability-index button:hover > svg {
     transform: rotate(0);
@@ -2216,25 +2199,12 @@ html:has(.mobile-menu[open]) {
 
 /* Hover belongs to the frame/action, never to the scroll-owned image transform. */
 
-/* The selected label responds independently of the scroll-owned presentation layer. */
-.capability-index button > span:nth-child(2) {
-  transition: translate var(--motion-panel) var(--motion-ease);
-}
-.capability-index button[aria-selected='true'] > span:nth-child(2) {
-  translate: 6px 0;
-}
 .capability-disclosure summary {
   transition: color var(--motion-hover) ease;
 }
-.capability-disclosure summary:is(:hover, :focus-visible),
+.capability-disclosure summary:focus-visible,
 .capability-disclosure[open] summary {
   color: var(--fg);
-}
-@media (prefers-reduced-motion: reduce) {
-  .capability-index button > span:nth-child(2) {
-    transition: none;
-    translate: none;
-  }
 }
 
 .github-evidence {

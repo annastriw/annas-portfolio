@@ -445,12 +445,6 @@
 .contribution-tooltip {
   animation-duration: 100ms;
 }
-.capability-index button > span:nth-child(2) {
-  transition: translate 220ms var(--motion-ease);
-}
-.capability-index button[aria-selected='true'] > span:nth-child(2) {
-  translate: 4px 0;
-}
 @media (max-width: 1000px) and (min-width: 701px) {
   .featured-project {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
