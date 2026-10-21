@@ -166,21 +166,6 @@
     animation: opening-signature 2000ms var(--motion-ease) both;
   }
 }
-@keyframes panel-response {
-  from {
-    opacity: 0.6;
-    translate: 0 5px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .project-grid[data-filtering='true'] .project-card-meta {
-    animation: panel-response 220ms var(--motion-ease) backwards;
-  }
-}
 @supports (interpolate-size: allow-keywords) and (transition-behavior: allow-discrete) and
   selector(::details-content) {
   @media (prefers-reduced-motion: no-preference) {

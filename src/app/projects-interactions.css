@@ -1,0 +1,99 @@
+/* One selection surface follows the real wrapping filter layout. */
+.filter-list {
+  position: relative;
+  isolation: isolate;
+}
+.filter-indicator {
+  position: absolute;
+  z-index: -1;
+  inset: 0 auto auto 0;
+  width: var(--filter-width, 0px);
+  height: var(--filter-height, 0px);
+  translate: var(--filter-x, 0px) var(--filter-y, 0px);
+  background: var(--surface);
+  box-shadow: inset 0 -2px 0 var(--accent);
+  pointer-events: none;
+}
+.filter-list[data-indicator-ready='true'] .filter-indicator {
+  transition:
+    translate var(--motion-state) var(--motion-ease),
+    width var(--motion-state) var(--motion-ease),
+    height var(--motion-state) var(--motion-ease);
+}
+.filter-list button {
+  transition:
+    color var(--motion-hover) var(--motion-ease-color),
+    background-color var(--motion-hover) var(--motion-ease-color),
+    box-shadow var(--motion-press) var(--motion-ease-press);
+}
+.filter-list button[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+.filter-list[data-indicator-ready='true'] button[aria-pressed='true'] {
+  background: transparent;
+  box-shadow: none;
+}
+.filter-list[data-indicator-ready='true'] button:active {
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.project-card[hidden] {
+  display: none;
+}
+.project-image {
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: outline-color var(--motion-hover) var(--motion-ease-color);
+}
+.project-image .image-arrow {
+  transition:
+    background-color var(--motion-hover) var(--motion-ease-color),
+    border-color var(--motion-hover) var(--motion-ease-color);
+}
+.project-image:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.project-image:focus-visible .image-arrow {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.project-image:is(:focus-visible, :active) [data-motion-icon='diagonal'] {
+  translate: var(--motion-icon-travel) calc(-1 * var(--motion-icon-travel));
+}
+.project-image:active [data-motion-icon] {
+  scale: 0.92;
+}
+.project-card h2 a:is(:focus-visible, :active) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+.detail-page .breadcrumb a {
+  gap: 8px;
+  flex-shrink: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .project-image:hover {
+    outline-color: var(--line);
+  }
+  .project-image:hover .image-arrow {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .project-card h2 a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+  .filter-list button:not([aria-pressed='true']):hover {
+    background: var(--surface);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filter-list[data-indicator-ready='true'] .filter-indicator,
+  .filter-list button {
+    transition: none;
+  }
+}

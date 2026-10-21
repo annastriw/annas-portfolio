@@ -155,11 +155,6 @@
 .filter-list {
   gap: 4px;
 }
-.filter-list button {
-  transition:
-    color 160ms ease,
-    background-color 160ms ease;
-}
 .detail-heading {
   max-width: 100%;
 }

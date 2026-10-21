@@ -603,13 +603,6 @@ dialog::backdrop {
   font-size: var(--type-meta);
   opacity: 0.6;
 }
-.filter-list button[aria-pressed='true'] {
-  background: var(--fg);
-  color: var(--bg);
-}
-.filter-list button:not([aria-pressed='true']):hover {
-  background: var(--surface);
-}
 .project-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2056,12 +2049,6 @@ body:has(.contact-page) .footer-meta {
   margin-top: -8px;
   margin-bottom: 20px;
 }
-.filter-list button {
-  transition:
-    background-color 220ms ease,
-    color 220ms ease,
-    translate 180ms ease;
-}
 .gallery-thumbnails button {
   transition:
     opacity 240ms ease,
@@ -2098,9 +2085,6 @@ body:has(.contact-page) .footer-meta {
   .contact-socials a:hover {
     color: var(--accent);
     background: var(--surface);
-  }
-  .project-image:hover img {
-    scale: 1.015;
   }
   .certificate:hover .certificate-action {
     border-color: var(--accent);

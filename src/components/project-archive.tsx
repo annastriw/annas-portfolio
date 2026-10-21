@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useLayoutEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { ProjectFilters } from './project-filters';
+import { useArchiveMotion } from './use-archive-motion';
 import { archiveSnapshot, captureArchive, settleArchiveEntry } from '@/lib/archive-navigation';
 import type { ArchiveVisit } from '@/lib/navigation';
 import { ArrowUpRightIcon } from '@phosphor-icons/react';
@@ -42,6 +44,8 @@ export function ProjectArchive({
         p.slug === restored.slug && (restored.filter === 'all' || p.category === restored.filter),
     );
   const filter: Category | 'all' = selected ?? (valid ? restored.filter : 'all');
+  const grid = useRef<HTMLDivElement>(null);
+  const prepareMotion = useArchiveMotion(grid, filter);
   useLayoutEffect(() => {
     const visit = settleArchiveEntry(path);
     if (!visit) return;
@@ -77,33 +81,41 @@ export function ProjectArchive({
   return (
     <>
       <div className="archive-toolbar">
-        <div
-          className="filter-list"
-          role="group"
-          aria-label={locale === 'id' ? 'Filter proyek' : 'Filter projects'}
-        >
-          {categories.map(([value, label]) => (
-            <button key={value} onClick={() => setFilter(value)} aria-pressed={filter === value}>
-              {label}
-              <span>
-                {value === 'all'
-                  ? projects.length
-                  : projects.filter((p) => p.category === value).length}
-              </span>
-            </button>
-          ))}
-        </div>
+        <ProjectFilters
+          locale={locale}
+          selected={filter}
+          categories={categories.map(([value, label]) => ({
+            value,
+            label,
+            count:
+              value === 'all'
+                ? projects.length
+                : projects.filter((p) => p.category === value).length,
+          }))}
+          onSelect={(value) => {
+            if (value === filter) return;
+            prepareMotion();
+            setFilter(value);
+          }}
+        />
         <p className="eyebrow" role="status">
           {visible.length} {locale === 'id' ? 'proyek' : 'projects'}
         </p>
       </div>
-      <div className="project-grid" key={filter} data-filtering={selected !== null}>
-        {visible.map((p) => (
-          <article className="project-card" data-scene="card" key={p.slug} id={`project-${p.slug}`}>
+      <div className="project-grid" ref={grid}>
+        {projects.map((p) => (
+          <article
+            className="project-card"
+            data-scene="card"
+            key={p.slug}
+            id={`project-${p.slug}`}
+            hidden={filter !== 'all' && p.category !== filter}
+          >
             <Link
               href={`/${locale}/projects/${p.slug}/`}
               onNavigate={() => remember(p.slug)}
               className="project-image"
+              aria-label={`${locale === 'id' ? 'Jelajahi' : 'Explore'} ${p.title}`}
             >
               <Image
                 src={p.cover}
@@ -112,8 +124,8 @@ export function ProjectArchive({
                 height={737}
                 sizes="(max-width: 700px) 92vw, 46vw"
               />
-              <span className="image-arrow">
-                <ArrowUpRightIcon size={24} />
+              <span className="image-arrow" aria-hidden="true">
+                <ArrowUpRightIcon data-motion-icon="diagonal" size={24} />
               </span>
             </Link>
             <div className="project-card-meta">

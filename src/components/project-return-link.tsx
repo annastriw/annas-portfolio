@@ -5,6 +5,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { queueReturn, settleArchiveEntry } from '@/lib/archive-navigation';
 import type { ArchiveVisit } from '@/lib/navigation';
 import type { Locale } from '@/lib/i18n';
+import { ArrowLeftIcon } from '@phosphor-icons/react';
 
 export function ProjectReturnLink({ locale, slug }: { locale: Locale; slug: string }) {
   const visit = useRef<ArchiveVisit | null>(null);
@@ -15,6 +16,7 @@ export function ProjectReturnLink({ locale, slug }: { locale: Locale; slug: stri
     <Link
       href={`/${locale}/projects/`}
       scroll={false}
+      aria-label={locale === 'id' ? 'Kembali ke daftar proyek' : 'Back to projects'}
       onNavigate={() => {
         if (visit.current) queueReturn(`/${locale}/projects/`, visit.current);
         else {
@@ -27,6 +29,7 @@ export function ProjectReturnLink({ locale, slug }: { locale: Locale; slug: stri
         }
       }}
     >
+      <ArrowLeftIcon data-motion-icon="left" size={18} aria-hidden="true" />
       {locale === 'id' ? 'Proyek' : 'Projects'}
     </Link>
   );
