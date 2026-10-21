@@ -1,0 +1,94 @@
+/* Stable targets and a reserved live region keep feedback from moving surrounding content. */
+.copy-email {
+  width: 250px;
+  max-width: 100%;
+}
+.copy-email > [role='status'] {
+  min-height: 3.2em;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.copy-email button {
+  min-height: 44px;
+}
+.copy-icon {
+  display: inline-grid;
+  flex: 0 0 19px;
+  width: 19px;
+  height: 19px;
+}
+.copy-icon svg {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--motion-hover) ease,
+    scale var(--motion-state) var(--motion-ease);
+}
+.copy-icon [data-copy-glyph='check'] {
+  opacity: 0;
+  scale: 0.8;
+}
+[data-copy-state='copied'] .copy-icon [data-copy-glyph='copy'] {
+  opacity: 0;
+  scale: 0.8;
+}
+[data-copy-state='copied'] .copy-icon [data-copy-glyph='check'] {
+  opacity: 1;
+  scale: 1;
+}
+.copy-message {
+  display: inline-block;
+  animation: contact-response var(--motion-hover) var(--motion-ease) both;
+}
+@keyframes contact-response {
+  from {
+    opacity: 0.6;
+    translate: 0 2px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+:is(.contact-email, .contact-socials > a) {
+  transition:
+    color var(--motion-hover) ease,
+    border-color var(--motion-hover) ease,
+    background-color var(--motion-hover) ease;
+}
+:is(.contact-email, .contact-socials > a):is(:focus-visible, :active)
+  [data-motion-icon='diagonal'] {
+  translate: var(--motion-icon-travel) calc(-1 * var(--motion-icon-travel));
+}
+:is(
+    .contact-email,
+    .contact-socials > a,
+    .footer-heading,
+    .footer-meta a,
+    .missing-actions a
+  ):active
+  [data-motion-icon] {
+  scale: 0.92;
+}
+.contact-socials > a:is(:focus-visible, :active) {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.missing-actions a {
+  min-height: 44px;
+}
+@media (hover: hover) and (pointer: fine) {
+  :is(.contact-email, .contact-socials > a):hover [data-motion-icon='diagonal'] {
+    translate: var(--motion-icon-travel) calc(-1 * var(--motion-icon-travel));
+  }
+  .contact-email:hover {
+    color: var(--accent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .copy-icon svg {
+    transition: none;
+  }
+  .copy-message {
+    animation: none;
+  }
+}

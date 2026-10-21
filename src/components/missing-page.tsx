@@ -1,5 +1,5 @@
 'use client';
-import { ArrowLeftIcon } from '@phosphor-icons/react';
+import { ArrowLeftIcon, ArrowRightIcon } from '@phosphor-icons/react';
 
 const messages = {
   id: {
@@ -49,6 +49,7 @@ export function MissingPage({ embedded = false }: { embedded?: boolean }) {
               </a>
               <a className="text-link" href={`/${locale}/projects/`}>
                 {copy.projects}
+                <ArrowRightIcon data-motion-icon="right" size={20} aria-hidden="true" />
               </a>
             </div>
           </div>
