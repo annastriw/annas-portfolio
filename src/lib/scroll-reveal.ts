@@ -4,6 +4,10 @@ const clamp = (value: number) => Math.max(0, Math.min(1, value));
 export function sceneProgress(top: number, viewport: number, small = false) {
   return clamp((viewport * 0.88 - top) / Math.max(1, viewport * (small ? 0.22 : 0.28)));
 }
+// Media senses its own frame, not the copy above it on a stacked layout.
+export function frameProgress(top: number, viewport: number, small = false) {
+  return clamp((viewport * 0.94 - top) / Math.max(1, viewport * (small ? 0.32 : 0.44)));
+}
 export function heroExitProgress(top: number, height: number, viewport = height) {
   const start = Math.min(0, viewport - height);
   return clamp((start - top) / Math.max(1, Math.min(height, viewport) * 0.8));
@@ -36,7 +40,9 @@ export function mountMotionScenes() {
       return String(
         scene.dataset.scene === 'hero'
           ? heroExitProgress(top, height, innerHeight)
-          : sceneProgress(top, innerHeight, small),
+          : scene.dataset.scene === 'work-media' || scene.dataset.scene === 'portrait'
+            ? frameProgress(top, innerHeight, small)
+            : sceneProgress(top, innerHeight, small),
       );
     });
     scenes.forEach((scene, i) => {

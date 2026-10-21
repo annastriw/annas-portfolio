@@ -45,7 +45,7 @@ export default async function Contact({ params }: { params: Promise<{ locale: st
             <CopyEmail locale={locale} />
           </div>
         </div>
-        <div className="contact-socials">
+        <div className="contact-socials" data-scene="social">
           <a href={identity.linkedin} target="_blank" rel="noreferrer">
             <span>
               LinkedIn<small>Annas Tri Widagdo</small>

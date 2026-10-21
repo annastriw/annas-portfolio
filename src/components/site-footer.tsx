@@ -19,7 +19,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
           <ArrowUpRightIcon data-motion-icon="diagonal" size={20} />
         </Link>
       </div>
-      <div className="footer-meta container">
+      <div className="footer-meta container" data-scene="closing">
         <Link className="wordmark" href={`/${locale}/`}>
           annastriwidagdo.me
         </Link>

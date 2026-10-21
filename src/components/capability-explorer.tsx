@@ -31,7 +31,7 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
   }, [selected]);
   return (
     <>
-      <div className="capability-explorer">
+      <div className="capability-explorer" data-scene="capability">
         <div
           className="capability-index"
           role="tablist"
@@ -106,6 +106,7 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
         {items.map((item, i) => (
           <details
             className="capability-disclosure"
+            data-scene="disclosure"
             key={item.title}
             onKeyDown={(event) => {
               if (event.key === 'Escape' && event.currentTarget.open) {

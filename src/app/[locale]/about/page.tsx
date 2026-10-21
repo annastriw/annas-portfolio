@@ -50,7 +50,7 @@ export default async function About({ params }: { params: Promise<{ locale: stri
           </div>
           <span className="eyebrow">Annas Tri Widagdo / Jakarta, ID</span>
         </div>
-        <div className="about-biography">
+        <div className="about-biography" data-scene="biography">
           {biography.map((p, i) => (
             <p key={i}>{p[locale]}</p>
           ))}

@@ -1,6 +1,7 @@
 'use client';
-import { useSyncExternalStore } from 'react';
-import Lightbox from 'yet-another-react-lightbox';
+import { useRef, useSyncExternalStore } from 'react';
+import Lightbox, { type CaptionsRef } from 'yet-another-react-lightbox';
+import { zoomHidesCaptions } from '@/lib/media-zoom';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import Captions from 'yet-another-react-lightbox/plugins/captions';
 import { ArrowLeftIcon, ArrowRightIcon, XIcon, PlusIcon, MinusIcon } from '@phosphor-icons/react';
@@ -37,6 +38,12 @@ export default function MediaLightbox({
     () => true,
   );
   const id = locale === 'id';
+  const captions = useRef<CaptionsRef>(null);
+  const zoomed = useRef(false);
+  const restoreCaptions = () => {
+    zoomed.current = false;
+    captions.current?.show();
+  };
   return (
     <Lightbox
       open={open}
@@ -48,7 +55,7 @@ export default function MediaLightbox({
       carousel={{ finite: true, preload: 1 }}
       controller={{ closeOnBackdropClick: true, closeOnPullDown: false, closeOnPullUp: false }}
       zoom={{ maxZoomPixelRatio: 2, scrollToZoom: false }}
-      captions={{ descriptionMaxLines: 2, showToggle: false }}
+      captions={{ ref: captions, descriptionMaxLines: 2, showToggle: false }}
       animation={{
         fade: reduced ? 0 : 240,
         swipe: reduced ? 0 : 300,
@@ -59,7 +66,23 @@ export default function MediaLightbox({
           navigation: 'cubic-bezier(.22,1,.36,1)',
         },
       }}
-      on={{ view: ({ index: current }) => onView?.(current), exited: onExited }}
+      on={{
+        view: ({ index: current }) => {
+          restoreCaptions();
+          onView?.(current);
+        },
+        zoom: ({ zoom }) => {
+          const hidden = zoomHidesCaptions(zoom, zoomed.current);
+          if (hidden === zoomed.current) return;
+          zoomed.current = hidden;
+          if (hidden) captions.current?.hide();
+          else captions.current?.show();
+        },
+        exited: () => {
+          restoreCaptions();
+          onExited();
+        },
+      }}
       labels={
         id
           ? {

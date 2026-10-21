@@ -23,18 +23,34 @@ export function PageMotion() {
     } catch {
       /* Native navigation still works without storage. */
     }
-    if (visit.current.path !== path) {
+    if (home && location.search === '?intro=1') {
+      replay = true;
+      history.replaceState(history.state, '', path + location.hash);
+    }
+    if (visit.current.path !== path || replay) {
       const booted = root.dataset.openingBooted === 'true';
       const pending = Number(root.dataset.openingAt);
       const play =
         home &&
         !reduced &&
-        (pending > 0 || (!booted && needsOpening(home, opened, replay, reduced)));
+        (pending > 0 || replay || (!booted && needsOpening(home, opened, replay, reduced)));
       visit.current = { path, opening: play, started: pending > 0 ? pending : Date.now() };
     }
     const remaining = Math.max(0, OPENING_DURATION - (Date.now() - visit.current.started));
     if (visit.current.opening && remaining && !reduced) {
+      // A running CSS clock must not jump forward a second time during hydration.
+      if (!root.dataset.opening) root.style.setProperty('--opening-delay', '0ms');
       root.dataset.opening = 'playing';
+      // CSS starts at first style resolution, which may follow the head script.
+      // Align both layers to the original clock so the fail-safe cannot cut off the swipe.
+      document
+        .querySelectorAll('.opening-curtain, .opening-curtain > .opening-signature')
+        .forEach((element) => {
+          for (const animation of element.getAnimations()) {
+            const delay = Number(animation.effect?.getTiming().delay ?? 0);
+            animation.currentTime = Date.now() - visit.current.started + delay;
+          }
+        });
       try {
         sessionStorage.setItem('portfolio-opened', 'true');
         sessionStorage.removeItem('portfolio-replay-opening');
@@ -49,6 +65,7 @@ export function PageMotion() {
       visit.current.opening = false;
       delete root.dataset.opening;
       delete root.dataset.openingAt;
+      root.style.removeProperty('--opening-delay');
     }, remaining);
     return () => window.clearTimeout(timer);
   }, [path, home]);
@@ -66,7 +83,7 @@ export function PageMotion() {
       }
       const animations: Animation[] = [];
       const elapsed = Date.now() - visit.current.started;
-      const base = visit.current.opening ? 1600 - elapsed : 0;
+      const base = visit.current.opening ? 1450 - elapsed : 0;
       const small = matchMedia('(max-width: 700px), (max-height: 600px)').matches;
       const play = (element: Element | null, frames: Keyframe[], duration: number, delay = 0) => {
         if (element && typeof element.animate === 'function')
@@ -81,6 +98,13 @@ export function PageMotion() {
       };
       if (!arrived && window.scrollY < 80) {
         if (home) {
+          if (visit.current.opening)
+            play(
+              document.querySelector('.site-header'),
+              [{ transform: 'translateY(-12px)' }, { transform: 'translateY(0)' }],
+              550,
+              base,
+            );
           play(
             document.querySelector('.hero-name'),
             [
@@ -113,6 +137,12 @@ export function PageMotion() {
                 i * 80,
               ),
             );
+          play(
+            document.querySelector('.missing-actions'),
+            [{ transform: 'translateY(6px)' }, { transform: 'translateY(0)' }],
+            420,
+            100,
+          );
         }
       }
       arrived = true;

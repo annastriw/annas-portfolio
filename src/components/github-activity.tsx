@@ -64,7 +64,13 @@ export function GitHubActivity({ locale }: { locale: Locale }) {
           {events.length > 0 && (
             <div className="github-events">
               {events.map((event, i) => (
-                <a key={`${event.date}-${i}`} href={event.url} target="_blank" rel="noreferrer">
+                <a
+                  data-scene="activity"
+                  key={`${event.date}-${i}`}
+                  href={event.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <span className="eyebrow">
                     {new Intl.DateTimeFormat(locale === 'id' ? 'id-ID' : 'en-GB', {
                       day: 'numeric',

@@ -7,33 +7,71 @@ import {
   OPENING_DURATION,
 } from '../src/lib/opening.ts';
 import { motionMilliseconds } from '../src/lib/motion-timing.ts';
-import { sceneProgress, heroExitProgress, mountMotionScenes } from '../src/lib/scroll-reveal.ts';
+import {
+  sceneProgress,
+  frameProgress,
+  heroExitProgress,
+  mountMotionScenes,
+} from '../src/lib/scroll-reveal.ts';
 
-test('root greeting waits two seconds and replaces the entry even with blocked storage', () => {
+test('root hands its original clock to home immediately, including blocked storage', () => {
   for (const blocked of [false, true]) {
-    let finish;
     const destinations = [];
-    const values = new Map([['portfolio-replay-opening', 'true']]);
-    new Function('sessionStorage', 'location', 'setTimeout', entryBootstrap)(
+    const now = Date.now();
+    new Function('sessionStorage', 'location', 'matchMedia', entryBootstrap)(
       {
-        setItem: (key, value) => {
-          if (blocked) throw new Error('storage blocked');
-          values.set(key, value);
+        getItem: () => {
+          if (blocked) throw new Error('blocked');
+          return null;
         },
-        removeItem: (key) => values.delete(key),
       },
       { replace: (url) => destinations.push(url) },
-      (callback, delay) => {
-        assert.equal(delay, 2000);
-        finish = callback;
+      () => ({ matches: false }),
+    );
+    const start = Number(destinations[0].split('=')[1]);
+    assert.ok(start >= now && start <= Date.now());
+  }
+  for (const reduced of [false, true]) {
+    const destinations = [];
+    new Function('sessionStorage', 'location', 'matchMedia', entryBootstrap)(
+      { getItem: (key) => (key === 'portfolio-opened' ? 'true' : null) },
+      { replace: (url) => destinations.push(url) },
+      () => ({ matches: reduced }),
+    );
+    assert.deepEqual(destinations, ['/en/?welcome=done']);
+  }
+});
+
+test('timestamp handoff resumes the remaining clock and skips expired openings', () => {
+  for (const elapsed of [450, 2400]) {
+    const start = Date.now() - elapsed;
+    const root = { dataset: {}, style: { setProperty() {} } };
+    let delay = 0;
+    new Function(
+      'document',
+      'location',
+      'history',
+      'sessionStorage',
+      'matchMedia',
+      'setTimeout',
+      openingBootstrap,
+    )(
+      { documentElement: root },
+      { pathname: '/en/', search: `?welcome=${start}`, hash: '' },
+      { replaceState() {} },
+      { setItem() {}, removeItem() {} },
+      () => ({ matches: false }),
+      (_, ms) => {
+        delay = ms;
       },
     );
-    assert.deepEqual(destinations, []);
-    finish();
-    assert.deepEqual(destinations, ['/en/?welcome=done']);
-    if (!blocked) {
-      assert.equal(values.get('portfolio-opened'), 'true');
-      assert.equal(values.has('portfolio-replay-opening'), false);
+    assert.equal(root.dataset.openingBooted, 'true');
+    if (elapsed < OPENING_DURATION) {
+      assert.equal(Number(root.dataset.openingAt), start);
+      assert.ok(delay <= 1550 && delay > 1400);
+    } else {
+      assert.equal(root.dataset.opening, undefined);
+      assert.equal(delay, 0);
     }
   }
 });
@@ -148,7 +186,7 @@ test('fallback batches stable sensors, refreshes filtered scenes and releases al
     assert.equal(root.dataset.motion, 'fallback');
     flush();
     assert.equal(work.values.get('--scene-progress'), '0');
-    assert.equal(portrait.values.get('--scene-progress'), '0');
+    assert.equal(portrait.values.get('--scene-progress'), String(frameProgress(top, innerHeight)));
     assert.ok(order.lastIndexOf('read') < order.indexOf('write'));
     top = 600;
     listeners.get('scroll')();
@@ -174,7 +212,10 @@ test('fallback batches stable sensors, refreshes filtered scenes and releases al
     listeners.get('portfolio-scenes-changed')();
     flush();
     assert.equal(work.values.size, 0);
-    assert.equal(card.values.get('--scene-progress'), portrait.values.get('--scene-progress'));
+    assert.equal(
+      card.values.get('--scene-progress'),
+      String(sceneProgress(top, innerHeight, small)),
+    );
     listeners.get('toggle')();
     assert.equal(frames.size, 1);
     document.hidden = true;
@@ -363,4 +404,26 @@ test('opening has a two-second clock and a pre-hydration escape hatch', () => {
   finish();
   assert.equal(root.dataset.opening, undefined);
   assert.equal(root.dataset.openingBooted, 'true');
+});
+
+test('image frames have their own longer reversible reading window', () => {
+  assert.equal(frameProgress(940, 1000), 0);
+  assert.equal(frameProgress(720, 1000), 0.5);
+  assert.equal(frameProgress(500, 1000), 1);
+  assert.equal(frameProgress(720, 1000), 0.5);
+  assert.equal(frameProgress(620, 1000, true), 1);
+  assert.equal(frameProgress(-200, 800), 1);
+});
+
+test('reduced-motion replay is consumed rather than leaking to a later visit', () => {
+  const values = new Map([['portfolio-replay-opening', 'true']]);
+  new Function('document', 'location', 'history', 'sessionStorage', 'matchMedia', openingBootstrap)(
+    { documentElement: { dataset: {} } },
+    { pathname: '/id/', search: '?intro=1' },
+    { replaceState() {} },
+    { setItem: (k, v) => values.set(k, v), removeItem: (k) => values.delete(k) },
+    () => ({ matches: true }),
+  );
+  assert.equal(values.get('portfolio-opened'), 'true');
+  assert.equal(values.has('portfolio-replay-opening'), false);
 });

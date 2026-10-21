@@ -8,11 +8,14 @@ next-env.d.ts
 coverage/
 playwright-report/
 test-results/
+.playwright-cli/
+.playwright/
+.cache/
 
 # Local documentation and private working files
 .project-local/
-*.md
-*.mdx
+*.[mM][dD]
+*.[mM][dD][xX]
 /docs/
 /documentation/
 /content/projects/

@@ -45,7 +45,7 @@ export function TechReel({ children, locale }: { children: React.ReactNode; loca
     };
   }, []);
   return (
-    <div className="tech-reel" ref={root}>
+    <div className="tech-reel" ref={root} data-scene="reel">
       <div className="tech-reel-label">
         <span className="eyebrow">
           {locale === 'id' ? 'Teknologi & alat' : 'Technologies & tools'}

@@ -117,6 +117,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
               </div>
               <Link
                 className="featured-image"
+                data-scene="work-media"
+                data-composition={i % 3}
                 href={`/${locale}/projects/${p.slug}/`}
                 aria-label={`${id ? 'Jelajahi' : 'Explore'} ${p.title}`}
               >

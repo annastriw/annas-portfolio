@@ -92,3 +92,25 @@
     animation: none;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .contact-body[data-scene='story'] > div:first-child > :is(.eyebrow, .contact-email) {
+    translate: 0 calc((1 - var(--lead, 1)) * 10px);
+  }
+  .contact-body[data-scene='story'] .contact-actions {
+    translate: 0 calc((1 - var(--tail, 1)) * 14px);
+  }
+  [data-scene='social'] > a > span {
+    translate: 0 calc((1 - var(--lead, 1)) * 8px);
+  }
+  [data-scene='social'] > a:nth-child(2) > span {
+    translate: 0 calc((1 - var(--tail, 1)) * 8px);
+  }
+  .footer-meta[data-scene='closing'] > :is(span, div) {
+    translate: 0 calc((1 - var(--tail, 1)) * 6px);
+  }
+  .contact-body[data-scene='story']:focus-within .contact-actions,
+  [data-scene='social'] > a:focus-visible > span {
+    translate: none;
+  }
+}

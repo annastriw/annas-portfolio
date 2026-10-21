@@ -22,63 +22,117 @@
     animation-timeline: view(block);
     animation-range: exit 0% exit 80%;
   }
-  :root[data-motion] [data-scene] {
-    --scene-travel: 14px;
-    --heading-travel: 6px;
-    --lead: clamp(0, calc(var(--scene-progress) / 0.65), 1);
-    --media: clamp(0, calc((var(--scene-progress) - 0.12) / 0.75), 1);
-    --tail: clamp(0, calc((var(--scene-progress) - 0.3) / 0.7), 1);
+  :root[data-motion='native'] [data-scene]:is([data-scene='work-media'], [data-scene='portrait']) {
+    animation-timeline: view(block 0 6%);
+    animation-range: entry 0px entry 44vh;
   }
+  :root[data-motion] [data-scene] {
+    --scene-travel: 24px;
+    --heading-travel: 12px;
+    --lead: clamp(0, calc(var(--scene-progress) / 0.65), 1);
+    --media: clamp(0, calc((var(--scene-progress) - 0.08) / 0.92), 1);
+    --tail: clamp(0, calc((var(--scene-progress) - 0.25) / 0.75), 1);
+  }
+  /* Copy stays readable throughout; motion supplies hierarchy, never access to content. */
   [data-scene] .scene-heading,
   [data-scene='heading'] > h2,
   [data-scene='heading'] > h3 {
-    translate: 0 calc((1 - var(--lead, 1)) * var(--heading-travel, 6px));
+    translate: 0 calc((1 - var(--lead, 1)) * var(--heading-travel, 12px));
   }
   [data-scene='hero'] .hero-photo {
     transform: translateY(calc(var(--scene-progress, 0) * -10px)) scale(1.015);
   }
-  [data-scene='work'] .featured-image img {
-    transform: translateY(calc((1 - var(--media, 1)) * var(--scene-travel, 20px)))
-      scale(calc(0.992 + 0.008 * var(--media, 1)));
+  [data-scene='work'] .featured-copy > .eyebrow {
+    translate: 0 calc((1 - var(--lead, 1)) * -8px);
+  }
+  [data-scene='work'] .featured-copy > .text-link {
+    translate: 0 calc((1 - var(--tail, 1)) * 12px);
+  }
+  /* Three quiet compositions: lift, opening aperture, and a rising lower edge.
+     The frame has its own sensor so mobile copy cannot finish the image reveal early. */
+  [data-scene='work-media'] img {
+    transform: translateY(calc((1 - var(--media, 1)) * var(--scene-travel, 24px)))
+      scale(calc(1.025 - 0.025 * var(--media, 1)));
+  }
+  [data-scene='work-media'][data-composition='1'] img {
+    transform: scale(calc(1.04 - 0.04 * var(--media, 1)));
+    clip-path: inset(0 calc((1 - var(--media, 1)) * 9%));
+  }
+  [data-scene='work-media'][data-composition='2'] img {
+    transform: translateY(calc((1 - var(--media, 1)) * 12px));
+    clip-path: inset(0 0 calc((1 - var(--media, 1)) * 18%));
   }
   [data-scene='experience']::after {
-    transform: scaleY(calc(0.05 + 0.95 * var(--scene-progress, 1)));
+    transform: scaleY(var(--scene-progress, 1));
   }
   [data-scene='experience'] .timeline-marker::before {
     transform: scaleX(var(--lead, 1));
+    transform-origin: left;
+  }
+  [data-scene='experience'] .timeline-number {
+    translate: 0 calc((1 - var(--lead, 1)) * -8px);
+  }
+  [data-scene='experience'] .timeline-entry {
+    translate: 0 calc((1 - var(--tail, 1)) * var(--scene-travel, 24px));
+  }
+  [data-scene='experience'] .timeline-entry .scene-heading {
+    translate: none;
+  }
+  [data-scene='experience'] .timeline-meta {
+    translate: calc((1 - var(--lead, 1)) * -8px) 0;
   }
   [data-scene='portrait'] .about-photo-frame {
-    transform: translateY(calc((1 - var(--media, 1)) * var(--scene-travel, 14px) * 0.6))
-      scale(calc(0.995 + 0.005 * var(--media, 1)));
+    clip-path: inset(calc((1 - var(--media, 1)) * 10%) 0 0);
+  }
+  [data-scene='portrait'] .about-photo-frame img {
+    transform: scale(calc(1.035 - 0.035 * var(--media, 1)));
+  }
+  [data-scene='portrait'] > .eyebrow {
+    translate: 0 calc((1 - var(--tail, 1)) * 8px);
   }
   [data-scene='card'] .project-image img {
-    transform: translateY(calc((1 - var(--media, 1)) * var(--scene-travel, 14px) * 0.5));
+    transform: scale(calc(1.02 - 0.02 * var(--media, 1)));
+  }
+  [data-scene='card'] > :is(.project-card-meta, h2, p) {
+    translate: 0 calc((1 - var(--tail, 1)) * 10px);
   }
   [data-scene='gallery'] .section-label {
-    translate: 0 calc((1 - var(--lead, 1)) * var(--heading-travel, 6px));
+    translate: 0 calc((1 - var(--lead, 1)) * var(--heading-travel, 12px));
   }
   [data-scene='gallery']:is(:focus-within, :has(.gallery[data-dragging='true'])) .section-label {
     translate: none;
   }
   [data-scene='footer'] .footer-heading {
-    translate: 0 calc((1 - var(--tail, 1)) * var(--heading-travel, 6px));
+    translate: 0 calc((1 - var(--media, 1)) * 16px);
+  }
+  [data-scene='footer'] > .text-link {
+    translate: 0 calc((1 - var(--tail, 1)) * 10px);
   }
   [data-scene='evidence']::before,
   [data-scene='story']::before,
   [data-scene='footer']::before {
-    transform: scaleX(calc(0.25 + 0.75 * var(--lead, 1)));
+    transform: scaleX(calc(0.15 + 0.85 * var(--lead, 1)));
   }
   @media (max-width: 700px), (max-height: 600px) {
     :root[data-motion='native'] [data-scene]:not([data-scene='hero']) {
       animation-range: entry 0px entry 22vh;
     }
+    :root[data-motion='native']
+      [data-scene]:is([data-scene='work-media'], [data-scene='portrait']) {
+      animation-range: entry 0px entry 32vh;
+    }
     :root[data-motion] [data-scene] {
-      --scene-travel: 6px;
-      --heading-travel: 4px;
+      --scene-travel: 12px;
+      --heading-travel: 8px;
     }
     [data-scene='hero'] .hero-photo {
       transform: translateY(calc(var(--scene-progress, 0) * -4px)) scale(1.008);
     }
+  }
+  /* An intentional interaction takes priority over a reveal. */
+  [data-scene='work-media']:focus-visible img {
+    transform: none;
+    clip-path: none;
   }
 }
 /* Names wrap responsively without clipping descenders or splitting their motion. */
@@ -161,9 +215,11 @@
   }
   :root:is([data-opening='pending'], [data-opening='playing']) .opening-curtain {
     animation: opening-curtain 2000ms cubic-bezier(0.76, 0, 0.24, 1) both;
+    animation-delay: var(--opening-delay, 0ms);
   }
   :root:is([data-opening='pending'], [data-opening='playing']) .opening-signature {
     animation: opening-signature 2000ms var(--motion-ease) both;
+    animation-delay: var(--opening-delay, 0ms);
   }
 }
 @supports (interpolate-size: allow-keywords) and (transition-behavior: allow-discrete) and

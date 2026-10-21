@@ -99,3 +99,28 @@
     transition: none;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-scene='biography'] > p:first-child {
+    translate: 0 calc((1 - var(--lead, 1)) * 12px);
+  }
+  [data-scene='biography'] > p:not(:first-child) {
+    translate: 0 calc((1 - var(--tail, 1)) * 16px);
+  }
+  .education-heading[data-scene='heading'] > div,
+  .thesis[data-scene='story'] > div {
+    translate: 0 calc((1 - var(--tail, 1)) * 12px);
+  }
+  [data-scene='certificate'] .certificate-image img {
+    clip-path: inset(0 0 calc((1 - var(--media, 1)) * 10%));
+  }
+  [data-scene='certificate'] .certificate-copy {
+    translate: 0 calc((1 - var(--tail, 1)) * 10px);
+  }
+  [data-scene='certificate']:focus-within .certificate-image img {
+    clip-path: none;
+  }
+  [data-scene='certificate']:focus-within .certificate-copy {
+    translate: none;
+  }
+}
