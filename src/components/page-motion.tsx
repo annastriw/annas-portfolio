@@ -2,14 +2,12 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { needsOpening, OPENING_DURATION } from '@/lib/opening';
-import { mountRevealFallback } from '@/lib/scroll-reveal';
-import { motionMilliseconds } from '@/lib/motion-timing';
+import { mountMotionScenes } from '@/lib/scroll-reveal';
 
 export function PageMotion() {
   const path = usePathname();
   const home = /^\/(en|id)\/?$/.test(path);
-  const opening = useRef(false);
-  const openingPath = useRef('');
+  const visit = useRef({ path: '', started: 0, opening: false });
   useLayoutEffect(() => {
     const root = document.documentElement;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -23,31 +21,38 @@ export function PageMotion() {
         window.scrollTo({ top: 0, behavior: 'instant' });
       }
     } catch {
-      /* Native navigation remains available without storage. */
+      /* Native navigation still works without storage. */
     }
-    opening.current =
-      needsOpening(home, opened, replay, reduced) ||
-      (home && !reduced && opening.current && openingPath.current === path);
-    openingPath.current = path;
-    if (opening.current) {
+    if (visit.current.path !== path) {
+      const booted = root.dataset.openingBooted === 'true';
+      const pending = Number(root.dataset.openingAt);
+      const play =
+        home &&
+        !reduced &&
+        (pending > 0 || (!booted && needsOpening(home, opened, replay, reduced)));
+      visit.current = { path, opening: play, started: pending > 0 ? pending : Date.now() };
+    }
+    const remaining = Math.max(0, OPENING_DURATION - (Date.now() - visit.current.started));
+    if (visit.current.opening && remaining && !reduced) {
       root.dataset.opening = 'playing';
       try {
         sessionStorage.setItem('portfolio-opened', 'true');
         sessionStorage.removeItem('portfolio-replay-opening');
       } catch {
-        /* The greeting still completes without storage. */
+        /* The greeting also completes without storage. */
       }
-    } else delete root.dataset.opening;
-    // CSS normally finishes the curtain. Also release it when animationend is lost.
+    } else {
+      visit.current.opening = false;
+      delete root.dataset.opening;
+    }
     const timer = window.setTimeout(() => {
-      opening.current = false;
+      visit.current.opening = false;
       delete root.dataset.opening;
-    }, OPENING_DURATION);
-    return () => {
-      window.clearTimeout(timer);
-      delete root.dataset.opening;
-    };
+      delete root.dataset.openingAt;
+    }, remaining);
+    return () => window.clearTimeout(timer);
   }, [path, home]);
+
   useEffect(() => {
     const media = matchMedia('(prefers-reduced-motion: reduce)');
     let release = () => {};
@@ -55,82 +60,99 @@ export function PageMotion() {
     const sync = () => {
       release();
       if (media.matches || document.hidden) {
-        opening.current = false;
+        visit.current.opening = false;
         delete document.documentElement.dataset.opening;
         return;
       }
-      const styles = getComputedStyle(document.documentElement);
-      const timing = (name: string, fallback: number) =>
-        motionMilliseconds(styles.getPropertyValue(`--motion-${name}`), fallback);
-      const easing = styles.getPropertyValue('--motion-ease').trim();
       const animations: Animation[] = [];
+      const elapsed = Date.now() - visit.current.started;
+      const base = visit.current.opening ? 1500 - elapsed : 0;
       const play = (element: Element | null, frames: Keyframe[], duration: number, delay = 0) => {
         if (element && typeof element.animate === 'function')
           animations.push(
             element.animate(frames, {
               duration,
               delay,
-              easing: easing || 'cubic-bezier(.22,1,.36,1)',
+              easing: 'cubic-bezier(.22,1,.36,1)',
               fill: 'backwards',
             }),
           );
       };
-      // Only the arrival is time-based. Page media and sections use reversible view timelines.
-      if (!arrived && home && window.scrollY < 80) {
-        const start = opening.current ? timing('opening-lead', 1450) : 0;
-        play(
-          document.querySelector('.hero-photo img'),
-          [{ transform: 'scale(1.06)' }, { transform: 'scale(1)' }],
-          timing('identity', 900),
-          start,
-        );
-        play(
-          document.querySelector('.hero-name'),
-          [{ transform: 'translateY(48px)' }, { transform: 'translateY(0)' }],
-          timing('identity', 900),
-          start,
-        );
-        document
-          .querySelectorAll('.hero-greeting,.hero-description,.hero-actions,.hero-location')
-          .forEach((element, i) =>
-            play(
-              element,
-              [{ transform: 'translateY(24px)' }, { transform: 'translateY(0)' }],
-              timing('support', 740),
-              start + 90 + i * 70,
-            ),
+      if (!arrived && window.scrollY < 80) {
+        if (home) {
+          play(
+            document.querySelector('.hero-photo img'),
+            [{ transform: 'scale(1.045)' }, { transform: 'scale(1)' }],
+            850,
+            base - 150,
           );
-        document
-          .querySelectorAll('.hero-statement .motion-word-inner')
-          .forEach((word, i) =>
-            play(
-              word,
-              [{ transform: 'translateY(115%)' }, { transform: 'translateY(0)' }],
-              timing('arrival', 780),
-              start + 80 + i * timing('stagger', 36),
-            ),
-          );
-      }
-      if (!arrived && !home && window.scrollY < 80) {
-        document
-          .querySelectorAll('.page-heading > *, .detail-heading > *, .breadcrumb')
-          .forEach((element, i) =>
-            play(
-              element,
-              [
-                { opacity: 0.8, transform: 'translateY(10px)' },
-                { opacity: 1, transform: 'translateY(0)' },
-              ],
-              timing('arrival', 780),
-              i * timing('stagger', 36),
-            ),
-          );
+          document
+            .querySelectorAll('.hero-name .arrival-inner')
+            .forEach((el, i) =>
+              play(
+                el,
+                [{ transform: 'translateY(110%)' }, { transform: 'translateY(0)' }],
+                700,
+                base + i * 70,
+              ),
+            );
+          document
+            .querySelectorAll('.hero-statement .arrival-inner')
+            .forEach((el, i) =>
+              play(
+                el,
+                [{ transform: 'translateY(110%)' }, { transform: 'translateY(0)' }],
+                620,
+                base + 120 + i * 45,
+              ),
+            );
+          document
+            .querySelectorAll('.hero-greeting,.hero-description,.hero-actions,.hero-location')
+            .forEach((el, i) =>
+              play(
+                el,
+                [
+                  { opacity: 0.65, transform: 'translateY(10px)' },
+                  { opacity: 1, transform: 'translateY(0)' },
+                ],
+                500,
+                base + 100 + i * 65,
+              ),
+            );
+        } else {
+          document
+            .querySelectorAll(
+              '.page-heading > *, .detail-heading > *, .breadcrumb, .missing-page > :not(.wordmark)',
+            )
+            .forEach((el, i) =>
+              play(
+                el,
+                [
+                  { opacity: 0.75, transform: 'translateY(14px)' },
+                  { opacity: 1, transform: 'translateY(0)' },
+                ],
+                580,
+                i * 55,
+              ),
+            );
+        }
       }
       arrived = true;
-      const releaseFallback = mountRevealFallback();
+      const cancelArrival = () => animations.forEach((animation) => animation.cancel());
+      const interrupt = () => {
+        if (window.scrollY > 80) cancelArrival();
+      };
+      // A gesture or navigation always takes precedence over presentation.
+      document.addEventListener('pointerdown', cancelArrival, { once: true });
+      document.addEventListener('keydown', cancelArrival, { once: true });
+      window.addEventListener('scroll', interrupt, { passive: true });
+      const releaseScenes = mountMotionScenes();
       release = () => {
-        releaseFallback();
-        animations.forEach((a) => a.cancel());
+        releaseScenes();
+        cancelArrival();
+        document.removeEventListener('pointerdown', cancelArrival);
+        document.removeEventListener('keydown', cancelArrival);
+        window.removeEventListener('scroll', interrupt);
       };
     };
     sync();
@@ -143,17 +165,7 @@ export function PageMotion() {
     };
   }, [path, home]);
   return home ? (
-    <div
-      className="opening-curtain"
-      aria-hidden="true"
-      key={path}
-      onAnimationEnd={(event) => {
-        if (event.target === event.currentTarget) {
-          opening.current = false;
-          delete document.documentElement.dataset.opening;
-        }
-      }}
-    >
+    <div className="opening-curtain" aria-hidden="true" key={path}>
       <span className="opening-signature">Hola.</span>
     </div>
   ) : null;

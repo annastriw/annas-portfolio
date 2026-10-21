@@ -1,83 +1,61 @@
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
-// Viewport anchors mirror the length-based entry ranges in motion.css.
-// The window does not shrink with a short heading or grow with a tall timeline.
-export function revealProgress(top: number, _height: number, viewport: number, small = false) {
-  return clamp((viewport * 0.94 - top) / Math.max(1, viewport * (small ? 0.38 : 0.41)));
-}
-export function readingProgress(top: number, viewport: number) {
-  return clamp((viewport * 0.9 - top) / Math.max(1, viewport * 0.54));
-}
-export function titleProgress(top: number, _height: number, viewport: number, small = false) {
-  return clamp(
-    (viewport * (small ? 0.93 : 0.9) - top) / Math.max(1, viewport * (small ? 0.29 : 0.3)),
-  );
+
+/** Only children move; every sensor stays in document flow. */
+export function sceneProgress(top: number, viewport: number, small = false) {
+  return clamp((viewport * 0.88 - top) / Math.max(1, viewport * (small ? 0.22 : 0.28)));
 }
 export function heroExitProgress(top: number, height: number, viewport = height) {
   const start = Math.min(0, viewport - height);
   return clamp((start - top) / Math.max(1, Math.min(height, viewport) * 0.8));
 }
-export function mountRevealFallback() {
+export function mountMotionScenes() {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
-  const nativeTimeline =
+  const root = document.documentElement;
+  const native =
     typeof CSS !== 'undefined' &&
+    typeof CSS.registerProperty === 'function' &&
     CSS.supports('animation-timeline: view()') &&
-    CSS.supports('animation-range: entry 0px entry 41vh') &&
-    CSS.supports('view-timeline-inset: 0 6%');
-  const nativeWork = nativeTimeline && CSS.supports('timeline-scope: --work-position');
-  const scenes: {
-    scene: HTMLElement;
-    target: HTMLElement;
-    property: string;
-    kind?: 'title' | 'exit' | 'media';
-  }[] = [];
-  if (!nativeWork) {
-    document.querySelectorAll<HTMLElement>('[data-motion="work"]').forEach((scene) => {
-      const target = scene.querySelector<HTMLElement>('.featured-image');
-      if (target) scenes.push({ scene, target, property: '--work-progress', kind: 'media' });
-    });
-  }
-  if (!nativeTimeline) {
-    document
-      .querySelectorAll<HTMLElement>('.hero')
-      .forEach((scene) =>
-        scenes.push({ scene, target: scene, property: '--hero-exit-progress', kind: 'exit' }),
-      );
-    document
-      .querySelectorAll<HTMLElement>('.scroll-title')
-      .forEach((scene) =>
-        scenes.push({ scene, target: scene, property: '--title-progress', kind: 'title' }),
-      );
-    document
-      .querySelectorAll<HTMLElement>('.featured-copy')
-      .forEach((scene) => scenes.push({ scene, target: scene, property: '--copy-progress' }));
-    document
-      .querySelectorAll<HTMLElement>('.timeline-item')
-      .forEach((scene) => scenes.push({ scene, target: scene, property: '--experience-progress' }));
-    document
-      .querySelectorAll<HTMLElement>('[data-motion="evidence"]')
-      .forEach((scene) => scenes.push({ scene, target: scene, property: '--evidence-progress' }));
-  }
-  if (!scenes.length) return () => {};
+    CSS.supports('animation-range: entry 0px entry 28vh') &&
+    CSS.supports('view-timeline-inset: 0 12%');
+  root.dataset.motion = native ? 'native' : 'fallback';
+  if (native)
+    return () => {
+      delete root.dataset.motion;
+    };
+  let scenes = Array.from(document.querySelectorAll<HTMLElement>('[data-scene]'));
   let frame = 0;
   let active = true;
+  const previous = new Map<HTMLElement, string>();
   const update = () => {
     frame = 0;
     if (!active || document.hidden) return;
-    const small = matchMedia('(max-width: 700px)').matches;
-    // One input-driven batch; no idle animation loop or React renders.
-    const progress = scenes.map(({ target, kind }) => {
-      const bounds = target.getBoundingClientRect();
-      if (kind === 'exit') return heroExitProgress(bounds.top, bounds.height, innerHeight);
-      if (kind === 'title') return titleProgress(bounds.top, bounds.height, innerHeight, small);
-      if (kind === 'media') return revealProgress(bounds.top, bounds.height, innerHeight, small);
-      return readingProgress(bounds.top, innerHeight);
+    const small = matchMedia('(max-width: 700px), (max-height: 600px)').matches;
+    // Read all geometry before writing. Input-driven frames only, no React renders.
+    const progress = scenes.map((scene) => {
+      const { top, height } = scene.getBoundingClientRect();
+      return String(
+        scene.dataset.scene === 'hero'
+          ? heroExitProgress(top, height, innerHeight)
+          : sceneProgress(top, innerHeight, small),
+      );
     });
-    scenes.forEach(({ scene, property }, index) =>
-      scene.style.setProperty(property, String(progress[index])),
-    );
+    scenes.forEach((scene, i) => {
+      if (previous.get(scene) === progress[i]) return;
+      scene.style.setProperty('--scene-progress', progress[i]);
+      previous.set(scene, progress[i]);
+    });
   };
   const schedule = () => {
     if (active && !frame && !document.hidden) frame = requestAnimationFrame(update);
+  };
+  const refresh = () => {
+    for (const scene of scenes)
+      if (!scene.isConnected) {
+        scene.style.removeProperty('--scene-progress');
+        previous.delete(scene);
+      }
+    scenes = Array.from(document.querySelectorAll<HTMLElement>('[data-scene]'));
+    schedule();
   };
   const visibility = () => {
     if (document.hidden) {
@@ -91,7 +69,7 @@ export function mountRevealFallback() {
   document.addEventListener('visibilitychange', visibility);
   document.addEventListener('load', schedule, true);
   document.addEventListener('toggle', schedule, true);
-  document.addEventListener('transitionend', schedule, true);
+  document.addEventListener('portfolio-scenes-changed', refresh);
   document.fonts?.ready.then(schedule);
   schedule();
   return () => {
@@ -103,7 +81,9 @@ export function mountRevealFallback() {
     document.removeEventListener('visibilitychange', visibility);
     document.removeEventListener('load', schedule, true);
     document.removeEventListener('toggle', schedule, true);
-    document.removeEventListener('transitionend', schedule, true);
-    scenes.forEach(({ scene, property }) => scene.style.removeProperty(property));
+    document.removeEventListener('portfolio-scenes-changed', refresh);
+    scenes.forEach((scene) => scene.style.removeProperty('--scene-progress'));
+    previous.clear();
+    delete root.dataset.motion;
   };
 }

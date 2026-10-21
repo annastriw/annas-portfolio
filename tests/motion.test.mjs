@@ -2,13 +2,169 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { needsOpening, openingBootstrap, OPENING_DURATION } from '../src/lib/opening.ts';
 import { motionMilliseconds } from '../src/lib/motion-timing.ts';
-import {
-  revealProgress,
-  titleProgress,
-  readingProgress,
-  heroExitProgress,
-  mountRevealFallback,
-} from '../src/lib/scroll-reveal.ts';
+import { sceneProgress, heroExitProgress, mountMotionScenes } from '../src/lib/scroll-reveal.ts';
+
+test('scene reading windows reverse and settle before the reading area, including short screens', () => {
+  assert.equal(sceneProgress(880, 1000), 0);
+  assert.equal(sceneProgress(740, 1000), 0.5);
+  assert.equal(sceneProgress(600, 1000), 1);
+  assert.equal(sceneProgress(740, 1000), 0.5);
+  assert.equal(sceneProgress(770, 1000, true), 0.5);
+  assert.equal(sceneProgress(660, 1000, true), 1);
+  assert.equal(sceneProgress(100, 0), 0);
+  assert.equal(sceneProgress(-1000, 800), 1);
+});
+
+test('fallback batches stable sensors, refreshes filtered scenes and releases all work', () => {
+  const names = [
+    'CSS',
+    'matchMedia',
+    'document',
+    'window',
+    'innerHeight',
+    'requestAnimationFrame',
+    'cancelAnimationFrame',
+  ];
+  const original = new Map(
+    names.map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)]),
+  );
+  const listeners = new Map();
+  const frames = new Map();
+  const order = [];
+  const root = { dataset: {} };
+  let top = 880,
+    serial = 0,
+    small = false;
+  const sensor = (kind) => {
+    const values = new Map();
+    return {
+      dataset: { scene: kind },
+      isConnected: true,
+      values,
+      getBoundingClientRect: () => {
+        order.push('read');
+        return { top, height: 700 };
+      },
+      style: {
+        setProperty: (key, value) => {
+          order.push('write');
+          values.set(key, value);
+        },
+        removeProperty: (key) => values.delete(key),
+      },
+    };
+  };
+  const work = sensor('work'),
+    portrait = sensor('portrait'),
+    hero = sensor('hero');
+  let scenes = [work, portrait, hero];
+  const events = {
+    addEventListener: (name, callback) => listeners.set(name, callback),
+    removeEventListener: (name) => listeners.delete(name),
+  };
+  const flush = () => {
+    const pending = [...frames.values()];
+    frames.clear();
+    pending.forEach((callback) => callback());
+  };
+  try {
+    const globals = {
+      CSS: { supports: () => false },
+      matchMedia: (query) => ({ matches: query.includes('max-width') && small }),
+      document: { ...events, documentElement: root, hidden: false, querySelectorAll: () => scenes },
+      window: events,
+      innerHeight: 1000,
+      requestAnimationFrame: (callback) => {
+        frames.set(++serial, callback);
+        return serial;
+      },
+      cancelAnimationFrame: (id) => frames.delete(id),
+    };
+    for (const [name, value] of Object.entries(globals))
+      Object.defineProperty(globalThis, name, { value, configurable: true });
+    const release = mountMotionScenes();
+    assert.equal(root.dataset.motion, 'fallback');
+    flush();
+    assert.equal(work.values.get('--scene-progress'), '0');
+    assert.equal(portrait.values.get('--scene-progress'), '0');
+    assert.ok(order.lastIndexOf('read') < order.indexOf('write'));
+    top = 600;
+    listeners.get('scroll')();
+    listeners.get('scroll')();
+    assert.equal(frames.size, 1);
+    flush();
+    assert.equal(work.values.get('--scene-progress'), '1');
+    top = 740;
+    listeners.get('scroll')();
+    flush();
+    assert.equal(work.values.get('--scene-progress'), '0.5');
+    order.length = 0;
+    listeners.get('scroll')();
+    flush();
+    assert.equal(order.includes('write'), false);
+    small = true;
+    listeners.get('resize')();
+    flush();
+    assert.ok(Number(work.values.get('--scene-progress')) > 0.5);
+    const card = sensor('card');
+    work.isConnected = false;
+    scenes = [portrait, hero, card];
+    listeners.get('portfolio-scenes-changed')();
+    flush();
+    assert.equal(work.values.size, 0);
+    assert.equal(card.values.get('--scene-progress'), portrait.values.get('--scene-progress'));
+    listeners.get('toggle')();
+    assert.equal(frames.size, 1);
+    document.hidden = true;
+    listeners.get('visibilitychange')();
+    assert.equal(frames.size, 0);
+    listeners.get('scroll')();
+    assert.equal(frames.size, 0);
+    document.hidden = false;
+    listeners.get('visibilitychange')();
+    assert.equal(frames.size, 1);
+    const stale = listeners.get('resize');
+    release();
+    stale();
+    assert.equal(frames.size, 0);
+    assert.equal(listeners.size, 0);
+    assert.equal(portrait.values.size, 0);
+    assert.equal(hero.values.size, 0);
+    assert.equal(card.values.size, 0);
+    assert.equal(root.dataset.motion, undefined);
+    Object.defineProperty(globalThis, 'CSS', {
+      value: { supports: () => true, registerProperty: () => {} },
+      configurable: true,
+    });
+    const releaseNative = mountMotionScenes();
+    assert.equal(root.dataset.motion, 'native');
+    assert.equal(listeners.size, 0);
+    releaseNative();
+    assert.equal(root.dataset.motion, undefined);
+    // Timeline support alone is insufficient: interpolation of registered progress is required.
+    Object.defineProperty(globalThis, 'CSS', {
+      value: { supports: () => true },
+      configurable: true,
+    });
+    const releasePartial = mountMotionScenes();
+    assert.equal(root.dataset.motion, 'fallback');
+    releasePartial();
+    Object.defineProperty(globalThis, 'matchMedia', {
+      value: () => ({ matches: true }),
+      configurable: true,
+    });
+    mountMotionScenes()();
+    assert.equal(listeners.size, 0);
+    assert.equal(frames.size, 0);
+    assert.equal(root.dataset.motion, undefined);
+  } finally {
+    for (const name of names) {
+      const descriptor = original.get(name);
+      if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+      else delete globalThis[name];
+    }
+  }
+});
 test('CSS timing tokens preserve duration in milliseconds and serialized seconds', () => {
   assert.equal(motionMilliseconds('320ms', 700), 320);
   assert.equal(motionMilliseconds(' .32s ', 700), 320);
@@ -52,213 +208,6 @@ test('prepaint bootstrap arms only a home visit that needs a greeting', () => {
   );
   assert.equal(other.dataset.opening, undefined);
 });
-test('media follows accepted viewport anchors on desktop and mobile regardless of media height', () => {
-  assert.equal(revealProgress(940, 400, 1000), 0);
-  assert.equal(revealProgress(735, 400, 1000), 0.5);
-  assert.equal(revealProgress(530, 400, 1000), 1);
-  assert.equal(revealProgress(735, 1600, 1000), 0.5);
-  assert.equal(revealProgress(750, 400, 1000, true), 0.5);
-  assert.equal(revealProgress(560, 400, 1000, true), 1);
-  assert.equal(revealProgress(-100, 1600, 1000), 1);
-});
-test('shared reading windows complete at the same position for short and tall sections', () => {
-  assert.equal(readingProgress(900, 1000), 0);
-  assert.equal(readingProgress(630, 1000), 0.5);
-  assert.equal(readingProgress(360, 1000), 1);
-});
-
-test('work and tall timeline fallbacks reverse scroll, batch frames and clean up on navigation', () => {
-  const names = [
-    'CSS',
-    'matchMedia',
-    'document',
-    'window',
-    'innerHeight',
-    'requestAnimationFrame',
-    'cancelAnimationFrame',
-  ];
-  const original = new Map(
-    names.map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)]),
-  );
-  let top = 940;
-  const order = [];
-  const values = new Map();
-  const experienceValues = new Map();
-  const titleValues = new Map();
-  const evidenceValues = new Map();
-  const listeners = new Map();
-  const frames = new Map();
-  let serial = 0;
-  const events = {
-    addEventListener: (name, callback) => listeners.set(name, callback),
-    removeEventListener: (name) => listeners.delete(name),
-  };
-  const scene = {
-    querySelector: () => ({
-      getBoundingClientRect: () => {
-        order.push('read');
-        return { top, height: 400 };
-      },
-    }),
-    style: {
-      setProperty: (key, value) => {
-        order.push('write');
-        values.set(key, value);
-      },
-      removeProperty: (key) => values.delete(key),
-    },
-  };
-  const timeline = {
-    getBoundingClientRect: () => {
-      order.push('read');
-      return { top, height: 1600 };
-    },
-    style: {
-      setProperty: (key, value) => experienceValues.set(key, value),
-      removeProperty: (key) => experienceValues.delete(key),
-    },
-  };
-  const title = {
-    getBoundingClientRect: () => {
-      order.push('read');
-      return { top, height: 40 };
-    },
-    style: {
-      setProperty: (key, value) => titleValues.set(key, value),
-      removeProperty: (key) => titleValues.delete(key),
-    },
-  };
-  const evidence = {
-    getBoundingClientRect: () => ({ top, height: 80 }),
-    style: {
-      setProperty: (key, value) => evidenceValues.set(key, value),
-      removeProperty: (key) => evidenceValues.delete(key),
-    },
-  };
-  const flush = () => {
-    const pending = [...frames.values()];
-    frames.clear();
-    pending.forEach((callback) => callback());
-  };
-  try {
-    const globals = {
-      CSS: { supports: () => false },
-      matchMedia: () => ({ matches: false }),
-      document: {
-        ...events,
-        hidden: false,
-        querySelectorAll: (selector) =>
-          selector === '.timeline-item'
-            ? [timeline]
-            : selector === '.scroll-title'
-              ? [title]
-              : selector === '[data-motion="work"]'
-                ? [scene]
-                : selector === '[data-motion="evidence"]'
-                  ? [evidence]
-                  : [],
-      },
-      window: events,
-      innerHeight: 1000,
-      requestAnimationFrame: (callback) => {
-        frames.set(++serial, callback);
-        return serial;
-      },
-      cancelAnimationFrame: (id) => frames.delete(id),
-    };
-    for (const [name, value] of Object.entries(globals))
-      Object.defineProperty(globalThis, name, { value, configurable: true });
-    const release = mountRevealFallback();
-    flush();
-    assert.equal(values.get('--work-progress'), '0');
-    assert.equal(experienceValues.get('--experience-progress'), '0');
-    assert.equal(titleValues.get('--title-progress'), '0');
-    assert.equal(evidenceValues.get('--evidence-progress'), '0');
-    assert.ok(order.lastIndexOf('read') < order.indexOf('write'));
-    top = 530;
-    listeners.get('scroll')();
-    listeners.get('scroll')();
-    assert.equal(frames.size, 1);
-    flush();
-    assert.equal(values.get('--work-progress'), '1');
-    assert.equal(Number(experienceValues.get('--experience-progress')), 370 / 540);
-    assert.equal(Number(evidenceValues.get('--evidence-progress')), 370 / 540);
-    top = 700;
-    listeners.get('scroll')();
-    flush();
-    assert.equal(Number(values.get('--work-progress')), 240 / 410);
-    assert.equal(Number(experienceValues.get('--experience-progress')), 200 / 540);
-    assert.equal(Number(evidenceValues.get('--evidence-progress')), 200 / 540);
-    listeners.get('toggle')();
-    listeners.get('transitionend')();
-    assert.equal(frames.size, 1);
-    flush();
-    assert.ok(
-      Number(titleValues.get('--title-progress')) > 0 &&
-        Number(titleValues.get('--title-progress')) < 1,
-    );
-    listeners.get('resize')();
-    assert.equal(frames.size, 1);
-    document.hidden = true;
-    listeners.get('visibilitychange')();
-    assert.equal(frames.size, 0);
-    listeners.get('scroll')();
-    assert.equal(frames.size, 0);
-    document.hidden = false;
-    listeners.get('visibilitychange')();
-    assert.equal(frames.size, 1);
-    const lateResize = listeners.get('resize');
-    release();
-    lateResize();
-    assert.equal(frames.size, 0);
-    assert.equal(listeners.size, 0);
-    assert.equal(values.size, 0);
-    assert.equal(experienceValues.size, 0);
-    assert.equal(titleValues.size, 0);
-    assert.equal(evidenceValues.size, 0);
-    assert.equal(scene.style.clipPath, undefined);
-    Object.defineProperty(globalThis, 'CSS', {
-      value: { supports: () => true },
-      configurable: true,
-    });
-    mountRevealFallback()();
-    assert.equal(listeners.size, 0);
-    assert.equal(frames.size, 0);
-    Object.defineProperty(globalThis, 'CSS', {
-      value: { supports: (feature) => !feature.startsWith('timeline-scope:') },
-      configurable: true,
-    });
-    const releasePartial = mountRevealFallback();
-    flush();
-    assert.equal(Number(values.get('--work-progress')), 240 / 410);
-    assert.equal(experienceValues.size, 0);
-    assert.equal(evidenceValues.size, 0);
-    releasePartial();
-    Object.defineProperty(globalThis, 'matchMedia', {
-      value: () => ({ matches: true }),
-      configurable: true,
-    });
-    mountRevealFallback()();
-    assert.equal(listeners.size, 0);
-    assert.equal(frames.size, 0);
-  } finally {
-    for (const name of names) {
-      const descriptor = original.get(name);
-      if (descriptor) Object.defineProperty(globalThis, name, descriptor);
-      else delete globalThis[name];
-    }
-  }
-});
-
-test('short headings reveal across a reading window rather than one line of scroll', () => {
-  assert.equal(titleProgress(900, 40, 1000), 0);
-  assert.equal(titleProgress(750, 40, 1000), 0.5);
-  assert.equal(titleProgress(600, 40, 1000), 1);
-  assert.equal(titleProgress(750, 40, 1000), 0.5);
-  assert.equal(titleProgress(100, 1400, 1000), 1);
-  assert.equal(titleProgress(785, 40, 1000, true), 0.5);
-  assert.equal(titleProgress(640, 40, 1000, true), 1);
-});
 test('hero exit reverses with scrolling and stays bounded on restored or short pages', () => {
   assert.equal(heroExitProgress(0, 800), 0);
   assert.equal(heroExitProgress(-320, 800), 0.5);
@@ -296,7 +245,7 @@ test('opening has a two-second clock and a pre-hydration escape hatch', () => {
       },
     },
     (callback, delay) => {
-      assert.equal(delay, 4000);
+      assert.equal(delay, 2000);
       finish = callback;
     },
   );
@@ -305,5 +254,6 @@ test('opening has a two-second clock and a pre-hydration escape hatch', () => {
   assert.equal(root.dataset.opening, undefined);
   root.dataset.opening = 'playing';
   finish();
-  assert.equal(root.dataset.opening, 'playing');
+  assert.equal(root.dataset.opening, undefined);
+  assert.equal(root.dataset.openingBooted, 'true');
 });

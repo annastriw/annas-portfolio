@@ -40,7 +40,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }}
       />
-      <section className="hero" aria-labelledby="hero-name">
+      <section className="hero" data-scene="hero" aria-labelledby="hero-name">
         <picture className="hero-photo">
           <source
             media="(max-width: 700px)"
@@ -60,7 +60,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <div className="hero-scrim" aria-hidden="true" />
         <div className="hero-name-stage">
           <h1 id="hero-name" className="hero-name">
-            Annas Tri Widagdo
+            <span className="arrival-mask">
+              <span className="arrival-inner">Annas Tri</span>
+            </span>{' '}
+            <span className="arrival-mask">
+              <span className="arrival-inner">Widagdo</span>
+            </span>
           </h1>
         </div>
         <div className="hero-content">
@@ -99,8 +104,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             <article
               key={p.slug}
               className="featured-project"
-              data-motion="work"
-              data-work-motion={['rise', 'focus', 'tilt'][i]}
+              data-scene="work"
               aria-labelledby={`featured-${p.slug}`}
             >
               <div className="featured-copy">
@@ -108,10 +112,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                   <span className="featured-index">0{i + 1}</span>
                   <span>{p.role}</span>
                 </p>
-                <h3 id={`featured-${p.slug}`} className="scroll-title">
-                  <Link href={`/${locale}/projects/${p.slug}/`}>
-                    <MotionWords text={p.title} />
-                  </Link>
+                <h3 id={`featured-${p.slug}`} className="scene-heading">
+                  <Link href={`/${locale}/projects/${p.slug}/`}>{p.title}</Link>
                 </h3>
                 <p className="featured-tagline">{p.tagline[locale]}</p>
                 <p>{p.intro[locale]}</p>
@@ -161,11 +163,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             {id ? 'Tentang Saya' : 'More About Me'} <ArrowUpRightIcon size={14} />
           </Link>
         </div>
-        <div className="section-intro">
-          <h2 id="experience-heading" className="scroll-title">
-            <MotionWords
-              text={id ? 'Dari kebutuhan, menjadi solusi.' : 'From understanding to building.'}
-            />
+        <div className="section-intro" data-scene="heading">
+          <h2 id="experience-heading" className="scene-heading">
+            {id ? 'Dari kebutuhan, menjadi solusi.' : 'From understanding to building.'}
           </h2>
           <p>
             {id
@@ -175,7 +175,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         </div>
         <ol className="experience-timeline">
           {experience.map((e, i) => (
-            <li className="timeline-item" key={e.role}>
+            <li className="timeline-item" data-scene="experience" key={e.role}>
               <div className="timeline-marker" aria-hidden="true">
                 <span className="timeline-number">0{i + 1}</span>
               </div>
@@ -184,9 +184,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 <p className="timeline-location">{e.location[locale]}</p>
               </div>
               <article className="timeline-entry">
-                <h3 className="scroll-title">
-                  <MotionWords text={e.role} />
-                </h3>
+                <h3 className="scene-heading">{e.role}</h3>
                 <p className="organization">{e.organization[locale]}</p>
                 <div className="timeline-description">
                   <p>{e.description[locale]}</p>
@@ -201,11 +199,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <div className="section-label">
           <span className="eyebrow">03 / {id ? 'Keahlian' : 'Capabilities'}</span>
         </div>
-        <div className="section-intro">
-          <h2 id="capabilities-heading" className="scroll-title">
-            <MotionWords
-              text={id ? 'Bagian-bagian yang saya hubungkan.' : 'The pieces I bring together.'}
-            />
+        <div className="section-intro" data-scene="heading">
+          <h2 id="capabilities-heading" className="scene-heading">
+            {id ? 'Bagian-bagian yang saya hubungkan.' : 'The pieces I bring together.'}
           </h2>
           <p>
             {id

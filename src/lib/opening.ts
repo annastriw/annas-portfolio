@@ -1,6 +1,6 @@
 export function needsOpening(home: boolean, opened: boolean, replay: boolean, reduced: boolean) {
   return home && !reduced && (!opened || replay);
 }
-// Runs before paint: hold the greeting until hydration starts its real animation clock.
-export const openingBootstrap = `(()=>{const r=document.documentElement;const h=/^\\/(en|id)\\/?$/.test(location.pathname);if(!h||matchMedia('(prefers-reduced-motion: reduce)').matches)return;let play=true;try{play=!sessionStorage.getItem('portfolio-opened')||!!sessionStorage.getItem('portfolio-replay-opening')}catch{}if(play){r.dataset.opening='pending';setTimeout(()=>{if(r.dataset.opening==='pending')delete r.dataset.opening},4000)}})()`;
+// Start before hydration; late JavaScript must never add a second two-second wait.
+export const openingBootstrap = `(()=>{const r=document.documentElement;const h=['/en','/en/','/id','/id/'].includes(location.pathname);if(!h||matchMedia('(prefers-reduced-motion: reduce)').matches)return;let play=true;try{play=!sessionStorage.getItem('portfolio-opened')||!!sessionStorage.getItem('portfolio-replay-opening')}catch{}if(play){r.dataset.openingBooted='true';r.dataset.opening='pending';r.dataset.openingAt=String(Date.now());try{sessionStorage.setItem('portfolio-opened','true');sessionStorage.removeItem('portfolio-replay-opening')}catch{}setTimeout(()=>{delete r.dataset.opening;delete r.dataset.openingAt},2000)}})()`;
 export const OPENING_DURATION = 2000;

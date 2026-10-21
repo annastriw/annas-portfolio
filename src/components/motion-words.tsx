@@ -1,17 +1,14 @@
-import { Fragment, type CSSProperties } from 'react';
+import { Fragment } from 'react';
 
-/** Server-rendered words retain natural spaces, wrapping and accessible heading text. */
+/** Short phrase groups wrap naturally; clipping never depends on a measured line count. */
 export function MotionWords({ text }: { text: string }) {
-  const words = text.split(' ');
-  return words.map((word, index) => (
+  const groups = text.match(/\S+(?:\s+\S+){0,2}/g) ?? [text];
+  return groups.map((group, index) => (
     <Fragment key={index}>
-      <span
-        className="motion-word"
-        style={{ '--word-order': index / words.length } as CSSProperties}
-      >
-        <span className="motion-word-inner">{word}</span>
+      <span className="arrival-mask">
+        <span className="arrival-inner">{group}</span>
       </span>
-      {index < words.length - 1 ? ' ' : null}
+      {index < groups.length - 1 ? ' ' : null}
     </Fragment>
   ));
 }

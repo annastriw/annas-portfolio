@@ -8,6 +8,7 @@ import { isLocale, locales } from '@/lib/i18n';
 import { siteUrl } from '@/lib/metadata';
 import '../globals.css';
 import '../motion.css';
+import '../editorial.css';
 
 export const dynamicParams = false;
 export function generateStaticParams() {
