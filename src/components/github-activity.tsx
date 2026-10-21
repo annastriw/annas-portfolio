@@ -1,6 +1,5 @@
 import snapshot from '@/content/github.json';
 import { ContributionCalendar } from './contribution-calendar';
-import { MotionWords } from './motion-words';
 import type { ContributionDay } from '@/lib/github-contributions';
 import { ArrowUpRightIcon } from '@phosphor-icons/react/dist/ssr';
 import { identity } from '@/content/site';
@@ -15,9 +14,9 @@ export function GitHubActivity({ locale }: { locale: Locale }) {
         <span className="eyebrow">04 / GitHub</span>
         <span className="eyebrow">@annastriw</span>
       </div>
-      <div className="section-intro">
-        <h2 id="github-heading" className="scroll-title">
-          <MotionWords text={locale === 'id' ? 'Di balik layar.' : 'Behind the work.'} />
+      <div className="section-intro" data-scene="heading">
+        <h2 id="github-heading" className="scene-heading">
+          {locale === 'id' ? 'Di balik layar.' : 'Behind the work.'}
         </h2>
         <div>
           <p>
@@ -30,7 +29,7 @@ export function GitHubActivity({ locale }: { locale: Locale }) {
           </a>
         </div>
       </div>
-      <div className="github-evidence evidence-scene" data-motion="evidence">
+      <div className="github-evidence" data-scene="evidence">
         {days.length > 0 ? (
           <>
             <div className="github-calendar-stage">

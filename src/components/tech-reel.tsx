@@ -12,7 +12,19 @@ export function TechReel({ children, locale }: { children: React.ReactNode; loca
     if (!element) return;
     // Leave the original, horizontally scrollable lists available without this API.
     if (typeof IntersectionObserver === 'undefined') return;
+    let active = true;
     let inView = false;
+    const measure = () => {
+      if (!active) return;
+      element.querySelectorAll<HTMLElement>('.marquee-row').forEach((row, index) => {
+        const width = row.querySelector('.marquee-group')?.getBoundingClientRect().width;
+        if (width) row.style.setProperty('--reel-duration', `${width / (index ? 15 : 17)}s`);
+      });
+    };
+    const resize = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
+    resize?.observe(element);
+    measure();
+    document.fonts?.ready.then(measure);
     const sync = () => {
       element.dataset.inView = String(inView && document.visibilityState === 'visible');
     };
@@ -26,6 +38,8 @@ export function TechReel({ children, locale }: { children: React.ReactNode; loca
     observer.observe(element);
     document.addEventListener('visibilitychange', sync);
     return () => {
+      active = false;
+      resize?.disconnect();
       observer.disconnect();
       document.removeEventListener('visibilitychange', sync);
     };

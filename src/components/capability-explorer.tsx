@@ -8,7 +8,7 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
   const tabs = useRef<HTMLDivElement>(null);
   return (
     <>
-      <div className="capability-explorer evidence-scene" data-motion="evidence">
+      <div className="capability-explorer">
         <div
           className="capability-index"
           role="tablist"
@@ -60,16 +60,6 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
               hidden={i !== selected}
               tabIndex={0}
             >
-              <div className="capability-panel-top">
-                <span className="eyebrow">
-                  {locale === 'id'
-                    ? 'Dari pemahaman ke penerapan'
-                    : 'From understanding to implementation'}
-                </span>
-                <span className="capability-large-number" aria-hidden="true">
-                  0{i + 1}
-                </span>
-              </div>
               <h3>{item.title}</h3>
               <p className="capability-description">{item.description}</p>
               <ul
@@ -89,8 +79,7 @@ export function CapabilityExplorer({ items, locale }: { items: Capability[]; loc
       <div className="capability-mobile">
         {items.map((item, i) => (
           <details
-            className="capability-disclosure evidence-scene"
-            data-motion="evidence"
+            className="capability-disclosure"
             key={item.title}
             onKeyDown={(event) => {
               if (event.key === 'Escape' && event.currentTarget.open) {
