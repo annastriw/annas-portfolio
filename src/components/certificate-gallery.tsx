@@ -15,36 +15,37 @@ export function CertificateGallery({ items, locale }: { items: string[][]; local
     <>
       <div className="certificate-grid">
         {items.map(([title, issuer, year, file], index) => (
-          <button
-            className="certificate"
-            type="button"
-            key={file}
-            onClick={(event) => {
-              trigger.current = event.currentTarget;
-              setSelected(index);
-              setOpen(true);
-            }}
-          >
-            <span className="certificate-image">
-              <Image
-                src={`/assets/certificates/thumb-${file}.webp`}
-                width={640}
-                height={450}
-                sizes="(max-width: 700px) 90vw, (max-width: 1000px) 43vw, 28vw"
-                alt=""
-              />
-            </span>
-            <span className="certificate-copy">
-              <span className="eyebrow">
-                {issuer} · {year}
+          <div key={file} data-scene="certificate">
+            <button
+              className="certificate"
+              type="button"
+              onClick={(event) => {
+                trigger.current = event.currentTarget;
+                setSelected(index);
+                setOpen(true);
+              }}
+            >
+              <span className="certificate-image">
+                <Image
+                  src={`/assets/certificates/thumb-${file}.webp`}
+                  width={640}
+                  height={450}
+                  sizes="(max-width: 700px) 90vw, (max-width: 1000px) 43vw, 28vw"
+                  alt=""
+                />
               </span>
-              <span className="certificate-title">{title}</span>
-              <span className="certificate-action">
-                {locale === 'id' ? 'Buka pratinjau' : 'Open preview'}
-                <ArrowsOutIcon size={18} />
+              <span className="certificate-copy">
+                <span className="eyebrow">
+                  {issuer} · {year}
+                </span>
+                <span className="certificate-title">{title}</span>
+                <span className="certificate-action">
+                  {locale === 'id' ? 'Buka pratinjau' : 'Open preview'}
+                  <ArrowsOutIcon size={18} />
+                </span>
               </span>
-            </span>
-          </button>
+            </button>
+          </div>
         ))}
       </div>
       {certificate && (

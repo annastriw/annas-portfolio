@@ -866,44 +866,6 @@ dialog::backdrop {
   height: 100%;
   object-fit: contain;
 }
-.about-intro {
-  display: grid;
-  grid-template-columns: 40% 50%;
-  gap: 10%;
-  align-items: center;
-}
-.about-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 83%;
-  filter: saturate(0.75);
-}
-.about-photo-frame {
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-}
-.about-photo-frame picture {
-  display: block;
-  height: 100%;
-}
-.about-photo > span {
-  display: block;
-  margin-top: 15px;
-  font-size: var(--type-meta);
-}
-.about-biography {
-  font-size: var(--type-body);
-  color: var(--muted);
-  line-height: var(--leading-body);
-
-  max-width: var(--measure-copy);
-}
-.about-biography p:first-child {
-  color: var(--fg);
-  font-size: var(--type-lead);
-  line-height: 1.6;
-}
 .education-heading {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1133,13 +1095,6 @@ body:has(.contact-page) .footer-meta {
   .contact-email {
     font-size: 32px;
   }
-  .about-biography {
-    font-size: var(--type-body);
-    line-height: var(--leading-body);
-  }
-  .about-biography p:first-child {
-    font-size: var(--type-lead);
-  }
 }
 @media (max-width: 850px) {
   .desktop-navigation,
@@ -1169,17 +1124,6 @@ body:has(.contact-page) .footer-meta {
   }
   .contact-socials {
     max-width: 500px;
-  }
-  .about-intro {
-    grid-template-columns: 40% 54%;
-    gap: 6%;
-  }
-  .about-biography p:first-child {
-    font-size: var(--type-lead);
-  }
-  .about-biography {
-    font-size: var(--type-body);
-    line-height: var(--leading-body);
   }
   .education h3 {
     font-size: 38px;
@@ -1384,17 +1328,6 @@ body:has(.contact-page) .footer-meta {
   .gallery-thumbnails button {
     width: 75px;
     height: 54px;
-  }
-  .about-intro {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  .about-biography {
-    font-size: var(--type-body);
-    line-height: var(--leading-body);
-  }
-  .about-biography p:first-child {
-    font-size: var(--type-lead);
   }
   .education-heading {
     grid-template-columns: 1fr;
@@ -2031,23 +1964,6 @@ body:has(.contact-page) .footer-meta {
 .locale-switch a::after,
 .theme-button svg {
     transition: none;
-  }
-}
-
-.missing-page {
-  animation: missing-entry 700ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-@keyframes missing-entry {
-  from {
-    transform: translateY(18px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .missing-page {
-    animation: none;
   }
 }
 .site-header .brand-dot {

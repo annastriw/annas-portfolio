@@ -6,7 +6,7 @@ import type { Locale } from '@/lib/i18n';
 export function SiteFooter({ locale }: { locale: Locale }) {
   return (
     <footer className="site-footer">
-      <div className="footer-invite container">
+      <div className="footer-invite container" data-scene="footer">
         <p className="eyebrow">
           {locale === 'id' ? 'Percakapan berikutnya' : 'The next conversation'}
         </p>

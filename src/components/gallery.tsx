@@ -36,9 +36,18 @@ export function Gallery({
   useEffect(() => {
     if (!carousel) return;
     const select = () => setIndex(carousel.selectedScrollSnap());
+    const begin = () => {
+      if (root.current) root.current.dataset.dragging = 'true';
+    };
+    const end = () => {
+      if (root.current) delete root.current.dataset.dragging;
+    };
+    carousel.on('pointerDown', begin).on('pointerUp', end).on('settle', end);
     carousel.on('select', select).on('reInit', select);
     return () => {
       carousel.off('select', select).off('reInit', select);
+      carousel.off('pointerDown', begin).off('pointerUp', end).off('settle', end);
+      end();
     };
   }, [carousel]);
   useEffect(() => {
@@ -76,8 +85,10 @@ export function Gallery({
       role="region"
       aria-roledescription="carousel"
       aria-label={`${title} ${id ? 'galeri' : 'gallery'}`}
+      aria-busy={!carousel}
       tabIndex={0}
       onKeyDown={(event) => {
+        if (!carousel) return;
         const next =
           event.key === 'ArrowLeft'
             ? index - 1
@@ -138,7 +149,7 @@ export function Gallery({
         <div>
           <button
             className="icon-button"
-            disabled={index === 0}
+            disabled={!carousel || index === 0}
             aria-label={id ? 'Gambar sebelumnya' : 'Previous image'}
             onClick={() => go(index - 1)}
           >
@@ -146,7 +157,7 @@ export function Gallery({
           </button>
           <button
             className="icon-button"
-            disabled={index === images.length - 1}
+            disabled={!carousel || index === images.length - 1}
             aria-label={id ? 'Gambar berikutnya' : 'Next image'}
             onClick={() => go(index + 1)}
           >
@@ -165,6 +176,7 @@ export function Gallery({
             key={src}
             aria-label={`${id ? 'Tampilkan gambar' : 'Show image'} ${i + 1}`}
             aria-pressed={i === index}
+            disabled={!carousel}
             onClick={() => go(i)}
           >
             <Image

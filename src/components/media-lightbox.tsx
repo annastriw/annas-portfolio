@@ -50,9 +50,9 @@ export default function MediaLightbox({
       zoom={{ maxZoomPixelRatio: 2, scrollToZoom: false }}
       captions={{ descriptionMaxLines: 2, showToggle: false }}
       animation={{
-        fade: reduced ? 0 : 300,
-        swipe: reduced ? 0 : 380,
-        zoom: reduced ? 0 : 280,
+        fade: reduced ? 0 : 240,
+        swipe: reduced ? 0 : 300,
+        zoom: reduced ? 0 : 240,
         easing: {
           fade: 'ease-out',
           swipe: 'cubic-bezier(.22,1,.36,1)',

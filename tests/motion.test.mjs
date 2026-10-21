@@ -180,6 +180,51 @@ test('opening replays after404 while ordinary repeat visits and reduced motion b
   assert.equal(needsOpening(false, false, true, false), false);
   assert.equal(needsOpening(true, true, true, true), false);
 });
+
+test('declarative404 return replays before hydration and consumes only its intro query', () => {
+  const root = { dataset: {} };
+  const replacements = [];
+  const run = new Function(
+    'document',
+    'location',
+    'matchMedia',
+    'sessionStorage',
+    'setTimeout',
+    'history',
+    openingBootstrap,
+  );
+  run(
+    { documentElement: root },
+    { pathname: '/id/', search: '?intro=1', hash: '' },
+    () => ({ matches: false }),
+    { getItem: () => 'true', setItem: () => {}, removeItem: () => {} },
+    () => {},
+    { state: null, replaceState: (...args) => replacements.push(args) },
+  );
+  assert.equal(root.dataset.opening, 'pending');
+  assert.equal(replacements[0][2], '/id/');
+  const reduced = { dataset: {} };
+  run(
+    { documentElement: reduced },
+    { pathname: '/id/', search: '?intro=1', hash: '' },
+    () => ({ matches: true }),
+    {},
+    () => assert.fail('reduced motion must not start a timer'),
+    { state: null, replaceState: (...args) => replacements.push(args) },
+  );
+  assert.equal(reduced.dataset.opening, undefined);
+  assert.equal(replacements.length, 2);
+  const normal = { dataset: {} };
+  run(
+    { documentElement: normal },
+    { pathname: '/en/', search: '?campaign=work', hash: '' },
+    () => ({ matches: false }),
+    { getItem: (key) => (key === 'portfolio-opened' ? 'true' : null) },
+    () => {},
+    { replaceState: () => assert.fail('ordinary query must be preserved') },
+  );
+  assert.equal(normal.dataset.opening, undefined);
+});
 test('prepaint bootstrap arms only a home visit that needs a greeting', () => {
   const run = new Function(
     'document',

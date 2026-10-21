@@ -20,24 +20,24 @@ export default async function About({ params }: { params: Promise<{ locale: stri
   if (!isLocale(locale)) notFound();
   const id = locale === 'id';
   return (
-    <div className="container page-space">
+    <div className="container page-space about-page">
       <div className="page-heading">
         <p className="eyebrow">{id ? 'Di Balik Karya' : 'Behind the Work'}</p>
         <h1>{id ? 'Senang berkenalan.\nSaya Annas.' : 'Nice to meet you.\nI’m Annas.'}</h1>
       </div>
       <section className="about-intro">
-        <div className="about-photo">
+        <div className="about-photo" data-scene="portrait">
           <div className="about-photo-frame">
             <picture>
               <source
                 srcSet="/assets/photos/about-640.jpg 640w, /assets/photos/about-960.jpg 960w, /assets/photos/about-1280.jpg 1280w, /assets/photos/about-1600.jpg 1600w, /assets/photos/about.jpg 2336w"
-                sizes="(max-height: 600px) and (orientation: landscape) 36vw, (max-width: 490px) 90vw, (min-width: 701px) and (max-width: 820px) 440px, (min-width: 821px) and (max-width: 1000px) 31vw, (max-width: 900px) 440px, (min-width: 1600px) 564px, 36vw"
+                sizes="(max-width: 700px) 90vw, (max-width: 1000px) 42vw, 500px"
               />
               <Image
                 src="/assets/photos/about.jpg"
                 width={2336}
                 height={3504}
-                sizes="(max-height: 600px) and (orientation: landscape) 36vw, (max-width: 490px) 90vw, (min-width: 701px) and (max-width: 820px) 440px, (min-width: 821px) and (max-width: 1000px) 31vw, (max-width: 900px) 440px, (min-width: 1600px) 564px, 36vw"
+                sizes="(max-width: 700px) 90vw, (max-width: 1000px) 42vw, 500px"
                 alt={
                   id
                     ? 'Annas Tri Widagdo di Universitas Diponegoro'
@@ -60,8 +60,10 @@ export default async function About({ params }: { params: Promise<{ locale: stri
         <div className="section-label">
           <h2 className="eyebrow">01 / {id ? 'Pendidikan' : 'Education'}</h2>
         </div>
-        <div className="education-heading">
-          <h3>{id ? 'Universitas Diponegoro' : 'Diponegoro University'}</h3>
+        <div className="education-heading" data-scene="heading">
+          <h3 className="scene-heading">
+            {id ? 'Universitas Diponegoro' : 'Diponegoro University'}
+          </h3>
           <div>
             <p>{id ? 'Sarjana Teknik Komputer' : 'Bachelor of Computer Engineering'}</p>
             <p className="muted">
@@ -71,10 +73,10 @@ export default async function About({ params }: { params: Promise<{ locale: stri
             </p>
           </div>
         </div>
-        <div className="thesis">
+        <div className="thesis" data-scene="story">
           <p className="eyebrow">{id ? 'Skripsi' : 'Undergraduate Thesis'}</p>
           <div>
-            <h4>{thesis.title[locale]}</h4>
+            <h4 className="scene-heading">{thesis.title[locale]}</h4>
             <p>{thesis.description[locale]}</p>
             <a className="text-link" href={thesis.url} target="_blank" rel="noreferrer">
               {id ? 'Baca Skripsi' : 'Read Thesis'}

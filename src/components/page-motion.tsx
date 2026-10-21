@@ -122,7 +122,7 @@ export function PageMotion() {
         } else {
           document
             .querySelectorAll(
-              '.page-heading > *, .detail-heading > *, .breadcrumb, .missing-page > :not(.wordmark)',
+              '.page-heading > *, .detail-heading > *, .breadcrumb, .missing-content > :not(.wordmark)',
             )
             .forEach((el, i) =>
               play(
@@ -146,6 +146,11 @@ export function PageMotion() {
       document.addEventListener('pointerdown', cancelArrival, { once: true });
       document.addEventListener('keydown', cancelArrival, { once: true });
       window.addEventListener('scroll', interrupt, { passive: true });
+      Promise.allSettled(animations.map((animation) => animation.finished)).then(() => {
+        window.removeEventListener('scroll', interrupt);
+        document.removeEventListener('pointerdown', cancelArrival);
+        document.removeEventListener('keydown', cancelArrival);
+      });
       const releaseScenes = mountMotionScenes();
       release = () => {
         releaseScenes();

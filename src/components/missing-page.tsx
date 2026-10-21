@@ -1,53 +1,59 @@
 'use client';
-import { useLayoutEffect, useSyncExternalStore } from 'react';
 import { ArrowLeftIcon } from '@phosphor-icons/react';
-const subscribe = () => () => {};
-export function MissingPage() {
-  const id = useSyncExternalStore(
-    subscribe,
-    () => location.pathname.startsWith('/id/'),
-    () => false,
-  );
-  useLayoutEffect(() => {
-    document.documentElement.lang = id ? 'id' : 'en';
-    try {
-      const saved = localStorage.getItem('portfolio-theme');
-      if (saved === 'light' || saved === 'dark' || saved === 'system')
-        document.documentElement.dataset.theme = saved;
-    } catch {
-      /* Fall back to the device theme. */
-    }
-  }, [id]);
-  const home = id ? '/id/' : '/en/';
+
+const messages = {
+  id: {
+    label: 'Halaman tidak ditemukan',
+    title: 'Sepertinya salah arah.',
+    description: 'Halaman ini tidak tersedia. Karya saya masih bisa Anda jelajahi dari beranda.',
+    home: 'Kembali ke Beranda',
+    projects: 'Jelajahi Proyek',
+  },
+  en: {
+    label: 'Page not found',
+    title: 'A little off the path.',
+    description: 'This page isn’t here. There’s still plenty to explore back at home.',
+    home: 'Back to Home',
+    projects: 'Explore Projects',
+  },
+};
+
+export function MissingPage({ embedded = false }: { embedded?: boolean }) {
+  const Container = embedded ? 'section' : 'main';
   function returnHome() {
     try {
       sessionStorage.setItem('portfolio-replay-opening', 'true');
       sessionStorage.setItem('portfolio-scroll-top', 'true');
     } catch {
-      /* An unavailable storage also makes home treat this as a fresh visit. */
+      /* Native home navigation also works without storage. */
     }
   }
   return (
-    <main className="container missing-page">
-      <a className="wordmark" href={home} onClick={returnHome}>
-        annastriwidagdo.me<span className="brand-dot">.</span>
-      </a>
-      <p className="eyebrow">404 / {id ? 'Halaman tidak ditemukan' : 'Page not found'}</p>
-      <h1>{id ? 'Sepertinya salah arah.' : 'A little off the path.'}</h1>
-      <p>
-        {id
-          ? 'Halaman ini tidak tersedia. Karya saya masih bisa Anda jelajahi dari beranda.'
-          : 'This page isn’t here. There’s still plenty to explore back at home.'}
-      </p>
-      <div className="missing-actions">
-        <a className="text-link" href={home} onClick={returnHome}>
-          <ArrowLeftIcon size={20} />
-          {id ? 'Kembali ke Beranda' : 'Back to Home'}
-        </a>
-        <a className="text-link" href={id ? '/id/projects/' : '/en/projects/'}>
-          {id ? 'Jelajahi Proyek' : 'Explore Projects'}
-        </a>
-      </div>
-    </main>
+    <Container className="container missing-page">
+      {(['id', 'en'] as const).map((locale) => {
+        const copy = messages[locale];
+        return (
+          <div className="missing-content" data-error-locale={locale} lang={locale} key={locale}>
+            {!embedded && (
+              <a className="wordmark" href={`/${locale}/?intro=1`} onClick={returnHome}>
+                annastriwidagdo.me
+              </a>
+            )}
+            <p className="eyebrow">404 / {copy.label}</p>
+            <h1>{copy.title}</h1>
+            <p>{copy.description}</p>
+            <div className="missing-actions">
+              <a className="text-link" href={`/${locale}/?intro=1`} onClick={returnHome}>
+                <ArrowLeftIcon size={20} />
+                {copy.home}
+              </a>
+              <a className="text-link" href={`/${locale}/projects/`}>
+                {copy.projects}
+              </a>
+            </div>
+          </div>
+        );
+      })}
+    </Container>
   );
 }

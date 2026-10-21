@@ -54,6 +54,9 @@ export function ProjectArchive({
       behavior: 'instant',
     });
   }, [path, snapshot]);
+  useEffect(() => {
+    document.dispatchEvent(new Event('portfolio-scenes-changed'));
+  }, [filter]);
   function remember(slug: string) {
     const card = document.getElementById(`project-${slug}`);
     if (card)
@@ -94,9 +97,9 @@ export function ProjectArchive({
           {visible.length} {locale === 'id' ? 'proyek' : 'projects'}
         </p>
       </div>
-      <div className="project-grid">
+      <div className="project-grid" key={filter} data-filtering={selected !== null}>
         {visible.map((p) => (
-          <article className="project-card" key={p.slug} id={`project-${p.slug}`}>
+          <article className="project-card" data-scene="card" key={p.slug} id={`project-${p.slug}`}>
             <Link
               href={`/${locale}/projects/${p.slug}/`}
               onNavigate={() => remember(p.slug)}

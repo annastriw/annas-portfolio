@@ -66,7 +66,7 @@ export default async function ProjectDetail({
         <p className="detail-tagline">{p.tagline[locale]}</p>
         <p className="detail-intro">{p.intro[locale]}</p>
       </div>
-      <div className="project-facts">
+      <div className="project-facts" data-scene="story">
         <div>
           <span className="eyebrow">{id ? 'Peran' : 'Role'}</span>
           <p>{p.role}</p>
@@ -104,16 +104,16 @@ export default async function ProjectDetail({
         </div>
       </div>
       <section className="detail-story">
-        <div>
-          <h2>{id ? 'Yang saya kerjakan' : 'My contribution'}</h2>
+        <div data-scene="heading">
+          <h2 className="scene-heading">{id ? 'Yang saya kerjakan' : 'My contribution'}</h2>
           <p>{p.contribution[locale]}</p>
         </div>
-        <div>
-          <h2>{id ? 'Yang dihadirkan' : 'What it brings together'}</h2>
+        <div data-scene="heading">
+          <h2 className="scene-heading">{id ? 'Yang dihadirkan' : 'What it brings together'}</h2>
           <p>{p.scope[locale]}</p>
         </div>
-        <div className="detail-stack">
-          <h2>{id ? 'Teknologi' : 'Built with'}</h2>
+        <div className="detail-stack" data-scene="heading">
+          <h2 className="scene-heading">{id ? 'Teknologi' : 'Built with'}</h2>
           <ul className="tag-list">
             {p.technologies.map((t) => (
               <li key={t}>
@@ -124,7 +124,7 @@ export default async function ProjectDetail({
           {p.note && <p className="project-note">{p.note[locale]}</p>}
         </div>
       </section>
-      <section className="detail-gallery">
+      <section className="detail-gallery" data-scene="gallery">
         <div className="section-label">
           <h2 className="eyebrow">{id ? 'Lihat Lebih Dekat' : 'A Closer Look'}</h2>
           <span className="eyebrow">

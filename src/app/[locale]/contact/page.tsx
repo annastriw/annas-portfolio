@@ -30,7 +30,7 @@ export default async function Contact({ params }: { params: Promise<{ locale: st
             : 'Have an opportunity, a project idea, or want to know more about my work? Let’s start a conversation.'}
         </p>
       </div>
-      <div className="contact-body">
+      <div className="contact-body" data-scene="story">
         <div>
           <p className="eyebrow">Email</p>
           <a className="contact-email" href={`mailto:${identity.email}`}>
