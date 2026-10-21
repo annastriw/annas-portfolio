@@ -66,7 +66,8 @@ export function PageMotion() {
       }
       const animations: Animation[] = [];
       const elapsed = Date.now() - visit.current.started;
-      const base = visit.current.opening ? 1500 - elapsed : 0;
+      const base = visit.current.opening ? 1600 - elapsed : 0;
+      const small = matchMedia('(max-width: 700px), (max-height: 600px)').matches;
       const play = (element: Element | null, frames: Keyframe[], duration: number, delay = 0) => {
         if (element && typeof element.animate === 'function')
           animations.push(
@@ -81,58 +82,35 @@ export function PageMotion() {
       if (!arrived && window.scrollY < 80) {
         if (home) {
           play(
-            document.querySelector('.hero-photo img'),
-            [{ transform: 'scale(1.045)' }, { transform: 'scale(1)' }],
-            850,
-            base - 150,
+            document.querySelector('.hero-name'),
+            [
+              { opacity: 0.85, transform: `translateY(${small ? 8 : 14}px)` },
+              { opacity: 1, transform: 'translateY(0)' },
+            ],
+            600,
+            base,
           );
+          play(
+            document.querySelector('.hero-content'),
+            [
+              { opacity: 0.8, transform: `translateY(${small ? 4 : 8}px)` },
+              { opacity: 1, transform: 'translateY(0)' },
+            ],
+            480,
+            base + 100,
+          );
+        } else {
           document
-            .querySelectorAll('.hero-name .arrival-inner')
-            .forEach((el, i) =>
-              play(
-                el,
-                [{ transform: 'translateY(110%)' }, { transform: 'translateY(0)' }],
-                700,
-                base + i * 70,
-              ),
-            );
-          document
-            .querySelectorAll('.hero-statement .arrival-inner')
-            .forEach((el, i) =>
-              play(
-                el,
-                [{ transform: 'translateY(110%)' }, { transform: 'translateY(0)' }],
-                620,
-                base + 120 + i * 45,
-              ),
-            );
-          document
-            .querySelectorAll('.hero-greeting,.hero-description,.hero-actions,.hero-location')
+            .querySelectorAll('.page-heading, .detail-heading, .missing-content')
             .forEach((el, i) =>
               play(
                 el,
                 [
-                  { opacity: 0.65, transform: 'translateY(10px)' },
+                  { opacity: 0.85, transform: `translateY(${small ? 4 : 8}px)` },
                   { opacity: 1, transform: 'translateY(0)' },
                 ],
                 500,
-                base + 100 + i * 65,
-              ),
-            );
-        } else {
-          document
-            .querySelectorAll(
-              '.page-heading > *, .detail-heading > *, .breadcrumb, .missing-content > :not(.wordmark)',
-            )
-            .forEach((el, i) =>
-              play(
-                el,
-                [
-                  { opacity: 0.75, transform: 'translateY(14px)' },
-                  { opacity: 1, transform: 'translateY(0)' },
-                ],
-                580,
-                i * 55,
+                i * 80,
               ),
             );
         }

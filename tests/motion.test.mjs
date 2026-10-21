@@ -1,8 +1,70 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { needsOpening, openingBootstrap, OPENING_DURATION } from '../src/lib/opening.ts';
+import {
+  needsOpening,
+  openingBootstrap,
+  entryBootstrap,
+  OPENING_DURATION,
+} from '../src/lib/opening.ts';
 import { motionMilliseconds } from '../src/lib/motion-timing.ts';
 import { sceneProgress, heroExitProgress, mountMotionScenes } from '../src/lib/scroll-reveal.ts';
+
+test('root greeting waits two seconds and replaces the entry even with blocked storage', () => {
+  for (const blocked of [false, true]) {
+    let finish;
+    const destinations = [];
+    const values = new Map([['portfolio-replay-opening', 'true']]);
+    new Function('sessionStorage', 'location', 'setTimeout', entryBootstrap)(
+      {
+        setItem: (key, value) => {
+          if (blocked) throw new Error('storage blocked');
+          values.set(key, value);
+        },
+        removeItem: (key) => values.delete(key),
+      },
+      { replace: (url) => destinations.push(url) },
+      (callback, delay) => {
+        assert.equal(delay, 2000);
+        finish = callback;
+      },
+    );
+    assert.deepEqual(destinations, []);
+    finish();
+    assert.deepEqual(destinations, ['/en/?welcome=done']);
+    if (!blocked) {
+      assert.equal(values.get('portfolio-opened'), 'true');
+      assert.equal(values.has('portfolio-replay-opening'), false);
+    }
+  }
+});
+
+test('entry handoff consumes its marker without another splash or hydration wait', () => {
+  const root = { dataset: {} };
+  const replacements = [];
+  new Function(
+    'document',
+    'location',
+    'history',
+    'sessionStorage',
+    'matchMedia',
+    'setTimeout',
+    openingBootstrap,
+  )(
+    { documentElement: root },
+    { pathname: '/en/', search: '?welcome=done', hash: '#main' },
+    { state: null, replaceState: (...args) => replacements.push(args) },
+    {
+      setItem: () => {
+        throw new Error('storage blocked');
+      },
+    },
+    () => assert.fail('handoff must not depend on motion preference'),
+    () => assert.fail('handoff must not start a second clock'),
+  );
+  assert.equal(root.dataset.openingBooted, 'true');
+  assert.equal(root.dataset.opening, undefined);
+  assert.equal(replacements[0][2], '/en/#main');
+});
 
 test('scene reading windows reverse and settle before the reading area, including short screens', () => {
   assert.equal(sceneProgress(880, 1000), 0);

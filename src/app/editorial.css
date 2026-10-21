@@ -99,9 +99,21 @@
   text-align: left;
 }
 .certificate-image {
+  position: relative;
   width: 100%;
+  flex: none;
+  min-height: 0;
+  padding: 0;
   overflow: clip;
   aspect-ratio: 1.55;
+}
+.certificate-image img {
+  position: absolute;
+  inset: 20px;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  max-height: none;
+  object-fit: contain;
 }
 .certificate-copy {
   display: flex;
@@ -203,10 +215,6 @@
 }
 .contact-socials a {
   min-height: 64px;
-}
-.site-header .brand-dot {
-  width: 11px;
-  height: 11px;
 }
 .breadcrumb {
   flex-wrap: wrap;
@@ -576,11 +584,6 @@
   margin-top: 24px;
   text-wrap: pretty;
 }
-.hero-statement .arrival-mask {
-  display: inline-block;
-  max-width: 100%;
-  vertical-align: top;
-}
 .hero-description {
   max-width: 43ch;
   font-size: var(--type-ui);
@@ -634,7 +637,7 @@
   padding-bottom: 0.08em;
   white-space: nowrap;
 }
-.hero-name .arrival-mask {
+.hero-name-part {
   max-width: 100%;
 }
 @media (min-width: 701px) and (max-width: 1000px) {
@@ -669,7 +672,7 @@
     white-space: normal;
     line-height: 1.02;
   }
-  .hero-name .arrival-mask {
+  .hero-name-part {
     display: block;
     width: fit-content;
   }

@@ -1098,7 +1098,7 @@ body:has(.contact-page) .footer-meta {
 }
 @media (max-width: 850px) {
   .desktop-navigation,
-.desktop-controls {
+  .desktop-controls {
     display: none;
   }
   .menu-toggle {
@@ -1194,7 +1194,7 @@ body:has(.contact-page) .footer-meta {
     max-width: 440px;
   }
   .section-intro > p,
-.section-intro > div {
+  .section-intro > div {
     padding: 0;
     font-size: var(--type-body);
     line-height: var(--leading-body);
@@ -1426,8 +1426,8 @@ body:has(.contact-page) .footer-meta {
     scroll-behavior: auto;
   }
   *,
-*::before,
-*::after {
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
   }
@@ -1668,7 +1668,7 @@ body:has(.contact-page) .footer-meta {
     padding-bottom: var(--space-10);
   }
   .timeline-meta,
-.timeline-entry {
+  .timeline-entry {
     grid-column: 2;
   }
   .timeline-marker {
@@ -1959,17 +1959,17 @@ body:has(.contact-page) .footer-meta {
 }
 @media (prefers-reduced-motion: reduce) {
   .wordmark::after,
-.brand-dot,
-.locale-switch a,
-.locale-switch a::after,
-.theme-button svg {
+  .brand-dot,
+  .locale-switch a,
+  .locale-switch a::after,
+  .theme-button svg {
     transition: none;
   }
 }
 .site-header .brand-dot {
   font-size: 0;
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   margin-left: 4px;
   background: var(--accent);
   vertical-align: baseline;
@@ -1977,7 +1977,7 @@ body:has(.contact-page) .footer-meta {
 }
 .site-header .wordmark:hover .brand-dot,
 .site-header .wordmark:focus-visible .brand-dot {
-  transform: translateY(-4px) rotate(45deg) scale(1.15);
+  transform: translateY(-2px) rotate(45deg) scale(1.08);
 }
 .capability-explorer {
   display: grid;
@@ -2177,12 +2177,12 @@ body:has(.contact-page) .footer-meta {
 }
 @media (prefers-reduced-motion: reduce) {
   .capability-panel,
-.contribution-tooltip {
+  .contribution-tooltip {
     animation: none !important;
   }
   .capability-index button::before,
-.capability-index button > svg,
-.contribution-grid button {
+  .capability-index button > svg,
+  .contribution-grid button {
     transition: none;
   }
 }
@@ -2288,10 +2288,10 @@ body:has(.contact-page) .footer-meta {
     text-underline-offset: 6px;
   }
   .text-link:hover svg,
-.small-link:hover svg,
-.featured-image:hover .image-arrow svg,
-.project-image:hover .image-arrow svg,
-.certificate:hover .certificate-action svg {
+  .small-link:hover svg,
+  .featured-image:hover .image-arrow svg,
+  .project-image:hover .image-arrow svg,
+  .certificate:hover .certificate-action svg {
     translate: 3px -2px;
   }
   .icon-button:not(:disabled):hover {
@@ -2351,12 +2351,12 @@ body:has(.contact-page) .footer-meta {
 }
 @media (prefers-reduced-motion: reduce) {
   :is(a, button, summary),
-.image-arrow svg,
-.enlarge svg,
-.small-link svg,
-.text-link svg,
-.certificate-action svg,
-.gallery-controls svg {
+  .image-arrow svg,
+  .enlarge svg,
+  .small-link svg,
+  .text-link svg,
+  .certificate-action svg,
+  .gallery-controls svg {
     transition: none !important;
   }
 }

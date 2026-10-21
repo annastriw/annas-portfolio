@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { ArrowRightIcon, ArrowUpRightIcon, MapPinIcon } from '@phosphor-icons/react/dist/ssr';
 import { identity, experience, capabilities } from '@/content/site';
 import { featuredProjects } from '@/content/projects';
-import { MotionWords } from '@/components/motion-words';
 import { GitHubActivity } from '@/components/github-activity';
 import { TechBadge } from '@/components/tech-badge';
 import { TechReel } from '@/components/tech-reel';
@@ -60,19 +59,13 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <div className="hero-scrim" aria-hidden="true" />
         <div className="hero-name-stage">
           <h1 id="hero-name" className="hero-name">
-            <span className="arrival-mask">
-              <span className="arrival-inner">Annas Tri</span>
-            </span>{' '}
-            <span className="arrival-mask">
-              <span className="arrival-inner">Widagdo</span>
-            </span>
+            <span className="hero-name-part">Annas Tri</span>{' '}
+            <span className="hero-name-part">Widagdo</span>
           </h1>
         </div>
         <div className="hero-content">
           <p className="hero-greeting">Software Engineer</p>
-          <p className="hero-statement">
-            <MotionWords text={identity.headline[locale]} />
-          </p>
+          <p className="hero-statement">{identity.headline[locale]}</p>
           <p className="hero-description">{identity.supporting[locale]}</p>
           <div className="hero-actions">
             <Link className="button hero-primary" href={`/${locale}/projects/`}>

@@ -23,7 +23,8 @@
     animation-range: exit 0% exit 80%;
   }
   :root[data-motion] [data-scene] {
-    --scene-travel: 20px;
+    --scene-travel: 14px;
+    --heading-travel: 6px;
     --lead: clamp(0, calc(var(--scene-progress) / 0.65), 1);
     --media: clamp(0, calc((var(--scene-progress) - 0.12) / 0.75), 1);
     --tail: clamp(0, calc((var(--scene-progress) - 0.3) / 0.7), 1);
@@ -31,20 +32,14 @@
   [data-scene] .scene-heading,
   [data-scene='heading'] > h2,
   [data-scene='heading'] > h3 {
-    translate: 0 calc((1 - var(--lead, 1)) * 10px);
+    translate: 0 calc((1 - var(--lead, 1)) * var(--heading-travel, 6px));
   }
   [data-scene='hero'] .hero-photo {
-    transform: translateY(calc(var(--scene-progress, 0) * -18px)) scale(1.025);
+    transform: translateY(calc(var(--scene-progress, 0) * -10px)) scale(1.015);
   }
   [data-scene='work'] .featured-image img {
     transform: translateY(calc((1 - var(--media, 1)) * var(--scene-travel, 20px)))
-      scale(calc(0.985 + 0.015 * var(--media, 1)));
-  }
-  [data-scene='work'] .featured-copy > .eyebrow {
-    translate: 0 calc((1 - var(--lead, 1)) * 6px);
-  }
-  [data-scene='work'] .featured-copy .text-link {
-    translate: 0 calc((1 - var(--tail, 1)) * 6px);
+      scale(calc(0.992 + 0.008 * var(--media, 1)));
   }
   [data-scene='experience']::after {
     transform: scaleY(calc(0.05 + 0.95 * var(--scene-progress, 1)));
@@ -52,26 +47,21 @@
   [data-scene='experience'] .timeline-marker::before {
     transform: scaleX(var(--lead, 1));
   }
-  [data-scene='experience'] .timeline-meta {
-    translate: 0 calc((1 - var(--lead, 1)) * 8px);
-  }
   [data-scene='portrait'] .about-photo-frame {
-    transform: translateY(calc((1 - var(--media, 1)) * 14px))
-      scale(calc(0.985 + 0.015 * var(--media, 1)));
+    transform: translateY(calc((1 - var(--media, 1)) * var(--scene-travel, 14px) * 0.6))
+      scale(calc(0.995 + 0.005 * var(--media, 1)));
   }
-  [data-scene='card'] .project-image img,
-  [data-scene='certificate'] .certificate-image img {
-    transform: translateY(calc((1 - var(--media, 1)) * 10px));
+  [data-scene='card'] .project-image img {
+    transform: translateY(calc((1 - var(--media, 1)) * var(--scene-travel, 14px) * 0.5));
   }
-  [data-scene='gallery'] .gallery-viewport {
-    translate: 0 calc((1 - var(--media, 1)) * 8px);
+  [data-scene='gallery'] .section-label {
+    translate: 0 calc((1 - var(--lead, 1)) * var(--heading-travel, 6px));
   }
-  [data-scene='gallery']:is(:focus-within, :has(.gallery[data-dragging='true'])) .gallery-viewport {
+  [data-scene='gallery']:is(:focus-within, :has(.gallery[data-dragging='true'])) .section-label {
     translate: none;
   }
-  [data-scene='footer'] .footer-heading,
-  [data-scene='evidence'] .github-activity-meta {
-    translate: 0 calc((1 - var(--tail, 1)) * 8px);
+  [data-scene='footer'] .footer-heading {
+    translate: 0 calc((1 - var(--tail, 1)) * var(--heading-travel, 6px));
   }
   [data-scene='evidence']::before,
   [data-scene='story']::before,
@@ -83,29 +73,35 @@
       animation-range: entry 0px entry 22vh;
     }
     :root[data-motion] [data-scene] {
-      --scene-travel: 9px;
+      --scene-travel: 6px;
+      --heading-travel: 4px;
     }
     [data-scene='hero'] .hero-photo {
-      transform: translateY(calc(var(--scene-progress, 0) * -8px)) scale(1.015);
+      transform: translateY(calc(var(--scene-progress, 0) * -4px)) scale(1.008);
     }
   }
 }
-/* Arrival uses inner groups, independently of scroll and pointer layers. */
-.arrival-mask {
-  display: block;
-  overflow: clip;
-  padding-block: 0.18em;
-  margin-block: -0.18em;
-}
-.arrival-inner {
-  display: inline-block;
-}
-.hero-name .arrival-mask {
+/* Names wrap responsively without clipping descenders or splitting their motion. */
+.hero-name-part {
   display: inline-block;
   vertical-align: top;
-}
-.hero-name .arrival-inner {
   white-space: nowrap;
+}
+.entry-opening {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  gap: 24px;
+  text-align: center;
+}
+.entry-fallback {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 32px;
 }
 .opening-curtain {
   position: fixed;
@@ -122,6 +118,15 @@
   font-family: var(--font-display);
   font-size: clamp(80px, 15vw, 180px);
   line-height: 1.2;
+  font-weight: 400;
+}
+@keyframes entry-greeting {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes opening-curtain {
   0%,
@@ -151,6 +156,9 @@
   }
 }
 @media (prefers-reduced-motion: no-preference) {
+  .entry-opening .opening-signature {
+    animation: entry-greeting 240ms ease-out both;
+  }
   :root:is([data-opening='pending'], [data-opening='playing']) .opening-curtain {
     animation: opening-curtain 2000ms cubic-bezier(0.76, 0, 0.24, 1) both;
   }
