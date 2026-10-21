@@ -5,6 +5,7 @@ import './globals.css';
 import './motion.css';
 import './editorial.css';
 import './interaction.css';
+import './shell.css';
 export const metadata: Metadata = {
   title: '404 — Annas Tri Widagdo',
   robots: { index: false, follow: true },

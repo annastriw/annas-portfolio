@@ -3,17 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import {
-  ListIcon,
-  XIcon,
-  SunIcon,
-  MoonIcon,
-  MonitorIcon,
-  ArrowUpRightIcon,
-} from '@phosphor-icons/react';
+import { ListIcon, XIcon, ArrowUpRightIcon } from '@phosphor-icons/react';
 import { localizePath, type Locale } from '@/lib/i18n';
 
 import { navigationCurrent } from '@/lib/navigation';
+import { HeaderControls } from './header-controls';
+import { useNavigationIndicator } from './use-navigation-indicator';
 import { motionMilliseconds } from '@/lib/motion-timing';
 import { clearArchiveNavigation, queueReturn, settleArchiveEntry } from '@/lib/archive-navigation';
 
@@ -31,6 +26,8 @@ export function SiteHeader({ locale }: { locale: Locale }) {
     }
   }, [locale]);
   const path = usePathname();
+  const navigation = useRef<HTMLElement>(null);
+  useNavigationIndicator(navigation, path);
   const dialog = useRef<HTMLDialogElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -41,9 +38,14 @@ export function SiteHeader({ locale }: { locale: Locale }) {
     const desktop = matchMedia('(min-width: 851px)');
     const panel = dialog.current;
     const reset = () => {
-      if (document.hidden || reduced.matches || desktop.matches) {
+      if (panel?.open && (document.hidden || reduced.matches || desktop.matches)) {
         clearTimeout(closeTimer.current);
-        panel?.close();
+        restoreFocus.current = !desktop.matches;
+        panel.close();
+        if (desktop.matches)
+          navigation.current
+            ?.querySelector<HTMLAnchorElement>('a[aria-current]')
+            ?.focus({ preventScroll: true });
       }
     };
     reduced.addEventListener('change', reset);
@@ -75,10 +77,13 @@ export function SiteHeader({ locale }: { locale: Locale }) {
       return;
     }
     if (panel.dataset.closing) return;
+    const presentation = getComputedStyle(panel);
+    panel.style.setProperty('--menu-exit-opacity', presentation.opacity);
+    panel.style.setProperty('--menu-exit-transform', presentation.transform);
     panel.dataset.closing = 'true';
     const duration = motionMilliseconds(
-      getComputedStyle(panel).getPropertyValue('--motion-menu'),
-      320,
+      getComputedStyle(panel).getPropertyValue('--motion-menu-exit'),
+      220,
     );
     closeTimer.current = setTimeout(() => panel.close(), duration);
   }
@@ -115,39 +120,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
     navigateToTop();
     if (visit) queueReturn(localizePath(path, next), visit);
   }
-  const controls = (
-    <div className="header-controls">
-      <div className="locale-switch" aria-label={locale === 'id' ? 'Bahasa' : 'Language'}>
-        {(['en', 'id'] as const).map((l) => (
-          <Link
-            key={l}
-            href={localizePath(path, l)}
-            scroll={false}
-            onNavigate={() => changeLanguage(l)}
-            hrefLang={l}
-            lang={l}
-            aria-current={locale === l ? 'true' : undefined}
-          >
-            {l.toUpperCase()}
-          </Link>
-        ))}
-      </div>
-      <button
-        className="icon-button theme-button"
-        onClick={cycleTheme}
-        aria-label={
-          locale === 'id'
-            ? 'Ganti tema: terang, gelap, atau ikuti perangkat'
-            : 'Switch theme: light, dark, or device setting'
-        }
-        title={locale === 'id' ? 'Ganti tema' : 'Switch theme'}
-      >
-        <SunIcon className="theme-sun" size={21} />
-        <MoonIcon className="theme-moon" size={21} />
-        <MonitorIcon className="theme-system" size={21} />
-      </button>
-    </div>
-  );
+
   return (
     <>
       <header className="site-header">
@@ -158,6 +131,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           </span>
         </Link>
         <nav
+          ref={navigation}
           className="desktop-navigation"
           aria-label={locale === 'id' ? 'Navigasi utama' : 'Main navigation'}
         >
@@ -170,12 +144,22 @@ export function SiteHeader({ locale }: { locale: Locale }) {
               className={p === 'contact/' ? 'navigation-contact' : undefined}
               aria-current={navigationCurrent(path, `/${locale}/${p}`)}
             >
-              {labels[i]}
-              {p === 'contact/' && <ArrowUpRightIcon size={16} aria-hidden="true" />}
+              <span className="navigation-label">{labels[i]}</span>
+              {p === 'contact/' && (
+                <ArrowUpRightIcon data-motion-icon="diagonal" size={16} aria-hidden="true" />
+              )}
             </Link>
           ))}
+          <span className="navigation-indicator" aria-hidden="true" />
         </nav>
-        <div className="desktop-controls">{controls}</div>
+        <div className="desktop-controls">
+          <HeaderControls
+            locale={locale}
+            path={path}
+            onLanguage={changeLanguage}
+            onTheme={cycleTheme}
+          />
+        </div>
         <button
           ref={menuButton}
           className="icon-button menu-toggle"
@@ -199,7 +183,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           closeMenu();
         }}
         onAnimationEnd={(event) => {
-          if (event.target === event.currentTarget && event.animationName === 'menu-exit')
+          if (event.target === event.currentTarget && event.animationName === 'shell-menu-exit')
             closeMenu(true);
         }}
         onClose={() => {
@@ -237,7 +221,12 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           ))}
         </nav>
         <div className="menu-bottom">
-          {controls}
+          <HeaderControls
+            locale={locale}
+            path={path}
+            onLanguage={changeLanguage}
+            onTheme={cycleTheme}
+          />
           <p>Jakarta, Indonesia</p>
         </div>
       </dialog>

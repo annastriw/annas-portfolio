@@ -1,0 +1,250 @@
+/* Navigation and shell motion. Layout stays in globals/editorial; atoms in interaction.css. */
+:root {
+  --motion-menu-exit: 220ms;
+}
+.desktop-navigation,
+.locale-switch {
+  position: relative;
+}
+.navigation-indicator {
+  display: none;
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: var(--indicator-width, 0px);
+  height: 1px;
+  background: var(--accent);
+  translate: var(--indicator-x, 0px) 0;
+  pointer-events: none;
+  transition:
+    translate var(--motion-state) var(--motion-ease),
+    width var(--motion-state) var(--motion-ease);
+}
+[data-indicator-ready] > .navigation-indicator {
+  display: block;
+}
+.desktop-navigation a {
+  transition: color var(--motion-hover) var(--motion-ease-color);
+}
+.desktop-navigation a::after,
+.locale-switch a::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  scale: 0 1;
+  transform-origin: left;
+}
+.desktop-navigation a[aria-current]::after,
+.locale-switch a[aria-current]::after {
+  scale: 1 1;
+}
+:is(.desktop-navigation, .locale-switch)[data-indicator-ready] a::after {
+  display: none;
+}
+.locale-switch a {
+  position: relative;
+  text-decoration: none;
+  transition: color var(--motion-hover) var(--motion-ease-color);
+}
+.desktop-navigation .navigation-contact {
+  gap: 18px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  transition:
+    color var(--motion-hover) var(--motion-ease-color),
+    background-color var(--motion-hover) var(--motion-ease-color),
+    border-color var(--motion-hover) var(--motion-ease-color);
+}
+.desktop-navigation .navigation-contact[aria-current] {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.wordmark {
+  position: relative;
+  transition: color var(--motion-hover) var(--motion-ease-color);
+}
+.wordmark::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -5px;
+  height: 1px;
+  background: var(--accent);
+  scale: 0 1;
+  transform-origin: left;
+  transition: scale var(--motion-state) var(--motion-ease);
+}
+.brand-dot {
+  display: inline-block;
+  transition: transform var(--motion-state) var(--motion-ease);
+}
+.site-header .brand-dot {
+  font-size: 0;
+  width: 8px;
+  height: 8px;
+  margin-left: 4px;
+  background: var(--accent);
+  vertical-align: baseline;
+  transform: translateY(-1px);
+}
+.wordmark:focus-visible::after {
+  scale: 1 1;
+}
+.site-header .wordmark:focus-visible .brand-dot {
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.theme-button {
+  position: relative;
+  --theme-tilt: 0deg;
+}
+.theme-button > svg {
+  display: block;
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transform: rotate(35deg) scale(0.75);
+  transition:
+    opacity var(--motion-hover) var(--motion-ease-color),
+    transform var(--motion-state) var(--motion-ease),
+    scale var(--motion-press) var(--motion-ease-press);
+}
+:root[data-theme='light'] .theme-sun,
+:root[data-theme='dark'] .theme-moon,
+:root[data-theme='system'] .theme-system {
+  opacity: 1;
+  transform: rotate(var(--theme-tilt)) scale(1);
+}
+.theme-button:focus-visible {
+  --theme-tilt: -8deg;
+}
+.site-header .menu-toggle[aria-expanded='true'] svg {
+  opacity: 0.4;
+  scale: 0.9;
+}
+.footer-meta a,
+.footer-heading {
+  transition: color var(--motion-hover) var(--motion-ease-color);
+}
+.footer-heading [data-motion-icon],
+.footer-meta [data-motion-icon],
+.navigation-contact [data-motion-icon] {
+  transition:
+    translate var(--motion-hover) var(--motion-ease),
+    scale var(--motion-press) var(--motion-ease-press);
+}
+:is(.footer-meta a, .footer-heading, .navigation-contact):focus-visible [data-motion-icon] {
+  translate: var(--motion-icon-travel) calc(-1 * var(--motion-icon-travel));
+}
+@media (hover: hover) and (pointer: fine) {
+  :is(.desktop-navigation a, .locale-switch a, .footer-meta a, .footer-heading):hover {
+    color: var(--accent);
+  }
+  .navigation-contact:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .wordmark:hover::after {
+    scale: 1 1;
+  }
+  .site-header .wordmark:hover .brand-dot {
+    transform: translateY(-2px) rotate(45deg);
+  }
+  .theme-button:hover {
+    --theme-tilt: -8deg;
+  }
+  :is(.footer-meta a, .footer-heading, .navigation-contact):hover [data-motion-icon] {
+    translate: var(--motion-icon-travel) calc(-1 * var(--motion-icon-travel));
+  }
+}
+@keyframes shell-menu-enter {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes shell-menu-exit {
+  from {
+    opacity: var(--menu-exit-opacity, 1);
+    transform: var(--menu-exit-transform, none);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+}
+@keyframes shell-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes shell-menu-item {
+  from {
+    opacity: 0.75;
+    translate: 0 8px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-menu[open] {
+    animation: shell-menu-enter var(--motion-menu) var(--motion-ease) both;
+  }
+  .mobile-menu[open]::backdrop {
+    animation: shell-backdrop var(--motion-menu) ease both;
+  }
+  .mobile-menu[open] nav a,
+  .mobile-menu[open] .menu-bottom {
+    animation: shell-menu-item var(--motion-state) var(--motion-ease) backwards;
+    animation-delay: 60ms;
+  }
+  .mobile-menu[open] nav a:nth-child(2) {
+    animation-delay: 85ms;
+  }
+  .mobile-menu[open] nav a:nth-child(3) {
+    animation-delay: 110ms;
+  }
+  .mobile-menu[open] nav a:nth-child(4) {
+    animation-delay: 135ms;
+  }
+  .mobile-menu[open] .menu-bottom {
+    animation-delay: 150ms;
+  }
+  .mobile-menu[open][data-closing] {
+    animation: shell-menu-exit var(--motion-menu-exit) var(--motion-ease) both;
+  }
+  .mobile-menu[open][data-closing]::backdrop {
+    animation: shell-backdrop var(--motion-menu-exit) ease reverse both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navigation-indicator,
+  .wordmark::after,
+  .brand-dot,
+  .theme-button > svg {
+    transition: none !important;
+  }
+  .theme-button > svg {
+    transform: none !important;
+  }
+  .site-header .brand-dot {
+    transform: translateY(-1px) !important;
+  }
+  .footer-heading [data-motion-icon],
+  .footer-meta [data-motion-icon],
+  .navigation-contact [data-motion-icon] {
+    translate: none !important;
+  }
+}

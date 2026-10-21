@@ -10,6 +10,7 @@ import '../globals.css';
 import '../motion.css';
 import '../editorial.css';
 import '../interaction.css';
+import '../shell.css';
 
 export const dynamicParams = false;
 export function generateStaticParams() {
