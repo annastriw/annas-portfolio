@@ -35,12 +35,12 @@ export default async function Contact({ params }: { params: Promise<{ locale: st
           <p className="eyebrow">Email</p>
           <a className="contact-email" href={`mailto:${identity.email}`}>
             {identity.email}
-            <ArrowUpRightIcon weight="light" />
+            <ArrowUpRightIcon data-motion-icon="diagonal" weight="light" />
           </a>
           <div className="contact-actions">
             <a className="button" href={`mailto:${identity.email}`}>
               {id ? 'Kirim Email' : 'Send an Email'}
-              <ArrowRightIcon size={22} />
+              <ArrowRightIcon data-motion-icon="right" size={22} />
             </a>
             <CopyEmail locale={locale} />
           </div>
@@ -50,13 +50,13 @@ export default async function Contact({ params }: { params: Promise<{ locale: st
             <span>
               LinkedIn<small>Annas Tri Widagdo</small>
             </span>
-            <ArrowUpRightIcon size={25} />
+            <ArrowUpRightIcon data-motion-icon="diagonal" size={25} />
           </a>
           <a href={identity.github} target="_blank" rel="noreferrer">
             <span>
               GitHub<small>@annastriw</small>
             </span>
-            <ArrowUpRightIcon size={25} />
+            <ArrowUpRightIcon data-motion-icon="diagonal" size={25} />
           </a>
           <p className="eyebrow">Jakarta, Indonesia</p>
         </div>

@@ -17,7 +17,11 @@ export function CopyEmail({ locale }: { locale: Locale }) {
   return (
     <div className="copy-email">
       <button className="text-link" onClick={copy}>
-        {status === 'copied' ? <CheckIcon size={19} /> : <CopyIcon size={19} />}{' '}
+        {status === 'copied' ? (
+          <CheckIcon data-motion-icon="status" size={19} />
+        ) : (
+          <CopyIcon data-motion-icon="status" size={19} />
+        )}{' '}
         {locale === 'id' ? 'Salin Alamat Email' : 'Copy Email Address'}
       </button>
       <span role="status">

@@ -4,6 +4,7 @@ import { MissingPage } from '@/components/missing-page';
 import './globals.css';
 import './motion.css';
 import './editorial.css';
+import './interaction.css';
 export const metadata: Metadata = {
   title: '404 — Annas Tri Widagdo',
   robots: { index: false, follow: true },

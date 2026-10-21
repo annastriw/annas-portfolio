@@ -9,6 +9,7 @@ import { siteUrl } from '@/lib/metadata';
 import '../globals.css';
 import '../motion.css';
 import '../editorial.css';
+import '../interaction.css';
 
 export const dynamicParams = false;
 export function generateStaticParams() {

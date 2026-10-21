@@ -1,5 +1,6 @@
 import '../globals.css';
 import '../motion.css';
+import '../interaction.css';
 import { entryBootstrap } from '@/lib/opening';
 export default function EntryLayout({ children }: { children: React.ReactNode }) {
   return (

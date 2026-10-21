@@ -153,7 +153,7 @@ export function Gallery({
             aria-label={id ? 'Gambar sebelumnya' : 'Previous image'}
             onClick={() => go(index - 1)}
           >
-            <ArrowLeftIcon size={23} />
+            <ArrowLeftIcon data-motion-icon="left" size={23} />
           </button>
           <button
             className="icon-button"
@@ -161,7 +161,7 @@ export function Gallery({
             aria-label={id ? 'Gambar berikutnya' : 'Next image'}
             onClick={() => go(index + 1)}
           >
-            <ArrowRightIcon size={23} />
+            <ArrowRightIcon data-motion-icon="right" size={23} />
           </button>
         </div>
       </div>

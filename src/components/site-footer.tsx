@@ -12,11 +12,11 @@ export function SiteFooter({ locale }: { locale: Locale }) {
         </p>
         <Link href={`/${locale}/contact/`} className="footer-heading">
           {locale === 'id' ? 'Apa yang ingin Anda bangun?' : 'What would you like to build?'}
-          <ArrowUpRightIcon weight="light" aria-hidden="true" />
+          <ArrowUpRightIcon data-motion-icon="diagonal" weight="light" aria-hidden="true" />
         </Link>
         <Link className="text-link" href={`/${locale}/contact/`}>
           {locale === 'id' ? 'Mari Bicara' : 'Let’s Talk'}
-          <ArrowUpRightIcon size={20} />
+          <ArrowUpRightIcon data-motion-icon="diagonal" size={20} />
         </Link>
       </div>
       <div className="footer-meta container">
@@ -26,10 +26,10 @@ export function SiteFooter({ locale }: { locale: Locale }) {
         <span>© {new Date().getFullYear()} Annas Tri Widagdo</span>
         <div>
           <a href={identity.github} target="_blank" rel="noreferrer">
-            GitHub <ArrowUpRightIcon size={14} />
+            GitHub <ArrowUpRightIcon data-motion-icon="diagonal" size={14} />
           </a>
           <a href={identity.linkedin} target="_blank" rel="noreferrer">
-            LinkedIn <ArrowUpRightIcon size={14} />
+            LinkedIn <ArrowUpRightIcon data-motion-icon="diagonal" size={14} />
           </a>
         </div>
         <span>Jakarta, Indonesia</span>

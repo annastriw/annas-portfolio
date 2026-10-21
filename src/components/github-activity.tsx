@@ -25,7 +25,8 @@ export function GitHubActivity({ locale }: { locale: Locale }) {
               : 'Code, experiments, and an ongoing learning process.'}
           </p>
           <a className="text-link" href={identity.github} target="_blank" rel="noreferrer">
-            {locale === 'id' ? 'Lihat di GitHub' : 'View on GitHub'} <ArrowUpRightIcon size={20} />
+            {locale === 'id' ? 'Lihat di GitHub' : 'View on GitHub'}{' '}
+            <ArrowUpRightIcon data-motion-icon="diagonal" size={20} />
           </a>
         </div>
       </div>
@@ -73,7 +74,7 @@ export function GitHubActivity({ locale }: { locale: Locale }) {
                     }).format(new Date(event.date))}
                   </span>
                   <span>{event.repo}</span>
-                  <ArrowUpRightIcon size={16} />
+                  <ArrowUpRightIcon data-motion-icon="diagonal" size={16} />
                 </a>
               ))}
             </div>

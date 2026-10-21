@@ -80,7 +80,7 @@ export default async function About({ params }: { params: Promise<{ locale: stri
             <p>{thesis.description[locale]}</p>
             <a className="text-link" href={thesis.url} target="_blank" rel="noreferrer">
               {id ? 'Baca Skripsi' : 'Read Thesis'}
-              <ArrowUpRightIcon size={20} />
+              <ArrowUpRightIcon data-motion-icon="diagonal" size={20} />
             </a>
           </div>
         </div>

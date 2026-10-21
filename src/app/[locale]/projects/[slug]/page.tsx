@@ -98,7 +98,7 @@ export default async function ProjectDetail({
               rel="noreferrer"
             >
               {link.label[locale]}
-              <ArrowUpRightIcon size={18} />
+              <ArrowUpRightIcon data-motion-icon="diagonal" size={18} />
             </a>
           ))}
         </div>

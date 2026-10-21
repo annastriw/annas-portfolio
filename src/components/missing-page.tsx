@@ -44,7 +44,7 @@ export function MissingPage({ embedded = false }: { embedded?: boolean }) {
             <p>{copy.description}</p>
             <div className="missing-actions">
               <a className="text-link" href={`/${locale}/?intro=1`} onClick={returnHome}>
-                <ArrowLeftIcon size={20} />
+                <ArrowLeftIcon data-motion-icon="left" size={20} />
                 {copy.home}
               </a>
               <a className="text-link" href={`/${locale}/projects/`}>

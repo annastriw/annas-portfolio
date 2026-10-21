@@ -1,0 +1,157 @@
+/* Shared controls own feedback here; layout, scroll scenes and panel presence stay separate. */
+:where(a[href], button, summary) {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+:where(a[href], button:not(:disabled), summary) {
+  cursor: pointer;
+}
+:where(a[href], button, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.hero :where(a[href], button):focus-visible {
+  outline-color: #fffdf6;
+}
+
+:is(.button, .icon-button, .text-link, .small-link, .hero-contact, .breadcrumb a) {
+  transition:
+    color var(--motion-hover) var(--motion-ease-color),
+    background-color var(--motion-hover) var(--motion-ease-color),
+    border-color var(--motion-hover) var(--motion-ease-color),
+    background-size var(--motion-state) var(--motion-ease),
+    box-shadow var(--motion-press) var(--motion-ease-press);
+}
+.button {
+  --control-hover-bg: var(--accent);
+  --control-hover-fg: var(--bg);
+}
+.hero-primary {
+  --control-hover-bg: #e7d9bd;
+  --control-hover-fg: #20271f;
+}
+.hero-contact {
+  --control-link-color: #e7d9bd;
+}
+:is(.text-link, .small-link, .hero-contact, .breadcrumb a) {
+  background-image: linear-gradient(
+    var(--control-link-color, var(--accent)),
+    var(--control-link-color, var(--accent))
+  );
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 1px;
+}
+
+/* Explicit direction avoids moving status icons such as Copy and Check like arrows. */
+[data-motion-icon],
+.icon-button > svg,
+:is(.button, .icon-button, .text-link, .small-link, .hero-contact) [data-motion-icon] {
+  flex-shrink: 0;
+  transition:
+    translate var(--motion-hover) var(--motion-ease),
+    scale var(--motion-press) var(--motion-ease-press),
+    transform var(--motion-state) var(--motion-ease),
+    color var(--motion-hover) var(--motion-ease-color);
+}
+:is(.button, .text-link, .small-link, .hero-contact, .breadcrumb a, .icon-button):focus-visible
+  [data-motion-icon='right'] {
+  translate: var(--motion-icon-travel) 0;
+}
+:is(.button, .text-link, .small-link, .hero-contact, .breadcrumb a, .icon-button):focus-visible
+  [data-motion-icon='left'] {
+  translate: calc(-1 * var(--motion-icon-travel)) 0;
+}
+:is(.button, .text-link, .small-link, .hero-contact, .breadcrumb a, .icon-button):focus-visible
+  [data-motion-icon='diagonal'] {
+  translate: var(--motion-icon-travel) calc(-1 * var(--motion-icon-travel));
+}
+:is(.text-link, .small-link, .hero-contact, .breadcrumb a):is(:focus-visible, :active) {
+  background-size: 100% 1px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:not(:disabled):hover {
+    background-color: var(--control-hover-bg);
+    color: var(--control-hover-fg);
+  }
+  .icon-button:not(:disabled):hover {
+    background-color: var(--surface);
+    border-color: var(--accent);
+  }
+  :is(.text-link, .small-link, .hero-contact, .breadcrumb a):hover {
+    color: var(--control-link-color, var(--accent));
+    background-size: 100% 1px;
+  }
+  :is(.button, .text-link, .small-link, .hero-contact, .breadcrumb a, .icon-button):hover
+    [data-motion-icon='right'] {
+    translate: var(--motion-icon-travel) 0;
+  }
+  :is(.button, .text-link, .small-link, .hero-contact, .breadcrumb a, .icon-button):hover
+    [data-motion-icon='left'] {
+    translate: calc(-1 * var(--motion-icon-travel)) 0;
+  }
+  :is(.button, .text-link, .small-link, .hero-contact, .breadcrumb a, .icon-button):hover
+    [data-motion-icon='diagonal'] {
+    translate: var(--motion-icon-travel) calc(-1 * var(--motion-icon-travel));
+  }
+}
+
+/* The target stays still: only its paint and inner icon acknowledge the press. */
+.button:not(:disabled):active {
+  background-color: var(--control-hover-bg);
+  color: var(--control-hover-fg);
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+.icon-button:not(:disabled):active {
+  background-color: var(--surface);
+  border-color: var(--accent);
+}
+:is(.button:not(:disabled), .text-link, .small-link, .hero-contact, .icon-button:not(:disabled)):active
+  [data-motion-icon],
+.icon-button:not(:disabled):active > svg {
+  scale: 0.92;
+}
+.icon-button:disabled {
+  cursor: default;
+  opacity: 0.35;
+  background-color: transparent;
+  border-color: transparent;
+}
+.button:disabled {
+  cursor: default;
+  opacity: 0.45;
+  box-shadow: none;
+}
+:is(.button, .icon-button):disabled [data-motion-icon],
+.icon-button:disabled > svg {
+  translate: none;
+  scale: none;
+}
+:is(.text-link, .small-link, .hero-contact, .breadcrumb a):focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.portfolio-lightbox .yarl__button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+
+@media (max-width: 700px) {
+  :root {
+    --motion-icon-travel: 2px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.button, .icon-button, .text-link, .small-link, .hero-contact, .breadcrumb a),
+  .icon-button > svg,
+  [data-motion-icon] {
+    transition: none !important;
+  }
+  [data-motion-icon],
+  .icon-button > svg {
+    translate: none !important;
+    scale: none !important;
+    transform: none !important;
+  }
+}

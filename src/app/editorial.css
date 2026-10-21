@@ -603,10 +603,6 @@
   background: #f3efe6;
   border: 1px solid #f3efe6;
 }
-.hero-primary:hover {
-  background: #e7d9bd;
-  color: #20271f;
-}
 .hero-contact {
   display: inline-flex;
   align-items: center;

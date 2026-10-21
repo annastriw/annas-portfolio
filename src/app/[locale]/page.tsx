@@ -70,11 +70,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <div className="hero-actions">
             <Link className="button hero-primary" href={`/${locale}/projects/`}>
               {id ? 'Jelajahi Karya' : 'Explore My Work'}
-              <ArrowUpRightIcon size={21} />
+              <ArrowUpRightIcon data-motion-icon="diagonal" size={21} />
             </Link>
             <Link className="hero-contact" href={`/${locale}/contact/`}>
               {id ? 'Mulai Percakapan' : 'Start a Conversation'}
-              <ArrowUpRightIcon size={16} />
+              <ArrowUpRightIcon data-motion-icon="diagonal" size={16} />
             </Link>
           </div>
           <p className="hero-location">
@@ -112,7 +112,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 <p>{p.intro[locale]}</p>
                 <Link className="text-link" href={`/${locale}/projects/${p.slug}/`}>
                   {id ? 'Jelajahi Proyek' : 'Explore Project'}
-                  <ArrowRightIcon size={21} />
+                  <ArrowRightIcon data-motion-icon="right" size={21} />
                 </Link>
               </div>
               <Link
@@ -128,7 +128,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                   alt={`${p.title} — ${id ? 'pratinjau proyek dalam mockup laptop' : 'project preview in a laptop mockup'}`}
                 />
                 <span className="image-arrow" aria-hidden="true">
-                  <ArrowUpRightIcon size={26} />
+                  <ArrowUpRightIcon data-motion-icon="diagonal" size={26} />
                 </span>
               </Link>
             </article>
@@ -141,7 +141,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </span>
             <Link className="text-link" href={`/${locale}/projects/`}>
               {id ? 'Lihat Semua Proyek' : 'View All Projects'}
-              <ArrowRightIcon size={22} />
+              <ArrowRightIcon data-motion-icon="right" size={22} />
             </Link>
           </div>
         </div>
@@ -153,7 +153,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <div className="section-label">
           <span className="eyebrow">02 / {id ? 'Pengalaman' : 'Experience'}</span>
           <Link href={`/${locale}/about/`} className="small-link">
-            {id ? 'Tentang Saya' : 'More About Me'} <ArrowUpRightIcon size={14} />
+            {id ? 'Tentang Saya' : 'More About Me'}{' '}
+            <ArrowUpRightIcon data-motion-icon="diagonal" size={14} />
           </Link>
         </div>
         <div className="section-intro" data-scene="heading">
