@@ -187,15 +187,6 @@
     overflow: clip;
   }
 }
-.gallery-thumbnails button {
-  transition:
-    opacity 180ms ease,
-    border-color 180ms ease;
-}
-.gallery-thumbnails button:hover {
-  opacity: 1;
-  border-color: var(--accent);
-}
 .contact-page {
   min-height: 0;
 }

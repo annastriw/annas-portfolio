@@ -1726,9 +1726,6 @@ body:has(.contact-page) .footer-meta {
   gap: 12px;
   margin-top: 10px;
 }
-.certificate:hover .certificate-title {
-  color: var(--accent);
-}
 .gallery-main {
   cursor: grab;
 }
@@ -2049,25 +2046,13 @@ body:has(.contact-page) .footer-meta {
   margin-top: -8px;
   margin-bottom: 20px;
 }
-.gallery-thumbnails button {
-  transition:
-    opacity 240ms ease,
-    border-color 240ms ease,
-    translate 240ms ease;
-}
 @media (hover: hover) {
   .project-card h2 a:hover {
     color: var(--accent);
   }
   .featured-image:hover .image-arrow svg,
-  .project-image:hover .image-arrow svg,
-  .certificate:hover .certificate-action svg {
+  .project-image:hover .image-arrow svg {
     translate: 3px -2px;
-  }
-  .gallery-thumbnails button:hover {
-    opacity: 1;
-    border-color: var(--accent);
-    translate: 0 -2px;
   }
   .gallery-main:hover .enlarge {
     color: var(--accent);

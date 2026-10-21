@@ -13,6 +13,7 @@ import '../interaction.css';
 import '../shell.css';
 import '../home-interactions.css';
 import '../projects-interactions.css';
+import '../media-interactions.css';
 
 export const dynamicParams = false;
 export function generateStaticParams() {

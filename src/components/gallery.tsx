@@ -1,9 +1,10 @@
 'use client';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import { ArrowLeftIcon, ArrowRightIcon, ArrowsOutIcon } from '@phosphor-icons/react';
+import { ArrowsOutIcon } from '@phosphor-icons/react';
+import { GalleryDetails } from './gallery-details';
 import type { Locale, Bilingual } from '@/lib/i18n';
 import { swipeStep } from '@/lib/gallery-gesture';
 const MediaLightbox = dynamic(() => import('./media-lightbox'), { ssr: false });
@@ -78,6 +79,16 @@ export function Gallery({
   const hint = id
     ? 'Cubit atau ketuk dua kali untuk zoom · Drag saat diperbesar'
     : 'Pinch or double-tap to zoom · Drag to pan when enlarged';
+  const slides = useMemo(
+    () =>
+      images.map((src, i) => ({
+        src,
+        alt: captions[src]?.alt[locale] ?? `${title} · ${i + 1}`,
+        title: `${title} · ${i + 1} / ${images.length}`,
+        description: hint,
+      })),
+    [images, captions, locale, title, hint],
+  );
   return (
     <div
       className="gallery"
@@ -138,70 +149,21 @@ export function Gallery({
           ))}
         </div>
       </div>
-      {captions[images[index]] && (
-        <p className="gallery-caption">{captions[images[index]].caption[locale]}</p>
-      )}
-      <div className="gallery-controls">
-        <p className="eyebrow" aria-live="polite">
-          {id ? 'Tampilan' : 'View'} {String(index + 1).padStart(2, '0')} /{' '}
-          {String(images.length).padStart(2, '0')}
-        </p>
-        <div>
-          <button
-            className="icon-button"
-            disabled={!carousel || index === 0}
-            aria-label={id ? 'Gambar sebelumnya' : 'Previous image'}
-            onClick={() => go(index - 1)}
-          >
-            <ArrowLeftIcon data-motion-icon="left" size={23} />
-          </button>
-          <button
-            className="icon-button"
-            disabled={!carousel || index === images.length - 1}
-            aria-label={id ? 'Gambar berikutnya' : 'Next image'}
-            onClick={() => go(index + 1)}
-          >
-            <ArrowRightIcon data-motion-icon="right" size={23} />
-          </button>
-        </div>
-      </div>
-      <p className="gallery-hint">
-        {id
-          ? 'Geser atau drag gambar · Klik untuk memperbesar'
-          : 'Swipe or drag the image · Click to enlarge'}
-      </p>
-      <div className="gallery-thumbnails" aria-label={id ? 'Pilih tampilan' : 'Choose a view'}>
-        {images.map((src, i) => (
-          <button
-            key={src}
-            aria-label={`${id ? 'Tampilkan gambar' : 'Show image'} ${i + 1}`}
-            aria-pressed={i === index}
-            disabled={!carousel}
-            onClick={() => go(i)}
-          >
-            <Image
-              src={src.replace('/documentation/', '/thumbnails/')}
-              alt=""
-              width={150}
-              height={100}
-              sizes="110px"
-              loading="lazy"
-            />
-          </button>
-        ))}
-      </div>
+      <GalleryDetails
+        images={images}
+        captions={captions}
+        locale={locale}
+        index={index}
+        ready={!!carousel}
+        go={go}
+      />
       {loaded && (
         <MediaLightbox
           open={open}
           close={() => setOpen(false)}
           index={index}
           locale={locale}
-          slides={images.map((src, i) => ({
-            src,
-            alt: captions[src]?.alt[locale] ?? `${title} · ${i + 1}`,
-            title: `${title} · ${i + 1} / ${images.length}`,
-            description: hint,
-          }))}
+          slides={slides}
           onView={go}
           onExited={() => {
             const current = root.current?.querySelector<HTMLButtonElement>(

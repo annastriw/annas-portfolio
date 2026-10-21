@@ -19,6 +19,8 @@ export function CertificateGallery({ items, locale }: { items: string[][]; local
             <button
               className="certificate"
               type="button"
+              aria-haspopup="dialog"
+              aria-label={`${locale === 'id' ? 'Buka sertifikat' : 'Open certificate'}: ${title}`}
               onClick={(event) => {
                 trigger.current = event.currentTarget;
                 setSelected(index);
@@ -41,7 +43,7 @@ export function CertificateGallery({ items, locale }: { items: string[][]; local
                 <span className="certificate-title">{title}</span>
                 <span className="certificate-action">
                   {locale === 'id' ? 'Buka pratinjau' : 'Open preview'}
-                  <ArrowsOutIcon size={18} />
+                  <ArrowsOutIcon data-motion-icon="status" size={18} aria-hidden="true" />
                 </span>
               </span>
             </button>

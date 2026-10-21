@@ -1,0 +1,101 @@
+/* Media state is separate from the viewport that Embla and Zoom move. */
+.certificate-image {
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: outline-color var(--motion-hover) var(--motion-ease-color);
+}
+.certificate:focus-visible .certificate-image {
+  outline-color: var(--accent);
+}
+.certificate:focus-visible .certificate-title {
+  color: var(--accent);
+}
+.certificate:is(:focus-visible, :active) .certificate-action {
+  border-color: var(--accent);
+}
+.certificate:active .certificate-action svg {
+  scale: 0.92;
+}
+.gallery-captions {
+  display: grid;
+  max-width: 850px;
+  margin-top: 14px;
+}
+.gallery-captions .gallery-caption {
+  grid-area: 1 / 1;
+  margin-top: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 140ms var(--motion-ease-color),
+    visibility 0s 140ms;
+}
+.gallery-captions .gallery-caption[data-active='true'] {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity var(--motion-state) var(--motion-ease-color),
+    visibility 0s;
+}
+.gallery-current {
+  display: inline-block;
+  min-width: 2ch;
+  font-variant-numeric: tabular-nums;
+  animation: gallery-count var(--motion-hover) var(--motion-ease) both;
+}
+@keyframes gallery-count {
+  from {
+    opacity: 0.6;
+    translate: 0 2px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.gallery-thumbnails button {
+  position: relative;
+  transition:
+    opacity var(--motion-hover) var(--motion-ease-color),
+    border-color var(--motion-hover) var(--motion-ease-color),
+    box-shadow var(--motion-press) var(--motion-ease-press);
+}
+.gallery-thumbnails button::after {
+  content: '';
+  position: absolute;
+  inset: auto 4px 0;
+  height: 2px;
+  background: var(--accent);
+  scale: 0 1;
+  transform-origin: left;
+  transition: scale var(--motion-state) var(--motion-ease);
+  pointer-events: none;
+}
+.gallery-thumbnails button[aria-pressed='true']::after {
+  scale: 1 1;
+}
+.gallery-thumbnails button:active {
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+@media (hover: hover) and (pointer: fine) {
+  .certificate:hover .certificate-image {
+    outline-color: var(--line);
+  }
+  .certificate:hover .certificate-title {
+    color: var(--accent);
+  }
+  .certificate:hover .certificate-action svg {
+    scale: 1.08;
+  }
+  .gallery-thumbnails button:hover {
+    opacity: 1;
+    border-color: var(--accent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-captions .gallery-caption[data-active],
+  .gallery-thumbnails button,
+  .gallery-thumbnails button::after {
+    transition: none;
+  }
+}
